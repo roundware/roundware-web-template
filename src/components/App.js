@@ -1,15 +1,16 @@
 import React, {useState} from "react";
-import {defaultTheme, useDefaultStyles} from "../styles";
+import {defaultTheme} from "../styles";
 import {makeStyles, ThemeProvider} from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
+import { CssBaseline } from "@material-ui/core";
+import { LandingPage } from "./LandingPage";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
-import {RoundwareProvider} from "../providers";
-import Button from "@material-ui/core/Button";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import {useRoundware} from "../hooks";
 import {ErrorOutline} from "@material-ui/icons";
+import Grid from "@material-ui/core/Grid";
+import {ListenPage} from "./ListenPage";
+import {SpeakPage} from "./SpeakPage";
+
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -32,43 +33,39 @@ const useStyles = makeStyles((theme) => {
     },
   }
 })
+
+
 export const App = () => {
   const [theme, setTheme] = useState(defaultTheme);
   const classes = useStyles();
-  const roundware = useRoundware();
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div className={classes.root}>
-        <Grid spacing={8} container direction={"column"}>
-          <AppBar className={classes.topBar} position="fixed">
-            <Toolbar className={classes.topBar} >
-              <ErrorOutline />
-            </Toolbar>
-          </AppBar>
-          <Toolbar />
-          <Grid item>
-            <Typography variant={'h1'}>{roundware.roundware && roundware.roundware._project.projectName}</Typography>
-            <Typography paragraph>Some text about the project should go here</Typography>
+      <AppBar className={classes.topBar} position="fixed">
+        <Toolbar className={classes.topBar} >
+          <ErrorOutline />
+        </Toolbar>
+      </AppBar>
+      <Toolbar />
+        <BrowserRouter >
+          <Grid spacing={8} className={classes.root} container direction={"column"}>
+            <Switch>
+              <Route exact path="/">
+                <LandingPage />
+              </Route>
+              <Route path="/listen">
+                <ListenPage />
+              </Route>
+              <Route path="/speak">
+                <SpeakPage />
+              </Route>
+            </Switch>
           </Grid>
-          <Grid item container direction={"column"}>
-            <Grid item sm={9}>
-              <Button className={classes.actionButton} variant="contained" elevation={0} color="primary">
-                <Typography>Listen</Typography>
-              </Button>
-            </Grid>
-          </Grid >
-          <Grid item container>
-            <Grid item sm={9}>
-              <Button className={classes.actionButton} variant="contained" elevation={0} color="primary">Speak</Button>
-            </Grid>
-          </Grid>
-          <AppBar position="fixed" className={classes.bottomBar} >
-            <Toolbar />
-          </AppBar>
-        </Grid>
-      </div>
+        </BrowserRouter>
+      <AppBar position="fixed" className={classes.bottomBar} >
+        <Toolbar />
+      </AppBar>
     </ThemeProvider>
   )
 }
