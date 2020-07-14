@@ -1,0 +1,32 @@
+{
+  "name": "roundware-web-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel src/index.html"
+  },
+  "author": "Evan Babb",
+  "license": "ISC",
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@react-google-maps/api": "^1.9.7",
+    "nanoid": "^3.1.10",
+    "react": "^16.13.1",
+    "react-cookie": "^4.0.3",
+    "react-dom": "^16.13.1",
+    "react-router": "^5.2.0",
+    "roundware-web-framework": "^0.10.1-0",
+    "standardized-audio-context": "^24.1.20"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/polyfill": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "dotenv": "^8.2.0",
+    "parcel-bundler": "^1.12.4"
+  }
+}
