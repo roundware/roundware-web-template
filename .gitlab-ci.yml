@@ -1,0 +1,23 @@
+stages: ['build']  # , 'test', 'deploy']
+
+variables:
+  IMAGE: $CI_REGISTRY_IMAGE
+  JOB_TAG: $IMAGE:$CI_COMMIT_REF_SLUG-$CI_JOB_NAME-$CI_JOB_ID
+  COMMIT_TAG: $IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  BRANCH_TAG: $IMAGE:$CI_COMMIT_REF_SLUG
+  DOCKER_AUTH_CONFIG: "{\"auths\":{\"registry.gitlab.com\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}"
+
+build:
+  image:
+    name: gcr.io/kaniko-project/debug:769
+    entrypoint: [""]
+  stage: build
+  before_script:
+    - echo $BRANCH_TAG
+    - echo $JOB_TAG
+    - echo $COMMIT_TAG
+    - echo $CI_PROJECT_DIR
+  script:
+    - echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $COMMIT_TAG --destination $BRANCH_TAG --destination $JOB_TAG
+
