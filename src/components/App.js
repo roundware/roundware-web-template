@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {defaultTheme} from "../styles";
 import {makeStyles, ThemeProvider} from "@material-ui/core/styles";
-import { CssBaseline } from "@material-ui/core";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { LandingPage } from "./LandingPage";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import {ErrorOutline} from "@material-ui/icons";
+import ErrorOutline from "@material-ui/icons/ErrorOutline";
 import Grid from "@material-ui/core/Grid";
 import {ListenPage} from "./ListenPage";
 import {SpeakPage} from "./SpeakPage";

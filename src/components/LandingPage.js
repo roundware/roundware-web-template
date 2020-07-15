@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import {ErrorOutline} from "@material-ui/icons";
+import ErrorOutline from "@material-ui/icons/ErrorOutline";
 import Typography from "@material-ui/core/Typography";
 import {ActionButton} from "./actionButton";
 import React, {Fragment} from "react";
