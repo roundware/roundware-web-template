@@ -18,5 +18,5 @@ build:
     - echo $CI_PROJECT_DIR
   script:
     - echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $COMMIT_TAG --destination $BRANCH_TAG --destination $JOB_TAG
+    - /kaniko/executor --context $CI_PROJECT_DIR --build-arg GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $COMMIT_TAG --destination $BRANCH_TAG --destination $JOB_TAG
 

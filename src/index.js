@@ -10,5 +10,5 @@ dotenv.config()
 import {RoundwareProvider} from "./providers";
 
 const mountNode = document.getElementById("app");
-ReactDOM.render(<RoundwareProvider><App /></RoundwareProvider>, mountNode);
+ReactDOM.render(<RoundwareProvider><App style={{"display": "flex"}}/></RoundwareProvider>, mountNode);
 

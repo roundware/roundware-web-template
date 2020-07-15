@@ -56,13 +56,13 @@ export const RoundwareProvider = props => {
   };
 
   const setAssetsPerPage = (n) => {
-    this.setState({...state,  assetsPerPage: n});
+    setState({...state,  assetsPerPage: n});
   }
   const setAssetPageIndex = (idx) => {
-    this.setState({...state,  assetPageIndex: idx})
+    setState({...state,  assetPageIndex: idx})
   }
   const selectAsset = (asset) => {
-    this.setState({...state, selectedAsset: asset});
+    setState({...state, selectedAsset: asset});
   }
   const filterAssets = (tagFilters) => {
     const asset_data = state.roundware._assetData || [];

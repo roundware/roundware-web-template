@@ -10,6 +10,7 @@ import ErrorOutline from "@material-ui/icons/ErrorOutline";
 import Grid from "@material-ui/core/Grid";
 import {ListenPage} from "./ListenPage";
 import {SpeakPage} from "./SpeakPage";
+import Container from "@material-ui/core/Container";
 
 
 const useStyles = makeStyles((theme) => {
@@ -31,6 +32,12 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       margin: theme.spacing(2)
     },
+    container: {
+      margin: 0,
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column"
+    }
   }
 })
 
@@ -47,22 +54,23 @@ export const App = () => {
           <ErrorOutline />
         </Toolbar>
       </AppBar>
-      <Toolbar />
+      <div className={classes.container}>
+        <Toolbar />
         <BrowserRouter >
-          <Grid spacing={8} className={classes.root} container direction={"column"}>
-            <Switch>
-              <Route exact path="/">
-                <LandingPage />
-              </Route>
-              <Route path="/listen">
-                <ListenPage />
-              </Route>
-              <Route path="/speak">
-                <SpeakPage />
-              </Route>
-            </Switch>
-          </Grid>
+          <Switch>
+            <Route exact path="/">
+              <LandingPage />
+            </Route>
+            <Route path="/listen">
+              <ListenPage />
+            </Route>
+            <Route path="/speak">
+              <SpeakPage />
+            </Route>
+          </Switch>
         </BrowserRouter>
+        <Toolbar />
+      </div>
       <AppBar position="fixed" className={classes.bottomBar} >
         <Toolbar />
       </AppBar>
