@@ -1,10 +1,16 @@
 import React, {useState} from 'react';
 import {useRoundware} from "../hooks";
-export const VoteButton = ({asset, votedClass, title, icon}) => {
+import Button from "@material-ui/core/Button";
+
+import LinkIcon from "@material-ui/icons/Link";
+import GetAppIcon from "@material-ui/icons/GetApp";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import FlagIcon from '@material-ui/icons/Flag';
+
+export const VoteButton = ({asset, votedClass, title, children}) => {
   const [voted, mark_voted] = useState(false);
   const {roundware} = useRoundware();
-  return <button
-    className={`markerAction ${voted ? votedClass : ''} fa fa-${icon}`}
+  return <Button
     title={title}
     disabled={voted}
     onClick={() => {
@@ -12,8 +18,10 @@ export const VoteButton = ({asset, votedClass, title, icon}) => {
       roundware.vote(asset.id, 'like');
     }}
   >
-  </button>
+    {children}
+  </Button>
 }
+
 const downloadAsset = async asset => {
   const response = await fetch(`${asset.file}.mp3`, {
     headers: new Headers({
@@ -40,30 +48,30 @@ export const AssetActionButtons = ({asset}) => {
       asset={asset}
       voteType='like'
       votedClass='liked'
-      icon='thumbs-up'
-    />
+    >
+      <ThumbUpIcon />
+    </VoteButton>
 
     <VoteButton
       title="tell us you like this one!"
       asset={asset}
       voteType='flag'
       votedClass='flagged'
-      icon='flag'
-    />
-
-    <button
+    >
+      <FlagIcon />
+    </VoteButton>
+    <Button
       onClick={() => {
         window.open(`https://coronadiaries.io/s.html?eid=${asset.envelope_ids[0]}`, '_blank');
       }}
-      className="markerAction fa fa-link"
       title="go to contribution page"
-    >
-    </button>
-    <button
+    ><LinkIcon />
+    </Button>
+    <Button
       onClick={() => downloadAsset(asset)}
-      className="markerAction fa fa-download"
       title="download this audio file"
     >
-    </button>
+      <GetAppIcon />
+    </Button>
   </div>
 }
