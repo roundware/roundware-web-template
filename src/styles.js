@@ -10,6 +10,15 @@ export const defaultTheme = createMuiTheme({
   spacing: 2
 });
 
+
+export const lightTheme = createMuiTheme({
+  palette: {
+    type: 'light',
+    primary: deepPurple,
+  },
+  spacing: 2
+});
+
 export const useDefaultStyles = makeStyles(theme => ({
     root: {
       height: "100vh",

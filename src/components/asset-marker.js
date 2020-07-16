@@ -5,10 +5,14 @@ import AssetPlayer from "./asset-player";
 import {useRoundware} from "../hooks";
 import {AssetActionButtons} from "./asset-action-buttons";
 import {TagsDisplay} from "./asset-tags";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import {lightTheme} from "../styles";
 
 const AssetInfoWindow = ({asset}) => {
-  const {roundware, selectedAsset, selectAsset} = useRoundware();
-  const map = useGoogleMap();
+  const {selectedAsset, selectAsset} = useRoundware();
 
   if (!selectedAsset) return null;
   if (selectedAsset.id !== asset.id) {
@@ -16,6 +20,7 @@ const AssetInfoWindow = ({asset}) => {
   }
 
   const position = {lat: asset.latitude, lng: asset.longitude}
+
   return (
     <InfoWindow
       options={{
@@ -25,12 +30,16 @@ const AssetInfoWindow = ({asset}) => {
       position={position}
       onCloseClick={() => selectAsset(null)}
     >
-      <div className="asset-info-window">
-        <div className='created'>{moment(asset.created).format('LLL')}</div>
-        <TagsDisplay tagIds={asset.tag_ids} />
-        <AssetPlayer className="fullwidth" asset={asset}/>
-        <AssetActionButtons asset={asset} />
-      </div>
+      <MuiThemeProvider theme={lightTheme}>
+        <Grid container direction={"column"}>
+          <Paper>
+            <Typography variant='body2'>{moment(asset.created).format('LLL')}</Typography>
+            <TagsDisplay tagIds={asset.tag_ids} />
+            <AssetPlayer style={{width: '100%'}} asset={asset}/>
+            <AssetActionButtons asset={asset} />
+          </Paper>
+        </Grid>
+      </MuiThemeProvider>
     </InfoWindow>
   )
 }
