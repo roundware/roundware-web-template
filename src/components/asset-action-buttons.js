@@ -6,16 +6,33 @@ import LinkIcon from "@material-ui/icons/Link";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import FlagIcon from '@material-ui/icons/Flag';
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
+const useStyles = makeStyles(theme => {
+  return {
+    liked: {
+      color: theme.palette.info.main
+    },
+    flagged: {
+      color: theme.palette.error.main
+    }
+
+  }
+})
 
 export const VoteButton = ({asset, votedClass, title, children}) => {
   const [voted, mark_voted] = useState(false);
   const {roundware} = useRoundware();
+  const classes = useStyles();
+
   return <Button
     title={title}
-    disabled={voted}
+    className={voted ? classes[votedClass] : null}
     onClick={() => {
-      mark_voted(true);
-      roundware.vote(asset.id, 'like');
+      if (!voted) {
+        mark_voted(true);
+        roundware.vote(asset.id, 'like');
+      }
     }}
   >
     {children}
