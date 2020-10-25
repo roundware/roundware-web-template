@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel src/index.html",
+    "start": "parcel src/index.html --host 0.0.0.0",
     "build": "rm -rf dist && parcel build --no-source-maps src/index.html "
   },
   "author": "Evan Babb",
@@ -13,18 +13,18 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "@react-google-maps/api": "^1.9.7",
+    "@react-google-maps/api": "^1.13.0",
     "moment": "^2.27.0",
     "momentjs": "^2.0.0",
     "nanoid": "^3.1.10",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-cookie": "^4.0.3",
     "react-debounce-input": "^3.2.2",
     "react-dom": "^16.13.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-select": "^3.1.0",
-    "roundware-web-framework": "^0.10.1-0",
+    "roundware-web-framework": "../roundware-web-framework",
     "standardized-audio-context": "^24.1.20",
     "ts-overlapping-marker-spiderfier": "^1.0.3"
   },
