@@ -23,6 +23,7 @@ export const RoundwareProvider = (props) => {
     assetsPerPage: 10,
     //
     draftRecording: {
+      doneTagging: false,
       tags: [],
     },
   });
@@ -102,7 +103,8 @@ export const RoundwareProvider = (props) => {
     });
   };
   const selectRecordingTag = (tag, deselect) => {
-    const updatedDraft = { ...state.draftRecording }
+    const updatedDraft = { ...state.draftRecording };
+
     if (!deselect) {
       updatedDraft.tags.push(tag);
     } else {
@@ -111,6 +113,17 @@ export const RoundwareProvider = (props) => {
     }
     setState({ ...state, draftRecording: updatedDraft });
   };
+  const clearRecordingTags = (tags) => {
+    const updatedDraft = { ...state.draftRecording };
+
+    tags.forEach((tag) => {
+      const tagPosition = updatedDraft.tags.indexOf(tag);
+      updatedDraft.tags.splice(tagPosition, 1);
+    });
+
+    setState({ ...state, draftRecording: updatedDraft });
+  };
+
   const setUserFilter = (user_str) => {
     setState({ ...state, userFilter: user_str });
   };
@@ -167,6 +180,12 @@ export const RoundwareProvider = (props) => {
     setState({ ...state, roundware: roundware });
   }, []);
 
+  const setTaggingDone = (done) => {
+      const updatedDraft = { ...state.draftRecording };
+      updatedDraft.doneTagging = done;
+      setState({ ...state, draftRecording: updatedDraft });
+  }
+
   return (
     <RoundwareContext.Provider
       value={{
@@ -181,6 +200,8 @@ export const RoundwareProvider = (props) => {
         setSortField: setSortField,
         //
         selectRecordingTag,
+        clearRecordingTags,
+        setTaggingDone,
         // computed properties
         assetPage: assetPage(),
       }}
