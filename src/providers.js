@@ -25,6 +25,7 @@ export const RoundwareProvider = (props) => {
     draftRecording: {
       doneTagging: false,
       tags: [],
+      location: {latitude: 0, longitude: 0}
     },
   });
   const setSortField = (f) => {
@@ -169,7 +170,7 @@ export const RoundwareProvider = (props) => {
     roundware.connect().then(({ uiConfig }) => {
       setState({ ...state, uiConfig: uiConfig });
       setState({ ...state, roundware: roundware });
-      roundware.loadAssetPool().then(() => {
+      roundware.loadAssets().then(() => {
         setState({
           ...state,
           roundware: roundware,
@@ -184,6 +185,13 @@ export const RoundwareProvider = (props) => {
       const updatedDraft = { ...state.draftRecording };
       updatedDraft.doneTagging = done;
       setState({ ...state, draftRecording: updatedDraft });
+  }
+
+  const setDraftLocation = (loc) => {
+   const updatedDraft = { ...state.draftRecording };
+   updatedDraft.location = loc;
+   setState({...state, draftRecording: updatedDraft})
+
   }
 
   return (
@@ -202,6 +210,7 @@ export const RoundwareProvider = (props) => {
         selectRecordingTag,
         clearRecordingTags,
         setTaggingDone,
+        setDraftLocation,
         // computed properties
         assetPage: assetPage(),
       }}

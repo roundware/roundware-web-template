@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { useRoundware } from "../hooks";
 import TagSelectForm from "./tag-select-form";
+import LocationSelectForm from "./location-select-form";
 
 export const SpeakPage = () => {
   const { roundware, draftRecording } = useRoundware();
@@ -16,7 +17,8 @@ export const SpeakPage = () => {
       <div>
         {JSON.stringify(draftRecording)}
       </div>
-      <TagSelectForm tagGroups={roundware.uiConfig.speak} />
+      {/*<TagSelectForm tagGroups={roundware.uiConfig.speak} />*/}
+      <LocationSelectForm/>
     </Fragment>
   );
 };
