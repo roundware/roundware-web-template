@@ -38,7 +38,6 @@ const LocationSelectForm = () => {
 
     };
     return <LoadScript id="script-loader" googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}>
-        {location.latitude} {location.longitude}
         <GoogleMap
             mapContainerStyle={containerStyle}
             onLoad={(map) => {
@@ -77,8 +76,8 @@ const LocationSelectForm = () => {
         >
             <LocationSelectMarker />
         </GoogleMap>
+        <Button aria-label="use my location" onClick={getGeolocation}>Use My Location</Button>
         <Button>Next</Button>
-        <Button aria-label="use my location" onClick={getGeolocation}> Use My Location</Button>
 
     </LoadScript>
 }

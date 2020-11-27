@@ -189,9 +189,11 @@ export const RoundwareProvider = (props) => {
 
   const setDraftLocation = (loc) => {
    const updatedDraft = { ...state.draftRecording };
-   updatedDraft.location = loc;
+   updatedDraft.location = {
+     latitude: loc.latitude,
+     longitude: loc.longitude
+   };
    setState({...state, draftRecording: updatedDraft})
-
   }
 
   return (

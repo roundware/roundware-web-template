@@ -8,6 +8,12 @@ const LocationSelectMarker = () => {
     const {draftRecording, setDraftLocation} = useRoundware();
 
     const map = useGoogleMap();
+    useEffect(() => {
+        map.panTo({
+            lat: draftRecording.location.latitude,
+            lng: draftRecording.location.longitude
+        })
+    }, [draftRecording.location])
     return <Marker
         draggable={true}
         position={{
@@ -16,7 +22,6 @@ const LocationSelectMarker = () => {
         }}
         onDragEnd={(evt) => {
             setDraftLocation({latitude: evt.latLng.lat(), longitude: evt.latLng.lng()})
-            map.panTo(evt.latLng);
         }}/>
 }
 export default LocationSelectMarker;
