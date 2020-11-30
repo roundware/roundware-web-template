@@ -19,6 +19,7 @@ import Dialog from "@material-ui/core/Dialog";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => {
 
@@ -44,6 +45,8 @@ const CreateRecordingForm = ({tagGroups}) => {
   const [stream, set_stream] = useState();
   const [deleteModalOpen, set_delete_modal_open] = useState(false);
   const [legalModalOpen, set_legal_modal_open] = useState(false);
+  const [saving, set_saving] = useState(false);
+  const [accepted_agreement, set_accepted_agreement] = useState(false);
 
   const startRecording = () => {
     set_record_button_processing(true);
@@ -170,6 +173,26 @@ const CreateRecordingForm = ({tagGroups}) => {
             <Typography>{roundware._project.legalAgreement}</Typography>
           </Container>
           <Grid container>
+            <Grid item container>
+              <Grid item>
+                <Checkbox
+                  checked={accepted_agreement}
+                  onChange={e => { set_accepted_agreement(e.target.checked)}}
+                  aria-label={"I agree"}
+                />
+                <Typography>I AGREE</Typography>
+              </Grid>
+              <Grid item>
+                <Checkbox
+                  checked={!accepted_agreement}
+                  onChange={e => {
+                    set_accepted_agreement(!e.target.checked)
+                  }}
+                  aria-label={"I do not agree"}
+                />
+                <Typography>I DO NOT AGREE</Typography>
+              </Grid>
+            </Grid>
             <Grid item>
               <Button
                 variant="contained"
@@ -177,20 +200,34 @@ const CreateRecordingForm = ({tagGroups}) => {
                 onClick={()=>{
                   set_legal_modal_open(false);
                 }}
-              >I disagree</Button>
+              >Go Back</Button>
             </Grid>
             <Grid item>
               <Button
                 variant="contained"
                 color="primary"
+                disabled={!accepted_agreement}
                 onClick={()=>{
                   set_legal_modal_open(false);
+                  set_saving(true);
+                  const fileName = new Date().toISOString() + ".mp3";
+                  const assetMeta = {
+                    longitude: draftRecording.location.longitude,
+                    latitude: draftRecording.location.latitude,
+                    tag_ids: draftRecording.tags
+                  }
+                  roundware.saveAsset(draftRecordingMedia, fileName, assetMeta).then(
+                    () => {set_saving(false)}
+                  )
                 }}
               >I agree!</Button>
             </Grid>
           </Grid>
         </Dialog>
       </Grid>
+      <Dialog open={saving}>
+        <Typography>Uploading your recording now! Please keep this page open until we finish uploading.</Typography>
+      </Dialog>
     </Grid>
   );
 };
