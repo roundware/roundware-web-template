@@ -217,10 +217,12 @@ const CreateRecordingForm = ({tagGroups}) => {
                     tag_ids: draftRecording.tags
                   }
                   roundware.saveAsset(draftRecordingMedia, fileName, assetMeta).then(
-                    () => {set_saving(false)}
+                    (asset) => {
+                      set_saving(false)
+                    }
                   )
                 }}
-              >I agree!</Button>
+              >Submit</Button>
             </Grid>
           </Grid>
         </Dialog>
