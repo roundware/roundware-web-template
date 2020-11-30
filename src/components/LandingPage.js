@@ -1,7 +1,4 @@
 import Grid from "@material-ui/core/Grid";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import ErrorOutline from "@material-ui/icons/ErrorOutline";
 import Typography from "@material-ui/core/Typography";
 import { ActionButton } from "./actionButton";
 import React, { Fragment } from "react";
@@ -31,17 +28,16 @@ const useStyles = makeStyles((theme) => {
 });
 
 export const LandingPage = (props) => {
-  const roundware = useRoundware();
-  const classes = useStyles();
+  const { roundware } = useRoundware();
 
   return (
     <Fragment>
       <Grid item>
         <Typography variant={"h1"}>
-          {roundware.roundware && roundware.roundware._project.projectName}
+          {roundware && roundware._project.projectName}
         </Typography>
         <Typography paragraph>
-          Some text about the project should go here
+          { roundware && JSON.stringify(roundware._project) }
         </Typography>
       </Grid>
       <ActionButton label={"Listen"} linkTo={"/listen"} />

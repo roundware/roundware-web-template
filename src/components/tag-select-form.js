@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const TagSelectForm = ({tagGroups}) => {
+const TagSelectForm = () => {
   const classes = useStyles();
   const {
     roundware,
@@ -36,9 +36,12 @@ const TagSelectForm = ({tagGroups}) => {
     draftRecording,
   } = useRoundware();
   const [tagGroupIndex, setTagGroupIndex] = useState(0);
-  if (draftRecording.doneTagging) {
-    return null;
+
+  if (!roundware.uiConfig) {
+    return null
   }
+  const tagGroups = roundware.uiConfig.speak
+
   const tagGroup = tagGroups[tagGroupIndex];
   const choices = tagGroup.display_items;
   let nextEnabled = false;
@@ -46,12 +49,12 @@ const TagSelectForm = ({tagGroups}) => {
     nextEnabled = choices.some(tag => draftRecording.tags.includes(tag.id))
   }
   return (
-    <Fragment>
+    <Grid>
       <Container>
         <Typography variant="h1">{tagGroup.group_short_name}</Typography>
         <Typography variant="h2">{tagGroup.header_display_text}</Typography>
       </Container>
-      {JSON.stringify(tagGroup)}
+      {/*{JSON.stringify(tagGroup)}*/}
       <Grid container className={classes.cardGrid}>
         <fieldset>
           {choices.map((choice) => (
@@ -87,7 +90,7 @@ const TagSelectForm = ({tagGroups}) => {
           setTagGroupIndex(tagGroupIndex + 1)
         }
       }}>Next</Button>
-    </Fragment>
+    </Grid>
   );
 };
 export default TagSelectForm;

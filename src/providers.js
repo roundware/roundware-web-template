@@ -1,5 +1,5 @@
 import RoundwareContext from "./context";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Roundware } from "roundware-web-framework";
 import { useDeviceID } from "./hooks";
 
@@ -24,6 +24,8 @@ export const RoundwareProvider = (props) => {
     //
     draftRecording: {
       doneTagging: false,
+      doneSelectingLocation: false,
+      acceptedAgreement: false,
       tags: [],
       location: {latitude: 0, longitude: 0}
     },
@@ -196,23 +198,29 @@ export const RoundwareProvider = (props) => {
    setState({...state, draftRecording: updatedDraft})
   }
 
+  const saveDraftLocation = () => {
+    const updatedDraft = { ...state.draftRecording };
+    updatedDraft.doneSelectingLocation = true;
+    setState({...state, draftRecording: updatedDraft})
+  }
   return (
     <RoundwareContext.Provider
       value={{
         // everything from the state
         ...state,
         // state modification functions
-        selectAsset: selectAsset,
-        selectTags: selectTags,
-        setUserFilter: setUserFilter,
-        setAssetPageIndex: setAssetPageIndex,
-        setAssetsPerPage: setAssetsPerPage,
-        setSortField: setSortField,
+        selectAsset,
+        selectTags,
+        setUserFilter,
+        setAssetPageIndex,
+        setAssetsPerPage,
+        setSortField,
         //
         selectRecordingTag,
         clearRecordingTags,
         setTaggingDone,
         setDraftLocation,
+        saveDraftLocation,
         // computed properties
         assetPage: assetPage(),
       }}

@@ -12,7 +12,7 @@ const getPosition = function (options) {
 }
 
 const LocationSelectForm = () => {
-    const {roundware, draftRecording, setDraftLocation } = useRoundware();
+    const {roundware, draftRecording, setDraftLocation, saveDraftLocation } = useRoundware();
     useEffect(() => {
         if (roundware._project) {
             setDraftLocation(roundware._project.location)
@@ -77,7 +77,7 @@ const LocationSelectForm = () => {
             <LocationSelectMarker />
         </GoogleMap>
         <Button aria-label="use my location" onClick={getGeolocation}>Use My Location</Button>
-        <Button>Next</Button>
+        <Button onClick={saveDraftLocation}>Next</Button>
 
     </LoadScript>
 }
