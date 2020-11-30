@@ -72,12 +72,12 @@ const CreateRecordingForm = ({tagGroups}) => {
   }
 
   useEffect(() => {
-    const mediaUrl = draftRecordingMedia ? URL.createObjectURL(draftRecordingMedia) : null
+    const mediaUrl = draftRecordingMedia ? URL.createObjectURL(draftRecordingMedia) : ""
     set_draft_media_url(mediaUrl)
   }, [draftRecordingMedia])
 
   useEffect(() => {
-    if (draftMediaUrl != null) {
+    if (draftMediaUrl !== "") {
       wave.fromElement("draft-audio", "audio-visualizer", visualizerOptions);
     }
   }, [draftMediaUrl])
@@ -116,7 +116,7 @@ const CreateRecordingForm = ({tagGroups}) => {
       { draftMediaUrl ? <Grid item><audio id={"draft-audio"} src={draftMediaUrl} controls /></Grid> : null}
       <Grid item>
         <IconButton
-          disabled={draftMediaUrl != null}
+          disabled={draftMediaUrl !== ""}
           style={{
             margin: "auto",
             backgroundColor: isRecording ? "red" : "inherit",
@@ -135,6 +135,7 @@ const CreateRecordingForm = ({tagGroups}) => {
         style={{margin:"auto"}}
         variant="contained"
         color="secondary"
+        disabled={draftMediaUrl === ""}
         onClick={() => {set_delete_modal_open(true)}}>Delete</Button>
 
       <Dialog open={deleteModalOpen}>
@@ -165,7 +166,7 @@ const CreateRecordingForm = ({tagGroups}) => {
       </Dialog>
       <Button variant="contained" color="primary"
               style={{margin:"auto"}}
-
+              disabled={draftMediaUrl === ""}
               onClick={() => {set_legal_modal_open(true)}}>Share</Button>
         <Dialog open={legalModalOpen}>
           <Container>
