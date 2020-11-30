@@ -11,7 +11,7 @@
   "author": "Evan Babb",
   "license": "ISC",
   "dependencies": {
-    "@foobar404/wave": "git+https://github.com/mrvwman/Wave.js.git",
+    "@foobar404/wave": "git+https://github.com/probabble/Wave.js.git#master",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@react-google-maps/api": "^1.13.0",
@@ -40,7 +40,6 @@
     "@babel/preset-react": "^7.10.4",
     "babel-plugin-transform-imports": "^2.0.0",
     "dotenv": "^8.2.0",
-    "parcel-bundler": "^1.12.4",
-    "parcel-plugin-bundle-visualiser": "^1.2.0"
+    "parcel-bundler": "^1.12.4"
   }
 }
