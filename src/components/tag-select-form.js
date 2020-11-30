@@ -35,6 +35,7 @@ const TagSelectForm = () => {
     clearRecordingTags,
     draftRecording,
   } = useRoundware();
+
   const [tagGroupIndex, setTagGroupIndex] = useState(0);
 
   if (!roundware.uiConfig) {
@@ -57,6 +58,7 @@ const TagSelectForm = () => {
       <Container>
         <Typography variant="h1">{tagGroup.group_short_name}</Typography>
         <Typography variant="h2">{tagGroup.header_display_text}</Typography>
+        <Typography variant="h4">{draftRecording.tags}</Typography>
       </Container>
       <Grid container className={classes.cardGrid}>
           {choices.map((choice) => (
@@ -67,7 +69,6 @@ const TagSelectForm = () => {
                   }}
                   onClick={ () => {
                     const isSelected = draftRecording.tags.indexOf(choice.id) !== -1;
-
                     clearRecordingTags(choices.map((c) => c.id));
                     selectRecordingTag(choice.id, isSelected);
                   }}
@@ -82,10 +83,6 @@ const TagSelectForm = () => {
                   <Grid item xs={2}>
                     <Checkbox
                       checked={draftRecording.tags.indexOf(choice.id) !== -1}
-                      onChange={(e) => {
-                        clearRecordingTags(choices.map((choice) => choice.id));
-                        selectRecordingTag(choice.id, !e.target.checked);
-                      }}
                     />
                   </Grid>
                 </Grid>

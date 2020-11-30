@@ -125,7 +125,9 @@ export const RoundwareProvider = (props) => {
       updatedDraft.tags.push(tag);
     } else {
       const tagPosition = updatedDraft.tags.indexOf(tag);
-      updatedDraft.tags.splice(tagPosition, 1);
+      if (tagPosition !== -1) {
+        updatedDraft.tags.splice(tagPosition, 1);
+      }
     }
     setState({ ...state, draftRecording: updatedDraft });
   };
@@ -134,7 +136,9 @@ export const RoundwareProvider = (props) => {
 
     tags.forEach((tag) => {
       const tagPosition = updatedDraft.tags.indexOf(tag);
-      updatedDraft.tags.splice(tagPosition, 1);
+      if (tagPosition !== -1) {
+        updatedDraft.tags.splice(tagPosition, 1);
+      }
     });
 
     setState({ ...state, draftRecording: updatedDraft });
