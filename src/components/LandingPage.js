@@ -34,10 +34,7 @@ export const LandingPage = (props) => {
     <Fragment>
       <Grid item>
         <Typography variant={"h1"}>
-          {roundware && roundware._project.projectName}
-        </Typography>
-        <Typography paragraph>
-          { roundware && JSON.stringify(roundware._project) }
+          {roundware._project && roundware._project.projectName}
         </Typography>
       </Grid>
       <ActionButton label={"Listen"} linkTo={"/listen"} />

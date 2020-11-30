@@ -5,13 +5,14 @@ import { useDeviceID } from "./hooks";
 
 export const RoundwareProvider = (props) => {
   const [state, setState] = useState({
-    roundware: null,
-    uiConfig: null,
+    roundware: {},
+    uiConfig: {},
     selectedAsset: null,
     roundwareReady: false,
     selectedTags: [],
     // todo refactor this filtering stuff into something more scalable
     tagFilters: {},
+    tagLookup: {},
     filteredAssets: [],
     userFilter: [],
     afterDateFilter: null,
@@ -63,6 +64,18 @@ export const RoundwareProvider = (props) => {
       assetPageIndex * assetsPerPage + assetsPerPage
     );
   };
+  useEffect(() => {
+    if (!state.uiConfig.speak) {
+      return;
+    }
+    const tagLookup = {};
+    state.uiConfig.speak.forEach(
+      group => group.display_items.forEach(tag =>{
+        tagLookup[tag.tag_id] = tag;
+      })
+    )
+    setState({...state, tagLookup: tagLookup})
+  }, [state.uiConfig.speak])
 
   const setAssetsPerPage = (n) => {
     setState({ ...state, assetsPerPage: n });

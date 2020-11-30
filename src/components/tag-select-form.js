@@ -43,7 +43,11 @@ const TagSelectForm = () => {
   const tagGroups = roundware.uiConfig.speak
 
   const tagGroup = tagGroups[tagGroupIndex];
-  const choices = tagGroup.display_items;
+  const choices = tagGroup.display_items.filter(item => {
+    // display the choices for this tagGroup that have no parent specified,
+    // or have their parent selected in the draft recording already
+    return item.parent_id === null || draftRecording.tags.indexOf(item.parent_id) !== -1
+  });
   let nextEnabled = false;
   if (tagGroup.select === 'single') {
     nextEnabled = choices.some(tag => draftRecording.tags.includes(tag.id))
@@ -54,11 +58,20 @@ const TagSelectForm = () => {
         <Typography variant="h1">{tagGroup.group_short_name}</Typography>
         <Typography variant="h2">{tagGroup.header_display_text}</Typography>
       </Container>
-      {/*{JSON.stringify(tagGroup)}*/}
       <Grid container className={classes.cardGrid}>
-        <fieldset>
           {choices.map((choice) => (
-            <Grid container item xs={11} key={choice.id}>
+            <Grid container item xs={11}
+                  key={choice.id}
+                  style={{
+                    border: draftRecording.tags.indexOf(choice.id) !== -1 ? "primary" : "inherit"
+                  }}
+                  onClick={ () => {
+                    const isSelected = draftRecording.tags.indexOf(choice.id) !== -1;
+
+                    clearRecordingTags(choices.map((c) => c.id));
+                    selectRecordingTag(choice.id, isSelected);
+                  }}
+            >
               <Card className={classes.tagCard}>
                 <Grid container>
                   <Grid item xs={10}>
@@ -79,7 +92,6 @@ const TagSelectForm = () => {
               </Card>
             </Grid>
           ))}
-        </fieldset>
       </Grid>
       <Button disabled={!nextEnabled} onClick={() => {
         // todo handle the dynamic trees that are possible with RW tag groups

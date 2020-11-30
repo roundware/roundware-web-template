@@ -32,7 +32,7 @@ const CreateRecordingForm = ({tagGroups}) => {
   const classes = useStyles();
   const {
     roundware,
-    setTaggingDone,
+    tagLookup,
     draftRecording,
   } = useRoundware();
   let [wave, set_wave] = useState(new Wave());
@@ -102,6 +102,7 @@ const CreateRecordingForm = ({tagGroups}) => {
     }
   }
 
+  const selectedTags = roundware._project.tags
   return (
     <Grid container alignItems={"center"} direction={"column"} className={"visualizer-canvas"}>
       <Typography> { isRecording.toString() } </Typography>
