@@ -11,7 +11,7 @@
   "author": "Evan Babb",
   "license": "ISC",
   "dependencies": {
-    "@foobar404/wave": "git+https://github.com/probabble/Wave.js.git#master",
+    "@foobar404/wave": "git+https://github.com/probabble/Wave.js.git#main",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@react-google-maps/api": "^1.13.0",
