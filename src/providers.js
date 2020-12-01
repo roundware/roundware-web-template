@@ -28,7 +28,7 @@ export const RoundwareProvider = (props) => {
       doneSelectingLocation: false,
       acceptedAgreement: false,
       tags: [],
-      location: {latitude: 0, longitude: 0}
+      location: { latitude: 0, longitude: 0 },
     },
   });
   const setSortField = (f) => {
@@ -69,13 +69,13 @@ export const RoundwareProvider = (props) => {
       return;
     }
     const tagLookup = {};
-    state.uiConfig.speak.forEach(
-      group => group.display_items.forEach(tag =>{
+    state.uiConfig.speak.forEach((group) =>
+      group.display_items.forEach((tag) => {
         tagLookup[tag.tag_id] = tag;
       })
-    )
-    setState({...state, tagLookup: tagLookup})
-  }, [state.uiConfig.speak])
+    );
+    setState({ ...state, tagLookup: tagLookup });
+  }, [state.uiConfig.speak]);
 
   const setAssetsPerPage = (n) => {
     setState({ ...state, assetsPerPage: n });
@@ -201,25 +201,25 @@ export const RoundwareProvider = (props) => {
   }, []);
 
   const setTaggingDone = (done) => {
-      const updatedDraft = { ...state.draftRecording };
-      updatedDraft.doneTagging = done;
-      setState({ ...state, draftRecording: updatedDraft });
-  }
+    const updatedDraft = { ...state.draftRecording };
+    updatedDraft.doneTagging = done;
+    setState({ ...state, draftRecording: updatedDraft });
+  };
 
   const setDraftLocation = (loc) => {
-   const updatedDraft = { ...state.draftRecording };
-   updatedDraft.location = {
-     latitude: loc.latitude,
-     longitude: loc.longitude
-   };
-   setState({...state, draftRecording: updatedDraft})
-  }
+    const updatedDraft = { ...state.draftRecording };
+    updatedDraft.location = {
+      latitude: loc.latitude,
+      longitude: loc.longitude,
+    };
+    setState({ ...state, draftRecording: updatedDraft });
+  };
 
   const saveDraftLocation = () => {
     const updatedDraft = { ...state.draftRecording };
     updatedDraft.doneSelectingLocation = true;
-    setState({...state, draftRecording: updatedDraft})
-  }
+    setState({ ...state, draftRecording: updatedDraft });
+  };
   return (
     <RoundwareContext.Provider
       value={{
