@@ -3,13 +3,14 @@ import { useRoundware } from "../hooks";
 import TagSelectForm from "./tag-select-form";
 import LocationSelectForm from "./location-select-form";
 import CreateRecordingForm from "./create-recording-form";
+import Grid from "@material-ui/core/Grid";
 
 const formComponents = {
   tags: TagSelectForm,
   location: LocationSelectForm,
   recording: CreateRecordingForm
 }
-export const SpeakPage = () => {
+const CurrentForm = () => {
 
   const [CurrentFormComponent, set_current_form_component] = useState('tags')
 
@@ -31,3 +32,13 @@ export const SpeakPage = () => {
   }
   return React.createElement(formComponents[CurrentFormComponent], {});
 };
+
+const SpeakPage = () => {
+  return <Grid container>
+    <Grid style={{margin: "auto"}} item xs={11} sm={8} md={4} >
+      <CurrentForm />
+    </Grid>
+  </Grid>
+}
+
+export default SpeakPage

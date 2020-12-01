@@ -20,6 +20,10 @@ import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Checkbox from "@material-ui/core/Checkbox";
+import LegalAgreementForm from "./legal-agreement-form";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 
 const useStyles = makeStyles((theme) => {
 
@@ -108,7 +112,6 @@ const CreateRecordingForm = ({tagGroups}) => {
   const selectedTags = roundware._project.tags
   return (
     <Grid container alignItems={"center"} direction={"column"} className={"visualizer-canvas"}>
-      <Typography> { isRecording.toString() } </Typography>
       <Grid item xs={9}>
         <canvas id="audio-visualizer" />
       </Grid>
@@ -139,11 +142,13 @@ const CreateRecordingForm = ({tagGroups}) => {
         onClick={() => {set_delete_modal_open(true)}}>Delete</Button>
 
       <Dialog open={deleteModalOpen}>
-        <Container>
-          <Typography>Delete your current draft recording?</Typography>
-        </Container>
-        <Grid container>
-          <Grid item>
+        <DialogContent>
+          <DialogContentText>
+           Delete your current draft recording?
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
             <Button
             variant="contained"
             color="primary"
@@ -151,8 +156,6 @@ const CreateRecordingForm = ({tagGroups}) => {
               set_delete_modal_open(false);
             }}
           >No, keep it!</Button>
-          </Grid>
-          <Grid item>
           <Button
             variant="contained"
             color="secondary"
@@ -161,75 +164,36 @@ const CreateRecordingForm = ({tagGroups}) => {
               set_delete_modal_open(false);
             }}
           >Yes, delete it!</Button>
-          </Grid>
-        </Grid>
+          </DialogActions>
       </Dialog>
       <Button variant="contained" color="primary"
               style={{margin:"auto"}}
               disabled={draftMediaUrl === ""}
               onClick={() => {set_legal_modal_open(true)}}>Share</Button>
         <Dialog open={legalModalOpen}>
-          <Container>
-            <Typography variant={"h2"}>Content Agreement</Typography>
-            <Typography>{roundware._project.legalAgreement}</Typography>
-          </Container>
-          <Grid container>
-            <Grid item container>
-              <Grid item>
-                <Checkbox
-                  checked={accepted_agreement}
-                  onChange={e => { set_accepted_agreement(e.target.checked)}}
-                  aria-label={"I agree"}
-                />
-                <Typography>I AGREE</Typography>
-              </Grid>
-              <Grid item>
-                <Checkbox
-                  checked={!accepted_agreement}
-                  onChange={e => {
-                    set_accepted_agreement(!e.target.checked)
-                  }}
-                  aria-label={"I do not agree"}
-                />
-                <Typography>I DO NOT AGREE</Typography>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={()=>{
-                  set_legal_modal_open(false);
-                }}
-              >Go Back</Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={!accepted_agreement}
-                onClick={()=>{
-                  set_legal_modal_open(false);
-                  set_saving(true);
-                  const fileName = new Date().toISOString() + ".mp3";
-                  const assetMeta = {
-                    longitude: draftRecording.location.longitude,
-                    latitude: draftRecording.location.latitude,
-                    tag_ids: draftRecording.tags
-                  }
-                  roundware.saveAsset(draftRecordingMedia, fileName, assetMeta).then(
-                    (asset) => {
-                      set_saving(false)
-                    }
-                  )
-                }}
-              >Submit</Button>
-            </Grid>
-          </Grid>
-        </Dialog>
+          <LegalAgreementForm
+            onDecline={ () => { set_legal_modal_open(false) }}
+            onAccept={ () => {
+              set_legal_modal_open(false);
+              set_saving(true);
+              const fileName = new Date().toISOString() + ".mp3";
+              const assetMeta = {
+                longitude: draftRecording.location.longitude,
+                latitude: draftRecording.location.latitude,
+                tag_ids: draftRecording.tags
+              }
+              roundware.saveAsset(draftRecordingMedia, fileName, assetMeta).then(
+                (asset) => {
+                  set_saving(false)
+                }
+              )
+            } }
+        /></Dialog>
       </Grid>
       <Dialog open={saving}>
-        <Typography>Uploading your recording now! Please keep this page open until we finish uploading.</Typography>
+        <DialogContentText>
+          Uploading your recording now! Please keep this page open until we finish uploading
+        </DialogContentText>
       </Dialog>
     </Grid>
   );

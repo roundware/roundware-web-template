@@ -4,6 +4,11 @@ import {GoogleMap, LoadScript, Marker, LatLng, useGoogleMap} from "@react-google
 import {useRoundware} from "../hooks";
 import Button from "@material-ui/core/Button";
 import LocationSelectMarker from "./location-select-marker";
+import Paper from "@material-ui/core/Paper";
+import Card from "@material-ui/core/Card";
+import {CardActionArea} from "@material-ui/core";
+import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
 
 const getPosition = function (options) {
     return new Promise(function (resolve, reject) {
@@ -36,8 +41,10 @@ const LocationSelectForm = () => {
         height: '400px',
         margin: "auto",
 
-    };
-    return <LoadScript id="script-loader" googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}>
+    }
+    return <Card>
+        <CardContent>
+        <LoadScript id="script-loader" googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}>
         <GoogleMap
             mapContainerStyle={containerStyle}
             onLoad={(map) => {
@@ -70,16 +77,18 @@ const LocationSelectForm = () => {
                     },
                 });
             }}
-            onUnmount={(map) => {
-                // do your stuff before map is unmounted
-            }}
         >
             <LocationSelectMarker />
         </GoogleMap>
-        <Button aria-label="use my location" onClick={getGeolocation}>Use My Location</Button>
-        <Button onClick={saveDraftLocation}>Next</Button>
 
     </LoadScript>
+        </CardContent>
+            <CardActions>
+                <Button size="medium" color="inherit" variant={"contained"} aria-label="use my location" onClick={getGeolocation}>Use My Location</Button>
+                <Button size="medium" color="primary" variant={"contained"} onClick={saveDraftLocation}>Next</Button>
+            </CardActions>
+    </Card>
+
 }
 
 export default LocationSelectForm;

@@ -7,14 +7,13 @@ import React, {Fragment, useState} from "react";
 import { useRoundware } from "../hooks";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const useStyles = makeStyles((theme) => {
   return {
     cardGrid: {
-      fontSize: "3rem",
       width: "100%",
-      overflowX: "scroll",
-      direction: "row",
+      direction: "column",
     },
 
     tagCard: {
@@ -23,6 +22,11 @@ const useStyles = makeStyles((theme) => {
       minWidth: "20rem",
       padding: theme.spacing(6),
     },
+    selectedTagCard: {
+      borderColor: "primary",
+      borderWidth: "2px",
+      borderStyle: "solid"
+    }
   };
 });
 
@@ -53,53 +57,52 @@ const TagSelectForm = () => {
   if (tagGroup.select === 'single') {
     nextEnabled = choices.some(tag => draftRecording.tags.includes(tag.id))
   }
+  const toggleTagSelected = (tagId) => {
+    const isSelected = draftRecording.tags.indexOf(tagId) !== -1;
+    clearRecordingTags(choices.map((c) => c.id));
+    selectRecordingTag(tagId, isSelected);
+  }
   return (
-    <Grid>
+    <div>
       <Container>
         <Typography variant="h1">{tagGroup.group_short_name}</Typography>
         <Typography variant="h2">{tagGroup.header_display_text}</Typography>
-        <Typography variant="h4">{draftRecording.tags}</Typography>
       </Container>
       <Grid container className={classes.cardGrid}>
-          {choices.map((choice) => (
-            <Grid container item xs={11}
-                  key={choice.id}
-                  style={{
-                    border: draftRecording.tags.indexOf(choice.id) !== -1 ? "primary" : "inherit"
-                  }}
-                  onClick={ () => {
-                    const isSelected = draftRecording.tags.indexOf(choice.id) !== -1;
-                    clearRecordingTags(choices.map((c) => c.id));
-                    selectRecordingTag(choice.id, isSelected);
-                  }}
-            >
-              <Card className={classes.tagCard}>
-                <Grid container>
-                  <Grid item xs={10}>
-                    <Typography variant={"h4"}>
-                      {choice.tag_display_text}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Checkbox
-                      checked={draftRecording.tags.indexOf(choice.id) !== -1}
-                    />
-                  </Grid>
-                </Grid>
+          {choices.map((choice) => {
+            const isSelected = draftRecording.tags.indexOf(choice.id) !== -1
+            return (
+              <Card
+              key={choice.id}
+              className={`${classes.tagCard} ${isSelected ? classes.selectedTagCard : ''}`}
+              onClick={() => toggleTagSelected(choice.id)}>
+                <FormControlLabel
+                  checked={isSelected}
+                  control={<Checkbox
+                    style={{display: "none"}} size={"medium"}
+                    onChange={evt=> {toggleTagSelected(choice.id)}}
+                  />}
+                  label={ choice.tag_display_text } />
               </Card>
-            </Grid>
-          ))}
+            )
+          })}
+
       </Grid>
-      <Button disabled={!nextEnabled} onClick={() => {
-        // todo handle the dynamic trees that are possible with RW tag groups
-        const isLastGroup = tagGroups.length <= tagGroupIndex + 1
-        if ( isLastGroup ) {
-          setTaggingDone(true);
-        } else {
-          setTagGroupIndex(tagGroupIndex + 1)
-        }
-      }}>Next</Button>
-    </Grid>
+      <Container>
+      <Button disabled={!nextEnabled}
+              variant={"contained"}
+              color={"primary"}
+              onClick={() => {
+                // todo handle the dynamic trees that are possible with RW tag groups
+                const isLastGroup = tagGroups.length <= tagGroupIndex + 1
+                if ( isLastGroup ) {
+                  setTaggingDone(true);
+                } else {
+                  setTagGroupIndex(tagGroupIndex + 1)
+                }
+              }}>Next</Button>
+      </Container>
+    </div>
   );
 };
 export default TagSelectForm;

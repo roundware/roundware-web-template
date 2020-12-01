@@ -9,12 +9,13 @@ import Toolbar from "@material-ui/core/Toolbar";
 import ErrorOutline from "@material-ui/icons/ErrorOutline";
 import Grid from "@material-ui/core/Grid";
 import { ListenPage } from "./ListenPage";
-import { SpeakPage } from "./SpeakPage";
+import SpeakPage from "./SpeakPage";
 import Container from "@material-ui/core/Container";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import Button from "@material-ui/core/Button";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import { useRoundware } from "../hooks";
+import DebugPage from "./DebugPage";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -68,6 +69,9 @@ export const App = () => {
             </Route>
             <Route path="/speak">
               <SpeakPage />
+            </Route>
+            <Route path="/debug">
+              <DebugPage />
             </Route>
           </Switch>
           <Toolbar />
