@@ -59,7 +59,7 @@ export const App = () => {
           </Toolbar>
         </AppBar>
         <div className={classes.container}>
-          <Toolbar />
+          <Toolbar style={{marginBottom: "2rem"}} />
           <Switch>
             <Route exact path="/">
               <LandingPage />

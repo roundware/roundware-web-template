@@ -34,8 +34,8 @@ const CurrentForm = () => {
 };
 
 const SpeakPage = () => {
-  return <Grid container>
-    <Grid style={{margin: "auto"}} item xs={11} sm={8} md={4} >
+  return <Grid container style={{marginBottom: "5rem"}}>
+    <Grid style={{margin: "auto"}} item xs={11} sm={10} md={4} >
       <CurrentForm />
     </Grid>
   </Grid>

@@ -9,6 +9,8 @@ import Card from "@material-ui/core/Card";
 import {CardActionArea} from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
 
 const getPosition = function (options) {
     return new Promise(function (resolve, reject) {
@@ -44,6 +46,11 @@ const LocationSelectForm = () => {
     }
     return <Card>
         <CardContent>
+        <Container style={{
+            marginTop: "1rem",
+            marginBottom: "2rem"}}>
+            <Typography variant={"h5"}>Where are you recording today?</Typography>
+        </Container>
         <LoadScript id="script-loader" googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}>
         <GoogleMap
             mapContainerStyle={containerStyle}
@@ -83,10 +90,10 @@ const LocationSelectForm = () => {
 
     </LoadScript>
         </CardContent>
-            <CardActions>
-                <Button size="medium" color="inherit" variant={"contained"} aria-label="use my location" onClick={getGeolocation}>Use My Location</Button>
-                <Button size="medium" color="primary" variant={"contained"} onClick={saveDraftLocation}>Next</Button>
-            </CardActions>
+        <CardActions>
+            <Button size="medium" variant={"contained"} aria-label="use my location" onClick={getGeolocation}>Use My Location</Button>
+            <Button size="medium" color="primary" variant={"contained"} onClick={saveDraftLocation}>Next</Button>
+        </CardActions>
     </Card>
 
 }

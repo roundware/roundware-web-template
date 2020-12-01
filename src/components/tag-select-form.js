@@ -8,6 +8,9 @@ import { useRoundware } from "../hooks";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Paper from "@material-ui/core/Paper";
+import {CardContent} from "@material-ui/core";
+import CardHeader from "@material-ui/core/CardHeader";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -21,11 +24,11 @@ const useStyles = makeStyles((theme) => {
       margin: theme.spacing(4),
       minWidth: "20rem",
       padding: theme.spacing(6),
+      cursor: "pointer"
     },
     selectedTagCard: {
-      borderColor: "primary",
-      borderWidth: "2px",
-      borderStyle: "solid"
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
     }
   };
 });
@@ -64,10 +67,13 @@ const TagSelectForm = () => {
   }
   return (
     <div>
-      <Container>
-        <Typography variant="h1">{tagGroup.group_short_name}</Typography>
-        <Typography variant="h2">{tagGroup.header_display_text}</Typography>
-      </Container>
+      <Card>
+        <CardContent>
+          <Typography variant={'h4'}>
+            {tagGroup.header_display_text}
+          </Typography>
+        </CardContent>
+      </Card>
       <Grid container className={classes.cardGrid}>
           {choices.map((choice) => {
             const isSelected = draftRecording.tags.indexOf(choice.id) !== -1
