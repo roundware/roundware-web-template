@@ -24,6 +24,9 @@ const CurrentForm = () => {
     if (draftRecording.doneSelectingLocation) {
       nextForm = 'recording'
     }
+    if (CurrentFormComponent !== nextForm) {
+      window.scrollTo(0,0)
+    }
     set_current_form_component(nextForm);
 
   }, [draftRecording.doneTagging, draftRecording.doneSelectingLocation])
@@ -34,8 +37,8 @@ const CurrentForm = () => {
 };
 
 const SpeakPage = () => {
-  return <Grid container style={{marginBottom: "5rem"}}>
-    <Grid style={{margin: "auto"}} item xs={11} sm={10} md={4} >
+  return <Grid container style={{paddingBottom: "5rem"}}>
+    <Grid style={{margin: "auto"}} item xs={11} md={7}>
       <CurrentForm />
     </Grid>
   </Grid>

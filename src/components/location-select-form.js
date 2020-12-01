@@ -1,17 +1,9 @@
-import React, {useEffect, useState} from "react";
-import {RoundwareMapStyle} from "../map-style";
-import {GoogleMap, LoadScript, Marker, LatLng, useGoogleMap} from "@react-google-maps/api";
+import React, {useEffect} from "react";
 import {useRoundware} from "../hooks";
-import Button from "@material-ui/core/Button";
 import LocationSelectMarker from "./location-select-marker";
-import Paper from "@material-ui/core/Paper";
-import Card from "@material-ui/core/Card";
-import {CardActionArea} from "@material-ui/core";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-
+import {RoundwareMapStyle} from "../map-style";
+import {GoogleMap, LoadScript} from "@react-google-maps/api";
+import { Button, Card, CardContent, CardActions, Typography, Container } from "@material-ui/core";
 const getPosition = function (options) {
     return new Promise(function (resolve, reject) {
         navigator.geolocation.getCurrentPosition(resolve, reject, options);
@@ -42,7 +34,6 @@ const LocationSelectForm = () => {
         width: '400px',
         height: '400px',
         margin: "auto",
-
     }
     return <Card>
         <CardContent>
