@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => {
 
 export const LandingPage = (props) => {
   const { roundware } = useRoundware();
-  if (!roundware._project) {
+  if (!roundware._project || roundware._project.projectName === '(unknown)') {
     return null;
   }
   return (

@@ -186,9 +186,9 @@ export const RoundwareProvider = (props) => {
       assetFilters: { submitted: true, media_type: "audio" },
       listenerLocation: initial_loc,
     });
+    setState({ ...state, roundware: roundware });
     roundware.connect().then(({ uiConfig }) => {
-      setState({ ...state, uiConfig: uiConfig });
-      setState({ ...state, roundware: roundware });
+      setState({ ...state, uiConfig: uiConfig, roundware: roundware });
       roundware.loadAssets().then(() => {
         setState({
           ...state,
@@ -197,7 +197,6 @@ export const RoundwareProvider = (props) => {
         });
       });
     });
-    setState({ ...state, roundware: roundware });
   }, []);
 
   const setTaggingDone = (done) => {
