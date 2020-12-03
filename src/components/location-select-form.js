@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import ErrorDialog from "./error-dialog";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const getPosition = function (options) {
   return new Promise(function (resolve, reject) {
@@ -44,6 +45,8 @@ const LocationSelectForm = () => {
     saveDraftLocation,
   } = useRoundware();
   const [error, set_error] = useState( null );
+  const [geolocating, set_geolocating] = useState( null );
+
   useEffect(() => {
     if (roundware._project) {
       setDraftLocation(roundware._project.location);
@@ -55,12 +58,15 @@ const LocationSelectForm = () => {
     if (!navigator.geolocation) {
       console.error("Geolocation is not supported by your browser");
     } else {
+      set_geolocating(true);
       getPosition()
         .then((position) => {
           setDraftLocation(position.coords);
         })
         .catch(err => {
           set_error(err);
+        }).finally( () => {
+          set_geolocating(false);
         });
     }
   };
@@ -125,7 +131,7 @@ const LocationSelectForm = () => {
           aria-label="use my location"
           onClick={getGeolocation}
         >
-          Use My Location
+          {geolocating ? <CircularProgress /> : "Use My Location" }
         </Button>
         <Button
           style={{
