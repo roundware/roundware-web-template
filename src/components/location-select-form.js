@@ -15,7 +15,7 @@ import ErrorDialog from "./error-dialog";
 
 const getPosition = function (options) {
   return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    return navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 };
 
@@ -23,6 +23,9 @@ const useStyles = () => makeStyles(theme => {
   return {
     container: {
       flexGrow: 1,
+      margin: "auto"
+    },
+    button: {
       margin: "auto"
     }
   }
@@ -113,6 +116,10 @@ const LocationSelectForm = () => {
       </CardContent>
       <CardActions>
         <Button
+          style={{
+            marginLeft: "auto",
+            marginRight: "2rem"
+          }}
           size="medium"
           variant={"contained"}
           aria-label="use my location"
@@ -121,6 +128,10 @@ const LocationSelectForm = () => {
           Use My Location
         </Button>
         <Button
+          style={{
+            marginRight: "auto",
+            marginLeft: "2rem"
+          }}
           size="medium"
           color="primary"
           variant={"contained"}

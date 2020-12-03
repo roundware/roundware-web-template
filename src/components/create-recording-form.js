@@ -13,7 +13,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import ErrorDialog from "./error-dialog";
 import Dialog from "@material-ui/core/Dialog";
-
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CircularProgress from "@material-ui/core/CircularProgress";
 const useStyles = makeStyles((theme) => {});
 
 const visualizerOptions = {
@@ -34,9 +35,14 @@ const CreateRecordingForm = ({ tagGroups }) => {
   const [legalModalOpen, set_legal_modal_open] = useState(false);
   const [saving, set_saving] = useState(false);
   const [error, set_error] = useState(null);
+  const [success, set_success] = useState(false);
 
   const startRecording = () => {
     set_record_button_processing(true);
+    if (!navigator.mediaDevices) {
+      set_error({message: "we can't get access to your microphone at this time"})
+      return;
+    }
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       set_draft_recording_media(null);
       set_stream(stream);
@@ -197,17 +203,40 @@ const CreateRecordingForm = ({ tagGroups }) => {
               roundware
                 .saveAsset(draftRecordingMedia, fileName, assetMeta)
                 .then((asset) => {
+                  set_success(asset);
+                }).catch(err => {
+                  set_error({"message": err});
+                }).finally(() => {
                   set_saving(false);
-                });
+              })
             }}
           />
         </Dialog>
       </Grid>
       <Dialog open={saving}>
-        <DialogContentText>
-          Uploading your recording now! Please keep this page open until we
-          finish uploading
-        </DialogContentText>
+        <DialogContent>
+          <CircularProgress color={"primary"} style={{margin: "auto"}}/>
+          <DialogContentText>
+            Uploading your recording now! Please keep this page open until we
+            finish uploading
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={success}>
+        <DialogContent>
+          <CheckCircleIcon color={"primary"}/>
+          <DialogContentText>
+            Upload Complete!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant={"contained"}
+                  color={"primary"}
+                  onClick={()=>{
+                    set_success(null);
+                  }}
+          />
+        </DialogActions>
       </Dialog>
     </Grid>
   );
