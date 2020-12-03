@@ -3,30 +3,28 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import Checkbox from "@material-ui/core/Checkbox";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { useRoundware } from "../hooks";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Paper from "@material-ui/core/Paper";
 import { CardContent } from "@material-ui/core";
-import CardHeader from "@material-ui/core/CardHeader";
 
 const useStyles = makeStyles((theme) => {
   return {
     root: {
-      flexGrop: true,
+      flexGrow: 1,
     },
     cardGrid: {
-      // width: 100%
     },
-
     tagCard: {
-      flex: 1,
-      margin: theme.spacing(4),
+      margin: theme.spacing(1),
+      padding: theme.spacing(4),
       minWidth: "20rem",
-      padding: theme.spacing(6),
       cursor: "pointer",
+    },
+    tagGroupHeader: {
+      marginBottom: theme.spacing(3)
     },
     selectedTagCard: {
       backgroundColor: theme.palette.primary.main,
@@ -72,7 +70,7 @@ const TagSelectForm = () => {
   };
   return (
     <div className={classes.root}>
-      <Card>
+      <Card className={classes.tagGroupHeader}>
         <CardContent>
           <Typography variant={"h4"}>{tagGroup.header_display_text}</Typography>
         </CardContent>
@@ -99,7 +97,7 @@ const TagSelectForm = () => {
                     }}
                   />
                 }
-                label={<Typography>choice.tag_display_text</Typography>}
+                label={<Typography children={[choice.tag_display_text]}/>}
               />
             </Card>
           );
@@ -107,6 +105,9 @@ const TagSelectForm = () => {
       </Grid>
       <Container>
         <Button
+          style={{
+            margin: "auto"
+          }}
           disabled={!nextEnabled}
           variant={"contained"}
           color={"primary"}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { useRoundware } from "../hooks";
 import LocationSelectMarker from "./location-select-marker";
 import { RoundwareMapStyle } from "../map-style";
@@ -9,13 +9,29 @@ import {
   CardContent,
   CardActions,
   Typography,
-  Container,
 } from "@material-ui/core";
+import {makeStyles} from "@material-ui/styles";
+import ErrorDialog from "./error-dialog";
+
 const getPosition = function (options) {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 };
+
+const useStyles = () => makeStyles(theme => {
+  return {
+    container: {
+      flexGrow: 1,
+      margin: "auto"
+    }
+  }
+})
+const mapContainerStyle = {
+    width: "400px",
+    height: "400px",
+    margin: "auto",
+}
 
 const LocationSelectForm = () => {
   const {
@@ -24,11 +40,13 @@ const LocationSelectForm = () => {
     setDraftLocation,
     saveDraftLocation,
   } = useRoundware();
+  const [error, set_error] = useState( null );
   useEffect(() => {
     if (roundware._project) {
       setDraftLocation(roundware._project.location);
     }
   }, [roundware._project]);
+  const classes = useStyles();
 
   const getGeolocation = () => {
     if (!navigator.geolocation) {
@@ -38,34 +56,26 @@ const LocationSelectForm = () => {
         .then((position) => {
           setDraftLocation(position.coords);
         })
-        .catch(console.error);
+        .catch(err => {
+          set_error(err);
+        });
     }
   };
   if (!roundware) {
     return null;
   }
-  const containerStyle = {
-    width: "400px",
-    height: "400px",
-    margin: "auto",
-  };
+
   return (
-    <Card>
+    <Card style={{margin: "auto"}} className={classes.container}>
+      <ErrorDialog error={error} set_error={set_error} />
       <CardContent>
-        <Container
-          style={{
-            marginTop: "1rem",
-            marginBottom: "2rem",
-          }}
-        >
-          <Typography variant={"h5"}>Where are you recording today?</Typography>
-        </Container>
+        <Typography variant={"h5"}>Where are you recording today?</Typography>
         <LoadScript
           id="script-loader"
           googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}
         >
           <GoogleMap
-            mapContainerStyle={containerStyle}
+            mapContainerStyle={mapContainerStyle}
             onLoad={(map) => {
               const styledMapType = new google.maps.StyledMapType(
                 RoundwareMapStyle,

@@ -4,6 +4,7 @@ import TagSelectForm from "./tag-select-form";
 import LocationSelectForm from "./location-select-form";
 import CreateRecordingForm from "./create-recording-form";
 import Grid from "@material-ui/core/Grid";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const formComponents = {
   tags: TagSelectForm,
@@ -17,6 +18,8 @@ const CurrentForm = () => {
 
   useEffect(() => {
     let nextForm = "tags";
+    nextForm = "location";
+
     if (draftRecording.doneTagging) {
       nextForm = "location";
     }
@@ -34,10 +37,25 @@ const CurrentForm = () => {
   return React.createElement(formComponents[CurrentFormComponent], {});
 };
 
+const useStyles = () => makeStyles(theme => ({
+  root: {
+    paddingTop: "5rem",
+    paddingBottom: "5rem"
+  },
+  responsiveFormContainer: {
+    margin: "auto"
+  }
+}))
+
+
 const SpeakPage = () => {
+  const classes = useStyles();
   return (
-    <Grid container style={{ paddingBottom: "5rem" }}>
-      <Grid item xs={11} sm={10} md={8}>
+    <Grid container className={classes.root}>
+      <Grid item container
+            className={classes.responsiveFormContainer}
+            style={{'margin': "auto"}}
+            xs={12} sm={10} md={6} lg={4} >
         <CurrentForm />
       </Grid>
     </Grid>

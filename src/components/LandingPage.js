@@ -29,9 +29,11 @@ const useStyles = makeStyles((theme) => {
 
 export const LandingPage = (props) => {
   const { roundware } = useRoundware();
-
+  if (!roundware._project) {
+    return null;
+  }
   return (
-    <Fragment>
+    <div>
       <Grid item>
         <Typography variant={"h1"}>
           {roundware._project && roundware._project.projectName}
@@ -39,6 +41,6 @@ export const LandingPage = (props) => {
       </Grid>
       <ActionButton label={"Listen"} linkTo={"/listen"} />
       <ActionButton label={"Speak"} linkTo={"/speak"} />
-    </Fragment>
+    </div>
   );
 };

@@ -3,26 +3,16 @@ import { useRoundware } from "../hooks";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import MediaRecorder from "audio-recorder-polyfill";
-import mpegEncoder from "audio-recorder-polyfill/mpeg-encoder";
-import Typography from "@material-ui/core/Typography";
-import MicrophonePlugin from "wavesurfer.js/dist/plugin/wavesurfer.microphone.js";
-import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
-import Container from "@material-ui/core/Container";
-import AudioSpectrum from "react-audio-spectrum";
 import Grid from "@material-ui/core/Grid";
 import { IconButton } from "@material-ui/core";
-import Icon from "@material-ui/core/Icon";
 import MicIcon from "@material-ui/icons/Mic";
 import Wave from "@foobar404/wave";
-import Dialog from "@material-ui/core/Dialog";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import Checkbox from "@material-ui/core/Checkbox";
 import LegalAgreementForm from "./legal-agreement-form";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import ErrorDialog from "./error-dialog";
+import Dialog from "@material-ui/core/Dialog";
 
 const useStyles = makeStyles((theme) => {});
 
@@ -38,14 +28,12 @@ const CreateRecordingForm = ({ tagGroups }) => {
   const [draftRecordingMedia, set_draft_recording_media] = useState();
   const [draftMediaUrl, set_draft_media_url] = useState("");
   const [recorder, set_recorder] = useState();
-  const [recordButtonProcessing, set_record_button_processing] = useState(
-    false
-  );
+  const [recordButtonProcessing, set_record_button_processing] = useState(false);
   const [stream, set_stream] = useState();
   const [deleteModalOpen, set_delete_modal_open] = useState(false);
   const [legalModalOpen, set_legal_modal_open] = useState(false);
   const [saving, set_saving] = useState(false);
-  const [accepted_agreement, set_accepted_agreement] = useState(false);
+  const [error, set_error] = useState(null);
 
   const startRecording = () => {
     set_record_button_processing(true);
@@ -66,6 +54,8 @@ const CreateRecordingForm = ({ tagGroups }) => {
       recorder.start();
       set_is_recording(true);
       set_record_button_processing(false);
+    }).catch(err => {
+      set_error(err)
     });
   };
 
@@ -113,6 +103,7 @@ const CreateRecordingForm = ({ tagGroups }) => {
       direction={"column"}
       className={"visualizer-canvas"}
     >
+      <ErrorDialog error={error} set_error={set_error}/>
       <Grid item xs={9}>
         <canvas id="audio-visualizer" />
       </Grid>

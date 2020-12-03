@@ -16,6 +16,8 @@ import Button from "@material-ui/core/Button";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import { useRoundware } from "../hooks";
 import DebugPage from "./DebugPage";
+import RoundwareMixerControl from "./roundware-mixer-control";
+import Helmet from "react-helmet";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -28,19 +30,12 @@ const useStyles = makeStyles((theme) => {
     },
     actionButton: {
       margin: "auto",
-      width: "100%",
-      height: "3em",
     },
     root: {
-      height: "100vh",
-      display: "flex",
       margin: theme.spacing(2),
     },
     container: {
-      margin: 0,
-      height: "100vh",
-      display: "flex",
-      flexDirection: "column",
+      flexGrow: true,
     },
   };
 });
@@ -51,6 +46,10 @@ export const App = () => {
   const { roundware } = useRoundware();
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{roundware._project ? roundware._project.projectName : "Roundware"}</title>
+      </Helmet>
       <BrowserRouter>
         <CssBaseline />
         <AppBar className={classes.topBar} position="fixed">
@@ -58,8 +57,8 @@ export const App = () => {
             <ErrorOutline />
           </Toolbar>
         </AppBar>
+        <Toolbar style={{ marginBottom: "2rem" }} />
         <div className={classes.container}>
-          <Toolbar style={{ marginBottom: "2rem" }} />
           <Switch>
             <Route exact path="/">
               <LandingPage />
@@ -74,28 +73,12 @@ export const App = () => {
               <DebugPage />
             </Route>
           </Switch>
-          <Toolbar />
         </div>
+        <Toolbar className={classes.bottomBar} style={{marginTop: "2rem"}}/>
         <AppBar position="fixed" className={classes.bottomBar}>
           <Toolbar>
             <Route path="/listen">
-              <Button
-                onClick={() => {
-                  if (!roundware._mixer) {
-                    roundware.activateMixer().then(() => {
-                      roundware._mixer.toggle();
-                    });
-                  } else {
-                    roundware._mixer.toggle();
-                  }
-                }}
-              >
-                {roundware && roundware._mixer && roundware._mixer.playing ? (
-                  <PauseCircleOutlineIcon />
-                ) : (
-                  <PlayCircleOutlineIcon />
-                )}
-              </Button>
+              <RoundwareMixerControl />
             </Route>
           </Toolbar>
         </AppBar>
