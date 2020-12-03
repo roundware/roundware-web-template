@@ -224,7 +224,9 @@ const CreateRecordingForm = ({ tagGroups }) => {
       </Dialog>
       <Dialog open={success}>
         <DialogContent>
-          <CheckCircleIcon color={"primary"}/>
+          <DialogContentText style={{textAlign: "center"}}>
+            <CheckCircleIcon color={"primary"}/>
+          </DialogContentText>
           <DialogContentText>
             Upload Complete!
           </DialogContentText>
@@ -235,7 +237,7 @@ const CreateRecordingForm = ({ tagGroups }) => {
                   onClick={()=>{
                     set_success(null);
                   }}
-          />
+          >OK</Button>
         </DialogActions>
       </Dialog>
     </Grid>
