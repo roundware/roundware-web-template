@@ -18,7 +18,6 @@ const CurrentForm = () => {
 
   useEffect(() => {
     let nextForm = "tags";
-    nextForm = "location";
 
     if (draftRecording.doneTagging) {
       nextForm = "location";
