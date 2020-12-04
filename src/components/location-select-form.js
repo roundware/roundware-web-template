@@ -13,6 +13,7 @@ import {
 import {makeStyles} from "@material-ui/styles";
 import ErrorDialog from "./error-dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {useHistory} from "react-router-dom";
 
 const getPosition = function (options) {
   return new Promise(function (resolve, reject) {
@@ -53,6 +54,7 @@ const LocationSelectForm = () => {
     }
   }, [roundware._project]);
   const classes = useStyles();
+  const history = useHistory();
 
   const getGeolocation = () => {
     if (!navigator.geolocation) {
@@ -123,8 +125,19 @@ const LocationSelectForm = () => {
       <CardActions>
         <Button
           style={{
-            marginLeft: "auto",
-            marginRight: "2rem"
+            marginLeft: "2rem",
+            marginRight: "auto"
+          }}
+          size="medium"
+          variant={"contained"}
+          aria-label="back"
+          onClick={history.goBack}
+        >
+          Back
+        </Button>
+        <Button
+          style={{
+            margin: "auto",
           }}
           size="medium"
           variant={"contained"}
@@ -141,7 +154,9 @@ const LocationSelectForm = () => {
           size="medium"
           color="primary"
           variant={"contained"}
-          onClick={saveDraftLocation}
+          onClick={() => {
+            history.push('/speak/recording')
+          }}
         >
           Next
         </Button>

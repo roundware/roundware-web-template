@@ -214,11 +214,6 @@ export const RoundwareProvider = (props) => {
     setState({ ...state, draftRecording: updatedDraft });
   };
 
-  const saveDraftLocation = () => {
-    const updatedDraft = { ...state.draftRecording };
-    updatedDraft.doneSelectingLocation = true;
-    setState({ ...state, draftRecording: updatedDraft });
-  };
   return (
     <RoundwareContext.Provider
       value={{
@@ -236,7 +231,6 @@ export const RoundwareProvider = (props) => {
         clearRecordingTags,
         setTaggingDone,
         setDraftLocation,
-        saveDraftLocation,
         // computed properties
         assetPage: assetPage(),
       }}

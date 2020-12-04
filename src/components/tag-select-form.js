@@ -33,6 +33,8 @@ const useStyles = makeStyles((theme) => {
     },
   };
 });
+const later = (delay, value) =>
+  new Promise(resolve => setTimeout(resolve, delay, value));
 
 const TagSelectForm = ({match}) => {
   const classes = useStyles();
@@ -70,6 +72,19 @@ const TagSelectForm = ({match}) => {
     const isSelected = draftRecording.tags.indexOf(tagId) !== -1;
     clearRecordingTags(choices.map((c) => c.id));
     selectRecordingTag(tagId, isSelected);
+    // let the ui respond to the selection before navigating
+    later(500, ).then(
+      () => {
+        const isLastGroup = tagGroups.length <= tagGroupIndex + 1;
+        if (isLastGroup) {
+          history.push('/speak/location');
+        } else {
+          const nextUrl = generatePath(match.path, {tagGroupIndex: tagGroupIndex + 1})
+          history.push(nextUrl);
+        }
+      }
+    )
+
   };
   return (
     <div className={classes.root}>
@@ -112,21 +127,17 @@ const TagSelectForm = ({match}) => {
           style={{
             margin: "auto"
           }}
-          disabled={!nextEnabled}
           variant={"contained"}
-          color={"primary"}
           onClick={() => {
-            // todo handle the dynamic trees that are possible with RW tag groups
-            const isLastGroup = tagGroups.length <= tagGroupIndex + 1;
-            if (isLastGroup) {
-              setTaggingDone(true);
+            if (tagGroupIndex === 0) {
+              history.replace("/")
             } else {
-              const nextUrl = generatePath(match.path, {tagGroupIndex: tagGroupIndex + 1})
-              history.push(nextUrl);
+              const nextUrl = generatePath(match.path, {tagGroupIndex: tagGroupIndex - 1})
+              history.replace(nextUrl);
             }
           }}
         >
-          Next
+          Back
         </Button>
       </Container>
     </div>

@@ -20,23 +20,7 @@ const useStyles = () => makeStyles(theme => ({
 
 const SpeakPage = (props) => {
   const { roundware, draftRecording } = useRoundware();
-  const history = useHistory()
-  const location = useLocation();
   const classes = useStyles();
-  useEffect(() => {
-    let nextForm = "tags/0";
-
-    if (draftRecording.doneTagging) {
-      nextForm = "location";
-    }
-    if (draftRecording.doneSelectingLocation) {
-      nextForm = "recording";
-    }
-    if (location !== nextForm) {
-      window.scrollTo(0, 0);
-    }
-    history.push(`/speak/${nextForm}`);
-  }, [draftRecording.doneTagging, draftRecording.doneSelectingLocation]);
 
   if (roundware === null || !roundware.uiConfig) {
     return null;
