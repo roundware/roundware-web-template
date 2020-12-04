@@ -9,6 +9,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { CardContent } from "@material-ui/core";
+import {generatePath, useHistory, useLocation} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const TagSelectForm = () => {
+const TagSelectForm = ({match}) => {
   const classes = useStyles();
   const {
     roundware,
@@ -42,14 +43,15 @@ const TagSelectForm = () => {
     clearRecordingTags,
     draftRecording,
   } = useRoundware();
-
-  const [tagGroupIndex, setTagGroupIndex] = useState(0);
-
+  const history = useHistory();
+  let tagGroupIndex = 0;
+  if (match.params.tagGroupIndex) {
+    tagGroupIndex = parseInt(match.params.tagGroupIndex);
+  }
   if (!roundware.uiConfig) {
     return null;
   }
   const tagGroups = roundware.uiConfig.speak;
-
   const tagGroup = tagGroups[tagGroupIndex];
   const choices = tagGroup.display_items.filter((item) => {
     // display the choices for this tagGroup that have no parent specified,
@@ -59,6 +61,7 @@ const TagSelectForm = () => {
       draftRecording.tags.indexOf(item.parent_id) !== -1
     );
   });
+
   let nextEnabled = false;
   if (tagGroup.select === "single") {
     nextEnabled = choices.some((tag) => draftRecording.tags.includes(tag.id));
@@ -70,6 +73,7 @@ const TagSelectForm = () => {
   };
   return (
     <div className={classes.root}>
+      { JSON.stringify(match) }
       <Card className={classes.tagGroupHeader}>
         <CardContent>
           <Typography variant={"h4"}>{tagGroup.header_display_text}</Typography>
@@ -117,7 +121,8 @@ const TagSelectForm = () => {
             if (isLastGroup) {
               setTaggingDone(true);
             } else {
-              setTagGroupIndex(tagGroupIndex + 1);
+              const nextUrl = generatePath(match.path, {tagGroupIndex: tagGroupIndex + 1})
+              history.push(nextUrl);
             }
           }}
         >

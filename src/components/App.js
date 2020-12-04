@@ -60,18 +60,10 @@ export const App = () => {
         <Toolbar style={{ marginBottom: "2rem" }} />
         <div className={classes.container}>
           <Switch>
-            <Route exact path="/">
-              <LandingPage />
-            </Route>
-            <Route path="/listen">
-              <ListenPage />
-            </Route>
-            <Route path="/speak">
-              <SpeakPage />
-            </Route>
-            <Route path="/debug">
-              <DebugPage />
-            </Route>
+            <Route exact path="/" component={LandingPage} />
+            <Route path="/listen" component={ListenPage} />
+            <Route path="/speak" component={SpeakPage} />
+            <Route path="/debug" component={DebugPage} />
           </Switch>
         </div>
         <Toolbar className={classes.bottomBar} style={{marginTop: "2rem"}}/>

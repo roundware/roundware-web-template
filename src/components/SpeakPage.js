@@ -5,36 +5,7 @@ import LocationSelectForm from "./location-select-form";
 import CreateRecordingForm from "./create-recording-form";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-
-const formComponents = {
-  tags: TagSelectForm,
-  location: LocationSelectForm,
-  recording: CreateRecordingForm,
-};
-const CurrentForm = () => {
-  const [CurrentFormComponent, set_current_form_component] = useState("tags");
-
-  const { roundware, draftRecording } = useRoundware();
-
-  useEffect(() => {
-    let nextForm = "tags";
-
-    if (draftRecording.doneTagging) {
-      nextForm = "location";
-    }
-    if (draftRecording.doneSelectingLocation) {
-      nextForm = "recording";
-    }
-    if (CurrentFormComponent !== nextForm) {
-      window.scrollTo(0, 0);
-    }
-    set_current_form_component(nextForm);
-  }, [draftRecording.doneTagging, draftRecording.doneSelectingLocation]);
-  if (roundware === null || !roundware.uiConfig) {
-    return null;
-  }
-  return React.createElement(formComponents[CurrentFormComponent], {});
-};
+import {Route, Switch, useHistory, useLocation} from "react-router-dom";
 
 const useStyles = () => makeStyles(theme => ({
   root: {
@@ -47,15 +18,40 @@ const useStyles = () => makeStyles(theme => ({
 }))
 
 
-const SpeakPage = () => {
+const SpeakPage = (props) => {
+  const { roundware, draftRecording } = useRoundware();
+  const history = useHistory()
+  const location = useLocation();
   const classes = useStyles();
+  useEffect(() => {
+    let nextForm = "tags/0";
+
+    if (draftRecording.doneTagging) {
+      nextForm = "location";
+    }
+    if (draftRecording.doneSelectingLocation) {
+      nextForm = "recording";
+    }
+    if (location !== nextForm) {
+      window.scrollTo(0, 0);
+    }
+    history.push(`/speak/${nextForm}`);
+  }, [draftRecording.doneTagging, draftRecording.doneSelectingLocation]);
+
+  if (roundware === null || !roundware.uiConfig) {
+    return null;
+  }
   return (
     <Grid container className={classes.root}>
       <Grid item container
             className={classes.responsiveFormContainer}
             style={{'margin': "auto"}}
             xs={12} sm={10} md={6} lg={4} >
-        <CurrentForm />
+        <Switch>
+          <Route path={`${props.match.path}/tags/:tagGroupIndex`} component={TagSelectForm } />
+          <Route path={`${props.match.path}/location`} component={LocationSelectForm} />
+          <Route path={`${props.match.path}/recording`} component={CreateRecordingForm} />
+        </Switch>
       </Grid>
     </Grid>
   );
