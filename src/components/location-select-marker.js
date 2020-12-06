@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { RoundwareMapStyle } from "../map-style";
+import React, { useEffect } from "react";
 import {
-  GoogleMap,
-  LoadScript,
   Marker,
-  LatLng,
   useGoogleMap,
 } from "@react-google-maps/api";
 import { useRoundware } from "../hooks";
-import Button from "@material-ui/core/Button";
 
 const LocationSelectMarker = () => {
   const { draftRecording, setDraftLocation } = useRoundware();

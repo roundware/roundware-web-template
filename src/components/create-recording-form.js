@@ -100,8 +100,8 @@ const CreateRecordingForm = ({ tagGroups }) => {
       startRecording();
     }
   };
+  const selected_tags = draftRecording.tags.map(tag => tagLookup[draftRecording.tags]);
 
-  const selectedTags = roundware._project.tags;
   return (
     <Grid
       container

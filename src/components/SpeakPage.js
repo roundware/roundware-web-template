@@ -19,15 +19,22 @@ const useStyles = () => makeStyles(theme => ({
 
 
 const SpeakPage = (props) => {
-  const { roundware, draftRecording } = useRoundware();
+  const { roundware, uiConfig } = useRoundware();
   const classes = useStyles();
+  const history = useHistory();
 
-  if (roundware === null || !roundware.uiConfig) {
+  if (roundware === null || !uiConfig) {
+    return null;
+  }
+  // if we are directed to the 'speak' page directly,
+  // redirect to the first tag selection page
+  if (props.match.isExact === true) {
+    history.replace('/speak/tags/0');
     return null;
   }
   return (
     <Grid container className={classes.root}>
-      <Grid item container
+      <Grid item
             className={classes.responsiveFormContainer}
             style={{'margin': "auto"}}
             xs={12} sm={10} md={6} lg={4} >

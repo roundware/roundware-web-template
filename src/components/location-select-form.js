@@ -29,7 +29,12 @@ const useStyles = () => makeStyles(theme => {
     },
     button: {
       margin: "auto"
-    }
+    },
+    cardActionButton: {
+      margin: {
+        right: theme.spacing(2),
+      }
+    },
   }
 })
 const mapContainerStyle = {
@@ -43,18 +48,19 @@ const LocationSelectForm = () => {
     roundware,
     draftRecording,
     setDraftLocation,
-    saveDraftLocation,
   } = useRoundware();
-  const [error, set_error] = useState( null );
-  const [geolocating, set_geolocating] = useState( null );
-
-  useEffect(() => {
-    if (roundware._project) {
-      setDraftLocation(roundware._project.location);
-    }
-  }, [roundware._project]);
   const classes = useStyles();
   const history = useHistory();
+  const [error, set_error] = useState( null );
+  const [geolocating, set_geolocating] = useState( null );
+  const default_project_location = roundware._project && roundware._project.location
+
+  useEffect(() => {
+    console.info(default_project_location)
+    if (default_project_location) {
+      setDraftLocation(default_project_location);
+    }
+  }, [default_project_location]);
 
   const getGeolocation = () => {
     if (!navigator.geolocation) {
@@ -72,7 +78,8 @@ const LocationSelectForm = () => {
         });
     }
   };
-  if (!roundware) {
+  const ready = default_project_location && draftRecording.location;
+  if (!ready) {
     return null;
   }
 
@@ -122,24 +129,17 @@ const LocationSelectForm = () => {
           </GoogleMap>
         </LoadScript>
       </CardContent>
-      <CardActions>
+      <CardActions variant={"contained"} style={{}}>
         <Button
-          style={{
-            marginLeft: "2rem",
-            marginRight: "auto"
-          }}
-          size="medium"
-          variant={"contained"}
+          classes={classes.cardActionButton}
           aria-label="back"
           onClick={history.goBack}
+          variant={"contained"}
         >
           Back
         </Button>
         <Button
-          style={{
-            margin: "auto",
-          }}
-          size="medium"
+          classes={classes.cardActionButton}
           variant={"contained"}
           aria-label="use my location"
           onClick={getGeolocation}
@@ -147,11 +147,7 @@ const LocationSelectForm = () => {
           {geolocating ? <CircularProgress /> : "Use My Location" }
         </Button>
         <Button
-          style={{
-            marginRight: "auto",
-            marginLeft: "2rem"
-          }}
-          size="medium"
+          classes={classes.cardActionButton}
           color="primary"
           variant={"contained"}
           onClick={() => {

@@ -39,8 +39,7 @@ const later = (delay, value) =>
 const TagSelectForm = ({match}) => {
   const classes = useStyles();
   const {
-    roundware,
-    setTaggingDone,
+    uiConfig,
     selectRecordingTag,
     clearRecordingTags,
     draftRecording,
@@ -50,24 +49,21 @@ const TagSelectForm = ({match}) => {
   if (match.params.tagGroupIndex) {
     tagGroupIndex = parseInt(match.params.tagGroupIndex);
   }
-  if (!roundware.uiConfig) {
+  if (!uiConfig.speak) {
     return null;
   }
-  const tagGroups = roundware.uiConfig.speak;
+  const tagGroups = uiConfig.speak;
   const tagGroup = tagGroups[tagGroupIndex];
+
+  // display the choices for this tagGroup that have no parent specified,
+  // or have their parent selected in the draft recording already
   const choices = tagGroup.display_items.filter((item) => {
-    // display the choices for this tagGroup that have no parent specified,
-    // or have their parent selected in the draft recording already
     return (
       item.parent_id === null ||
       draftRecording.tags.indexOf(item.parent_id) !== -1
     );
   });
 
-  let nextEnabled = false;
-  if (tagGroup.select === "single") {
-    nextEnabled = choices.some((tag) => draftRecording.tags.includes(tag.id));
-  }
   const toggleTagSelected = (tagId) => {
     const isSelected = draftRecording.tags.indexOf(tagId) !== -1;
     clearRecordingTags(choices.map((c) => c.id));
@@ -88,7 +84,6 @@ const TagSelectForm = ({match}) => {
   };
   return (
     <div className={classes.root}>
-      { JSON.stringify(match) }
       <Card className={classes.tagGroupHeader}>
         <CardContent>
           <Typography variant={"h4"}>{tagGroup.header_display_text}</Typography>

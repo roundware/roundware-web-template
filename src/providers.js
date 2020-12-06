@@ -199,12 +199,6 @@ export const RoundwareProvider = (props) => {
     });
   }, []);
 
-  const setTaggingDone = (done) => {
-    const updatedDraft = { ...state.draftRecording };
-    updatedDraft.doneTagging = done;
-    setState({ ...state, draftRecording: updatedDraft });
-  };
-
   const setDraftLocation = (loc) => {
     const updatedDraft = { ...state.draftRecording };
     updatedDraft.location = {
@@ -229,7 +223,6 @@ export const RoundwareProvider = (props) => {
         //
         selectRecordingTag,
         clearRecordingTags,
-        setTaggingDone,
         setDraftLocation,
         // computed properties
         assetPage: assetPage(),
