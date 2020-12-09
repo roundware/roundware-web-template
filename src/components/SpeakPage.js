@@ -26,12 +26,15 @@ const SpeakPage = (props) => {
   if (roundware === null || !uiConfig) {
     return null;
   }
-  // if we are directed to the 'speak' page directly,
-  // redirect to the first tag selection page
-  if (props.match.isExact === true) {
-    history.replace('/speak/tags/0');
-    return null;
-  }
+  useEffect( () => {
+      // if we are directed to the 'speak' page directly,
+      // redirect to the first tag selection page
+      if (props.match.isExact === true) {
+        history.replace('/speak/tags/0');
+      }
+    },    []
+  )
+
   return (
     <Grid container className={classes.root}>
       <Grid item

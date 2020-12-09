@@ -3,8 +3,10 @@ import React from "react";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import Button from "@material-ui/core/Button";
+import {useRoundware} from "../hooks";
 
 const RoundwareMixerControl = props => {
+  const {roundware} = useRoundware();
   return (
     <Button
     onClick={() => {

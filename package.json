@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel src/index.html --host 0.0.0.0",
+    "start": "parcel src/index.html --host localhost",
     "build": "rm -rf dist && parcel build --no-source-maps src/index.html "
   },
   "author": "Evan Babb",
@@ -17,11 +17,9 @@
     "@react-google-maps/api": "^1.13.0",
     "audio-recorder-polyfill": "^0.4.1",
     "moment": "^2.27.0",
-    "momentjs": "^2.0.0",
     "nanoid": "^3.1.10",
     "prettier": "^2.1.2",
     "react": "^16.14.0",
-    "react-audio-spectrum": "^0.1.0",
     "react-cookie": "^4.0.3",
     "react-debounce-input": "^3.2.2",
     "react-dom": "^16.13.1",
@@ -31,8 +29,7 @@
     "react-select": "^3.1.0",
     "roundware-web-framework": "^0.10.0",
     "standardized-audio-context": "^24.1.20",
-    "ts-overlapping-marker-spiderfier": "^1.0.3",
-    "wavesurfer.js": "^4.2.0"
+    "ts-overlapping-marker-spiderfier": "^1.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",

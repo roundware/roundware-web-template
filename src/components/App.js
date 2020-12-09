@@ -31,11 +31,8 @@ const useStyles = makeStyles((theme) => {
     actionButton: {
       margin: "auto",
     },
-    root: {
-      margin: theme.spacing(2),
-    },
-    container: {
-      flexGrow: true,
+    appContainer: {
+      flexGrow: 1,
     },
   };
 });
@@ -46,19 +43,19 @@ export const App = () => {
   const { roundware } = useRoundware();
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Helmet>
         <meta charSet="utf-8" />
         <title>{roundware._project ? roundware._project.projectName : "Roundware"}</title>
       </Helmet>
       <BrowserRouter>
-        <CssBaseline />
         <AppBar className={classes.topBar} position="fixed">
           <Toolbar className={classes.topBar}>
             <ErrorOutline />
           </Toolbar>
         </AppBar>
         <Toolbar style={{ marginBottom: "2rem" }} />
-        <div className={classes.container}>
+        <div className={classes.appContainer}>
           <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route path="/listen" component={ListenPage} />

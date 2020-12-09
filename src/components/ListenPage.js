@@ -1,14 +1,21 @@
-import React, { Fragment } from "react";
-import Typography from "@material-ui/core/Typography";
+import React from "react";
 import RoundwareMap from "./map";
-import AssetTable from "./asset-table";
-import Grid from "@material-ui/core/Grid";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
+const useStyles = makeStyles(theme => {
+  return {
+    root: {
+      flexGrow: 1,
+      display: "flex",
+    },
+    map: {
+      flexGrow: 1,
+    }
+  }
+})
 export const ListenPage = () => {
-  return (
-    <RoundwareMap
-      style={{ height: "100%" }}
-      googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}
-    />
-  );
-};
+  const classes = useStyles();
+  return <RoundwareMap
+        className={classes.map}
+        googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY} />
+}
