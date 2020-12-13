@@ -4,5 +4,6 @@ import React from "react";
 // https://redux.js.org/api/createstore
 
 const RoundwareContext = React.createContext({ roundware: null });
+const DraftRecordingContext = React.createContext({ });
 
-export default RoundwareContext;
+export {RoundwareContext, DraftRecordingContext};

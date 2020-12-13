@@ -1,12 +1,13 @@
 import { useContext } from "react";
-import RoundwareContext from "./context";
+import {RoundwareContext, DraftRecordingContext} from "./context";
 import { useCookies } from "react-cookie";
 import { nanoid } from "nanoid";
 
 export const useRoundware = () => useContext(RoundwareContext);
+export const useRoundwareDraft = () => useContext(DraftRecordingContext);
 
 export const useDeviceID = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["deviceId"]);
+  const [cookies, setCookie] = useCookies(["deviceId"]);
 
   if (!cookies["deviceId"]) {
     const millisecondsYear = 365 * 24 * 60 * 60 * 1000;

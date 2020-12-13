@@ -1,15 +1,75 @@
-import RoundwareContext from "./context";
+import {RoundwareContext, DraftRecordingContext} from "./context";
 import React, { useEffect, useState } from "react";
 import { Roundware } from "roundware-web-framework";
 import { useDeviceID } from "./hooks";
 
-export const RoundwareProvider = (props) => {
+export const DraftRecordingProvider = ({roundware, children}) => {
+
   const [state, setState] = useState({
-    roundware: {},
-    uiConfig: {},
+      acceptedAgreement: false,
+      tags: [],
+      location: {
+        latitude: null,
+        longitude: null
+      }
+  });
+
+  useEffect(() => {
+    if (!roundware._project || !roundware._project.location) {
+      return
+    }
+    if (state.location.latitude === null || state.location.longitude === null) {
+      setState({...state, location: roundware._project.location});
+    }
+  }, [roundware._project && roundware._project.location]);
+
+  const selectTag = (tag, deselect) => {
+    const updatedDraft = { ...state };
+
+    if (!deselect) {
+      updatedDraft.tags.push(tag);
+    } else {
+      const tagPosition = updatedDraft.tags.indexOf(tag);
+      if (tagPosition !== -1) {
+        updatedDraft.tags.splice(tagPosition, 1);
+      }
+    }
+    setState({ ...updatedDraft });
+  };
+
+  const clearTags = (tags) => {
+    const updatedDraft = { ...state };
+
+    tags.forEach((tag) => {
+      const tagPosition = updatedDraft.tags.indexOf(tag);
+      if (tagPosition !== -1) {
+        updatedDraft.tags.splice(tagPosition, 1);
+      }
+    });
+
+    setState({ ...updatedDraft });
+  };
+  return <DraftRecordingContext.Provider value={{
+    ...state,
+    setState,
+    selectTag,
+    clearTags
+  }}>
+    {children}
+  </DraftRecordingContext.Provider>
+}
+
+export const RoundwareProvider = (props) => {
+  const [roundware, setRoundware] = useState(
+    {uiConfig: {}}
+  );
+  const [state, setState] = useState({
+    project: {},
+    assets: {},
+
     selectedAsset: null,
-    roundwareReady: false,
     selectedTags: [],
+
     // todo refactor this filtering stuff into something more scalable
     tagFilters: {},
     tagLookup: {},
@@ -22,14 +82,6 @@ export const RoundwareProvider = (props) => {
     // pagination by default
     assetPageIndex: 0,
     assetsPerPage: 10,
-    //
-    draftRecording: {
-      doneTagging: false,
-      doneSelectingLocation: false,
-      acceptedAgreement: false,
-      tags: [],
-      location: { latitude: 0, longitude: 0 },
-    },
   });
   const setSortField = (f) => {
     setState({ ...state, sortField: f });
@@ -65,17 +117,17 @@ export const RoundwareProvider = (props) => {
     );
   };
   useEffect(() => {
-    if (!state.uiConfig.speak) {
+    if (!roundware.uiConfig.speak) {
       return;
     }
     const tagLookup = {};
-    state.uiConfig.speak.forEach((group) =>
+    roundware.uiConfig.speak.forEach((group) =>
       group.display_items.forEach((tag) => {
         tagLookup[tag.tag_id] = tag;
       })
     );
     setState({ ...state, tagLookup: tagLookup });
-  }, [state.uiConfig.speak]);
+  }, [roundware.uiConfig && roundware.uiConfig.speak]);
 
   const setAssetsPerPage = (n) => {
     setState({ ...state, assetsPerPage: n });
@@ -87,7 +139,7 @@ export const RoundwareProvider = (props) => {
     setState({ ...state, selectedAsset: asset });
   };
   const filterAssets = (tagFilters) => {
-    const asset_data = state.roundware._assetData || [];
+    const asset_data = roundware._assetData || [];
     const tag_filters = tagFilters || state.tagFilters;
     return asset_data.filter((asset) => {
       // show the asset, unless a filter returns 'false'
@@ -95,7 +147,7 @@ export const RoundwareProvider = (props) => {
 
       const tag_filter_groups = Object.entries(tag_filters);
       matches.push(
-        ...tag_filter_groups.map(([filter_group, tags]) => {
+        ...tag_filter_groups.map(([_filter_group, tags]) => {
           if (!tags) {
             return true;
           } else {
@@ -104,11 +156,8 @@ export const RoundwareProvider = (props) => {
         })
       );
       if (state.userFilter.length) {
-        let user_str = "";
-
-        if (!asset.user) {
-          user_str = "anonymous";
-        } else {
+        let user_str = "anonymous";
+        if (asset.user) {
           user_str = asset.user && `${asset.user.username} ${asset.user.email}`;
         }
         const user_match = user_str.indexOf(state.userFilter) !== -1;
@@ -118,31 +167,7 @@ export const RoundwareProvider = (props) => {
       return matches.every((m) => m);
     });
   };
-  const selectRecordingTag = (tag, deselect) => {
-    const updatedDraft = { ...state.draftRecording };
 
-    if (!deselect) {
-      updatedDraft.tags.push(tag);
-    } else {
-      const tagPosition = updatedDraft.tags.indexOf(tag);
-      if (tagPosition !== -1) {
-        updatedDraft.tags.splice(tagPosition, 1);
-      }
-    }
-    setState({ ...state, draftRecording: updatedDraft });
-  };
-  const clearRecordingTags = (tags) => {
-    const updatedDraft = { ...state.draftRecording };
-
-    tags.forEach((tag) => {
-      const tagPosition = updatedDraft.tags.indexOf(tag);
-      if (tagPosition !== -1) {
-        updatedDraft.tags.splice(tagPosition, 1);
-      }
-    });
-
-    setState({ ...state, draftRecording: updatedDraft });
-  };
 
   const setUserFilter = (user_str) => {
     setState({ ...state, userFilter: user_str });
@@ -164,11 +189,12 @@ export const RoundwareProvider = (props) => {
   };
   const deviceId = useDeviceID();
   useEffect(() => {
-    if (state.roundware !== null) {
+    if (roundware._assetData !== undefined) {
       setState({ ...state, filteredAssets: filterAssets() });
     }
-  }, [state.tagFilters, state.userFilter]);
+  }, [state.tagFilters, state.userFilter, roundware._assetData]);
 
+  // when this provider is loaded, initialize roundware via api
   useEffect(() => {
     const project_id = process.env.ROUNDWARE_DEFAULT_PROJECT_ID;
     const server_url = process.env.ROUNDWARE_SERVER_URL;
@@ -186,31 +212,24 @@ export const RoundwareProvider = (props) => {
       assetFilters: { submitted: true, media_type: "audio" },
       listenerLocation: initial_loc,
     });
-    setState({ ...state, roundware: roundware });
-    roundware.connect().then(({ uiConfig }) => {
-      setState({ ...state, uiConfig: uiConfig, roundware: roundware });
-      roundware.loadAssets().then(() => {
-        setState({
-          ...state,
-          roundware: roundware,
-          filteredAssets: roundware._assetData,
-        });
-      });
-    });
+    roundware.connect().then(() => {
+      setRoundware(roundware);
+    })
   }, []);
 
-  const setDraftLocation = (loc) => {
-    const updatedDraft = { ...state.draftRecording };
-    updatedDraft.location = {
-      latitude: loc.latitude,
-      longitude: loc.longitude,
-    };
-    setState({ ...state, draftRecording: updatedDraft });
-  };
+  useEffect(()=>{
+    if (roundware._project) {
+      roundware.loadAssetPool().then( () => {
+        setState({...state});
+      })
+    }
+  }, [roundware._project])
 
   return (
     <RoundwareContext.Provider
       value={{
+        roundware: roundware,
+        rw: {...roundware},
         // everything from the state
         ...state,
         // state modification functions
@@ -220,10 +239,6 @@ export const RoundwareProvider = (props) => {
         setAssetPageIndex,
         setAssetsPerPage,
         setSortField,
-        //
-        selectRecordingTag,
-        clearRecordingTags,
-        setDraftLocation,
         // computed properties
         assetPage: assetPage(),
       }}

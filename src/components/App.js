@@ -7,13 +7,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import ErrorOutline from "@material-ui/icons/ErrorOutline";
-import Grid from "@material-ui/core/Grid";
 import { ListenPage } from "./ListenPage";
 import SpeakPage from "./SpeakPage";
-import Container from "@material-ui/core/Container";
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
-import Button from "@material-ui/core/Button";
-import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import { useRoundware } from "../hooks";
 import DebugPage from "./DebugPage";
 import RoundwareMixerControl from "./roundware-mixer-control";
@@ -38,7 +33,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 export const App = () => {
-  const [theme, setTheme] = useState(defaultTheme);
+  const [theme] = useState(defaultTheme);
   const classes = useStyles();
   const { roundware } = useRoundware();
   return (
@@ -54,7 +49,7 @@ export const App = () => {
             <ErrorOutline />
           </Toolbar>
         </AppBar>
-        <Toolbar style={{ marginBottom: "2rem" }} />
+        <Toolbar/>
         <div className={classes.appContainer}>
           <Switch>
             <Route exact path="/" component={LandingPage} />
@@ -63,7 +58,7 @@ export const App = () => {
             <Route path="/debug" component={DebugPage} />
           </Switch>
         </div>
-        <Toolbar className={classes.bottomBar} style={{marginTop: "2rem"}}/>
+        <Toolbar className={classes.bottomBar} />
         <AppBar position="fixed" className={classes.bottomBar}>
           <Toolbar>
             <Route path="/listen">

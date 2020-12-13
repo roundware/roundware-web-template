@@ -1,6 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useRoundware } from "../hooks";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import React, { useEffect, useState } from "react";
+import {useRoundware, useRoundwareDraft} from "../hooks";
 import Button from "@material-ui/core/Button";
 import MediaRecorder from "audio-recorder-polyfill";
 import Grid from "@material-ui/core/Grid";
@@ -15,21 +14,19 @@ import ErrorDialog from "./error-dialog";
 import Dialog from "@material-ui/core/Dialog";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
-const useStyles = makeStyles((theme) => {});
 
 const visualizerOptions = {
   type: "bars",
 };
 
-const CreateRecordingForm = ({ tagGroups }) => {
-  const classes = useStyles();
-  const { roundware, tagLookup, draftRecording } = useRoundware();
+const CreateRecordingForm = () => {
+  const draftRecording = useRoundwareDraft();
+  const { roundware } = useRoundware();
   let [wave, set_wave] = useState(new Wave());
   const [isRecording, set_is_recording] = useState(false);
   const [draftRecordingMedia, set_draft_recording_media] = useState();
   const [draftMediaUrl, set_draft_media_url] = useState("");
   const [recorder, set_recorder] = useState();
-  const [recordButtonProcessing, set_record_button_processing] = useState(false);
   const [stream, set_stream] = useState();
   const [deleteModalOpen, set_delete_modal_open] = useState(false);
   const [legalModalOpen, set_legal_modal_open] = useState(false);
@@ -38,7 +35,6 @@ const CreateRecordingForm = ({ tagGroups }) => {
   const [success, set_success] = useState(false);
 
   const startRecording = () => {
-    set_record_button_processing(true);
     if (!navigator.mediaDevices) {
       set_error({message: "we can't get access to your microphone at this time"})
       return;
@@ -59,7 +55,6 @@ const CreateRecordingForm = ({ tagGroups }) => {
       });
       recorder.start();
       set_is_recording(true);
-      set_record_button_processing(false);
     }).catch(err => {
       set_error(err)
     });
@@ -79,15 +74,12 @@ const CreateRecordingForm = ({ tagGroups }) => {
   }, [draftMediaUrl]);
 
   const stopRecording = () => {
-    set_record_button_processing(true);
     recorder.stop();
     stream.getTracks().forEach((track) => {
       track.stop();
     });
     wave.stopStream();
-    // set_stream(null);
     set_is_recording(false);
-    set_record_button_processing(false);
   };
 
   const deleteRecording = () => {
@@ -100,7 +92,8 @@ const CreateRecordingForm = ({ tagGroups }) => {
       startRecording();
     }
   };
-  const selected_tags = draftRecording.tags.map(tag => tagLookup[draftRecording.tags]);
+  // todo present the participant with the tags they picked
+  // const selected_tags = draftRecording.tags && draftRecording.tags.map(tag => tagLookup[draftRecording.tags]);
 
   return (
     <Grid

@@ -3,13 +3,13 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import Checkbox from "@material-ui/core/Checkbox";
-import React, { useState } from "react";
-import { useRoundware } from "../hooks";
+import React from "react";
+import {useRoundware, useRoundwareDraft} from "../hooks";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { CardContent } from "@material-ui/core";
-import {generatePath, useHistory, useLocation} from "react-router-dom";
+import {generatePath, useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -38,21 +38,19 @@ const later = (delay, value) =>
 
 const TagSelectForm = ({match}) => {
   const classes = useStyles();
-  const {
-    uiConfig,
-    selectRecordingTag,
-    clearRecordingTags,
-    draftRecording,
-  } = useRoundware();
+  const { roundware } = useRoundware();
+  const draftRecording = useRoundwareDraft();
   const history = useHistory();
+  // wait for roundware to be initialized
+  if (!roundware.uiConfig || !roundware.uiConfig.speak) {
+    return null;
+  }
+  // figure out which tagGroup to show in this view
   let tagGroupIndex = 0;
   if (match.params.tagGroupIndex) {
     tagGroupIndex = parseInt(match.params.tagGroupIndex);
   }
-  if (!uiConfig.speak) {
-    return null;
-  }
-  const tagGroups = uiConfig.speak;
+  const tagGroups = roundware.uiConfig.speak;
   const tagGroup = tagGroups[tagGroupIndex];
 
   // display the choices for this tagGroup that have no parent specified,
@@ -66,8 +64,8 @@ const TagSelectForm = ({match}) => {
 
   const toggleTagSelected = (tagId) => {
     const isSelected = draftRecording.tags.indexOf(tagId) !== -1;
-    clearRecordingTags(choices.map((c) => c.id));
-    selectRecordingTag(tagId, isSelected);
+    draftRecording.clearTags(choices.map((c) => c.id));
+    draftRecording.selectTag(tagId, isSelected);
     // let the ui respond to the selection before navigating
     later(500, ).then(
       () => {
@@ -106,7 +104,7 @@ const TagSelectForm = ({match}) => {
                   <Checkbox
                     style={{ display: "none" }}
                     size={"medium"}
-                    onChange={(evt) => {
+                    onChange={() => {
                       toggleTagSelected(choice.id);
                     }}
                   />

@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { useRoundware } from "../hooks";
+import React, { useState } from "react";
+import { useRoundwareDraft } from "../hooks";
 import LocationSelectMarker from "./location-select-marker";
 import { RoundwareMapStyle } from "../map-style";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
@@ -44,23 +44,15 @@ const mapContainerStyle = {
 }
 
 const LocationSelectForm = () => {
-  const {
-    roundware,
-    draftRecording,
-    setDraftLocation,
-  } = useRoundware();
+  const draftRecording = useRoundwareDraft();
   const classes = useStyles();
   const history = useHistory();
   const [error, set_error] = useState( null );
   const [geolocating, set_geolocating] = useState( null );
-  const default_project_location = roundware._project && roundware._project.location
 
-  useEffect(() => {
-    console.info(default_project_location)
-    if (default_project_location) {
-      setDraftLocation(default_project_location);
-    }
-  }, [default_project_location]);
+  if (!draftRecording.location.latitude || !draftRecording.location.longitude) {
+    return null;
+  }
 
   const getGeolocation = () => {
     if (!navigator.geolocation) {
@@ -69,19 +61,15 @@ const LocationSelectForm = () => {
       set_geolocating(true);
       getPosition()
         .then((position) => {
-          setDraftLocation(position.coords);
+          draftRecording.setState({...draftRecording.state, location: position.coords});
         })
         .catch(err => {
           set_error(err);
         }).finally( () => {
-          set_geolocating(false);
-        });
+        set_geolocating(false);
+      });
     }
   };
-  const ready = default_project_location && draftRecording.location;
-  if (!ready) {
-    return null;
-  }
 
   return (
     <Card style={{margin: "auto"}} className={classes.container}>
