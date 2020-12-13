@@ -8,7 +8,7 @@ import {
   Card,
   CardContent,
   CardActions,
-  Typography,
+  Typography, useTheme,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import ErrorDialog from "./error-dialog";
@@ -37,14 +37,15 @@ const useStyles = () => makeStyles(theme => {
     },
   }
 })
-const mapContainerStyle = {
-    width: "400px",
-    height: "400px",
-    margin: "auto",
-}
+
 
 const LocationSelectForm = () => {
   const draftRecording = useRoundwareDraft();
+  const theme = useTheme();
+  const mapContainerStyle = {
+    height: "400px",
+    margin: theme.spacing(2, 0),
+  }
   const classes = useStyles();
   const history = useHistory();
   const [error, set_error] = useState( null );

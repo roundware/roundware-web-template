@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => {
     tagCard: {
       margin: theme.spacing(1),
       padding: theme.spacing(4),
-      minWidth: "20rem",
       cursor: "pointer",
     },
     tagGroupHeader: {
