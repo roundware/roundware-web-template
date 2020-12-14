@@ -14,6 +14,8 @@ import ErrorDialog from "./error-dialog";
 import Dialog from "@material-ui/core/Dialog";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
 
 const visualizerOptions = {
   type: "bars",
@@ -21,7 +23,7 @@ const visualizerOptions = {
 
 const CreateRecordingForm = () => {
   const draftRecording = useRoundwareDraft();
-  const { roundware } = useRoundware();
+  const { roundware, tagLookup } = useRoundware();
   let [wave, set_wave] = useState(new Wave());
   const [isRecording, set_is_recording] = useState(false);
   const [draftRecordingMedia, set_draft_recording_media] = useState();
@@ -93,7 +95,7 @@ const CreateRecordingForm = () => {
     }
   };
   // todo present the participant with the tags they picked
-  // const selected_tags = draftRecording.tags && draftRecording.tags.map(tag => tagLookup[draftRecording.tags]);
+  const selected_tags = draftRecording.tags.map(tag => tagLookup[tag]);
 
   return (
     <Grid
@@ -102,6 +104,11 @@ const CreateRecordingForm = () => {
       direction={"column"}
       className={"visualizer-canvas"}
     >
+      <Grid item>
+        <Container>
+          { selected_tags.map( tag => <Typography key={tag.id}>{tag.tag_display_text}</Typography> ) }
+        </Container>
+      </Grid>
       <ErrorDialog error={error} set_error={set_error}/>
       <Grid item xs={9}>
         <canvas id="audio-visualizer" />
@@ -187,14 +194,15 @@ const CreateRecordingForm = () => {
             onAccept={() => {
               set_legal_modal_open(false);
               set_saving(true);
-              const fileName = new Date().toISOString() + ".mp3";
               const assetMeta = {
                 longitude: draftRecording.location.longitude,
                 latitude: draftRecording.location.latitude,
-                tag_ids: draftRecording.tags,
+                tag_ids: selected_tags.map(t => t.tag_id),
               };
+              const fileName = new Date().toISOString() + ".mp3";
+
               roundware
-                .saveAsset(draftRecordingMedia, fileName, assetMeta)
+                .saveAsset(draftRecordingMedia, fileName, {}) // assetMeta)
                 .then((asset) => {
                   set_success(asset);
                 }).catch(err => {

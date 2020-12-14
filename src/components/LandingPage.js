@@ -4,6 +4,7 @@ import { ActionButton } from "./actionButton";
 import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRoundware } from "../hooks";
+import Container from "@material-ui/core/Container";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -16,12 +17,8 @@ const useStyles = makeStyles((theme) => {
     },
     actionButton: {
       margin: "auto",
-      width: "100%",
-      height: "3em",
     },
     root: {
-      height: "100vh",
-      display: "flex",
       margin: theme.spacing(2),
     },
   };
@@ -33,14 +30,16 @@ export const LandingPage = (props) => {
     return null;
   }
   return (
-    <div>
+    <Grid container>
       <Grid item>
+        <Container>
         <Typography variant={"h1"}>
           {roundware._project && roundware._project.projectName}
         </Typography>
+        </Container>
       </Grid>
       <ActionButton label={"Listen"} linkTo={"/listen"} />
       <ActionButton label={"Speak"} linkTo={"/speak"} />
-    </div>
+    </Grid>
   );
 };

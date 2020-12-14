@@ -9,7 +9,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { CardContent } from "@material-ui/core";
-import {generatePath, useHistory} from "react-router-dom";
+import {generatePath, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => {
     tagCard: {
       margin: theme.spacing(1),
       padding: theme.spacing(4),
+      minWidth: "20rem",
       cursor: "pointer",
     },
     tagGroupHeader: {
@@ -69,6 +70,7 @@ const TagSelectForm = ({match}) => {
     later(500, ).then(
       () => {
         const isLastGroup = tagGroups.length <= tagGroupIndex + 1;
+        window.scrollTo(0,0)
         if (isLastGroup) {
           history.push('/speak/location');
         } else {
@@ -95,7 +97,10 @@ const TagSelectForm = ({match}) => {
               className={`${classes.tagCard} ${
                 isSelected ? classes.selectedTagCard : ""
               }`}
-              onClick={() => toggleTagSelected(choice.id)}
+              onClick={(e) => {
+                toggleTagSelected(choice.id)
+                e.preventDefault()
+              }}
             >
               <FormControlLabel
                 checked={isSelected}
@@ -103,9 +108,6 @@ const TagSelectForm = ({match}) => {
                   <Checkbox
                     style={{ display: "none" }}
                     size={"medium"}
-                    onChange={() => {
-                      toggleTagSelected(choice.id);
-                    }}
                   />
                 }
                 label={<Typography children={[choice.tag_display_text]}/>}

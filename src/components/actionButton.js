@@ -8,11 +8,10 @@ import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => {
   return {
     actionButton: {
-      margin: theme.spacing(8),
-      width: "100%",
+      margin: theme.spacing(5),
     },
     buttonLabel: {
-      margin: theme.spacing(16),
+      margin: theme.spacing(2),
     },
   };
 });
@@ -23,7 +22,7 @@ export const ActionButton = ({ label, linkTo }) => {
 
   return (
     <Grid item container direction={"column"}>
-      <Grid item sm={9}>
+      <Grid item sm={9} md={6}>
         <Button
           aria-label={label}
           className={classes.actionButton}
@@ -34,11 +33,9 @@ export const ActionButton = ({ label, linkTo }) => {
             history.push(linkTo);
           }}
         >
-          <Grid container>
-            <Typography variant={"h3"} className={classes.buttonLabel}>
-              {label}
-            </Typography>
-          </Grid>
+          <Typography variant={"h3"} className={classes.buttonLabel}>
+            {label}
+          </Typography>
         </Button>
       </Grid>
     </Grid>
