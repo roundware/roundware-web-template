@@ -16,6 +16,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import {useHistory} from "react-router-dom";
 
 const visualizerOptions = {
   type: "bars",
@@ -34,12 +35,15 @@ const CreateRecordingForm = () => {
   const [legalModalOpen, set_legal_modal_open] = useState(false);
   const [saving, set_saving] = useState(false);
   const [error, set_error] = useState(null);
-  const [success, set_success] = useState(false);
+  const [success, set_success] = useState(null);
+  const history = useHistory();
 
   const startRecording = () => {
     if (!navigator.mediaDevices) {
       set_error({message: "we can't get access to your microphone at this time"})
       return;
+    } else {
+      set_error(null);
     }
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       set_draft_recording_media(null);
@@ -201,13 +205,12 @@ const CreateRecordingForm = () => {
               };
               const fileName = new Date().toISOString() + ".mp3";
 
-              roundware
-                .saveAsset(draftRecordingMedia, fileName, {}) // assetMeta)
-                .then((asset) => {
+              roundware.saveAsset(draftRecordingMedia, fileName, assetMeta)
+                .then( asset => {
                   set_success(asset);
-                }).catch(err => {
+                }).catch( err => {
                   set_error({"message": err});
-                }).finally(() => {
+                }).finally( () => {
                   set_saving(false);
               })
             }}
@@ -223,22 +226,31 @@ const CreateRecordingForm = () => {
           </DialogContentText>
         </DialogContent>
       </Dialog>
-      <Dialog open={success}>
+      <Dialog open={success !== null}>
         <DialogContent>
           <DialogContentText style={{textAlign: "center"}}>
             <CheckCircleIcon color={"primary"}/>
           </DialogContentText>
           <DialogContentText>
-            Upload Complete!
+            Upload Complete! Thank you for participating!
+
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button variant={"contained"}
                   color={"primary"}
                   onClick={()=>{
-                    set_success(null);
+                    history.push(`/listen?eid=${success.envelope_ids[0]}`)
                   }}
-          >OK</Button>
+          >Listen</Button>
+          <Button
+            variant={"contained"}
+            color={"primary"}
+             onClick={()=>{
+               draftRecording.reset();
+               history.push('/speak')
+             }}
+          >Create New Recording</Button>
         </DialogActions>
       </Dialog>
     </Grid>

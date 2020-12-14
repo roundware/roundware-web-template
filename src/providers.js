@@ -4,15 +4,15 @@ import { Roundware } from "roundware-web-framework";
 import { useDeviceID } from "./hooks";
 
 export const DraftRecordingProvider = ({roundware, children}) => {
-
-  const [state, setState] = useState({
-      acceptedAgreement: false,
-      tags: [],
-      location: {
-        latitude: null,
-        longitude: null
-      }
-  });
+  const defaultState = {
+    acceptedAgreement: false,
+    tags: [],
+    location: {
+    latitude: null,
+      longitude: null
+   }
+  }
+  const [state, setState] = useState(defaultState);
 
   useEffect(() => {
     if (!roundware._project || !roundware._project.location) {
@@ -35,7 +35,9 @@ export const DraftRecordingProvider = ({roundware, children}) => {
     }
     setState({ ...state, tags: [...newTags] });
   };
-
+  const reset = () => {
+    setState(defaultState);
+  }
   const clearTags = (tags) => {
     const newTags = [...state.tags]
     tags.forEach((tag) => {
@@ -51,7 +53,8 @@ export const DraftRecordingProvider = ({roundware, children}) => {
     ...state,
     setState,
     selectTag,
-    clearTags
+    clearTags,
+    reset
   }}>
     {children}
   </DraftRecordingContext.Provider>
