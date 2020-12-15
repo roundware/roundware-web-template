@@ -11,7 +11,9 @@ export const TagsDisplay = ({ tagIds }) => {
   return (
     <div className="rw-tags">
       {tagIds.map((tagId) => (
-        <TagDisplay key={tagId} tagId={tagId} />
+        <React.Fragment key={tagId}>
+          <TagDisplay tagId={tagId} /><br/>
+        </React.Fragment>
       ))}
     </div>
   );
