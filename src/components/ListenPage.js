@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import RoundwareMap from "./map";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {useRoundware} from "../hooks";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -15,6 +16,8 @@ const useStyles = makeStyles(theme => {
 })
 export const ListenPage = () => {
   const classes = useStyles();
+  const { roundware } = useRoundware();
+
   return <RoundwareMap
         className={classes.map}
         googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY} />

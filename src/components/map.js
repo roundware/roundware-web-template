@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { RoundwareMapStyle } from "../map-style";
 import AssetLayer from "./asset-layer";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import ListenerLocationMarker from "./listener-location-marker";
+import {useRoundware} from "../hooks";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -13,12 +15,25 @@ const useStyles = makeStyles((theme) => {
 });
 const RoundwareMap = (props) => {
   const classes = useStyles();
+  const {roundware} = useRoundware();
+  const [map, setMap] = useState(null);
 
+  if (!roundware._project) {
+    return null;
+  }
+
+  // when the listener location changes, center the map
   return (
     <LoadScript id="script-loader" googleMapsApiKey={props.googleMapsApiKey}>
       <GoogleMap
         mapContainerClassName={classes.roundwareMap}
+        // onCenterChanged={() => {
+        //   if (!map) {return}
+        //   const center = map.getCenter();
+        //   roundware.updateLocation({latitude: center.lat(), longitude: center.lng()})
+        // }}
         onLoad={(map) => {
+          setMap(map);
           const styledMapType = new google.maps.StyledMapType(
             RoundwareMapStyle,
             { name: "Street Map" }
@@ -37,6 +52,7 @@ const RoundwareMap = (props) => {
               style: google.maps.ZoomControlStyle.SMALL,
             },
             rotateControl: false,
+
             mapTypeId: "styled_map",
             mapTypeControlOptions: {
               mapTypeIds: [google.maps.MapTypeId.SATELLITE, "styled_map"],
@@ -50,6 +66,7 @@ const RoundwareMap = (props) => {
         }}
       >
         <AssetLayer />
+        <ListenerLocationMarker />
       </GoogleMap>
     </LoadScript>
   );

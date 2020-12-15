@@ -98,6 +98,9 @@ const CreateRecordingForm = () => {
       startRecording();
     }
   };
+  if (!draftRecording.tags) {
+    return null
+  }
   // todo present the participant with the tags they picked
   const selected_tags = draftRecording.tags.map(tag => tagLookup[tag]);
 

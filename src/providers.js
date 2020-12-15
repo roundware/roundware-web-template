@@ -170,9 +170,11 @@ export const RoundwareProvider = (props) => {
   useEffect(() => {
     const project_id = process.env.ROUNDWARE_DEFAULT_PROJECT_ID;
     const server_url = process.env.ROUNDWARE_SERVER_URL;
+    // maybe we build the site with a default listener location,
+    // otherwise we go to null island
     const initial_loc = {
-      latitude: process.env.INITIAL_LATITUDE,
-      longitude: process.env.INITIAL_LONGITUDE,
+      latitude: process.env.INITIAL_LATITUDE || 0,
+      longitude: process.env.INITIAL_LONGITUDE || 0,
     };
 
     const roundware = new Roundware(window, {
@@ -186,6 +188,9 @@ export const RoundwareProvider = (props) => {
     });
 
     roundware.connect().then(() => {
+      // set the initial listener location to the project default
+      roundware.updateLocation(roundware._project.location)
+      roundware.onUpdateLocation = forceUpdate
       setRoundware(roundware);
     })
   }, []);

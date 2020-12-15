@@ -1,5 +1,4 @@
-import Toolbar from "@material-ui/core/Toolbar";
-import React from "react";
+import React, {useEffect} from "react";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import Button from "@material-ui/core/Button";
@@ -7,6 +6,14 @@ import {useRoundware} from "../hooks";
 
 const RoundwareMixerControl = props => {
   const {roundware} = useRoundware();
+  // if the control for the mixer is unmounted, clean up by stopping the mixer
+  useEffect(() => {
+    return () => {
+      if (roundware._mixer &&  roundware._mixer.active) {
+        roundware._mixer.toggle(roundware._mixer.token)
+        roundware._mixer.stop();
+      }
+  }}, [])
   return (
     <Button
     onClick={() => {
