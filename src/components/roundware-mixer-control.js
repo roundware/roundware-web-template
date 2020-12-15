@@ -20,10 +20,14 @@ const RoundwareMixerControl = props => {
     onClick={() => {
       if (!roundware._mixer) {
         roundware.activateMixer().then((token, force) => {
+          const listen_tags = roundware.uiConfig.listen[0].display_items.map(i => i.tag_id)
           roundware._mixer.updateParams({
+            listenerLocation: roundware._listenerLocation,
             minDist: 0,
-            maxDist: roundware._project.recordingRadius
+            maxDist: roundware._project.recordingRadius,
+            listenTagIds: listen_tags,
           })
+
           roundware._mixer.toggle(token, force);
         });
       } else {
