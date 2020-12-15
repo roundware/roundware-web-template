@@ -72,7 +72,7 @@ export const RoundwareProvider = (props) => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [sortField, setSortField] = useState({name: "created", asc: false })
   const [assetPageIndex, setAssetPageIndex] = useState(0);
-  const [assetsPerPage, setAssetsPerPage] = useState(10);
+  const [assetsPerPage, setAssetsPerPage] = useState(100);
   const [tagLookup, setTagLookup] = useState({})
   const [filteredAssets, setFilteredAssets] = useState([]);
   const deviceId = useDeviceID();

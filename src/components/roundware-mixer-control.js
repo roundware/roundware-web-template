@@ -6,19 +6,24 @@ import {useRoundware} from "../hooks";
 
 const RoundwareMixerControl = props => {
   const {roundware} = useRoundware();
-  // if the control for the mixer is unmounted, clean up by stopping the mixer
   useEffect(() => {
+    // when the control for the mixer is unmounted, clean up by stopping the mixer
     return () => {
       if (roundware._mixer &&  roundware._mixer.active) {
         roundware._mixer.toggle(roundware._mixer.token)
         roundware._mixer.stop();
       }
   }}, [])
+
   return (
     <Button
     onClick={() => {
       if (!roundware._mixer) {
         roundware.activateMixer().then((token, force) => {
+          roundware._mixer.updateParams({
+            minDist: 0,
+            maxDist: roundware._project.recordingRadius
+          })
           roundware._mixer.toggle(token, force);
         });
       } else {

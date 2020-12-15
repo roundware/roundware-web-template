@@ -81,7 +81,7 @@ export const AssetActionButtons = ({ asset }) => {
       <Button
         onClick={() => {
           window.open(
-            `https://coronadiaries.io/s.html?eid=${asset.envelope_ids[0]}`,
+            `/listen?eid=${asset.envelope_ids[0]}`,
             "_blank"
           );
         }}
