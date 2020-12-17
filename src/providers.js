@@ -67,6 +67,7 @@ export const RoundwareProvider = (props) => {
 
   const [beforeDateFilter, setBeforeDateFilter] = useState(null);
   const [afterDateFilter, setAfterDateFilter] = useState(null);
+  const [eidFilter, setEidFilter] = useState([]);
   const [userFilter, setUserFilter] = useState("");
   const [selectedAsset, selectAsset] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -78,7 +79,6 @@ export const RoundwareProvider = (props) => {
   const deviceId = useDeviceID();
 
   const [, forceUpdate] = useReducer(x => !x, false);
-
 
   const sortAssets = (assets) => {
     const sort_value = sortField.asc ? 1 : -1;
@@ -121,12 +121,13 @@ export const RoundwareProvider = (props) => {
     setTagLookup( tag_lookup );
   }, [roundware.uiConfig && roundware.uiConfig.speak]);
 
-  const filterAssets = (tagFilters) => {
+  const filterAssets = () => {
     const asset_data = roundware._assetData || [];
     return asset_data.filter((asset) => {
       // show the asset, unless a filter returns 'false'
       const matches = [true];
-      const tag_filter_groups = Object.entries(tagFilters || {});
+
+      const tag_filter_groups = Object.entries(selectedTags || {});
       matches.push(
         ...tag_filter_groups.map(([_filter_group, tags]) => {
           if (!tags) {
@@ -143,6 +144,10 @@ export const RoundwareProvider = (props) => {
         }
         const user_match = user_str.indexOf(userFilter) !== -1;
         matches.push(user_match);
+      }
+      if (eidFilter.length) {
+        const eid_match = eidFilter.some((eid) => asset.envelope_ids.indexOf(eid) !== -1);
+        matches.push(eid_match);
       }
 
       return matches.every((m) => m);
@@ -164,7 +169,7 @@ export const RoundwareProvider = (props) => {
     if (roundware._assetData !== undefined) {
       setFilteredAssets(filterAssets());
     }
-  }, [selectedTags, userFilter, roundware._assetData]);
+  }, [selectedTags, userFilter, eidFilter, roundware._assetData]);
 
   // when this provider is loaded, initialize roundware via api
   useEffect(() => {
@@ -181,7 +186,7 @@ export const RoundwareProvider = (props) => {
       deviceId: deviceId,
       serverUrl: server_url,
       projectId: project_id,
-      geoListenEnabled: false,
+      geoListenEnabled: true,
       speakerFilters: { activeyn: true },
       assetFilters: { submitted: true, media_type: "audio" },
       listenerLocation: initial_loc,
@@ -223,6 +228,7 @@ export const RoundwareProvider = (props) => {
         setAssetPageIndex,
         setAssetsPerPage,
         setSortField,
+        setEidFilter,
         // computed properties
         assetPage: assetPage(),
       }}
