@@ -12,7 +12,7 @@ class AssetPlayer extends React.Component {
     let filename = fileparts.join(".")
 
     if (ext !== 'mp3' && ext !== 'wav') {
-      ext = 'mp3'
+      ext += 'mp3'
     }
 
     const audioType = `audio/${ext}`
