@@ -73,7 +73,7 @@ export const RoundwareProvider = (props) => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [sortField, setSortField] = useState({name: "created", asc: false })
   const [assetPageIndex, setAssetPageIndex] = useState(0);
-  const [assetsPerPage, setAssetsPerPage] = useState(100);
+  const [assetsPerPage, setAssetsPerPage] = useState(10000);
   const [tagLookup, setTagLookup] = useState({})
   const [filteredAssets, setFilteredAssets] = useState([]);
   const deviceId = useDeviceID();
@@ -186,7 +186,7 @@ export const RoundwareProvider = (props) => {
       deviceId: deviceId,
       serverUrl: server_url,
       projectId: project_id,
-      geoListenEnabled: true,
+      geoListenEnabled: false,
       speakerFilters: { activeyn: true },
       assetFilters: { submitted: true, media_type: "audio" },
       listenerLocation: initial_loc,
