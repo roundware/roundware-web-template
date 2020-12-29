@@ -229,6 +229,7 @@ export const RoundwareProvider = (props) => {
         setAssetsPerPage,
         setSortField,
         setEidFilter,
+        forceUpdate,
         // computed properties
         assetPage: assetPage(),
       }}

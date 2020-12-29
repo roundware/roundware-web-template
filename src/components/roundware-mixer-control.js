@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import {useRoundware} from "../hooks";
 
 const RoundwareMixerControl = props => {
-  const {roundware} = useRoundware();
+  const {roundware, forceUpdate } = useRoundware();
   useEffect(() => {
     // when the control for the mixer is unmounted, clean up by stopping the mixer
     return () => {
@@ -27,11 +27,12 @@ const RoundwareMixerControl = props => {
             maxDist: roundware._project.recordingRadius,
             listenTagIds: listen_tags,
           })
-
           roundware._mixer.toggle(token, force);
+          forceUpdate()
         });
       } else {
         roundware._mixer.toggle(roundware._mixer.token, false);
+        forceUpdate()
       }
     }}
   >
