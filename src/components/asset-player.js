@@ -7,12 +7,12 @@ class AssetPlayer extends React.Component {
       return null;
     }
 
-    let [...fileparts] = asset.file.split('.')
-    let ext = fileparts.pop();
-    let filename = fileparts.join(".")
-
-    if (ext !== 'mp3' && ext !== 'wav') {
-      ext += 'mp3'
+    let ext = (/(?:\.([^.]+))?$/).exec(asset.file)[1]
+    let filename = asset.file
+    const supported = ['mp3', 'wav'];
+    if (supported.indexOf(ext) === -1) {
+      ext = "mp3"
+      filename = `${filename}.${ext}`
     }
 
     const audioType = `audio/${ext}`
@@ -25,7 +25,7 @@ class AssetPlayer extends React.Component {
         controlsList="nodownload"
         className={this.props.className}
       >
-        <source src={`${filename}.${ext}`} type={audioType} />
+        <source src={filename} type={audioType} />
         Your browser does not support audio!
       </audio>
     );
