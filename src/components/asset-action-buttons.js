@@ -41,7 +41,14 @@ export const VoteButton = ({ asset, votedClass, title, children }) => {
 };
 
 const downloadAsset = async (asset) => {
-  const response = await fetch(`${asset.file}.mp3`, {
+  let ext = (/(?:\.([^.]+))?$/).exec(asset.file)[1]
+  let filename = asset.file
+  const supported = ['mp3', 'wav'];
+  if (supported.indexOf(ext) === -1) {
+    ext = "mp3"
+    filename = `${filename}.${ext}`
+  }
+  const response = await fetch(filename, {
     headers: new Headers({
       Origin: location.origin,
     }),
