@@ -31,14 +31,14 @@ const AssetLayer = (props) => {
   }
 
   const assets = assetPage || filteredAssets || [];
-  // when the list of assets changes, pan to new assets
-  useEffect(() => {
-    const bounds = new google.maps.LatLngBounds();
-    assets.forEach((asset) => {
-      bounds.extend({ lat: asset.latitude, lng: asset.longitude });
-    });
-    map.fitBounds(bounds, { top: 40, bottom: 40, right: 30, left: 0 });
-  }, [assets]);
+  // // when the list of assets changes, pan to new assets
+  // useEffect(() => {
+  //   const bounds = new google.maps.LatLngBounds();
+  //   assets.forEach((asset) => {
+  //     bounds.extend({ lat: asset.latitude, lng: asset.longitude });
+  //   });
+  //   map.fitBounds(bounds, { top: 40, bottom: 40, right: 30, left: 0 });
+  // }, [assets]);
 
   // when the selected asset changes, pan to it
   useEffect(() => {
