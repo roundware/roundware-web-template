@@ -26,16 +26,16 @@
     "react-helmet": "^6.1.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-select": "^3.1.0",
-    "roundware-web-framework": "^0.11.0-alpha.3",
-    "standardized-audio-context": "^24.1.20",
+    "react-select": "^3.1.1",
+    "roundware-web-framework": "file:../roundware-web-framework",
+    "standardized-audio-context": "^24.1.26",
     "ts-overlapping-marker-spiderfier": "^1.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/polyfill": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "@babel/preset-react": "^7.10.4",
+    "@babel/core": "^7.12.10",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
     "babel-plugin-transform-imports": "^2.0.0",
     "dotenv": "^8.2.0",
     "parcel-bundler": "^1.12.4"
