@@ -8,7 +8,10 @@ import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => {
   return {
     actionButton: {
-      margin: theme.spacing(5),
+      margin: theme.spacing(2),
+      width: 300,
+      // padding: 50
+      height: 100,
     },
     buttonLabel: {
       margin: theme.spacing(2),
@@ -21,7 +24,7 @@ export const ActionButton = ({ label, linkTo }) => {
   const history = useHistory();
 
   return (
-    <Grid item container direction={"column"}>
+    <Grid container direction={"column"}>
       <Grid item sm={9} md={6}>
         <Button
           aria-label={label}
