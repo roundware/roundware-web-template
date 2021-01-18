@@ -3,6 +3,7 @@ import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import Button from "@material-ui/core/Button";
 import {useRoundware} from "../hooks";
+import { GeoListenMode } from "roundware-web-framework";
 
 const RoundwareMixerControl = props => {
   const {roundware, forceUpdate } = useRoundware();
@@ -17,32 +18,36 @@ const RoundwareMixerControl = props => {
 
   return (
     <Button
-    onClick={() => {
-      if (!roundware._mixer) {
-        roundware.activateMixer().then((token, force) => {
-          const listen_tags = roundware.uiConfig.listen[0].display_items.map(i => i.tag_id)
-          roundware._mixer.updateParams({
-            listenerLocation: roundware._listenerLocation,
-            minDist: 0,
-            maxDist: roundware._project.recordingRadius,
-            listenTagIds: listen_tags,
-          })
-          roundware._mixer.toggle(token, force);
-          forceUpdate()
-        });
-      } else {
-        roundware._mixer.toggle(roundware._mixer.token, false);
-        forceUpdate()
-      }
-    }}
-  >
-    {roundware && roundware._mixer && roundware._mixer.playing ? (
-      <PauseCircleOutlineIcon />
-    ) : (
-      <PlayCircleOutlineIcon />
-    )}
-  </Button>
-  )
-}
+      onClick={() => {
+        if (!roundware._mixer) {
+          roundware
+            .activateMixer({ geoListenMode: GeoListenMode.MANUAL })
+            .then((token, force) => {
+              const listen_tags = roundware.uiConfig.listen[0].display_items.map(
+                (i) => i.tag_id
+              );
+              roundware._mixer.updateParams({
+                listenerLocation: roundware._listenerLocation,
+                minDist: 0,
+                maxDist: roundware._project.recordingRadius,
+                listenTagIds: listen_tags,
+              });
+              roundware._mixer.toggle(token, force);
+              forceUpdate();
+            });
+        } else {
+          roundware._mixer.toggle(roundware._mixer.token, false);
+          forceUpdate();
+        }
+      }}
+    >
+      {roundware && roundware._mixer && roundware._mixer.playing ? (
+        <PauseCircleOutlineIcon />
+      ) : (
+        <PlayCircleOutlineIcon />
+      )}
+    </Button>
+  );
+};
 
 export default RoundwareMixerControl;

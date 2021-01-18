@@ -62,7 +62,10 @@ const LocationSelectForm = () => {
       set_geolocating(true);
       getPosition()
         .then((position) => {
-          draftRecording.setState({...draftRecording.state, location: position.coords});
+          draftRecording.setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
         })
         .catch(err => {
           set_error(err);

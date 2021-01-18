@@ -1,25 +1,24 @@
-import {RoundwareContext, DraftRecordingContext} from "./context";
-import React, {useEffect, useReducer, useState} from "react";
-import { Roundware } from "roundware-web-framework";
+import { RoundwareContext, DraftRecordingContext } from "./context";
+import React, { useEffect, useReducer, useState } from "react";
+import { Roundware, GeoListenMode } from "roundware-web-framework";
 import { useDeviceID } from "./hooks";
 
-export const DraftRecordingProvider = ({roundware, children}) => {
+export const DraftRecordingProvider = ({ roundware, children }) => {
   const defaultState = {
     acceptedAgreement: false,
     tags: [],
-    location: {
-    latitude: null,
-      longitude: null
-   }
-  }
+  };
   const [state, setState] = useState(defaultState);
-
+  const [location, setLocation] = useState({
+    latitude: null,
+    longitude: null
+  })
   useEffect(() => {
     if (!roundware._project || !roundware._project.location) {
-      return
+      return;
     }
-    if (state.location.latitude === null || state.location.longitude === null) {
-      setState({...state, location: roundware._project.location});
+    if (location.latitude === null || location.longitude === null) {
+      setLocation(roundware._project.location);
     }
   }, [roundware._project && roundware._project.location]);
 
@@ -37,9 +36,9 @@ export const DraftRecordingProvider = ({roundware, children}) => {
   };
   const reset = () => {
     setState(defaultState);
-  }
+  };
   const clearTags = (tags) => {
-    const newTags = [...state.tags]
+    const newTags = [...state.tags];
     tags.forEach((tag) => {
       const tagPosition = newTags.indexOf(tag);
       if (tagPosition !== -1) {
@@ -47,23 +46,27 @@ export const DraftRecordingProvider = ({roundware, children}) => {
       }
     });
 
-    setState({...state, tags: [...newTags] });
+    setState({ ...state, tags: [...newTags] });
   };
-  return <DraftRecordingContext.Provider value={{
-    ...state,
-    setState,
-    selectTag,
-    clearTags,
-    reset
-  }}>
-    {children}
-  </DraftRecordingContext.Provider>
-}
+  return (
+    <DraftRecordingContext.Provider
+      value={{
+        ...state,
+        location,
+        setState,
+        setLocation,
+        selectTag,
+        clearTags,
+        reset,
+      }}
+    >
+      {children}
+    </DraftRecordingContext.Provider>
+  );
+};
 
 export const RoundwareProvider = (props) => {
-  const [roundware, setRoundware] = useState(
-    {uiConfig: {}}
-  );
+  const [roundware, setRoundware] = useState({ uiConfig: {} });
 
   const [beforeDateFilter, setBeforeDateFilter] = useState(null);
   const [afterDateFilter, setAfterDateFilter] = useState(null);
@@ -71,14 +74,14 @@ export const RoundwareProvider = (props) => {
   const [userFilter, setUserFilter] = useState("");
   const [selectedAsset, selectAsset] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [sortField, setSortField] = useState({name: "created", asc: false })
+  const [sortField, setSortField] = useState({ name: "created", asc: false });
   const [assetPageIndex, setAssetPageIndex] = useState(0);
   const [assetsPerPage, setAssetsPerPage] = useState(10000);
-  const [tagLookup, setTagLookup] = useState({})
+  const [tagLookup, setTagLookup] = useState({});
   const [filteredAssets, setFilteredAssets] = useState([]);
   const deviceId = useDeviceID();
 
-  const [, forceUpdate] = useReducer(x => !x, false);
+  const [, forceUpdate] = useReducer((x) => !x, false);
 
   const sortAssets = (assets) => {
     const sort_value = sortField.asc ? 1 : -1;
@@ -100,7 +103,7 @@ export const RoundwareProvider = (props) => {
   const assetPage = () => {
     const sortedAssets = sortAssets(filteredAssets);
     if (sortedAssets.length < assetPageIndex * assetsPerPage) {
-      setAssetPageIndex( 0 );
+      setAssetPageIndex(0);
       return [];
     }
     return sortedAssets.slice(
@@ -118,7 +121,7 @@ export const RoundwareProvider = (props) => {
         tag_lookup[tag.id] = tag;
       })
     );
-    setTagLookup( tag_lookup );
+    setTagLookup(tag_lookup);
   }, [roundware.uiConfig && roundware.uiConfig.speak]);
 
   const filterAssets = () => {
@@ -146,7 +149,9 @@ export const RoundwareProvider = (props) => {
         matches.push(user_match);
       }
       if (eidFilter.length) {
-        const eid_match = eidFilter.some((eid) => asset.envelope_ids.indexOf(eid) !== -1);
+        const eid_match = eidFilter.some(
+          (eid) => asset.envelope_ids.indexOf(eid) !== -1
+        );
         matches.push(eid_match);
       }
 
@@ -194,19 +199,19 @@ export const RoundwareProvider = (props) => {
 
     roundware.connect().then(() => {
       // set the initial listener location to the project default
-      roundware.updateLocation(roundware._project.location)
-      roundware.onUpdateLocation = forceUpdate
+      roundware.updateLocation(roundware._project.location);
+      roundware.onUpdateLocation = forceUpdate;
       setRoundware(roundware);
-    })
+    });
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (roundware._project) {
       roundware.loadAssetPool().then(() => {
-        forceUpdate()
-      })
+        forceUpdate();
+      });
     }
-  }, [roundware._project])
+  }, [roundware._project]);
 
   return (
     <RoundwareContext.Provider
