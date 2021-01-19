@@ -6,12 +6,8 @@ import {useLocation, useRouteMatch} from "react-router";
 
 const useStyles = makeStyles(theme => {
   return {
-    root: {
-      flexGrow: 1,
-      display: "flex",
-    },
     map: {
-      flexGrow: 1,
+      display: "flex"
     }
   }
 })

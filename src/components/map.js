@@ -10,7 +10,7 @@ import distance from "@turf/distance"
 const useStyles = makeStyles((theme) => {
   return {
     roundwareMap: {
-      height: "100%",
+      flexGrow: 1
     },
   };
 });

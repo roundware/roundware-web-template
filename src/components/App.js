@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => {
       margin: "auto",
     },
     appContainer: {
+      display: "flex",
       flexGrow: 1,
     },
   };
