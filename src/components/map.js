@@ -47,7 +47,11 @@ const RoundwareMap = (props) => {
     )
     const shortSide = Math.min(xDist, yDist)
     // TODO implement setting recording radius in RW framework
-    roundware._project.recordingRadius = shortSide * 0.9 / 2;
+    const newRadius = shortSide * 0.8 / 2;
+    roundware._project.recordingRadius = newRadius;
+    if (roundware._mixer) {
+      roundware._mixer.updateParams({recordingRadius: newRadius})
+    }
     forceUpdate()
   }
 
