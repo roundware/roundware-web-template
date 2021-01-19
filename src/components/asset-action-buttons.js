@@ -43,7 +43,7 @@ export const VoteButton = ({ asset, votedClass, title, children }) => {
 const downloadAsset = async (asset) => {
   let ext = (/(?:\.([^.]+))?$/).exec(asset.file)[1]
   let filename = asset.file
-  const supported = ['mp3', 'wav'];
+  const supported = ['mp3', 'wav', 'mp4'];
   if (supported.indexOf(ext) === -1) {
     ext = "mp3"
     filename = `${filename}.${ext}`
