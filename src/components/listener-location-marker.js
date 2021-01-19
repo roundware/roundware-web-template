@@ -1,9 +1,12 @@
 import {Circle, useGoogleMap} from "@react-google-maps/api";
 import {useRoundware} from "../hooks";
 import React, {useEffect, useState} from 'react';
+import {useDefaultStyles} from "../styles";
+import {useTheme} from "@material-ui/core";
 
 const ListenerLocationMarker = () => {
   const {roundware} = useRoundware();
+  const theme = useTheme();
   const loc = roundware._listenerLocation
   const lat = loc && loc.latitude
   const lng = loc && loc.longitude
@@ -14,7 +17,10 @@ const ListenerLocationMarker = () => {
   // when the listenerLocation is updated, center the map
   useEffect(() => {
     if (ready) {
-      map.panTo(center)
+      const c = map.getCenter();
+      if (center.lat !== c.lat() || center.lng !== c.lng()) {
+        map.panTo(center)
+      }
     }
   }, [lat, lng])
 
@@ -22,18 +28,21 @@ const ListenerLocationMarker = () => {
     return null;
   }
 
-
-  return <Circle radius={roundware._project.recordingRadius}  center={center} options={{
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.8,
-      strokeWeight: 2,
-      fillColor: '#FF0000',
-      fillOpacity: 0.35,
+  return <Circle radius={roundware._project.recordingRadius}  center={center}
+                 onLoad={ circle => {
+                   const newBounds = circle.getBounds()
+                   map.panToBounds(newBounds)
+                 }}
+                 options={{
+      strokeColor: theme.palette.secondary.light,
+      strokeOpacity: 0.4,
+      strokeWeight: 1,
+      fillColor: theme.palette.primary.light,
+      fillOpacity: 0.125,
       clickable: false,
       draggable: false,
       editable: false,
       visible: true,
-      radius: 30000,
       zIndex: 1
     }}
   />
