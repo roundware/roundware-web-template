@@ -6,6 +6,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import ListenerLocationMarker from "./listener-location-marker";
 import {useRoundware} from "../hooks";
 import distance from "@turf/distance"
+import AssetLoadingOverlay from "./asset-loading-overlay";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -58,6 +59,7 @@ const RoundwareMap = (props) => {
   // when the listener location changes, center the map
   return (
     <LoadScript id="script-loader" googleMapsApiKey={props.googleMapsApiKey}>
+      <AssetLoadingOverlay />
       <GoogleMap
         mapContainerClassName={classes.roundwareMap}
         onZoomChanged={ () => {
