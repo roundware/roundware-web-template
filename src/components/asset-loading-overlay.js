@@ -27,10 +27,10 @@ const AssetLoadingOverlay = () => {
   const classes = useStyles();
   return (
     <Backdrop className={classes.backdrop} open={!roundware._assetData} >
-      <Card className={classes.loadingCard}>
-        <CircularProgress className={classes.loadingSpinner}  />
-        <Typography className={classes.loadingMessage}>
-          Loading audio... <br />
+      <Card className={classes.loadingCard} >
+        <CircularProgress className={classes.loadingSpinner} />
+        <Typography className={classes.loadingMessage} >
+          Loading audio...
         </Typography>
       </Card>
     </Backdrop>
