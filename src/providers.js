@@ -71,7 +71,6 @@ export const RoundwareProvider = (props) => {
 
   const [beforeDateFilter, setBeforeDateFilter] = useState(null);
   const [afterDateFilter, setAfterDateFilter] = useState(null);
-  const [eidFilter, setEidFilter] = useState([]);
   const [userFilter, setUserFilter] = useState("");
   const [selectedAsset, selectAsset] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -149,13 +148,6 @@ export const RoundwareProvider = (props) => {
         const user_match = user_str.indexOf(userFilter) !== -1;
         matches.push(user_match);
       }
-      if (eidFilter.length) {
-        const eid_match = eidFilter.some(
-          (eid) => asset.envelope_ids.indexOf(eid) !== -1
-        );
-        matches.push(eid_match);
-      }
-
       return matches.every((m) => m);
     });
   };
@@ -175,7 +167,7 @@ export const RoundwareProvider = (props) => {
     if (roundware._assetData !== undefined) {
       setFilteredAssets(filterAssets());
     }
-  }, [selectedTags, userFilter, eidFilter, roundware._assetData]);
+  }, [selectedTags, userFilter, roundware._assetData]);
 
   // when this provider is loaded, initialize roundware via api
   useEffect(() => {
@@ -234,10 +226,10 @@ export const RoundwareProvider = (props) => {
         setAssetPageIndex,
         setAssetsPerPage,
         setSortField,
-        setEidFilter,
         forceUpdate,
         // computed properties
         assetPage: assetPage(),
+        assetsReady: Boolean(roundware._assetData && roundware._assetData.length)
       }}
     >
       {props.children}

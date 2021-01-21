@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { MarkerClusterer, useGoogleMap } from "@react-google-maps/api";
 import AssetMarker from "./asset-marker";
-import { useRoundware } from "../hooks";
+import {useQuery, useRoundware} from "../hooks";
 import { OverlappingMarkerSpiderfier } from "ts-overlapping-marker-spiderfier";
 
 const OverlappingMarkerSpiderfierComponent = (props) => {
@@ -23,22 +23,28 @@ const OverlappingMarkerSpiderfierComponent = (props) => {
 };
 
 const AssetLayer = (props) => {
-  const { filteredAssets, assetPage, selectedAsset } = useRoundware();
+  const { filteredAssets, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
   const map = useGoogleMap();
+  const query = useQuery();
 
   if (!map) {
     return null;
   }
 
   const assets = assetPage || filteredAssets || [];
-  // // when the list of assets changes, pan to new assets
-  // useEffect(() => {
-  //   const bounds = new google.maps.LatLngBounds();
-  //   assets.forEach((asset) => {
-  //     bounds.extend({ lat: asset.latitude, lng: asset.longitude });
-  //   });
-  //   map.fitBounds(bounds, { top: 40, bottom: 40, right: 30, left: 0 });
-  // }, [assets]);
+  const eid = parseInt(query.get("eid"))
+
+  useEffect(() => {
+    if (!assetsReady) {
+      return
+    }
+    const asset = assets.find(a => a.envelope_ids.indexOf(eid) !== -1)
+    if (!asset) {
+      // todo  present an error and clear bad query params when we can't find the asset we're looking for
+      return;
+    }
+    selectAsset(asset)
+  }, [assetsReady, assets.length, eid]);
 
   // when the selected asset changes, pan to it
   useEffect(() => {
