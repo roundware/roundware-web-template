@@ -17,6 +17,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import {useHistory} from "react-router-dom";
+import {wait} from "../utils";
 
 const visualizerOptions = {
   type: "bars",
@@ -84,7 +85,8 @@ const CreateRecordingForm = () => {
     stream.getTracks().forEach((track) => {
       track.stop();
     });
-    wave.stopStream();
+    wait(100).then(wave.stopStream)
+
     set_is_recording(false);
   };
 
