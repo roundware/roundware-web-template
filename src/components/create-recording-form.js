@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import {useRoundware, useRoundwareDraft} from "../hooks";
 import Button from "@material-ui/core/Button";
 import MediaRecorder from "audio-recorder-polyfill";
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import { IconButton } from "@material-ui/core";
 import MicIcon from "@material-ui/icons/Mic";
+import DeleteIcon from '@material-ui/icons/Delete';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Wave from "@foobar404/wave";
 import LegalAgreementForm from "./legal-agreement-form";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -17,11 +20,85 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import {useHistory} from "react-router-dom";
+import AudioPlayer from 'material-ui-audio-player';
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import {wait} from "../utils";
 
 const visualizerOptions = {
   type: "bars",
 };
+
+const useStyles = makeStyles((theme) => {
+  return {
+    iconButtonLabel: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    iconButton: {
+      height: 150,
+      width: 150,
+    },
+    iconButtonSmall: {
+      height: 50,
+      width: 50,
+    },
+    audioVisualizer: {
+      backgroundColor: "#333",
+      padding: "0 !important",
+      height: 150,
+      width: 300,
+    },
+    label: {
+      paddingTop: 0,
+    },
+  };
+});
+
+const useStylesAudioPlayer = makeStyles((theme) => {
+  return {
+    root: {
+      width: 700,
+      [theme.breakpoints.down('sm')]: {
+        width: 500,
+      },
+    },
+    playIcon: {
+      //color: '#f50057',
+      height: 75,
+      width: 75,
+      '&:hover': {
+        //color: '#ff4081'
+      }
+    },
+    pauseIcon: {
+      height: 75,
+      width: 75,
+    },
+    replayIcon: {
+      height: 75,
+      width: 75,
+    },
+    progressTime: {
+      fontSize: "2em",
+    },
+    mainSlider: {
+      //color: '#3f51b5',
+      '& .MuiSlider-rail': {
+        //color: '#7986cb',
+        marginTop: 4,
+      },
+      '& .MuiSlider-track': {
+        //color: '#3f51b5',
+        marginTop: 4,
+      },
+      '& .MuiSlider-thumb': {
+        //color: '#303f9f'
+        height: 20,
+        width: 20,
+      }
+    }
+  };
+});
 
 const CreateRecordingForm = () => {
   const draftRecording = useRoundwareDraft();
@@ -38,6 +115,7 @@ const CreateRecordingForm = () => {
   const [error, set_error] = useState(null);
   const [success, set_success] = useState(null);
   const history = useHistory();
+  const classes = useStyles();
 
   const startRecording = () => {
     if (!navigator.mediaDevices) {
@@ -116,47 +194,113 @@ const CreateRecordingForm = () => {
   // todo present the participant with the tags they picked
   const selected_tags = draftRecording.tags.map(tag => tagLookup[tag]);
 
+  const maxRecordingLength = roundware._project ? roundware._project.maxRecordingLength : "--"
+
   return (
     <Grid
       container
       alignItems={"center"}
       direction={"column"}
-      className={"visualizer-canvas"}
+      spacing={8}
     >
       <Grid item>
         <Container>
-          { selected_tags.map( tag => <Typography key={tag.id}>{tag.tag_display_text}</Typography> ) }
+          { selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }
         </Container>
       </Grid>
       <ErrorDialog error={error} set_error={set_error}/>
-      <Grid item xs={9}>
+      <Grid
+        item
+        xs={12}
+        className={classes.audioVisualizer}>
         <canvas id="audio-visualizer" />
       </Grid>
 
       {draftMediaUrl ? (
         <Grid item>
-          <audio id={"draft-audio"} src={draftMediaUrl} controls />
+          {/*}<audio id={"draft-audio"} src={draftMediaUrl} controls />*/}
+          <AudioPlayer
+            id="draft-audio"
+            src={draftMediaUrl}
+            useStyles={useStylesAudioPlayer}
+            variation="primary"
+            time="single"
+            timePosition="end"
+            volume={false} />
         </Grid>
       ) : null}
+      {(!draftMediaUrl && !isRecording) ? (
+        <Grid
+          item
+          style={{"paddingBottom": 0}}>
+          <IconButton
+            disabled={draftMediaUrl !== ""}
+            style={{
+              margin: "auto",
+              backgroundColor: isRecording ? "red" : "inherit",
+            }}
+            variant="contained"
+            onClick={toggleRecording}
+            label={isRecording ? "stop" : "start"}
+          >
+            <MicIcon
+              color={isRecording ? "primary" : "inherit"}
+              className={classes.iconButton} />
+          </IconButton>
+        </Grid>
+      ) : null}
+      {/*}<Grid
+        item
+        style={{"paddingTop": 0}}>
+        <Typography
+          variant={"h3"}
+          className={classes.label}>
+          {draftMediaUrl ? "Listen Back" : (isRecording ? "Recording!" : "Record")}
+        </Typography>
+      </Grid>*/}
       <Grid item>
-        <IconButton
-          disabled={draftMediaUrl !== ""}
-          style={{
-            margin: "auto",
-            backgroundColor: isRecording ? "red" : "inherit",
-          }}
-          variant="contained"
-          onClick={toggleRecording}
-          label={isRecording ? "stop" : "start"}
-        >
-          <MicIcon color={isRecording ? "primary" : "inherit"} />
-        </IconButton>
+        {isRecording ? (
+          <CountdownCircleTimer
+            isPlaying
+            duration={maxRecordingLength}
+            onComplete={() => {
+              stopRecording();
+            }}
+            colors={[
+              ['#004777', 0.33],
+              ['#F7B801', 0.33],
+              ['#A30000', 0.33],
+            ]}
+          >
+              {({ remainingTime }) => (
+                <div>
+                  <Typography
+                    variant="h3"
+                    style={{"textAlign": "center"}}>{remainingTime}</Typography>
+                  <IconButton
+                    disabled={draftMediaUrl !== ""}
+                    style={{
+                      margin: "auto",
+                      backgroundColor: isRecording ? "red" : "inherit",
+                    }}
+                    variant="contained"
+                    onClick={toggleRecording}
+                    label={isRecording ? "stop" : "start"}
+                  >
+                    <MicIcon
+                      color={isRecording ? "primary" : "inherit"}
+                      className={classes.iconButtonSmall} />
+                  </IconButton>
+                </div>)}
+          </CountdownCircleTimer>
+        ) : null}
       </Grid>
       <Grid container item>
         <Button
           style={{ margin: "auto" }}
           variant="contained"
           color="secondary"
+          startIcon={<DeleteIcon />}
           disabled={draftMediaUrl === ""}
           onClick={() => {
             set_delete_modal_open(true);
@@ -197,13 +341,14 @@ const CreateRecordingForm = () => {
         <Button
           variant="contained"
           color="primary"
+          startIcon={<CloudUploadIcon />}
           style={{ margin: "auto" }}
           disabled={draftMediaUrl === ""}
           onClick={() => {
             set_legal_modal_open(true);
           }}
         >
-          Share
+          Submit
         </Button>
         <Dialog open={legalModalOpen}>
           <LegalAgreementForm

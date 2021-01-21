@@ -6,6 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useRoundware } from "../hooks";
 import Container from "@material-ui/core/Container";
 
+import landingHeaderImage from '../assets/bg-about.jpg';
+
 const useStyles = makeStyles((theme) => {
   return {
     topBar: {
@@ -21,25 +23,69 @@ const useStyles = makeStyles((theme) => {
     root: {
       margin: theme.spacing(2),
     },
+    landingHeader: {
+      backgroundImage: `linear-gradient(180deg, #000000ff, #ffffff00), url(${landingHeaderImage})`,
+      backgroundSize: "cover",
+      height: "100vh",
+      backgroundPosition: "center",
+    },
   };
 });
 
 export const LandingPage = (props) => {
   const { roundware } = useRoundware();
+  const classes = useStyles();
+
   if (!roundware._project || roundware._project.projectName === '(unknown)') {
     return null;
   }
   return (
-    <Grid container>
-      <Grid item>
-        <Container>
-        <Typography variant={"h1"}>
-          {roundware._project && roundware._project.projectName}
-        </Typography>
-        </Container>
+    <Container
+      style={{"paddingRight": 0, "paddingLeft": 0}}>
+      <Grid
+        container
+        className={classes.landingHeader}>
+        <Grid
+          container
+          justify="center"
+          style={{height: "100px"}}>
+          <Grid
+            item
+            style={{margin: 'auto', height: "15vh", "textAlign": "center", "paddingTop": 15}}
+            sm={12}>
+            <Typography
+              variant={"h2"}>
+              {roundware._project && roundware._project.projectName}
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            sm={12}>
+            <Typography
+              variant={"subtitle1"}
+              style={{"textAlign": "center", height: "15vh"}}>
+              A Storytelling Project with the Peale and Museum on Main Street, Smithsonian
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          justify="center"
+          style={{height: "300px"}}>
+          <Grid item>
+            <ActionButton
+              label={"Listen"}
+              linkTo={"/listen"}
+              style={{width: "100%"}}/>
+          </Grid>
+          <Grid item>
+            <ActionButton
+              label={"Speak"}
+              linkTo={"/speak"} />
+          </Grid>
+        </Grid>
+
       </Grid>
-      <ActionButton label={"Listen"} linkTo={"/listen"} />
-      <ActionButton label={"Speak"} linkTo={"/speak"} />
-    </Grid>
+    </Container>
   );
 };

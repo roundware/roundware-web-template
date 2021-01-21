@@ -45,7 +45,7 @@ const SpeakPage = (props) => {
         <Grid item
               className={classes.responsiveFormContainer}
               style={{'margin': "auto"}}
-              xs={12} sm={10} md={6} lg={4} >
+              xs={12} sm={10} md={8} lg={6} >
           <Switch>
             <Route path={`${props.match.path}/tags/:tagGroupIndex`} component={TagSelectForm } />
             <Route path={`${props.match.path}/location`} component={LocationSelectForm} />
