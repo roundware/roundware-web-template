@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => {
     bottomBar: {
       top: "auto",
       bottom: 0,
-      flexFlow: "row-reverse",
+      flexFlow: "row",
     },
     actionButton: {
       margin: "auto",
@@ -52,19 +52,16 @@ export const App = () => {
       <CssBaseline />
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{roundware._project ? roundware._project.projectName : "Roundware"}</title>
+        <title>{roundware._project ? roundware._project.projectName : ""}</title>
       </Helmet>
       <BrowserRouter>
-        <Container
-          maxWidth="md"
-          style={{"paddingRight": 0, "paddingLeft": 0}}>
           <AppBar
             className={classes.topBar}
             position="fixed">
             <Toolbar className={classes.topBar}>
               <Typography variant="h6" className={classes.title}>
                 <NavLink to="/" className={classes.title}>
-                  {roundware._project ? roundware._project.projectName : "Roundware"}
+                  {roundware._project ? roundware._project.projectName : ""}
                 </NavLink>
               </Typography>
               <img
@@ -83,14 +80,16 @@ export const App = () => {
           </div>
           <Toolbar className={classes.bottomBar} />
           <AppBar position="fixed" className={classes.bottomBar}>
-            <Toolbar>
+            <Toolbar
+              style={{margin: "0 0 0 100px", width: "100%", "justifyContent": "center"}}>
               <Route path="/listen">
                 <RoundwareMixerControl />
               </Route>
+            </Toolbar>
+            <Toolbar>
               <InfoPopup />
             </Toolbar>
           </AppBar>
-        </Container>
       </BrowserRouter>
     </ThemeProvider>
   );

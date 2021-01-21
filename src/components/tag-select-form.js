@@ -19,13 +19,20 @@ const useStyles = makeStyles((theme) => {
     cardGrid: {
     },
     tagCard: {
-      margin: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      marginTop: theme.spacing(1),
+      marginLeft: theme.spacing(3),
+      marginRight: theme.spacing(3),
       padding: theme.spacing(4),
       minWidth: "20rem",
       cursor: "pointer",
     },
     tagGroupHeader: {
-      marginBottom: theme.spacing(3)
+      marginBottom: theme.spacing(3),
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(2),
+      backgroundColor: "transparent",
+      boxShadow: "none",
     },
     selectedTagCard: {
       backgroundColor: theme.palette.primary.main,
