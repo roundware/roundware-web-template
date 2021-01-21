@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useRoundwareDraft } from "../hooks";
 import LocationSelectMarker from "./location-select-marker";
 import { RoundwareMapStyle } from "../map-style";
@@ -50,6 +50,12 @@ const LocationSelectForm = () => {
   const history = useHistory();
   const [error, set_error] = useState( null );
   const [geolocating, set_geolocating] = useState( null );
+
+  useEffect(() => {
+    if (draftRecording.tags.length === 0) {
+      history.replace('/speak/tags/0')
+    }
+  }, [draftRecording.tags])
 
   if (!draftRecording.location.latitude || !draftRecording.location.longitude) {
     return null;

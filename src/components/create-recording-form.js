@@ -98,9 +98,19 @@ const CreateRecordingForm = () => {
       startRecording();
     }
   };
-  if (!draftRecording.tags) {
-    return null
-  }
+
+  useEffect(() => {
+    const hasLocation = draftRecording.location.latitude && draftRecording.location.longitude;
+    if (!hasLocation) {
+      history.replace('/speak/location/')
+    }
+    const hasTags = draftRecording.tags.length > 0;
+
+    if (!hasTags) {
+      history.replace('/speak/tags/0')
+    }
+  }, [draftRecording.tags, draftRecording.location.latitude, draftRecording.location.longitude])
+
   // todo present the participant with the tags they picked
   const selected_tags = draftRecording.tags.map(tag => tagLookup[tag]);
 
