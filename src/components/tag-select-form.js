@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { CardContent } from "@material-ui/core";
 import {generatePath, useHistory } from "react-router-dom";
+import {wait} from "../utils";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -33,8 +34,6 @@ const useStyles = makeStyles((theme) => {
     },
   };
 });
-const later = (delay, value) =>
-  new Promise(resolve => setTimeout(resolve, delay, value));
 
 const TagSelectForm = ({match}) => {
   const classes = useStyles();
@@ -86,7 +85,7 @@ const TagSelectForm = ({match}) => {
     }
     draftRecording.setTags(newTags);
     // let the ui respond to the selection before navigating
-    later(500, ).then(
+    wait(500 ).then(
       () => {
         if (isSelected) {return}
         const isLastGroup = tagGroups.length <= tagGroupIndex + 1;
