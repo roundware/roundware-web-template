@@ -22,6 +22,7 @@ import Container from "@material-ui/core/Container";
 import {useHistory} from "react-router-dom";
 import AudioPlayer from 'material-ui-audio-player';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import {wait} from "../utils";
 
 const visualizerOptions = {
   type: "bars",
@@ -162,7 +163,8 @@ const CreateRecordingForm = () => {
     stream.getTracks().forEach((track) => {
       track.stop();
     });
-    wave.stopStream();
+    wait(100).then(wave.stopStream)
+
     set_is_recording(false);
   };
 
