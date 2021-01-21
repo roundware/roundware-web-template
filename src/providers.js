@@ -4,15 +4,13 @@ import { Roundware, GeoListenMode } from "roundware-web-framework";
 import { useDeviceID } from "./hooks";
 
 export const DraftRecordingProvider = ({ roundware, children }) => {
-  const defaultState = {
-    acceptedAgreement: false,
-    tags: [],
-  };
-  const [state, setState] = useState(defaultState);
   const [location, setLocation] = useState({
     latitude: null,
     longitude: null
   })
+  const [tags, setTags] = useState([]);
+  const [acceptedAgreement, setAcceptedAgreement] = useState(false);
+
   useEffect(() => {
     if (!roundware._project || !roundware._project.location) {
       return;
@@ -23,7 +21,7 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
   }, [roundware._project && roundware._project.location]);
 
   const selectTag = (tag, deselect) => {
-    const newTags = [...state.tags];
+    const newTags = [...tags];
     if (!deselect) {
       newTags.push(tag);
     } else {
@@ -32,13 +30,15 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
         newTags.splice(tagPosition, 1);
       }
     }
-    setState({ ...state, tags: [...newTags] });
+    setTags(newTags);
   };
   const reset = () => {
-    setState(defaultState);
+    setTags([]);
+    setLocation({latitude: null, longitude: null});
+    setAcceptedAgreement(false);
   };
   const clearTags = (tags) => {
-    const newTags = [...state.tags];
+    const newTags = [...tags];
     tags.forEach((tag) => {
       const tagPosition = newTags.indexOf(tag);
       if (tagPosition !== -1) {
@@ -46,15 +46,16 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
       }
     });
 
-    setState({ ...state, tags: [...newTags] });
+    setTags(newTags);
   };
   return (
     <DraftRecordingContext.Provider
       value={{
-        ...state,
+        tags,
+        acceptedAgreement,
         location,
-        setState,
         setLocation,
+        setTags,
         selectTag,
         clearTags,
         reset,
