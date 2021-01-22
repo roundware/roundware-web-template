@@ -51,7 +51,7 @@ const RoundwareMap = (props) => {
     const newRadius = shortSide * 0.8 / 2;
     roundware._project.recordingRadius = newRadius;
     if (roundware._mixer) {
-      roundware._mixer.updateParams({recordingRadius: newRadius})
+      roundware._mixer.updateParams({maxDist: newRadius})
     }
     forceUpdate()
   }
