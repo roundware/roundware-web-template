@@ -273,25 +273,35 @@ const CreateRecordingForm = () => {
             ]}
           >
               {({ remainingTime }) => (
-                <div>
-                  <Typography
-                    variant="h3"
-                    style={{"textAlign": "center"}}>{remainingTime}</Typography>
-                  <IconButton
-                    disabled={draftMediaUrl !== ""}
-                    style={{
-                      margin: "auto",
-                      backgroundColor: isRecording ? "red" : "inherit",
-                    }}
-                    variant="contained"
-                    onClick={toggleRecording}
-                    label={isRecording ? "stop" : "start"}
-                  >
-                    <MicIcon
-                      color={isRecording ? "primary" : "inherit"}
-                      className={classes.iconButtonSmall} />
-                  </IconButton>
-                </div>)}
+                <Grid
+                  container
+                  direction="column"
+                  alignItems="center">
+                  <Grid item>
+                    <Typography
+                      variant="h3"
+                      style={{"textAlign": "center"}}>
+                      {Math.floor(remainingTime/60) + ":" + (remainingTime % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <IconButton
+                      disabled={draftMediaUrl !== ""}
+                      style={{
+                        margin: "auto",
+                        backgroundColor: isRecording ? "red" : "inherit",
+                        justifyContent: "center",
+                      }}
+                      variant="contained"
+                      onClick={toggleRecording}
+                      label={isRecording ? "stop" : "start"}
+                    >
+                      <MicIcon
+                        color={isRecording ? "primary" : "inherit"}
+                        className={classes.iconButtonSmall} />
+                    </IconButton>
+                  </Grid>
+                </Grid>)}
           </CountdownCircleTimer>
         ) : null}
       </Grid>
