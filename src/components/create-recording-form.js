@@ -197,234 +197,236 @@ const CreateRecordingForm = () => {
   const maxRecordingLength = roundware._project ? roundware._project.maxRecordingLength : "--"
 
   return (
-    <Grid
-      container
-      alignItems={"center"}
-      direction={"column"}
-      spacing={8}
-    >
-      <Grid item>
-        <Container
-          style={{"textAlign": "center"}}>
-          { selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }
-        </Container>
-      </Grid>
-      <ErrorDialog error={error} set_error={set_error}/>
+    <div style={{"overflowX": "hidden"}}>
       <Grid
-        item
-        xs={12}
-        className={classes.audioVisualizer}>
-        <canvas id="audio-visualizer" />
-      </Grid>
-
-      {draftMediaUrl ? (
+        container
+        alignItems={"center"}
+        direction={"column"}
+        spacing={8}
+      >
         <Grid item>
-          {/*}<audio id={"draft-audio"} src={draftMediaUrl} controls />*/}
-          <AudioPlayer
-            id="draft-audio"
-            src={draftMediaUrl}
-            useStyles={useStylesAudioPlayer}
-            variation="primary"
-            time="single"
-            timePosition="end"
-            volume={false} />
+          <Container
+            style={{"textAlign": "center"}}>
+            { selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }
+          </Container>
         </Grid>
-      ) : null}
-      {(!draftMediaUrl && !isRecording) ? (
+        <ErrorDialog error={error} set_error={set_error}/>
         <Grid
           item
-          style={{"paddingBottom": 0}}>
-          <IconButton
-            disabled={draftMediaUrl !== ""}
-            style={{
-              margin: "auto",
-              backgroundColor: isRecording ? "red" : "inherit",
-            }}
-            variant="contained"
-            onClick={toggleRecording}
-            label={isRecording ? "stop" : "start"}
-          >
-            <MicIcon
-              color={isRecording ? "primary" : "inherit"}
-              className={classes.iconButton} />
-          </IconButton>
+          xs={12}
+          className={classes.audioVisualizer}>
+          <canvas id="audio-visualizer" />
         </Grid>
-      ) : null}
-      {/*}<Grid
-        item
-        style={{"paddingTop": 0}}>
-        <Typography
-          variant={"h3"}
-          className={classes.label}>
-          {draftMediaUrl ? "Listen Back" : (isRecording ? "Recording!" : "Record")}
-        </Typography>
-      </Grid>*/}
-      <Grid item>
-        {isRecording ? (
-          <CountdownCircleTimer
-            isPlaying
-            duration={maxRecordingLength}
-            onComplete={() => {
-              stopRecording();
-            }}
-            colors={[
-              ['#004777', 0.33],
-              ['#F7B801', 0.33],
-              ['#A30000', 0.33],
-            ]}
-          >
-              {({ remainingTime }) => (
-                <Grid
-                  container
-                  direction="column"
-                  alignItems="center">
-                  <Grid item>
-                    <Typography
-                      variant="h3"
-                      style={{"textAlign": "center"}}>
-                      {Math.floor(remainingTime/60) + ":" + (remainingTime % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <IconButton
-                      disabled={draftMediaUrl !== ""}
-                      style={{
-                        margin: "auto",
-                        backgroundColor: isRecording ? "red" : "inherit",
-                        justifyContent: "center",
-                      }}
-                      variant="contained"
-                      onClick={toggleRecording}
-                      label={isRecording ? "stop" : "start"}
-                    >
-                      <MicIcon
-                        color={isRecording ? "primary" : "inherit"}
-                        className={classes.iconButtonSmall} />
-                    </IconButton>
-                  </Grid>
-                </Grid>)}
-          </CountdownCircleTimer>
-        ) : null}
-      </Grid>
-      <Grid container item>
-        <Button
-          style={{ margin: "auto" }}
-          variant="contained"
-          color="secondary"
-          startIcon={<DeleteIcon />}
-          disabled={draftMediaUrl === ""}
-          onClick={() => {
-            set_delete_modal_open(true);
-          }}
-        >
-          Delete
-        </Button>
 
-        <Dialog open={deleteModalOpen}>
+        {draftMediaUrl ? (
+          <Grid item>
+            {/*}<audio id={"draft-audio"} src={draftMediaUrl} controls />*/}
+            <AudioPlayer
+              id="draft-audio"
+              src={draftMediaUrl}
+              useStyles={useStylesAudioPlayer}
+              variation="primary"
+              time="single"
+              timePosition="end"
+              volume={false} />
+          </Grid>
+        ) : null}
+        {(!draftMediaUrl && !isRecording) ? (
+          <Grid
+            item
+            style={{"paddingBottom": 0}}>
+            <IconButton
+              disabled={draftMediaUrl !== ""}
+              style={{
+                margin: "auto",
+                backgroundColor: isRecording ? "red" : "inherit",
+              }}
+              variant="contained"
+              onClick={toggleRecording}
+              label={isRecording ? "stop" : "start"}
+            >
+              <MicIcon
+                color={isRecording ? "primary" : "inherit"}
+                className={classes.iconButton} />
+            </IconButton>
+          </Grid>
+        ) : null}
+        {/*}<Grid
+          item
+          style={{"paddingTop": 0}}>
+          <Typography
+            variant={"h3"}
+            className={classes.label}>
+            {draftMediaUrl ? "Listen Back" : (isRecording ? "Recording!" : "Record")}
+          </Typography>
+        </Grid>*/}
+        <Grid item>
+          {isRecording ? (
+            <CountdownCircleTimer
+              isPlaying
+              duration={maxRecordingLength}
+              onComplete={() => {
+                stopRecording();
+              }}
+              colors={[
+                ['#004777', 0.33],
+                ['#F7B801', 0.33],
+                ['#A30000', 0.33],
+              ]}
+            >
+                {({ remainingTime }) => (
+                  <Grid
+                    container
+                    direction="column"
+                    alignItems="center">
+                    <Grid item>
+                      <Typography
+                        variant="h3"
+                        style={{"textAlign": "center"}}>
+                        {Math.floor(remainingTime/60) + ":" + (remainingTime % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <IconButton
+                        disabled={draftMediaUrl !== ""}
+                        style={{
+                          margin: "auto",
+                          backgroundColor: isRecording ? "red" : "inherit",
+                          justifyContent: "center",
+                        }}
+                        variant="contained"
+                        onClick={toggleRecording}
+                        label={isRecording ? "stop" : "start"}
+                      >
+                        <MicIcon
+                          color={isRecording ? "primary" : "inherit"}
+                          className={classes.iconButtonSmall} />
+                      </IconButton>
+                    </Grid>
+                  </Grid>)}
+            </CountdownCircleTimer>
+          ) : null}
+        </Grid>
+        <Grid container item>
+          <Button
+            style={{ margin: "auto" }}
+            variant="contained"
+            color="secondary"
+            startIcon={<DeleteIcon />}
+            disabled={draftMediaUrl === ""}
+            onClick={() => {
+              set_delete_modal_open(true);
+            }}
+          >
+            Delete
+          </Button>
+
+          <Dialog open={deleteModalOpen}>
+            <DialogContent>
+              <DialogContentText>
+                Delete your current draft recording?
+              </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  set_delete_modal_open(false);
+                }}
+              >
+                No, keep it!
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  deleteRecording();
+                  set_delete_modal_open(false);
+                }}
+              >
+                Yes, delete it!
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<CloudUploadIcon />}
+            style={{ margin: "auto" }}
+            disabled={draftMediaUrl === ""}
+            onClick={() => {
+              set_legal_modal_open(true);
+            }}
+          >
+            Submit
+          </Button>
+          <Dialog open={legalModalOpen}>
+            <LegalAgreementForm
+              onDecline={() => {
+                set_legal_modal_open(false);
+              }}
+              onAccept={() => {
+                set_legal_modal_open(false);
+                set_saving(true);
+                const assetMeta = {
+                  longitude: draftRecording.location.longitude,
+                  latitude: draftRecording.location.latitude,
+                  tag_ids: selected_tags.map(t => t.tag_id),
+                };
+                const fileName = new Date().toISOString() + ".mp3";
+
+                roundware.saveAsset(draftRecordingMedia, fileName, assetMeta)
+                  .then( asset => {
+                    set_success(asset);
+                  }).catch( err => {
+                    set_error({"message": err});
+                  }).finally( () => {
+                    set_saving(false);
+                })
+              }}
+            />
+          </Dialog>
+        </Grid>
+        <Dialog open={saving}>
           <DialogContent>
+            <CircularProgress color={"primary"} style={{margin: "auto"}}/>
             <DialogContentText>
-              Delete your current draft recording?
+              Uploading your recording now! Please keep this page open until we
+              finish uploading
             </DialogContentText>
           </DialogContent>
+        </Dialog>
+        <Dialog open={success !== null}>
+          <DialogContent>
+            <DialogContentText style={{textAlign: "center"}}>
+              <CheckCircleIcon color={"primary"}/>
+            </DialogContentText>
+            <DialogContentText>
+              Upload Complete! Thank you for participating!
 
+            </DialogContentText>
+          </DialogContent>
           <DialogActions>
+            <Button variant={"contained"}
+                    color={"primary"}
+                    onClick={()=>{
+                      history.push(`/listen?eid=${success.envelope_ids[0]}`)
+                    }}
+            >Listen</Button>
             <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                set_delete_modal_open(false);
-              }}
-            >
-              No, keep it!
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => {
-                deleteRecording();
-                set_delete_modal_open(false);
-              }}
-            >
-              Yes, delete it!
-            </Button>
+              variant={"contained"}
+              color={"primary"}
+               onClick={()=>{
+                 draftRecording.reset();
+                 history.push('/speak')
+               }}
+            >Create New Recording</Button>
           </DialogActions>
         </Dialog>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<CloudUploadIcon />}
-          style={{ margin: "auto" }}
-          disabled={draftMediaUrl === ""}
-          onClick={() => {
-            set_legal_modal_open(true);
-          }}
-        >
-          Submit
-        </Button>
-        <Dialog open={legalModalOpen}>
-          <LegalAgreementForm
-            onDecline={() => {
-              set_legal_modal_open(false);
-            }}
-            onAccept={() => {
-              set_legal_modal_open(false);
-              set_saving(true);
-              const assetMeta = {
-                longitude: draftRecording.location.longitude,
-                latitude: draftRecording.location.latitude,
-                tag_ids: selected_tags.map(t => t.tag_id),
-              };
-              const fileName = new Date().toISOString() + ".mp3";
-
-              roundware.saveAsset(draftRecordingMedia, fileName, assetMeta)
-                .then( asset => {
-                  set_success(asset);
-                }).catch( err => {
-                  set_error({"message": err});
-                }).finally( () => {
-                  set_saving(false);
-              })
-            }}
-          />
-        </Dialog>
       </Grid>
-      <Dialog open={saving}>
-        <DialogContent>
-          <CircularProgress color={"primary"} style={{margin: "auto"}}/>
-          <DialogContentText>
-            Uploading your recording now! Please keep this page open until we
-            finish uploading
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={success !== null}>
-        <DialogContent>
-          <DialogContentText style={{textAlign: "center"}}>
-            <CheckCircleIcon color={"primary"}/>
-          </DialogContentText>
-          <DialogContentText>
-            Upload Complete! Thank you for participating!
-
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button variant={"contained"}
-                  color={"primary"}
-                  onClick={()=>{
-                    history.push(`/listen?eid=${success.envelope_ids[0]}`)
-                  }}
-          >Listen</Button>
-          <Button
-            variant={"contained"}
-            color={"primary"}
-             onClick={()=>{
-               draftRecording.reset();
-               history.push('/speak')
-             }}
-          >Create New Recording</Button>
-        </DialogActions>
-      </Dialog>
-    </Grid>
+    </div>
   );
 };
 export default CreateRecordingForm;
