@@ -204,7 +204,8 @@ const CreateRecordingForm = () => {
       spacing={8}
     >
       <Grid item>
-        <Container>
+        <Container
+          style={{"textAlign": "center"}}>
           { selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }
         </Container>
       </Grid>
