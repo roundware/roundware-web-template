@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {useRoundware, useRoundwareDraft} from "../hooks";
 import Button from "@material-ui/core/Button";
 import MediaRecorder from "audio-recorder-polyfill";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import { IconButton } from "@material-ui/core";
 import MicIcon from "@material-ui/icons/Mic";
@@ -20,6 +20,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import {useHistory} from "react-router-dom";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AudioPlayer from 'material-ui-audio-player';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import {wait} from "../utils";
@@ -37,19 +38,37 @@ const useStyles = makeStyles((theme) => {
     iconButton: {
       height: 150,
       width: 150,
+      [theme.breakpoints.down('xs')]: {
+        height: 100,
+        width: 100,
+      },
     },
     iconButtonSmall: {
       height: 50,
       width: 50,
+      [theme.breakpoints.down('xs')]: {
+        height: 30,
+        width: 30,
+      },
     },
     audioVisualizer: {
       backgroundColor: "#333",
       padding: "0 !important",
       height: 150,
       width: 300,
+      [theme.breakpoints.down('xs')]: {
+        height: 150,
+      },
     },
     label: {
       paddingTop: 0,
+    },
+    tagGroupHeaderLabel: {
+      marginTop: theme.spacing(2),
+      fontSize: "2rem",
+      [theme.breakpoints.down('sm')]: {
+        fontSize: "1.2rem",
+      },
     },
   };
 });
@@ -60,6 +79,9 @@ const useStylesAudioPlayer = makeStyles((theme) => {
       width: 700,
       [theme.breakpoints.down('sm')]: {
         width: 500,
+      },
+      [theme.breakpoints.down('xs')]: {
+        width: "100vw",
       },
     },
     playIcon: {
@@ -116,6 +138,9 @@ const CreateRecordingForm = () => {
   const [success, set_success] = useState(null);
   const history = useHistory();
   const classes = useStyles();
+
+  const theme = useTheme();
+  const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   const startRecording = () => {
     if (!navigator.mediaDevices) {
@@ -205,9 +230,15 @@ const CreateRecordingForm = () => {
         spacing={8}
       >
         <Grid item>
-          <Container
-            style={{"textAlign": "center"}}>
-            { selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }
+          <Container>
+            {/*{ selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }*/}
+            {<Typography
+              variant={"h5"}
+              className={classes.tagGroupHeaderLabel}
+              key={selected_tags.length > 0 ? selected_tags[1].id : 1}
+            >
+              {selected_tags.length > 0 ? selected_tags[1].tag_display_text : "No selected tags"}
+            </Typography>}
           </Container>
         </Grid>
         <ErrorDialog error={error} set_error={set_error}/>
@@ -260,11 +291,13 @@ const CreateRecordingForm = () => {
             {draftMediaUrl ? "Listen Back" : (isRecording ? "Recording!" : "Record")}
           </Typography>
         </Grid>*/}
-        <Grid item>
-          {isRecording ? (
+        {isRecording ? (
+          <Grid item>
             <CountdownCircleTimer
               isPlaying
               duration={maxRecordingLength}
+              size={isExtraSmallScreen ? 140 : 180}
+              strokeWidth={isExtraSmallScreen ? 8 : 12}
               onComplete={() => {
                 stopRecording();
               }}
@@ -305,8 +338,8 @@ const CreateRecordingForm = () => {
                     </Grid>
                   </Grid>)}
             </CountdownCircleTimer>
-          ) : null}
-        </Grid>
+          </Grid>
+        ) : null}
         <Grid container item>
           <Button
             style={{ margin: "auto" }}
