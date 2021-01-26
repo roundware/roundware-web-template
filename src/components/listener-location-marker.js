@@ -7,22 +7,6 @@ import {useTheme} from "@material-ui/core";
 const ListenerLocationMarker = () => {
   const {roundware} = useRoundware();
   const theme = useTheme();
-  const loc = roundware._listenerLocation
-  const lat = loc && loc.latitude
-  const lng = loc && loc.longitude
-  const center = { lat, lng }
-  const ready = typeof(lat) === "number" && typeof(lng) === "number"
-  const map = useGoogleMap();
-
-  // when the listenerLocation is updated, center the map
-  useEffect(() => {
-    if (ready) {
-      const c = map.getCenter();
-      if (center.lat !== c.lat() || center.lng !== c.lng()) {
-        map.panTo(center)
-      }
-    }
-  }, [lat, lng])
 
   if (!ready) {
     return null;
