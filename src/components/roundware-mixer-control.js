@@ -6,7 +6,7 @@ import {useRoundware} from "../hooks";
 import { GeoListenMode } from "roundware-web-framework";
 
 const RoundwareMixerControl = props => {
-  const {roundware, forceUpdate } = useRoundware();
+  const { roundware, forceUpdate } = useRoundware();
   useEffect(() => {
     // when the control for the mixer is unmounted, clean up by stopping the mixer
     return () => {
@@ -42,9 +42,9 @@ const RoundwareMixerControl = props => {
       }}
     >
       {roundware && roundware._mixer && roundware._mixer.playing ? (
-        <PauseCircleOutlineIcon />
+        <PauseCircleOutlineIcon fontSize="large" />
       ) : (
-        <PlayCircleOutlineIcon />
+        <PlayCircleOutlineIcon fontSize="large" />
       )}
     </Button>
   );

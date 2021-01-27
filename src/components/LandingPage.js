@@ -26,8 +26,17 @@ const useStyles = makeStyles((theme) => {
     landingHeader: {
       backgroundImage: `linear-gradient(180deg, #000000ff, #ffffff00), url(${landingHeaderImage})`,
       backgroundSize: "cover",
-      height: "100vh",
+      height: "100%",
       backgroundPosition: "center",
+    },
+    landingTitle: {
+      fontSize: "6em",
+      [theme.breakpoints.down('md')]: {
+        fontSize: "4em",
+      },
+      [theme.breakpoints.down('sm')]: {
+        fontSize: "3em",
+      },
     },
   };
 });
@@ -54,7 +63,8 @@ export const LandingPage = (props) => {
             style={{margin: 'auto', height: "15vh", "textAlign": "center", "paddingTop": 15}}
             sm={12}>
             <Typography
-              variant={"h2"}>
+              variant={"h2"}
+              className={classes.landingTitle}>
               {roundware._project && roundware._project.projectName}
             </Typography>
           </Grid>

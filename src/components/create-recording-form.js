@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {useRoundware, useRoundwareDraft} from "../hooks";
+import { useRoundware, useRoundwareDraft } from "../hooks";
 import Button from "@material-ui/core/Button";
 import MediaRecorder from "audio-recorder-polyfill";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -19,7 +19,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AudioPlayer from 'material-ui-audio-player';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
@@ -138,7 +138,6 @@ const CreateRecordingForm = () => {
   const [success, set_success] = useState(null);
   const history = useHistory();
   const classes = useStyles();
-
   const theme = useTheme();
   const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 

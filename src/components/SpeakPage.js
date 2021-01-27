@@ -13,10 +13,17 @@ const useStyles = () => makeStyles(theme => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-
+  rootFormContainer: {
+    paddingTop: '3rem',
+    paddingBottom: '3rem',
+    [theme.breakpoints.down('sm')]: {
+      paddingTop: 0,
+      paddingBottom: 0,
+    },
+  },
   responsiveFormContainer: {
     margin: "auto"
-  }
+  },
 }))
 
 
@@ -40,8 +47,7 @@ const SpeakPage = (props) => {
   return (
     <DraftRecordingProvider roundware={roundware}>
       <Grid container
-            style={{paddingTop: '3rem', paddingBottom: '3rem'}}
-            className={classes.root}>
+            className={classes.rootFormContainer}>
         <Grid item
               className={classes.responsiveFormContainer}
               style={{'margin': "auto"}}

@@ -5,14 +5,18 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 export const defaultTheme = createMuiTheme({
   palette: {
     type: "dark",
-    primary: deepPurple,
+    primary: {
+      main: '#159095',
+    },
   },
 });
 
 export const lightTheme = createMuiTheme({
   palette: {
     type: "light",
-    primary: deepPurple,
+    primary: {
+      main: '#159095',
+    },
   },
 });
 

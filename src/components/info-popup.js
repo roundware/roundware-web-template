@@ -80,8 +80,8 @@ const InfoPopup = () => {
             Many stories that are recorded in this app are also published on the Museum
             on Main Street website (www.MuseumOnMainStreet.org) for inclusion in the
             Smithsonian's "Stories from Main Street" archive. If at any point, storytellers
-            wish to remove their stories, they may email us at
-            <a href="mailto:online@thePealeCenter.org">online@thePealeCenter.org</a>.
+            wish to remove their stories, they may email us at <a href="mailto:online@thePealeCenter.org">
+            online@thePealeCenter.org</a>.
           </Typography>
           <Typography gutterBottom variant={"h6"}>
             Find Your Story on the Map
