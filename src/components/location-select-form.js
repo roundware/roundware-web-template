@@ -21,7 +21,7 @@ const getPosition = function (options) {
   });
 };
 
-const useStyles = () => makeStyles(theme => {
+const useStyles = makeStyles((theme) => {
   return {
     container: {
       flexGrow: 1,
@@ -33,7 +33,17 @@ const useStyles = () => makeStyles(theme => {
     cardActionButton: {
       margin: {
         right: theme.spacing(2),
-      }
+      },
+      [theme.breakpoints.down('xs')]: {
+        paddingRight: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
+      },
+    },
+    locationHeaderLabel: {
+      fontSize: "2rem",
+      [theme.breakpoints.down('sm')]: {
+        fontSize: "1.2rem",
+      },
     },
   }
 })
@@ -43,7 +53,7 @@ const LocationSelectForm = () => {
   const draftRecording = useRoundwareDraft();
   const theme = useTheme();
   const mapContainerStyle = {
-    height: "400px",
+    height: "60vh",
     margin: theme.spacing(2, 0),
   }
   const classes = useStyles();
@@ -85,7 +95,12 @@ const LocationSelectForm = () => {
     <Card style={{margin: "auto"}} className={classes.container}>
       <ErrorDialog error={error} set_error={set_error} />
       <CardContent>
-        <Typography variant={"h5"}>Where are you recording today?</Typography>
+        <Typography
+          variant={"h4"}
+          className={classes.locationHeaderLabel}
+        >
+          Where are you recording today?
+        </Typography>
         <LoadScript
           id="script-loader"
           googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}
@@ -106,7 +121,7 @@ const LocationSelectForm = () => {
                 zoom: 5,
                 zoomControl: true,
                 draggable: true,
-                mapTypeControl: true,
+                mapTypeControl: false,
                 streetViewControl: false,
                 draggableCursor: "cursor",
                 fullscreenControl: false,
@@ -129,7 +144,7 @@ const LocationSelectForm = () => {
       </CardContent>
       <CardActions variant={"contained"} style={{}}>
         <Button
-          classes={classes.cardActionButton}
+          className={classes.cardActionButton}
           aria-label="back"
           onClick={history.goBack}
           variant={"contained"}
@@ -137,7 +152,7 @@ const LocationSelectForm = () => {
           Back
         </Button>
         <Button
-          classes={classes.cardActionButton}
+          className={classes.cardActionButton}
           variant={"contained"}
           aria-label="use my location"
           onClick={getGeolocation}
@@ -145,7 +160,7 @@ const LocationSelectForm = () => {
           {geolocating ? <CircularProgress /> : "Use My Location" }
         </Button>
         <Button
-          classes={classes.cardActionButton}
+          className={classes.cardActionButton}
           color="primary"
           variant={"contained"}
           onClick={() => {

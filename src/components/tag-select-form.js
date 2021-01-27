@@ -7,6 +7,7 @@ import React, {useEffect, useState} from "react";
 import {useRoundware, useRoundwareDraft} from "../hooks";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { CardContent } from "@material-ui/core";
 import {generatePath, useHistory } from "react-router-dom";
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme) => {
       flexGrow: 1,
     },
     cardGrid: {
+      marginBottom: theme.spacing(1),
     },
     tagCard: {
       marginBottom: theme.spacing(1),
@@ -27,6 +29,13 @@ const useStyles = makeStyles((theme) => {
       padding: theme.spacing(4),
       minWidth: "20rem",
       cursor: "pointer",
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(3),
+      },
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+      },
     },
     tagGroupHeader: {
       marginBottom: theme.spacing(3),
@@ -34,6 +43,19 @@ const useStyles = makeStyles((theme) => {
       marginRight: theme.spacing(2),
       backgroundColor: "transparent",
       boxShadow: "none",
+      [theme.breakpoints.down('sm')]: {
+        marginBottom: theme.spacing(0),
+      },
+      [theme.breakpoints.down('xs')]: {
+        marginRight: theme.spacing(0),
+        marginLeft: theme.spacing(0),
+      },
+    },
+    tagGroupHeaderLabel: {
+      fontSize: "2rem",
+      [theme.breakpoints.down('sm')]: {
+        fontSize: "1.5rem",
+      },
     },
     selectedTagCard: {
       backgroundColor: theme.palette.primary.main,
@@ -114,7 +136,12 @@ const TagSelectForm = ({match}) => {
     <div className={classes.root}>
       <Card className={classes.tagGroupHeader}>
         <CardContent>
-          <Typography variant={"h4"}>{tagGroup.header_display_text}</Typography>
+          <Typography
+            variant={"h4"}
+            className={classes.tagGroupHeaderLabel}
+          >
+            {tagGroup.header_display_text}
+          </Typography>
         </CardContent>
       </Card>
       <Grid container direction={"column"} className={classes.cardGrid}>
@@ -148,9 +175,10 @@ const TagSelectForm = ({match}) => {
       <Container>
         <Button
           style={{
-            margin: "auto"
+            margin: "0 auto 16px auto"
           }}
           variant={"contained"}
+          startIcon={<ArrowBackIosIcon />}
           onClick={() => {
             if (tagGroupIndex === 0) {
               history.replace("/")

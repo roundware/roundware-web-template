@@ -21,12 +21,13 @@ import pealeLogoSmall from '../assets/peale-white.png';
 const useStyles = makeStyles((theme) => {
   return {
     topBar: {
-      backgroundColor: theme.palette.grey[900],
+      backgroundColor: theme.palette.primary,
     },
     bottomBar: {
       top: "auto",
       bottom: 0,
       flexFlow: "row",
+      backgroundColor: theme.palette.grey[900],
     },
     actionButton: {
       margin: "auto",
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => {
     appContainer: {
       display: "flex",
       flexGrow: 1,
+      overflow: "scroll",
     },
     title: {
       flexGrow: 1,
