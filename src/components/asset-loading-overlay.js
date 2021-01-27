@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => {
 });
 const AssetLoadingOverlay = () => {
   const {roundware} = useRoundware();
+
   const classes = useStyles();
   return (
     <Backdrop className={classes.backdrop} open={!roundware._assetData} >
