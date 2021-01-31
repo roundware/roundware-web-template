@@ -8,6 +8,8 @@ import { GeoListenMode } from "roundware-web-framework";
 
 const RoundwareMixerControl = props => {
   const { roundware, forceUpdate } = useRoundware();
+  const isPlaying = roundware._mixer && roundware._mixer.playing
+
   useEffect(() => {
     // when the control for the mixer is unmounted, clean up by stopping the mixer
     return () => {
@@ -51,6 +53,7 @@ const RoundwareMixerControl = props => {
         )}
       </Button>
       <Button
+        disabled={isPlaying ? false : true}
         onClick={() => {
           if (!roundware._mixer) {
 
