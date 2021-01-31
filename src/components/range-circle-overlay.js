@@ -16,10 +16,6 @@ const useStyles = makeStyles((theme) => {
       left: 0,
       zIndex: 10,
       pointerEvents: "none",
-      [theme.breakpoints.down('sm')]: {
-        width: "100%",
-        height: "100%",
-      },
     },
     circle: {
       borderRadius: "50%",
@@ -32,6 +28,7 @@ const useStyles = makeStyles((theme) => {
       position: "relative",
       top: "50%",
       transform: "translateY(-50%)",
+      boxShadow: "0 0 0 99999px rgba(0, 0, 0, .1)",
       [theme.breakpoints.only('xs')]: {
         width: 300,
         height: 300,
