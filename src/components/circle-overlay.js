@@ -63,6 +63,8 @@ const RangeCircleOverlay = () => {
   const ready = typeof(lat) === "number" && typeof(lng) === "number"
   const { ref, width, height } = useDimensions();
   const [resizeListener, set_resize_listener] = useState(null)
+  const isPlaying = roundware._mixer && roundware._mixer.playing
+
   // when the listenerLocation is updated, center the map
   useEffect(() => {
     if (ready) {
@@ -80,27 +82,35 @@ const RangeCircleOverlay = () => {
     if (resizeListener) {
       resizeListener.remove()
     }
-    const circleSizeListener = map.addListener('zoom_changed', () => {
+    if (!isPlaying) {
+      set_resize_listener(null);
+      return;
+    }
+    const set_radius_with_circle_geom = () => {
       // from https://gis.stackexchange.com/questions/7430/what-ratio-scales-do-google-maps-zoom-levels-correspond-to
       const metersPerPixel = 156543.03392 * Math.cos(map.getCenter().lat() * Math.PI / 180) / Math.pow(2, map.getZoom())
       // todo: use the actual height / width of the circle element to get this value
       const newRadius = (width / 2) * metersPerPixel;
       roundware._project.recordingRadius = newRadius;
       if (roundware._mixer) {
-        roundware._mixer.updateParams({maxDist: newRadius})
+        roundware._mixer.updateParams({maxDist: newRadius, recordingRadius: newRadius})
       }
       forceUpdate()
-    });
+    }
+    const circleSizeListener = map.addListener('zoom_changed', set_radius_with_circle_geom)
     set_resize_listener(circleSizeListener);
-
-  }, [map, width])
+    set_radius_with_circle_geom()
+  }, [map, width, isPlaying])
 
   return (
-    <Box  className={classes.circleOverlay} >
-        <div
-          ref={ref}
-          className={classes.circle}
-        />
+    <Box
+      className={classes.circleOverlay}
+      style={{"visibility": isPlaying ? "inherit" : "hidden"}}
+    >
+      <div
+        ref={ref}
+        className={classes.circle}
+      />
     </Box>
   )
 }

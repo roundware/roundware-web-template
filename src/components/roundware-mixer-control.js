@@ -29,7 +29,8 @@ const RoundwareMixerControl = props => {
               roundware._mixer.updateParams({
                 listenerLocation: roundware._listenerLocation,
                 minDist: 0,
-                maxDist: roundware._project.recordingRadius,
+                maxDist: 0,
+                recordingRadius: 0,
                 listenTagIds: listen_tags,
               });
               roundware._mixer.toggle(token, force);

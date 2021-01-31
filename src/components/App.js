@@ -87,6 +87,7 @@ export const App = () => {
               <Route path="/listen">
                 <RoundwareMixerControl />
               </Route>
+              mixer: {roundware._mixer && JSON.stringify(roundware._mixer.mixParams)}
             </Toolbar>
             <Toolbar>
               <InfoPopup />
