@@ -58,7 +58,10 @@ const RoundwareMixerControl = props => {
           if (!roundware._mixer) {
 
           } else {
-            roundware._mixer.skipTrack(7);
+            const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+            trackIds.forEach(
+              audioTrackId => roundware._mixer.skipTrack(audioTrackId)
+            );
           }
         }}
       >
