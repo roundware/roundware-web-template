@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRoundwareDraft } from "../hooks";
 import LocationSelectMarker from "./location-select-marker";
 import { RoundwareMapStyle } from "../map-style";
@@ -10,10 +10,10 @@ import {
   CardActions,
   Typography, useTheme,
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import ErrorDialog from "./error-dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const getPosition = function (options) {
   return new Promise(function (resolve, reject) {
@@ -59,6 +59,7 @@ const LocationSelectForm = () => {
   const classes = useStyles();
   const history = useHistory();
   const [error, set_error] = useState( null );
+  const [errorMessage, setErrorMessage] = useState( null );
   const [geolocating, set_geolocating] = useState( null );
 
   useEffect(() => {
@@ -76,7 +77,10 @@ const LocationSelectForm = () => {
       console.error("Geolocation is not supported by your browser");
     } else {
       set_geolocating(true);
-      getPosition()
+      const options = {
+        timeout: 5000,
+      };
+      getPosition(options)
         .then((position) => {
           draftRecording.setLocation({
             latitude: position.coords.latitude,
@@ -84,6 +88,10 @@ const LocationSelectForm = () => {
           });
         })
         .catch(err => {
+          console.log(err);
+          if (err.message == "Timeout expired") {
+            setErrorMessage("Your location is unavailable. Please move the pin to manually select a location for your contribution. Thanks!");
+          }
           set_error(err);
         }).finally( () => {
         set_geolocating(false);
@@ -93,13 +101,17 @@ const LocationSelectForm = () => {
 
   return (
     <Card style={{margin: "auto"}} className={classes.container}>
-      <ErrorDialog error={error} set_error={set_error} />
+      <ErrorDialog
+        error={error}
+        set_error={set_error}
+        errorMessage={errorMessage}
+      />
       <CardContent>
         <Typography
           variant={"h4"}
           className={classes.locationHeaderLabel}
         >
-          Where are you recording today?
+          Where would you like to place your recording?
         </Typography>
         <LoadScript
           id="script-loader"

@@ -6,19 +6,19 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import Typography from "@material-ui/core/Typography";
 
-const ErrorDialog = ({error, set_error}) => {
+const ErrorDialog = (props) => {
 
     return (
-      <Dialog open={error !== null} >
+      <Dialog open={props.error !== null} >
       <DialogContent>
         <DialogContentText>
-          { error && error.message }
+          { props.errorMessage }
         </DialogContentText>
         </DialogContent>
         <DialogActions>
             <Button
                 variant="contained"
-                onClick={()=>{set_error(null)}}
+                onClick={()=>{props.set_error(null)}}
             >OK</Button>
         </DialogActions>
       </Dialog>
