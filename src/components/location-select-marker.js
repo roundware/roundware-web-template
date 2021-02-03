@@ -26,12 +26,9 @@ const LocationSelectMarker = () => {
         lng: draftRecording.location.longitude,
       }}
       onDragEnd={(evt) => {
-        draftRecording.setState({
-            ...draftRecording,
-            location: {
-              latitude: evt.latLng.lat(),
-              longitude: evt.latLng.lng(),
-            }
+        draftRecording.setLocation({
+          latitude: evt.latLng.lat(),
+          longitude: evt.latLng.lng(),
         });
       }}
     />
