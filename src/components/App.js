@@ -53,13 +53,12 @@ export const App = () => {
   const [theme] = useState(defaultTheme);
   const classes = useStyles();
   const { roundware } = useRoundware();
-  let locationTest = useLocation();
+  let location = useLocation();
 
   useEffect(() => {
       ReactGA.pageview(window.location.pathname + window.location.search)
-      console.log(location.pathname);
     },
-    [locationTest]
+    [location.pathname]
   )
 
   return (
