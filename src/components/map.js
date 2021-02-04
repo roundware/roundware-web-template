@@ -8,7 +8,7 @@ import ListenerLocationMarker from "./listener-location-marker";
 import { useRoundware } from "../hooks";
 import distance from "@turf/distance"
 import AssetLoadingOverlay from "./asset-loading-overlay";
-import RangeCircleOverlay from "./circle-overlay";
+import RangeCircleOverlay from "./range-circle-overlay";
 import WalkingModeButton from "./walking-mode-button";
 
 const useStyles = makeStyles((theme) => {
