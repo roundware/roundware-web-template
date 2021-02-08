@@ -6,6 +6,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
 import MapIcon from '@material-ui/icons/Map';
+import ListenerLocationMarker from './listener-location-marker';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -77,6 +78,7 @@ const walkingModeButton = () => {
           <MapIcon fontSize="large" />
         )}
       </Button>
+      {walkingMode ? <ListenerLocationMarker /> : null}
     </div>
   );
 }
