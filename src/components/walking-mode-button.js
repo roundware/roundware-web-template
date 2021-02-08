@@ -64,6 +64,12 @@ const walkingModeButton = () => {
       // use spinner to indicate location is being determined initially
     }
     setwalkingMode(!walkingMode);
+    if (roundware._mixer) {
+      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+      trackIds.forEach(
+        audioTrackId => roundware._mixer.skipTrack(audioTrackId)
+      );
+    }
     forceUpdate();
   };
 
