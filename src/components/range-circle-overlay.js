@@ -64,6 +64,9 @@ const RangeCircleOverlay = () => {
   const { ref, width, height } = useDimensions();
   const [resizeListener, set_resize_listener] = useState(null)
   const isPlaying = roundware._mixer && roundware._mixer.playing
+  const isGeoLocationEnabled = roundware._geoPosition && roundware._geoPosition.isEnabled;
+  const showRangeCircle = isPlaying && !isGeoLocationEnabled;
+  console.log(`show range circle? ${showRangeCircle}`);
 
   // when the listenerLocation is updated, center the map
   useEffect(() => {
@@ -91,9 +94,16 @@ const RangeCircleOverlay = () => {
       const metersPerPixel = 156543.03392 * Math.cos(map.getCenter().lat() * Math.PI / 180) / Math.pow(2, map.getZoom())
       // todo: use the actual height / width of the circle element to get this value
       const newRadius = (width / 2) * metersPerPixel;
-      roundware._project.recordingRadius = newRadius;
+      // roundware._project.recordingRadius = newRadius;
+      // set listening range to project recordingRadius when in walking mode
+      // set listening range to overlay circle when in map mode
       if (roundware._mixer) {
-        roundware._mixer.updateParams({maxDist: newRadius, recordingRadius: newRadius})
+        if (roundware._geoPosition && roundware._geoPosition.isEnabled) {
+          roundware._mixer.updateParams({maxDist: roundware._project.recordingRadius,
+                                         recordingRadius: roundware._project.recordingRadius})
+        } else if (roundware._geoPosition && !roundware._geoPosition.isEnabled) {
+          roundware._mixer.updateParams({maxDist: newRadius, recordingRadius: newRadius})
+        }
       }
       forceUpdate()
     }
@@ -105,7 +115,7 @@ const RangeCircleOverlay = () => {
   return (
     <Box
       className={classes.circleOverlay}
-      style={{"visibility": isPlaying ? "inherit" : "hidden"}}
+      style={{"visibility": (showRangeCircle) ? "inherit" : "hidden"}}
     >
       <div
         ref={ref}

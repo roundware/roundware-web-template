@@ -45,20 +45,28 @@ const walkingModeButton = () => {
   const toggleWalkingMode = () => {
     if (walkingMode) {
       console.log("switching to map mode");
-      // re-center map on user location
       // zoom out
       map.setZoom(5);
-      // change to geoListenMode.MANUAL
-      // make project.recordingRadius circle invisible
+      // enable map panning
+      map.setOptions({gestureHandling: "cooperative"});
+      // stop listening for location updates
+      roundware.enableGeolocation(GeoListenMode.MANUAL)
       // update text instructions?
     } else if (!walkingMode) {
       console.log("switching to walking mode");
-      // re-center map on user location
+      // disable map panning
+      map.setOptions({gestureHandling: "none"});
       // zoom in
       map.setZoom(16);
       // change to geoListenMode.AUTOMATIC
       roundware.enableGeolocation(GeoListenMode.AUTOMATIC)
       // make project.recordingRadius circle invisible
+      const isGeoLocationEnabled = roundware._geoPosition && roundware._geoPosition.isEnabled;
+      console.log(`isGeoLocationEnabled: ${isGeoLocationEnabled}`);
+      if (roundware._mixer) {
+        roundware._mixer.updateParams({maxDist: roundware._project.recordingRadius,
+                                       recordingRadius: roundware._project.recordingRadius});
+      }
       // update text instructions?
       // use spinner to indicate location is being determined initially
     }
@@ -73,9 +81,9 @@ const walkingModeButton = () => {
         onClick={toggleWalkingMode}
       >
         {walkingMode ? (
-          <DirectionsWalkIcon fontSize="large" />
-        ) : (
           <MapIcon fontSize="large" />
+        ) : (
+          <DirectionsWalkIcon fontSize="large" />
         )}
       </Button>
       {walkingMode ? <ListenerLocationMarker /> : null}
