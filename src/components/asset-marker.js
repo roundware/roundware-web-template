@@ -48,10 +48,15 @@ const AssetInfoWindow = ({ asset }) => {
 
 const AssetMarker = ({ asset, clusterer, oms }) => {
   const { selectAsset } = useRoundware();
+  const iconPin = {
+       url: 'https://www.google.com/intl/en_us/mapfiles/ms/micons/green.png',
+       scaledSize: new google.maps.Size(20, 20)
+      };
 
   return (
     <Marker
       position={{ lat: asset.latitude, lng: asset.longitude }}
+      icon={iconPin}
       clusterer={clusterer}
       onLoad={(m) => oms.addMarker(m, () => selectAsset(asset))}
     >
