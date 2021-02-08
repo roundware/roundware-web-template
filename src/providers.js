@@ -206,6 +206,20 @@ export const RoundwareProvider = (props) => {
     }
   }, [roundware._project]);
 
+  const geoListenMode = ( roundware._mixer && roundware._mixer.mixParams.geoListenMode ) || GeoListenMode.DISABLED;
+  const setGeoListenMode = (modeName) => {
+    roundware.enableGeolocation(modeName);
+    // console.log(`roundware._mixer.mixParams.geoListenMode: ${roundware._mixer.mixParams.geoListenMode}`);
+    if (modeName === GeoListenMode.AUTOMATIC && roundware._mixer) {
+      roundware._mixer.updateParams({
+        maxDist: roundware._project.recordingRadius,
+        recordingRadius: roundware._project.recordingRadius
+      });
+    } else if (modeName === GeoListenMode.MANUAL) {
+      // set maxDist to value calculated from range circle overlay
+    }
+  }
+
   return (
     <RoundwareContext.Provider
       value={{
@@ -219,6 +233,7 @@ export const RoundwareProvider = (props) => {
         afterDateFilter,
         assetPageIndex,
         assetsPerPage,
+        geoListenMode,
         // state modification functions
         selectAsset,
         selectTags,
@@ -227,6 +242,7 @@ export const RoundwareProvider = (props) => {
         setAssetsPerPage,
         setSortField,
         forceUpdate,
+        setGeoListenMode,
         // computed properties
         assetPage: assetPage(),
         assetsReady: Boolean(roundware._assetData && roundware._assetData.length)

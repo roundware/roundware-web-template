@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 const walkingModeButton = () => {
-  const { roundware, forceUpdate } = useRoundware();
+  const { roundware, forceUpdate, geoListenMode, setGeoListenMode } = useRoundware();
   const map = useGoogleMap();
   const classes = useStyles();
   const [walkingMode, setwalkingMode] = useState(false);
@@ -50,27 +50,21 @@ const walkingModeButton = () => {
       // enable map panning
       map.setOptions({gestureHandling: "cooperative"});
       // stop listening for location updates
-      roundware.enableGeolocation(GeoListenMode.MANUAL)
+      setGeoListenMode(GeoListenMode.MANUAL);
       // update text instructions?
     } else if (!walkingMode) {
       console.log("switching to walking mode");
       // disable map panning
       map.setOptions({gestureHandling: "none"});
       // zoom in
-      map.setZoom(16);
-      // change to geoListenMode.AUTOMATIC
-      roundware.enableGeolocation(GeoListenMode.AUTOMATIC)
-      // make project.recordingRadius circle invisible
-      const isGeoLocationEnabled = roundware._geoPosition && roundware._geoPosition.isEnabled;
-      console.log(`isGeoLocationEnabled: ${isGeoLocationEnabled}`);
-      if (roundware._mixer) {
-        roundware._mixer.updateParams({maxDist: roundware._project.recordingRadius,
-                                       recordingRadius: roundware._project.recordingRadius});
-      }
+      map.setZoom(17);
+      // determine user location and listen for updates
+      setGeoListenMode(GeoListenMode.AUTOMATIC);
       // update text instructions?
       // use spinner to indicate location is being determined initially
     }
     setwalkingMode(!walkingMode);
+    forceUpdate();
   };
 
   return (
