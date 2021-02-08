@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useDefaultStyles } from "../styles";
 import { useTheme } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import PersonPinIcon from '@material-ui/icons/PersonPin';
 
 const ListenerLocationMarker = () => {
   const { roundware } = useRoundware();
@@ -20,8 +19,8 @@ const ListenerLocationMarker = () => {
   // }
 
   const iconPin = {
-    url: 'https://www.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
-    scaledSize: new google.maps.Size(20, 20)
+    url: 'https://fonts.gstatic.com/s/i/materialicons/person_pin/v10/24px.svg',
+    scaledSize: new google.maps.Size(30, 30)
   };
 
   return (
