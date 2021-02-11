@@ -118,7 +118,7 @@ const RangeCircleOverlay = () => {
   return (
     <Box
       className={classes.circleOverlay}
-      style={{"visibility": (geoListenMode === GeoListenMode.MANUAL) ? "inherit" : "hidden"}}
+      style={{"visibility": (geoListenMode === GeoListenMode.MANUAL && isPlaying) ? "inherit" : "hidden"}}
     >
       <div
         ref={ref}

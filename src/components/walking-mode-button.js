@@ -24,7 +24,7 @@ const walkingModeButton = () => {
   const { roundware, forceUpdate, geoListenMode, setGeoListenMode } = useRoundware();
   const map = useGoogleMap();
   const classes = useStyles();
-  const [walkingMode, setwalkingMode] = useState(false);
+  // const [walkingMode, setwalkingMode] = useState(false);
   const loc = roundware._listenerLocation
   const lat = loc && loc.latitude
   const lng = loc && loc.longitude
@@ -43,7 +43,7 @@ const walkingModeButton = () => {
   }, [lat, lng])
 
   const toggleWalkingMode = () => {
-    if (walkingMode) {
+    if (geoListenMode === GeoListenMode.AUTOMATIC) {
       console.log("switching to map mode");
       // zoom out
       map.setZoom(5);
@@ -52,7 +52,7 @@ const walkingModeButton = () => {
       // stop listening for location updates
       setGeoListenMode(GeoListenMode.MANUAL);
       // update text instructions?
-    } else if (!walkingMode) {
+    } else if ([GeoListenMode.MANUAL, GeoListenMode.DISABLED].includes(geoListenMode)) {
       console.log("switching to walking mode");
       // disable map panning
       map.setOptions({gestureHandling: "none"});
@@ -63,7 +63,6 @@ const walkingModeButton = () => {
       // update text instructions?
       // use spinner to indicate location is being determined initially
     }
-    setwalkingMode(!walkingMode);
     if (roundware._mixer) {
       const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
       trackIds.forEach(
@@ -80,13 +79,13 @@ const walkingModeButton = () => {
         color="primary"
         onClick={toggleWalkingMode}
       >
-        {walkingMode ? (
+        {(geoListenMode === GeoListenMode.AUTOMATIC) ? (
           <MapIcon fontSize="large" />
         ) : (
           <DirectionsWalkIcon fontSize="large" />
         )}
       </Button>
-      {walkingMode ? <ListenerLocationMarker /> : null}
+      {(geoListenMode === GeoListenMode.AUTOMATIC) ? <ListenerLocationMarker /> : null}
     </div>
   );
 }

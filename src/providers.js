@@ -218,6 +218,7 @@ export const RoundwareProvider = (props) => {
     } else if (modeName === GeoListenMode.MANUAL) {
       // set maxDist to value calculated from range circle overlay
     }
+    forceUpdate();
   }
 
   return (
