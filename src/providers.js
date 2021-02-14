@@ -209,16 +209,21 @@ export const RoundwareProvider = (props) => {
   const geoListenMode = ( roundware._mixer && roundware._mixer.mixParams.geoListenMode ) || GeoListenMode.DISABLED;
   const setGeoListenMode = (modeName) => {
     roundware.enableGeolocation(modeName);
+    let prom;
     // console.log(`roundware._mixer.mixParams.geoListenMode: ${roundware._mixer.mixParams.geoListenMode}`);
-    if (modeName === GeoListenMode.AUTOMATIC && roundware._mixer) {
-      roundware._mixer.updateParams({
-        maxDist: roundware._project.recordingRadius,
-        recordingRadius: roundware._project.recordingRadius
-      });
+    if (modeName === GeoListenMode.AUTOMATIC) {
+      prom = roundware._geoPosition.waitForInitialGeolocation()
+      if (roundware._mixer) {
+        roundware._mixer.updateParams({
+          maxDist: roundware._project.recordingRadius,
+          recordingRadius: roundware._project.recordingRadius
+        })
+      }
     } else if (modeName === GeoListenMode.MANUAL) {
       // set maxDist to value calculated from range circle overlay
+      prom = new Promise((resolve, reject) => {resolve()});
     }
-    forceUpdate();
+    prom.then(forceUpdate)
   }
 
   return (
