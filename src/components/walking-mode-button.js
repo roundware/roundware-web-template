@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => {
 
 const walkingModeButton = () => {
   const { roundware, forceUpdate, geoListenMode, setGeoListenMode } = useRoundware();
+  const [busy, setBusy] = useState(false);
   const map = useGoogleMap();
   const classes = useStyles();
   // const [walkingMode, setwalkingMode] = useState(false);
@@ -43,6 +44,7 @@ const walkingModeButton = () => {
   }, [lat, lng])
 
   const toggleWalkingMode = () => {
+    setBusy(true);
     if (geoListenMode === GeoListenMode.AUTOMATIC) {
       console.log("switching to map mode");
       // zoom out
@@ -69,7 +71,7 @@ const walkingModeButton = () => {
         audioTrackId => roundware._mixer.skipTrack(audioTrackId)
       );
     }
-    forceUpdate();
+    setBusy(false);
   };
 
   return (
@@ -77,6 +79,7 @@ const walkingModeButton = () => {
       <Button
         className={classes.walkingModeButton}
         color="primary"
+        disabled={busy}
         onClick={toggleWalkingMode}
       >
         {(geoListenMode === GeoListenMode.AUTOMATIC) ? (
