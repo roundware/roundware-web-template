@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { MarkerClusterer, useGoogleMap } from "@react-google-maps/api";
 import AssetMarker from "./asset-marker";
-import {useQuery, useRoundware} from "../hooks";
+import { useQuery, useRoundware } from "../hooks";
 import { OverlappingMarkerSpiderfier } from "ts-overlapping-marker-spiderfier";
 
 const OverlappingMarkerSpiderfierComponent = (props) => {
   const map = useGoogleMap();
-  const [spiderfier, set_spiderfire] = useState(null);
+  const [spiderfier, set_spiderfier] = useState(null);
   if (!map) {
     return null;
   }
@@ -16,14 +16,14 @@ const OverlappingMarkerSpiderfierComponent = (props) => {
       markersWontHide: true,
       basicFormatEvents: true,
     });
-    set_spiderfire(oms_obj);
+    set_spiderfier(oms_obj);
   }
 
   return <Fragment>{props.children(spiderfier)}</Fragment>;
 };
 
 const AssetLayer = (props) => {
-  const { filteredAssets, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
+  const { roundware, filteredAssets, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
   const map = useGoogleMap();
   const query = useQuery();
 
@@ -51,13 +51,18 @@ const AssetLayer = (props) => {
     if (!selectedAsset) {
       return;
     }
-    const bounds = new google.maps.LatLngBounds();
-    bounds.extend({
-      lat: selectedAsset.latitude,
-      lng: selectedAsset.longitude,
-    });
-    map.fitBounds(bounds, { top: 100, bottom: 40, right: 30, left: 30 });
-    map.setZoom(13);
+    // const bounds = new google.maps.LatLngBounds();
+    // bounds.extend({
+    //   lat: selectedAsset.latitude,
+    //   lng: selectedAsset.longitude,
+    // });
+    // map.fitBounds(bounds, { top: 100, bottom: 40, right: 30, left: 30 });
+    // map.setZoom(8);
+    const center = { lat: selectedAsset.latitude,
+                     lng: selectedAsset.longitude }
+    map.panTo(center);
+    roundware.updateLocation({latitude: selectedAsset.latitude, longitude: selectedAsset.longitude})
+    console.log(selectedAsset);
   }, [selectedAsset]);
 
   return (
