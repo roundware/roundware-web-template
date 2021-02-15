@@ -13,6 +13,7 @@ import SpeakPage from "./SpeakPage";
 import { useRoundware } from "../hooks";
 import DebugPage from "./DebugPage";
 import RoundwareMixerControl from "./roundware-mixer-control";
+import ListenFilterDrawer from "./listen-filter-drawer";
 import InfoPopup from "./info-popup";
 import Helmet from "react-helmet";
 import ReactGA from "react-ga";
@@ -96,6 +97,7 @@ export const App = () => {
         <Toolbar
           style={{margin: "0 0 0 100px", width: "100%", "justifyContent": "center"}}>
           <Route path="/listen">
+            <ListenFilterDrawer />
             <RoundwareMixerControl />
           </Route>
           mixer: {roundware._mixer && JSON.stringify(roundware._mixer.mixParams)}
