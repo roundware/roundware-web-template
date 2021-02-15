@@ -8,7 +8,8 @@ import ListenerLocationMarker from "./listener-location-marker";
 import { useRoundware } from "../hooks";
 import distance from "@turf/distance"
 import AssetLoadingOverlay from "./asset-loading-overlay";
-import RangeCircleOverlay from "./circle-overlay";
+import RangeCircleOverlay from "./range-circle-overlay";
+import WalkingModeButton from "./walking-mode-button";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => {
 });
 const RoundwareMap = (props) => {
   const classes = useStyles();
-  const {roundware} = useRoundware();
+  const { roundware } = useRoundware();
   const [map, setMap] = useState(null);
 
   if (!roundware._project) {
@@ -74,6 +75,7 @@ const RoundwareMap = (props) => {
       >
         <AssetLayer />
         <RangeCircleOverlay />
+        <WalkingModeButton />
       </GoogleMap>
     </LoadScript>
   );
