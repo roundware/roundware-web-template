@@ -5,11 +5,13 @@ import { DebounceInput } from "react-debounce-input";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 
-const TagFilterMenu = ({ tag_group }) => {
+export const TagFilterMenu = ({ tag_group }) => {
   const { selectTags, tagFilters } = useRoundware();
+  const [selectedTags, setSelectedTags] = useState(null);
 
   const handleChange = (tags) => {
     const tag_ids = tags ? tags.map((t) => t.value) : null;
+    setSelectedTags(tags);
     selectTags(tag_ids, tag_group);
   };
   const options = tag_group.display_items.map(
@@ -21,12 +23,24 @@ const TagFilterMenu = ({ tag_group }) => {
     }
   );
   const fieldId = `roundware-tag-${tag_group.header_display_text}`;
+
   const selectStyles = {
-    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-    menu: (provided) => ({ ...provided, zIndex: "9999 !important" }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999
+    }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: "9999 !important",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isSelected ? 'black' : 'black',
+    }),
   };
+
   return (
-    <Grid item xs={12} sm={4} className={`tag-filter-field tag-filter-select`}>
+    <Grid item xs={12} className={`tag-filter-field tag-filter-select`}>
       <label className="tag-filter-field--label">
         <span className="label-text">{tag_group.header_display_text}</span>
         <Select
@@ -37,6 +51,7 @@ const TagFilterMenu = ({ tag_group }) => {
           isMulti={true}
           onChange={handleChange}
           options={options}
+          value={selectedTags}
         />
       </label>
     </Grid>

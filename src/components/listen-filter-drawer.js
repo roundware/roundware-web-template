@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRoundware } from "../hooks";
 import 'date-fns';
 import clsx from 'clsx';
 import DateFnsUtils from '@date-io/date-fns';
@@ -17,6 +18,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from "@material-ui/core/Typography";
 import FilterListIcon from '@material-ui/icons/FilterList';
 import LabelIcon from '@material-ui/icons/Label';
+import { TagFilterMenu } from './asset-filter-panel';
 
 const useStyles = makeStyles({
   list: {
@@ -36,10 +38,18 @@ const ListenFilterDrawer = () => {
     bottom: false,
     right: false,
   });
-  const [selectedDate, setSelectedDate] = useState(new Date('2021-01-01T21:11:54'));
+  const [selectedStartDate, setSelectedStartDate] = useState(new Date('2021-01-01T21:11:54'));
+  const [selectedEndDate, setSelectedEndDate] = useState(new Date('2021-01-01T21:11:54'));
+  const { roundware, tagFilters, userFilter, setUserFilter } = useRoundware();
+  if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
+    return null;
+  }
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const handleStartDateChange = (date) => {
+    setSelectedStartDate(date);
+  };
+  const handleEndDateChange = (date) => {
+    setSelectedEndDate(date);
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -75,8 +85,8 @@ const ListenFilterDrawer = () => {
               margin="normal"
               id="start-date-picker-inline"
               label="Start Date"
-              value={selectedDate}
-              onChange={handleDateChange}
+              value={selectedStartDate}
+              onChange={handleStartDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change start date',
               }}
@@ -92,18 +102,24 @@ const ListenFilterDrawer = () => {
               margin="normal"
               id="end-date-picker-inline"
               label="End Date"
-              value={selectedDate}
-              onChange={handleDateChange}
+              value={selectedEndDate}
+              onChange={handleEndDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change end date',
               }}
             />
           </MuiPickersUtilsProvider>
         </ListItem>
-        <ListItem button key="tags">
+        <Divider />
+        <ListItem key="tags-header">
           <ListItemIcon><LabelIcon /></ListItemIcon>
-          <ListItemText primary="Tags" />
+          <ListItemText primary="Filter by Tags" />
         </ListItem>
+          {roundware.uiConfig.listen.map((tg) => (
+            <ListItem key={"list-item" + tg.group_short_name}>
+              <TagFilterMenu key={tg.group_short_name} tag_group={tg} />
+            </ListItem>
+          ))}
       </List>
     </div>
   );
