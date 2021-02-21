@@ -23,23 +23,15 @@ const OverlappingMarkerSpiderfierComponent = (props) => {
 };
 
 const AssetLayer = (props) => {
-  const { roundware, filteredAssets, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
+  const { roundware, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
   const map = useGoogleMap();
   const query = useQuery();
-
-  if (!map) {
-    return null;
-  }
-
-  const assets = assetPage || filteredAssets || [];
+  const assets = assetPage;
   const eid = parseInt(query.get("eid"))
 
   useEffect(() => {
     if (!eid) {
       return;
-    }
-    if (!assetsReady) {
-      return
     }
     const asset = assets.find(a => a.envelope_ids.indexOf(eid) !== -1)
     if (!asset) {
@@ -47,31 +39,25 @@ const AssetLayer = (props) => {
       return;
     }
     selectAsset(asset)
-  }, [assetsReady, assets.length, eid]);
+  }, [assetPage, eid]);
 
   // when the selected asset changes, pan to it
   useEffect(() => {
     if (!selectedAsset) {
       return;
     }
-    // const bounds = new google.maps.LatLngBounds();
-    // bounds.extend({
-    //   lat: selectedAsset.latitude,
-    //   lng: selectedAsset.longitude,
-    // });
-    // map.fitBounds(bounds, { top: 100, bottom: 40, right: 30, left: 30 });
-    // map.setZoom(8);
     const center = { lat: selectedAsset.latitude,
                      lng: selectedAsset.longitude }
     map.panTo(center);
     roundware.updateLocation({latitude: selectedAsset.latitude, longitude: selectedAsset.longitude})
     console.log(selectedAsset);
   }, [selectedAsset]);
-
+  if (!map) {
+    return null;
+  }
   return (
     <React.Fragment>
       <MarkerClusterer
-        averageCenter={true}
         maxZoom={12}
         minimumClusterSize={3}
         options={{

@@ -68,7 +68,7 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
 
 export const RoundwareProvider = (props) => {
   const [roundware, setRoundware] = useState({ uiConfig: {} });
-
+  const [assetsReady, setAssetsReady] = useState(false);
   const [beforeDateFilter, setBeforeDateFilter] = useState(null);
   const [afterDateFilter, setAfterDateFilter] = useState(null);
   const [userFilter, setUserFilter] = useState("");
@@ -99,7 +99,6 @@ export const RoundwareProvider = (props) => {
     sortedAssets.sort(sortEntries);
     return sortedAssets;
   };
-  const assetsReady = Boolean(roundware._assetData && roundware._assetData.length)
 
  useEffect(() => {
     const sortedAssets = sortAssets(filteredAssets);
@@ -112,7 +111,7 @@ export const RoundwareProvider = (props) => {
       );
       setAssetPage(page);
    }
-  }, [assetsReady, assetPageIndex, assetsPerPage, sortField.name, sortField.asc, JSON.stringify(selectedTags)])
+  }, [filteredAssets, assetPageIndex, assetsPerPage, sortField.name, sortField.asc])
 
   useEffect(() => {
     if (!roundware.uiConfig.speak) {
@@ -127,16 +126,14 @@ export const RoundwareProvider = (props) => {
     setTagLookup(tag_lookup);
   }, [roundware.uiConfig && roundware.uiConfig.speak]);
 
-  const filterAssets = () => {
-    const asset_data = roundware._assetData || [];
+  const filterAssets = (asset_data) => {
     return asset_data.filter((asset) => {
       // show the asset, unless a filter returns 'false'
       const matches = [true];
-
       const tag_filter_groups = Object.entries(selectedTags || {});
       matches.push(
         ...tag_filter_groups.map(([_filter_group, tags]) => {
-          if (!tags) {
+          if (!tags.length) {
             return true;
           } else {
             return tags.some((tag_id) => asset.tag_ids.indexOf(tag_id) !== -1);
@@ -151,9 +148,16 @@ export const RoundwareProvider = (props) => {
         const user_match = user_str.indexOf(userFilter) !== -1;
         matches.push(user_match);
       }
-      return matches.every(m => m === true);
+      return matches.every(Boolean);
     });
   };
+  useEffect(() => {
+    if (assetsReady) {
+      const asset_data = roundware._assetData;
+      const filteredAssets = filterAssets(asset_data);
+      setFilteredAssets(filteredAssets);
+    }
+  }, [assetsReady, selectedTags, userFilter]);
 
   const selectTags = (tags, group) => {
     const group_key = group.group_short_name;
@@ -166,12 +170,6 @@ export const RoundwareProvider = (props) => {
     setSelectedTags(newFilters);
   };
 
-  useEffect(() => {
-    if (roundware._assetData !== undefined) {
-      const filteredAssets = filterAssets();
-      setFilteredAssets(filteredAssets);
-    }
-  }, [selectedTags, userFilter, roundware._assetData]);
 
   // when this provider is loaded, initialize roundware via api
   useEffect(() => {
@@ -205,7 +203,7 @@ export const RoundwareProvider = (props) => {
   useEffect(() => {
     if (roundware._project) {
       roundware.loadAssetPool().then(() => {
-        forceUpdate();
+        setAssetsReady(true);
       });
     }
   }, [roundware._project]);
