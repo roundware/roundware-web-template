@@ -1,17 +1,15 @@
 import { useRoundware } from "../hooks";
-import React, { useState } from "react";
-import Select from "react-select";
+import React from "react";
 import { DebounceInput } from "react-debounce-input";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {TextField} from "@material-ui/core";
 
 export const TagFilterMenu = ({ tag_group }) => {
-  const { selectTags, tagFilters } = useRoundware();
-  const [selectedTags, setSelectedTags] = useState(null);
+  const { selectTags, selectedTags } = useRoundware();
 
-  const handleChange = (tags) => {
-    const tag_ids = tags ? tags.map((t) => t.value) : null;
-    setSelectedTags(tags);
+  const handleChange = (evt, value, action, target) => {
+    const tag_ids = value ? value.map((t) => t.value) : null;
     selectTags(tag_ids, tag_group);
   };
   const options = tag_group.display_items.map(
@@ -39,27 +37,36 @@ export const TagFilterMenu = ({ tag_group }) => {
     }),
   };
 
+  const selectedTagGroupTags = selectedTags[tag_group.group_short_name] || []
+
   return (
     <Grid item xs={12} className={`tag-filter-field tag-filter-select`}>
       <label className="tag-filter-field--label">
         <span className="label-text">{tag_group.header_display_text}</span>
-        <Select
-          menuPortalTarget={document.querySelector("body")}
-          styles={selectStyles}
-          id={fieldId}
-          isClearable={true}
-          isMulti={true}
-          onChange={handleChange}
+        <Autocomplete
+          multiple
+          id={tag_group.name}
           options={options}
-          value={selectedTags}
-        />
+          getOptionLabel={(option) => option ? option.label: ""}
+          onChange={handleChange}
+          getOptionSelected={option => selectedTagGroupTags.indexOf(option.value) !== -1}
+          value={options.filter(o => selectedTagGroupTags.indexOf(o.value) !== -1)}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              label={tag_group.header_display_text}
+              placeholder="Select multiple..."
+            />
+          )}
+        ></Autocomplete>
       </label>
     </Grid>
   );
 };
 
 const AssetFilterPanel = ({ hidden }) => {
-  const { uiConfig, tagFilters, userFilter, setUserFilter } = useRoundware();
+  const { uiConfig, userFilter, setUserFilter } = useRoundware();
   if (!(uiConfig && uiConfig.listen)) {
     return null;
   }

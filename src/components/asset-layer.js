@@ -35,6 +35,9 @@ const AssetLayer = (props) => {
   const eid = parseInt(query.get("eid"))
 
   useEffect(() => {
+    if (!eid) {
+      return;
+    }
     if (!assetsReady) {
       return
     }

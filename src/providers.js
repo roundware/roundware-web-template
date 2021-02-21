@@ -73,14 +73,14 @@ export const RoundwareProvider = (props) => {
   const [afterDateFilter, setAfterDateFilter] = useState(null);
   const [userFilter, setUserFilter] = useState("");
   const [selectedAsset, selectAsset] = useState(null);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState({});
   const [sortField, setSortField] = useState({ name: "created", asc: false });
   const [assetPageIndex, setAssetPageIndex] = useState(0);
   const [assetsPerPage, setAssetsPerPage] = useState(10000);
   const [tagLookup, setTagLookup] = useState({});
   const [filteredAssets, setFilteredAssets] = useState([]);
   const deviceId = useDeviceID();
-
+  const [assetPage, setAssetPage] = useState([])
   const [, forceUpdate] = useReducer((x) => !x, false);
 
   const sortAssets = (assets) => {
@@ -99,18 +99,21 @@ export const RoundwareProvider = (props) => {
     sortedAssets.sort(sortEntries);
     return sortedAssets;
   };
+  const assetsReady = Boolean(roundware._assetData && roundware._assetData.length)
 
-  const assetPage = () => {
+ useEffect(() => {
     const sortedAssets = sortAssets(filteredAssets);
     if (sortedAssets.length < assetPageIndex * assetsPerPage) {
       setAssetPageIndex(0);
-      return [];
-    }
-    return sortedAssets.slice(
-      assetPageIndex * assetsPerPage,
-      assetPageIndex * assetsPerPage + assetsPerPage
-    );
-  };
+    } else {
+      const page = sortedAssets.slice(
+        assetPageIndex * assetsPerPage,
+        assetPageIndex * assetsPerPage + assetsPerPage
+      );
+      setAssetPage(page);
+   }
+  }, [assetsReady, assetPageIndex, assetsPerPage, sortField.name, sortField.asc, JSON.stringify(selectedTags)])
+
   useEffect(() => {
     if (!roundware.uiConfig.speak) {
       return;
@@ -148,7 +151,7 @@ export const RoundwareProvider = (props) => {
         const user_match = user_str.indexOf(userFilter) !== -1;
         matches.push(user_match);
       }
-      return matches.every((m) => m);
+      return matches.every(m => m === true);
     });
   };
 
@@ -165,7 +168,8 @@ export const RoundwareProvider = (props) => {
 
   useEffect(() => {
     if (roundware._assetData !== undefined) {
-      setFilteredAssets(filterAssets());
+      const filteredAssets = filterAssets();
+      setFilteredAssets(filteredAssets);
     }
   }, [selectedTags, userFilter, roundware._assetData]);
 
@@ -250,8 +254,8 @@ export const RoundwareProvider = (props) => {
         forceUpdate,
         setGeoListenMode,
         // computed properties
-        assetPage: assetPage(),
-        assetsReady: Boolean(roundware._assetData && roundware._assetData.length)
+        assetPage,
+        assetsReady,
       }}
     >
       {props.children}
