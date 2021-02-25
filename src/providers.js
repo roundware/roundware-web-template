@@ -104,13 +104,16 @@ export const RoundwareProvider = (props) => {
     const sortedAssets = sortAssets(filteredAssets);
     if (sortedAssets.length < assetPageIndex * assetsPerPage) {
       setAssetPageIndex(0);
-    } else {
-      const page = sortedAssets.slice(
-        assetPageIndex * assetsPerPage,
-        assetPageIndex * assetsPerPage + assetsPerPage
-      );
-      setAssetPage(page);
-   }
+      return;
+    }
+    const page = sortedAssets.slice(
+      assetPageIndex * assetsPerPage,
+      assetPageIndex * assetsPerPage + assetsPerPage
+    );
+    setAssetPage(page);
+    if (roundware._assetData) {
+      setAssetsReady(true);
+    }
   }, [filteredAssets, assetPageIndex, assetsPerPage, sortField.name, sortField.asc])
 
   useEffect(() => {
@@ -152,12 +155,11 @@ export const RoundwareProvider = (props) => {
     });
   };
   useEffect(() => {
-    if (assetsReady) {
-      const asset_data = roundware._assetData;
-      const filteredAssets = filterAssets(asset_data);
+    if (roundware._assetData) {
+      const filteredAssets = filterAssets(roundware._assetData);
       setFilteredAssets(filteredAssets);
     }
-  }, [assetsReady, selectedTags, userFilter]);
+  }, [roundware._assetData, selectedTags, userFilter]);
 
   const selectTags = (tags, group) => {
     const group_key = group.group_short_name;

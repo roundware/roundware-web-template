@@ -59,6 +59,7 @@ const AssetMarker = ({ asset, clusterer, oms }) => {
       icon={iconPin}
       clusterer={clusterer}
       onLoad={(m) => oms.addMarker(m, () => selectAsset(asset))}
+      noClustererRedraw={true}
     >
       <AssetInfoWindow asset={asset} />
     </Marker>
