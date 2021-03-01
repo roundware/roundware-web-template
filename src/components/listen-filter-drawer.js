@@ -22,7 +22,7 @@ import { TagFilterMenu } from './asset-filter-panel';
 
 const useStyles = makeStyles({
   list: {
-    width: 250,
+    width: 300,
   },
   fullList: {
     width: 'auto',
@@ -115,11 +115,11 @@ const ListenFilterDrawer = () => {
           <ListItemIcon><LabelIcon /></ListItemIcon>
           <ListItemText primary="Filter by Tags" />
         </ListItem>
-          {roundware.uiConfig.listen.map((tg) => (
-            <ListItem key={"list-item" + tg.group_short_name}>
-              <TagFilterMenu key={tg.group_short_name} tag_group={tg} />
-            </ListItem>
-          ))}
+        {roundware.uiConfig.listen.map((tg) => (
+          <ListItem key={"list-item" + tg.group_short_name}>
+            <TagFilterMenu key={tg.group_short_name} tag_group={tg} />
+          </ListItem>
+        ))}
       </List>
     </div>
   );

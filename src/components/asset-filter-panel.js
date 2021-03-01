@@ -3,9 +3,17 @@ import React from "react";
 import { DebounceInput } from "react-debounce-input";
 import Grid from "@material-ui/core/Grid";
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import {TextField} from "@material-ui/core";
+import { TextField } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    backgroundColor: "#525252",
+  },
+}));
 
 export const TagFilterMenu = ({ tag_group }) => {
+  const classes = useStyles();
   const { selectTags, selectedTags } = useRoundware();
 
   const handleChange = (evt, value, action, target) => {
@@ -22,30 +30,15 @@ export const TagFilterMenu = ({ tag_group }) => {
   );
   const fieldId = `roundware-tag-${tag_group.header_display_text}`;
 
-  const selectStyles = {
-    menuPortal: (base) => ({
-      ...base,
-      zIndex: 9999
-    }),
-    menu: (provided) => ({
-      ...provided,
-      zIndex: "9999 !important",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      color: state.isSelected ? 'black' : 'black',
-    }),
-  };
-
   const selectedTagGroupTags = selectedTags[tag_group.group_short_name] || []
 
   return (
     <Grid item xs={12} className={`tag-filter-field tag-filter-select`}>
       <label className="tag-filter-field--label">
-        <span className="label-text">{tag_group.header_display_text}</span>
         <Autocomplete
           multiple
           id={tag_group.name}
+          classes={classes}
           options={options}
           getOptionLabel={(option) => option ? option.label: ""}
           onChange={handleChange}
@@ -56,7 +49,7 @@ export const TagFilterMenu = ({ tag_group }) => {
               {...params}
               variant="standard"
               label={tag_group.header_display_text}
-              placeholder="Select multiple..."
+              placeholder="Select one or more..."
             />
           )}
         ></Autocomplete>
