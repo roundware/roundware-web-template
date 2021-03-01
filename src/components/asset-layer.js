@@ -72,15 +72,31 @@ const AssetLayer = (props) => {
         ))}
     />
   }
-
+  const recluster = () => {
+    const markerObjs = markerClusterer.markers.slice()
+    markerClusterer.clearMarkers()
+    markerClusterer.repaint()
+    markerClusterer.addMarkers(markerObjs)
+  }
+  const wait_for_full_page = async () => {
+    return new Promise((resolve, reject) => {
+      const checkStart = Date.now();
+      const checkLength = () => {
+        if (assetPage.length === markerClusterer.markers.length) {
+          resolve()
+        } else if (Date.now() > checkStart + 3000) {
+          reject("asset page contains a different number of entries than the marker clusterer")
+        } else {
+          setTimeout(checkLength, 100)
+        }
+      };
+      checkLength();
+    });
+  }
   useEffect(() => {
-    if (markerClusterer) {
-      const markerObjs = markerClusterer.markers.slice()
-      markerClusterer.clearMarkers()
-      markerClusterer.repaint()
-      markerClusterer.addMarkers(markerObjs)
-    }
-  }, [markerClusterer, assetPage])
+    if (!(markerClusterer && markerClusterer.ready)) return;
+    wait_for_full_page().then(recluster);
+  }, [markerClusterer && markerClusterer.ready, assetPage])
   return (
     <MarkerClusterer
       maxZoom={12}
