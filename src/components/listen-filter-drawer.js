@@ -40,7 +40,7 @@ const ListenFilterDrawer = () => {
   });
   const [selectedStartDate, setSelectedStartDate] = useState(new Date('2021-01-01T21:11:54'));
   const [selectedEndDate, setSelectedEndDate] = useState(new Date('2021-01-01T21:11:54'));
-  const { roundware, tagFilters, userFilter, setUserFilter } = useRoundware();
+  const { roundware, userFilter, setUserFilter } = useRoundware();
   if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
     return null;
   }
