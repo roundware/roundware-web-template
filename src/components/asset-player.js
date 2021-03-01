@@ -9,10 +9,11 @@ class AssetPlayer extends React.Component {
 
     let ext = (/(?:\.([^.]+))?$/).exec(asset.file)[1]
     let filename = asset.file
-    const supported = ['mp3', 'wav', 'mp4'];
+    const supported = ['mp3', 'wav'];
     if (supported.indexOf(ext) === -1) {
       ext = "mp3"
-      filename = `${filename}.${ext}`
+      let pos = filename.lastIndexOf(".");
+      filename = filename.substr(0, pos < 0 ? filename.length : pos) + "." + ext;
     }
 
     const audioType = `audio/${ext}`
