@@ -32,11 +32,13 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
     }
     setTags(newTags);
   };
+
   const reset = () => {
     setTags([]);
     setLocation({latitude: null, longitude: null});
     setAcceptedAgreement(false);
   };
+
   const clearTags = (tags) => {
     const newTags = [...tags];
     tags.forEach((tag) => {
@@ -48,6 +50,7 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
 
     setTags(newTags);
   };
+
   return (
     <DraftRecordingContext.Provider
       value={{
@@ -164,6 +167,7 @@ export const RoundwareProvider = (props) => {
       return true;
     });
   };
+
   useEffect(() => {
     if (roundware._assetData) {
       const filteredAssets = filterAssets(roundware._assetData);
@@ -174,12 +178,17 @@ export const RoundwareProvider = (props) => {
   const selectTags = (tags, group) => {
     const group_key = group.group_short_name;
     const newFilters = { ...selectedTags };
+    let listenTagIds = [];
     if (tags === null && newFilters[group_key]) {
       delete newFilters[group_key];
     } else {
       newFilters[group_key] = tags;
     }
     setSelectedTags(newFilters);
+    Object.keys(newFilters).map(function(key) {
+      listenTagIds.push(...newFilters[key]);
+    })
+    roundware._mixer.updateParams({listenTagIds: listenTagIds});
   };
 
 
