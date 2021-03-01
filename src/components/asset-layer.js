@@ -80,7 +80,7 @@ const AssetLayer = (props) => {
       markerClusterer.repaint()
       markerClusterer.addMarkers(markerObjs)
     }
-  }, [markerClusterer && markerClusterer.markers.length, assetPage])
+  }, [markerClusterer, assetPage])
   return (
     <MarkerClusterer
       maxZoom={12}

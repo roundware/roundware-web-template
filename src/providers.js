@@ -132,26 +132,36 @@ export const RoundwareProvider = (props) => {
   const filterAssets = (asset_data) => {
     return asset_data.filter((asset) => {
       // show the asset, unless a filter returns 'false'
-      const matches = [true];
+      // filter by tags first
+      let filteredByTag = false;
       const tag_filter_groups = Object.entries(selectedTags || {});
-      matches.push(
-        ...tag_filter_groups.map(([_filter_group, tags]) => {
-          if (!tags.length) {
-            return true;
-          } else {
-            return tags.some((tag_id) => asset.tag_ids.indexOf(tag_id) !== -1);
+      tag_filter_groups.forEach(([_filter_group, tags]) => {
+        if (filteredByTag) {
+          // if we've already filtered out this asset based on another tag group, stop thinking about it
+          return
+        }
+        if (tags.length) {
+          const hasMatch = tags.some((tag_id) => asset.tag_ids.indexOf(tag_id) !== -1);
+          if (!hasMatch) {
+            filteredByTag = true;
           }
-        })
-      );
+        }
+      })
+      if (filteredByTag) {
+        return false;
+      }
+      // then filter by user
       if (userFilter.length) {
         let user_str = "anonymous";
         if (asset.user) {
           user_str = asset.user && `${asset.user.username} ${asset.user.email}`;
         }
         const user_match = user_str.indexOf(userFilter) !== -1;
-        matches.push(user_match);
+        if (!user_match) {
+          return false
+        }
       }
-      return matches.every(Boolean);
+      return true;
     });
   };
   useEffect(() => {
