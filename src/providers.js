@@ -32,11 +32,13 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
     }
     setTags(newTags);
   };
+
   const reset = () => {
     setTags([]);
     setLocation({latitude: null, longitude: null});
     setAcceptedAgreement(false);
   };
+
   const clearTags = (tags) => {
     const newTags = [...tags];
     tags.forEach((tag) => {
@@ -48,6 +50,7 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
 
     setTags(newTags);
   };
+
   return (
     <DraftRecordingContext.Provider
       value={{
@@ -68,19 +71,19 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
 
 export const RoundwareProvider = (props) => {
   const [roundware, setRoundware] = useState({ uiConfig: {} });
-
+  const [assetsReady, setAssetsReady] = useState(false);
   const [beforeDateFilter, setBeforeDateFilter] = useState(null);
   const [afterDateFilter, setAfterDateFilter] = useState(null);
   const [userFilter, setUserFilter] = useState("");
   const [selectedAsset, selectAsset] = useState(null);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState({});
   const [sortField, setSortField] = useState({ name: "created", asc: false });
   const [assetPageIndex, setAssetPageIndex] = useState(0);
   const [assetsPerPage, setAssetsPerPage] = useState(10000);
   const [tagLookup, setTagLookup] = useState({});
   const [filteredAssets, setFilteredAssets] = useState([]);
   const deviceId = useDeviceID();
-
+  const [assetPage, setAssetPage] = useState([])
   const [, forceUpdate] = useReducer((x) => !x, false);
 
   const sortAssets = (assets) => {
@@ -100,17 +103,22 @@ export const RoundwareProvider = (props) => {
     return sortedAssets;
   };
 
-  const assetPage = () => {
+ useEffect(() => {
     const sortedAssets = sortAssets(filteredAssets);
     if (sortedAssets.length < assetPageIndex * assetsPerPage) {
       setAssetPageIndex(0);
-      return [];
+      return;
     }
-    return sortedAssets.slice(
+    const page = sortedAssets.slice(
       assetPageIndex * assetsPerPage,
       assetPageIndex * assetsPerPage + assetsPerPage
     );
-  };
+    setAssetPage(page);
+    if (roundware._assetData) {
+      setAssetsReady(true);
+    }
+  }, [filteredAssets, assetPageIndex, assetsPerPage, sortField.name, sortField.asc])
+
   useEffect(() => {
     if (!roundware.uiConfig.speak) {
       return;
@@ -124,50 +132,65 @@ export const RoundwareProvider = (props) => {
     setTagLookup(tag_lookup);
   }, [roundware.uiConfig && roundware.uiConfig.speak]);
 
-  const filterAssets = () => {
-    const asset_data = roundware._assetData || [];
+  const filterAssets = (asset_data) => {
     return asset_data.filter((asset) => {
       // show the asset, unless a filter returns 'false'
-      const matches = [true];
-
+      // filter by tags first
+      let filteredByTag = false;
       const tag_filter_groups = Object.entries(selectedTags || {});
-      matches.push(
-        ...tag_filter_groups.map(([_filter_group, tags]) => {
-          if (!tags) {
-            return true;
-          } else {
-            return tags.some((tag_id) => asset.tag_ids.indexOf(tag_id) !== -1);
+      tag_filter_groups.forEach(([_filter_group, tags]) => {
+        if (filteredByTag) {
+          // if we've already filtered out this asset based on another tag group, stop thinking about it
+          return
+        }
+        if (tags.length) {
+          const hasMatch = tags.some((tag_id) => asset.tag_ids.indexOf(tag_id) !== -1);
+          if (!hasMatch) {
+            filteredByTag = true;
           }
-        })
-      );
+        }
+      })
+      if (filteredByTag) {
+        return false;
+      }
+      // then filter by user
       if (userFilter.length) {
         let user_str = "anonymous";
         if (asset.user) {
           user_str = asset.user && `${asset.user.username} ${asset.user.email}`;
         }
         const user_match = user_str.indexOf(userFilter) !== -1;
-        matches.push(user_match);
+        if (!user_match) {
+          return false
+        }
       }
-      return matches.every((m) => m);
+      return true;
     });
   };
+
+  useEffect(() => {
+    if (roundware._assetData) {
+      const filteredAssets = filterAssets(roundware._assetData);
+      setFilteredAssets(filteredAssets);
+    }
+  }, [roundware._assetData, selectedTags, userFilter]);
 
   const selectTags = (tags, group) => {
     const group_key = group.group_short_name;
     const newFilters = { ...selectedTags };
+    let listenTagIds = [];
     if (tags === null && newFilters[group_key]) {
       delete newFilters[group_key];
     } else {
       newFilters[group_key] = tags;
     }
     setSelectedTags(newFilters);
+    Object.keys(newFilters).map(function(key) {
+      listenTagIds.push(...newFilters[key]);
+    })
+    roundware._mixer.updateParams({listenTagIds: listenTagIds});
   };
 
-  useEffect(() => {
-    if (roundware._assetData !== undefined) {
-      setFilteredAssets(filterAssets());
-    }
-  }, [selectedTags, userFilter, roundware._assetData]);
 
   // when this provider is loaded, initialize roundware via api
   useEffect(() => {
@@ -201,7 +224,7 @@ export const RoundwareProvider = (props) => {
   useEffect(() => {
     if (roundware._project) {
       roundware.loadAssetPool().then(() => {
-        forceUpdate();
+        setAssetsReady(true);
       });
     }
   }, [roundware._project]);
@@ -250,8 +273,8 @@ export const RoundwareProvider = (props) => {
         forceUpdate,
         setGeoListenMode,
         // computed properties
-        assetPage: assetPage(),
-        assetsReady: Boolean(roundware._assetData && roundware._assetData.length)
+        assetPage,
+        assetsReady,
       }}
     >
       {props.children}

@@ -1,8 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, {Fragment, useEffect, useRef, useState} from "react";
 import { MarkerClusterer, useGoogleMap } from "@react-google-maps/api";
 import AssetMarker from "./asset-marker";
 import { useQuery, useRoundware } from "../hooks";
 import { OverlappingMarkerSpiderfier } from "ts-overlapping-marker-spiderfier";
+import {wait} from "../utils";
 
 const OverlappingMarkerSpiderfierComponent = (props) => {
   const map = useGoogleMap();
@@ -22,21 +23,19 @@ const OverlappingMarkerSpiderfierComponent = (props) => {
   return <Fragment>{props.children(spiderfier)}</Fragment>;
 };
 
+
+
 const AssetLayer = (props) => {
-  const { roundware, filteredAssets, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
+  const { roundware, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
   const map = useGoogleMap();
   const query = useQuery();
-
-  if (!map) {
-    return null;
-  }
-
-  const assets = assetPage || filteredAssets || [];
+  const assets = assetPage;
   const eid = parseInt(query.get("eid"))
+  const [markerClusterer, setMarkerClusterer] = useState(null);
 
   useEffect(() => {
-    if (!assetsReady) {
-      return
+    if (!eid) {
+      return;
     }
     const asset = assets.find(a => a.envelope_ids.indexOf(eid) !== -1)
     if (!asset) {
@@ -44,55 +43,72 @@ const AssetLayer = (props) => {
       return;
     }
     selectAsset(asset)
-  }, [assetsReady, assets.length, eid]);
+  }, [assetPage, eid]);
 
   // when the selected asset changes, pan to it
   useEffect(() => {
     if (!selectedAsset) {
       return;
     }
-    // const bounds = new google.maps.LatLngBounds();
-    // bounds.extend({
-    //   lat: selectedAsset.latitude,
-    //   lng: selectedAsset.longitude,
-    // });
-    // map.fitBounds(bounds, { top: 100, bottom: 40, right: 30, left: 30 });
-    // map.setZoom(8);
     const center = { lat: selectedAsset.latitude,
                      lng: selectedAsset.longitude }
     map.panTo(center);
     roundware.updateLocation({latitude: selectedAsset.latitude, longitude: selectedAsset.longitude})
     console.log(selectedAsset);
   }, [selectedAsset]);
-
+  if (!map) {
+    return null;
+  }
+  const markers = (clusterer) => {
+    return <OverlappingMarkerSpiderfierComponent
+      children={(oms) =>
+        assets.map( asset => (
+          <AssetMarker
+            key={asset.id}
+            asset={asset}
+            clusterer={clusterer}
+            oms={oms}
+          />
+        ))}
+    />
+  }
+  const recluster = () => {
+    const markerObjs = markerClusterer.markers.slice()
+    markerClusterer.clearMarkers()
+    markerClusterer.repaint()
+    markerClusterer.addMarkers(markerObjs)
+  }
+  const wait_for_full_page = async () => {
+    return new Promise((resolve, reject) => {
+      const checkStart = Date.now();
+      const checkLength = () => {
+        if (assetPage.length === markerClusterer.markers.length) {
+          resolve()
+        } else if (Date.now() > checkStart + 3000) {
+          reject("asset page contains a different number of entries than the marker clusterer")
+        } else {
+          setTimeout(checkLength, 100)
+        }
+      };
+      checkLength();
+    });
+  }
+  useEffect(() => {
+    if (!(markerClusterer && markerClusterer.ready)) return;
+    wait_for_full_page().then(recluster);
+  }, [markerClusterer && markerClusterer.ready, assetPage])
   return (
-    <React.Fragment>
-      <MarkerClusterer
-        averageCenter={true}
-        maxZoom={12}
-        minimumClusterSize={3}
-        options={{
-          imagePath:
-            "https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m",
-        }}
-      >
-        {(clusterer) => (
-          <OverlappingMarkerSpiderfierComponent>
-            {(oms) =>
-              assets.map((asset) => (
-                <AssetMarker
-                  key={asset.id}
-                  asset={asset}
-                  clusterer={clusterer}
-                  oms={oms}
-                />
-              ))
-            }
-          </OverlappingMarkerSpiderfierComponent>
-        )}
-      </MarkerClusterer>
-    </React.Fragment>
+    <MarkerClusterer
+      maxZoom={12}
+      minimumClusterSize={3}
+      onLoad={(c) => setMarkerClusterer(c)}
+      options={{
+        imagePath:
+          "https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m",
+      }}
+      children={markers}
+    />
   );
-};
+}
 
 export default AssetLayer;
