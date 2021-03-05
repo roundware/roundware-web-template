@@ -167,7 +167,11 @@ export const RoundwareProvider = (props) => {
       return true;
     });
   };
-
+  // tells the provider to update assetData dependencies with the roundware _assetData source
+  const updateAssets = () => {
+    const filteredAssets = filterAssets(roundware._assetData);
+    setFilteredAssets(filteredAssets);
+  }
   useEffect(() => {
     if (roundware._assetData) {
       const filteredAssets = filterAssets(roundware._assetData);
@@ -272,6 +276,7 @@ export const RoundwareProvider = (props) => {
         setSortField,
         forceUpdate,
         setGeoListenMode,
+        updateAssets,
         // computed properties
         assetPage,
         assetsReady,

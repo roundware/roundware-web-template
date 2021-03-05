@@ -124,7 +124,7 @@ const useStylesAudioPlayer = makeStyles((theme) => {
 
 const CreateRecordingForm = () => {
   const draftRecording = useRoundwareDraft();
-  const { roundware, tagLookup } = useRoundware();
+  const { roundware, tagLookup, updateAssets } = useRoundware();
   let [wave, set_wave] = useState(new Wave());
   const [isRecording, set_is_recording] = useState(false);
   const [draftRecordingMedia, set_draft_recording_media] = useState();
@@ -412,6 +412,7 @@ const CreateRecordingForm = () => {
                 roundware.saveAsset(draftRecordingMedia, fileName, assetMeta)
                   .then( asset => {
                     set_success(asset);
+                    updateAssets()
                   }).catch( err => {
                     set_error({"message": err});
                   }).finally( () => {
