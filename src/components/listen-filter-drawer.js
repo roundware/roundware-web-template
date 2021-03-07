@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRoundware } from "../hooks";
 import 'date-fns';
+import moment from "moment";
 import clsx from 'clsx';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -38,18 +39,20 @@ const ListenFilterDrawer = () => {
     bottom: false,
     right: false,
   });
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date('2021-01-01T21:11:54'));
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date('2021-01-01T21:11:54'));
-  const { roundware, userFilter, setUserFilter } = useRoundware();
+  const { roundware,
+    userFilter, setUserFilter,
+    afterDateFilter, setAfterDateFilter,
+    beforeDateFilter, setBeforeDateFilter
+  } = useRoundware();
   if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
     return null;
   }
 
-  const handleStartDateChange = (date) => {
-    setSelectedStartDate(date);
+  const handleAfterDateChange = (date) => {
+    setAfterDateFilter(moment(date).format());
   };
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date);
+  const handleBeforeDateChange = (date) => {
+    setBeforeDateFilter(moment(date).format());
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -85,8 +88,8 @@ const ListenFilterDrawer = () => {
               margin="normal"
               id="start-date-picker-inline"
               label="Start Date"
-              value={selectedStartDate}
-              onChange={handleStartDateChange}
+              value={afterDateFilter}
+              onChange={handleAfterDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change start date',
               }}
@@ -102,8 +105,8 @@ const ListenFilterDrawer = () => {
               margin="normal"
               id="end-date-picker-inline"
               label="End Date"
-              value={selectedEndDate}
-              onChange={handleEndDateChange}
+              value={beforeDateFilter}
+              onChange={handleBeforeDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change end date',
               }}
