@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRoundwareDraft } from "../hooks";
 import LocationSelectMarker from "./location-select-marker";
 import { RoundwareMapStyle } from "../map-style";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import PlacesAutocomplete from "./places-autocomplete";
 import {
   Button,
   Card,
@@ -10,10 +11,10 @@ import {
   CardActions,
   Typography, useTheme,
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import ErrorDialog from "./error-dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const getPosition = function (options) {
   return new Promise(function (resolve, reject) {
@@ -48,7 +49,6 @@ const useStyles = makeStyles((theme) => {
   }
 })
 
-
 const LocationSelectForm = () => {
   const draftRecording = useRoundwareDraft();
   const theme = useTheme();
@@ -60,6 +60,7 @@ const LocationSelectForm = () => {
   const history = useHistory();
   const [error, set_error] = useState( null );
   const [geolocating, set_geolocating] = useState( null );
+  const gmapsLibraries = ["places"];
 
   useEffect(() => {
     if (draftRecording.tags.length === 0) {
@@ -104,7 +105,9 @@ const LocationSelectForm = () => {
         <LoadScript
           id="script-loader"
           googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}
+          libraries={gmapsLibraries}
         >
+          <PlacesAutocomplete />
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
             onLoad={(map) => {
@@ -118,7 +121,7 @@ const LocationSelectForm = () => {
                   lat: draftRecording.location.latitude,
                   lng: draftRecording.location.longitude,
                 },
-                zoom: 5,
+                zoom: 9,
                 zoomControl: true,
                 draggable: true,
                 mapTypeControl: false,
