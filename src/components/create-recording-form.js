@@ -59,6 +59,9 @@ const useStyles = makeStyles((theme) => {
       [theme.breakpoints.down('xs')]: {
         height: 150,
       },
+      [theme.breakpoints.down(350)]: {
+        height: 100,
+      },
     },
     label: {
       paddingTop: 0,

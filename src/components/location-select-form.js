@@ -42,8 +42,22 @@ const useStyles = makeStyles((theme) => {
     },
     locationHeaderLabel: {
       fontSize: "2rem",
+      padding: theme.spacing(2, 1, 1, 1),
       [theme.breakpoints.down('sm')]: {
         fontSize: "1.2rem",
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: "1.2rem",
+      },
+    },
+    mapContainerDiv: {
+      height: "60vh",
+      margin: theme.spacing(2, 0),
+      [theme.breakpoints.down('xs')]: {
+        height: "50vh",
+      },
+      [theme.breakpoints.down(350)]: {
+        height: "45vh",
       },
     },
   }
@@ -53,7 +67,7 @@ const LocationSelectForm = () => {
   const draftRecording = useRoundwareDraft();
   const theme = useTheme();
   const mapContainerStyle = {
-    height: "60vh",
+    height: "100%",
     margin: theme.spacing(2, 0),
   }
   const classes = useStyles();
@@ -93,9 +107,9 @@ const LocationSelectForm = () => {
   };
 
   return (
-    <Card style={{margin: "auto"}} className={classes.container}>
+    <Card className={classes.container}>
       <ErrorDialog error={error} set_error={set_error} />
-      <CardContent>
+      <CardContent style={{padding: 0}} >
         <Typography
           variant={"h4"}
           className={classes.locationHeaderLabel}
@@ -108,41 +122,43 @@ const LocationSelectForm = () => {
           libraries={gmapsLibraries}
         >
           <PlacesAutocomplete />
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            onLoad={(map) => {
-              const styledMapType = new google.maps.StyledMapType(
-                RoundwareMapStyle,
-                { name: "Street Map" }
-              );
-              map.mapTypes.set("styled_map", styledMapType);
-              map.setOptions({
-                center: {
-                  lat: draftRecording.location.latitude,
-                  lng: draftRecording.location.longitude,
-                },
-                zoom: 9,
-                zoomControl: true,
-                draggable: true,
-                mapTypeControl: false,
-                streetViewControl: false,
-                draggableCursor: "cursor",
-                fullscreenControl: false,
-                zoomControlOptions: {
-                  style: google.maps.ZoomControlStyle.SMALL,
-                },
-                rotateControl: false,
-                mapTypeId: "styled_map",
-                mapTypeControlOptions: {
-                  mapTypeIds: [google.maps.MapTypeId.SATELLITE, "styled_map"],
-                  style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                  position: google.maps.ControlPosition.BOTTOM_LEFT,
-                },
-              });
-            }}
-          >
-            <LocationSelectMarker />
-          </GoogleMap>
+          <div className={classes.mapContainerDiv}>
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              onLoad={(map) => {
+                const styledMapType = new google.maps.StyledMapType(
+                  RoundwareMapStyle,
+                  { name: "Street Map" }
+                );
+                map.mapTypes.set("styled_map", styledMapType);
+                map.setOptions({
+                  center: {
+                    lat: draftRecording.location.latitude,
+                    lng: draftRecording.location.longitude,
+                  },
+                  zoom: 9,
+                  zoomControl: true,
+                  draggable: true,
+                  mapTypeControl: false,
+                  streetViewControl: false,
+                  draggableCursor: "cursor",
+                  fullscreenControl: false,
+                  zoomControlOptions: {
+                    style: google.maps.ZoomControlStyle.SMALL,
+                  },
+                  rotateControl: false,
+                  mapTypeId: "styled_map",
+                  mapTypeControlOptions: {
+                    mapTypeIds: [google.maps.MapTypeId.SATELLITE, "styled_map"],
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.BOTTOM_LEFT,
+                  },
+                });
+              }}
+            >
+              <LocationSelectMarker />
+            </GoogleMap>
+          </div>
         </LoadScript>
       </CardContent>
       <CardActions variant={"contained"} style={{}}>

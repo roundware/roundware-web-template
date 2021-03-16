@@ -13,6 +13,14 @@ import { useRoundwareDraft } from "../hooks";
 const autocompleteService = { current: null };
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    margin: "20px 0",
+    [theme.breakpoints.down(350)]: {
+      marginBottom: theme.spacing(0),
+      marginTop: theme.spacing(1),
+    },
+  },
   icon: {
     color: theme.palette.text.secondary,
     marginRight: theme.spacing(2),
@@ -72,7 +80,7 @@ const PlacesAutocomplete = () => {
   return (
     <Autocomplete
       id="places-autocomplete"
-      style={{ width: "100%", margin: "20px 0" }}
+      className={classes.root}
       getOptionLabel={(option) => (typeof option === 'string' ? option : option.description)}
       filterOptions={(x) => x}
       options={options}

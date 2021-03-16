@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => {
       marginLeft: theme.spacing(3),
       marginRight: theme.spacing(3),
       padding: theme.spacing(4),
-      minWidth: "20rem",
       cursor: "pointer",
       [theme.breakpoints.down('sm')]: {
         padding: theme.spacing(3),
@@ -35,6 +34,7 @@ const useStyles = makeStyles((theme) => {
       [theme.breakpoints.down('xs')]: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
+        padding: theme.spacing(2, 1, 2, 3),
       },
     },
     tagGroupHeader: {
@@ -53,8 +53,11 @@ const useStyles = makeStyles((theme) => {
     },
     tagGroupHeaderLabel: {
       fontSize: "2rem",
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.only('sm')]: {
         fontSize: "1.5rem",
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: "1.2rem",
       },
     },
     selectedTagCard: {
