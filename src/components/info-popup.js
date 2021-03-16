@@ -26,7 +26,7 @@ const InfoPopup = () => {
   };
 
   return (
-    <div>
+    <div style={{position: "absolute", right: 10}}>
       <Button onClick={handleClickOpen}>
         INFO
       </Button>
