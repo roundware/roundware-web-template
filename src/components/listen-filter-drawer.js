@@ -21,15 +21,17 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import LabelIcon from '@material-ui/icons/Label';
 import { TagFilterMenu } from './asset-filter-panel';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   list: {
     width: 300,
+    [theme.breakpoints.down(350)]: {
+      width: 250,
+    },
   },
   fullList: {
     width: 'auto',
   },
-
-});
+}));
 
 const ListenFilterDrawer = () => {
   const classes = useStyles();
