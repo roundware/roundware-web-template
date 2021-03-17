@@ -59,6 +59,9 @@ const useStyles = makeStyles((theme) => {
       [theme.breakpoints.down('xs')]: {
         height: 150,
       },
+      [theme.breakpoints.down(350)]: {
+        height: 100,
+      },
     },
     label: {
       paddingTop: 0,
@@ -234,9 +237,9 @@ const CreateRecordingForm = () => {
             {<Typography
               variant={"h5"}
               className={classes.tagGroupHeaderLabel}
-              key={selected_tags.length > 0 ? selected_tags[1].id : 1}
+              key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].id : 1}
             >
-              {selected_tags.length > 0 ? selected_tags[1].tag_display_text : "No selected tags"}
+              {selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].tag_display_text : "No selected tags"}
             </Typography>}
           </Container>
         </Grid>

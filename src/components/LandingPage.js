@@ -81,7 +81,7 @@ export const LandingPage = (props) => {
         <Grid
           container
           justify="center"
-          style={{height: "300px"}}>
+          style={{height: "200px"}}>
           <Grid item>
             <ActionButton
               label={"Listen"}

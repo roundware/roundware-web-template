@@ -95,14 +95,12 @@ export const App = () => {
       <Toolbar className={classes.bottomBar} />
       <AppBar position="fixed" className={classes.bottomBar}>
         <Toolbar
-          style={{margin: "0 0 0 100px", width: "100%", "justifyContent": "center"}}>
+          style={{width: "100%", "justifyContent": "center"}}>
           <Route path="/listen">
             <ListenFilterDrawer />
             <RoundwareMixerControl />
           </Route>
           mixer: {roundware._mixer && JSON.stringify(roundware._mixer.mixParams)}
-        </Toolbar>
-        <Toolbar>
           <InfoPopup />
         </Toolbar>
       </AppBar>
