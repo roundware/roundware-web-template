@@ -4,10 +4,11 @@ import Button from "@material-ui/core/Button";
 import MediaRecorder from "audio-recorder-polyfill";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { IconButton } from "@material-ui/core";
+import { IconButton, useMediaQuery } from "@material-ui/core";
 import MicIcon from "@material-ui/icons/Mic";
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import PhotoIcon from '@material-ui/icons/Photo';
 import Wave from "@foobar404/wave";
 import LegalAgreementForm from "./legal-agreement-form";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -20,7 +21,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AudioPlayer from 'material-ui-audio-player';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import {wait} from "../utils";
@@ -347,6 +347,7 @@ const CreateRecordingForm = () => {
             style={{ margin: "auto" }}
             variant="contained"
             color="secondary"
+            size={isExtraSmallScreen ? "small" : "medium"}
             startIcon={<DeleteIcon />}
             disabled={draftMediaUrl === ""}
             onClick={() => {
@@ -388,6 +389,18 @@ const CreateRecordingForm = () => {
           <Button
             variant="contained"
             color="primary"
+            size={isExtraSmallScreen ? "small" : "medium"}
+            startIcon={<PhotoIcon />}
+            style={{ margin: "auto" }}
+            disabled={draftMediaUrl === ""}
+            onClick={() => {}}
+          >
+            {isExtraSmallScreen ? "+Photo" : "Add Photo"}
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            size={isExtraSmallScreen ? "small" : "medium"}
             startIcon={<CloudUploadIcon />}
             style={{ margin: "auto" }}
             disabled={draftMediaUrl === ""}
