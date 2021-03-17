@@ -1,5 +1,6 @@
 import { RoundwareContext, DraftRecordingContext } from "./context";
 import React, { useEffect, useReducer, useState } from "react";
+import moment from "moment";
 import { Roundware, GeoListenMode } from "roundware-web-framework";
 import { useDeviceID } from "./hooks";
 
@@ -72,7 +73,7 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
 export const RoundwareProvider = (props) => {
   const [roundware, setRoundware] = useState({ uiConfig: {} });
   const [assetsReady, setAssetsReady] = useState(false);
-  const [beforeDateFilter, setBeforeDateFilter] = useState(null);
+  const [beforeDateFilter, setBeforeDateFilter] = useState(moment().format());
   const [afterDateFilter, setAfterDateFilter] = useState(null);
   const [userFilter, setUserFilter] = useState("");
   const [selectedAsset, selectAsset] = useState(null);
@@ -164,6 +165,13 @@ export const RoundwareProvider = (props) => {
           return false
         }
       }
+      // then filter by start and end dates
+      if (afterDateFilter && beforeDateFilter) {
+        const dateMatch = (asset.created <= beforeDateFilter && asset.created >= afterDateFilter) ? true : false;
+        if (!dateMatch) {
+          return false
+        }
+      }
       return true;
     });
   };
@@ -172,12 +180,13 @@ export const RoundwareProvider = (props) => {
     const filteredAssets = filterAssets(roundware._assetData);
     setFilteredAssets(filteredAssets);
   }
+
   useEffect(() => {
     if (roundware._assetData) {
       const filteredAssets = filterAssets(roundware._assetData);
       setFilteredAssets(filteredAssets);
     }
-  }, [roundware._assetData, selectedTags, userFilter]);
+  }, [roundware._assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
 
   const selectTags = (tags, group) => {
     const group_key = group.group_short_name;
@@ -194,7 +203,6 @@ export const RoundwareProvider = (props) => {
     })
     roundware._mixer.updateParams({listenTagIds: listenTagIds});
   };
-
 
   // when this provider is loaded, initialize roundware via api
   useEffect(() => {
@@ -271,6 +279,8 @@ export const RoundwareProvider = (props) => {
         selectAsset,
         selectTags,
         setUserFilter,
+        setBeforeDateFilter,
+        setAfterDateFilter,
         setAssetPageIndex,
         setAssetsPerPage,
         setSortField,
