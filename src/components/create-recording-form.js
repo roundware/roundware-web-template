@@ -23,7 +23,8 @@ import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
 import AudioPlayer from 'material-ui-audio-player';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import {wait} from "../utils";
+import AdditionalMediaMenu from "./additional-media-menu";
+import { wait } from "../utils";
 
 const visualizerOptions = {
   type: "bars",
@@ -386,17 +387,7 @@ const CreateRecordingForm = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          <Button
-            variant="contained"
-            color="primary"
-            size={isExtraSmallScreen ? "small" : "medium"}
-            startIcon={<PhotoIcon />}
-            style={{ margin: "auto" }}
-            disabled={draftMediaUrl === ""}
-            onClick={() => {}}
-          >
-            {isExtraSmallScreen ? "+Photo" : "Add Photo"}
-          </Button>
+          <AdditionalMediaMenu />
           <Button
             variant="contained"
             color="primary"
