@@ -7,6 +7,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PhotoIcon from '@material-ui/icons/Photo';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import Dialog from "@material-ui/core/Dialog";
+import TextField from '@material-ui/core/TextField';
 
 const StyledMenu = withStyles({
   paper: {
@@ -41,6 +46,7 @@ const StyledMenuItem = withStyles((theme) => ({
 
 const AdditionalMediaMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [addTextModalOpen, setAddTextModalOpen] = useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -76,13 +82,51 @@ const AdditionalMediaMenu = () => {
           </ListItemIcon>
           <ListItemText primary="Add Photo" />
         </StyledMenuItem>
-        <StyledMenuItem>
+        <StyledMenuItem
+          onClick={() => {
+            setAddTextModalOpen(true);
+          }}
+        >
           <ListItemIcon>
             <TextFieldsIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Add Text" />
         </StyledMenuItem>
       </StyledMenu>
+      <Dialog
+        open={addTextModalOpen}
+      >
+        <DialogContent>
+          <TextField
+            id="outlined-multiline-static"
+            label="Tap/Click to Type!"
+            multiline
+            rows={6}
+            defaultValue=""
+            variant="outlined"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              setAddTextModalOpen(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setAddTextModalOpen(false);
+            }}
+          >
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
