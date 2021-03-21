@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
@@ -44,7 +44,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-const AdditionalMediaMenu = ({ onSetText }) => {
+const AdditionalMediaMenu = ({ onSetText, onSetImage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [addTextModalOpen, setAddTextModalOpen] = useState(false);
 
@@ -76,12 +76,7 @@ const AdditionalMediaMenu = ({ onSetText }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <StyledMenuItem>
-          <ListItemIcon>
-            <PhotoIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Add Photo" />
-        </StyledMenuItem>
+        <PhotoPicker onSetImage={onSetImage} />
         <StyledMenuItem
           onClick={() => {
             setAddTextModalOpen(true);
@@ -127,6 +122,27 @@ const AdditionalMediaMenu = ({ onSetText }) => {
         </DialogActions>
       </Dialog>
     </div>
+  );
+};
+
+const PhotoPicker = ({ onSetImage }) => {
+  const picker = useRef(null);
+  return (
+    <StyledMenuItem onClick={() => picker.current.click()}>
+      <input
+        ref={picker}
+        type="file"
+        accept="image/jpeg"
+        style={{ display: "none" }}
+        onChange={(e) => {
+          onSetImage(e.target.files[0]);
+        }}
+      />
+      <ListItemIcon>
+        <PhotoIcon fontSize="small" />
+      </ListItemIcon>
+      <ListItemText primary="Add Photo" />
+    </StyledMenuItem>
   );
 };
 

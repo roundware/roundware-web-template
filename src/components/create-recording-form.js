@@ -136,6 +136,7 @@ const CreateRecordingForm = () => {
   const [recorder, set_recorder] = useState();
   const [stream, set_stream] = useState();
   const [textAsset, setTextAsset] = useState(null);
+  const [imageAsset, setImageAsset] = useState(null);
   const [deleteModalOpen, set_delete_modal_open] = useState(false);
   const [legalModalOpen, set_legal_modal_open] = useState(false);
   const [saving, set_saving] = useState(false);
@@ -407,7 +408,10 @@ const CreateRecordingForm = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          <AdditionalMediaMenu onSetText={setTextAsset} />
+          <AdditionalMediaMenu
+            onSetText={setTextAsset}
+            onSetImage={setImageAsset}
+          />
           <Button
             variant="contained"
             color="primary"
@@ -445,8 +449,6 @@ const CreateRecordingForm = () => {
                     dateStr + ".mp3",
                     assetMeta
                   );
-                  set_success(asset);
-                  updateAssets();
 
                   // Add the text asset, if any.
                   if (textAsset) {
@@ -456,6 +458,18 @@ const CreateRecordingForm = () => {
                       { ...assetMeta, media_type: "text" }
                     );
                   }
+                  if (imageAsset) {
+                    await envelope.upload(
+                      imageAsset,
+                      imageAsset.name || dateStr + ".jpg",
+                      {
+                        ...assetMeta,
+                        media_type: "photo",
+                      }
+                    );
+                  }
+                  set_success(asset);
+                  updateAssets();
                 } catch (err) {
                   set_error({ message: err });
                 }
