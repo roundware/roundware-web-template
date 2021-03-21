@@ -1,33 +1,33 @@
-import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import PhotoIcon from '@material-ui/icons/Photo';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
+import React, { useState } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import PhotoIcon from "@material-ui/icons/Photo";
+import TextFieldsIcon from "@material-ui/icons/TextFields";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Dialog from "@material-ui/core/Dialog";
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
 
 const StyledMenu = withStyles({
   paper: {
-    border: '1px solid #d3d4d5',
+    border: "1px solid #d3d4d5",
   },
 })((props) => (
   <Menu
     elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
+      vertical: "bottom",
+      horizontal: "center",
     }}
     transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
+      vertical: "top",
+      horizontal: "center",
     }}
     {...props}
   />
@@ -35,16 +35,16 @@ const StyledMenu = withStyles({
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {
-    '&:focus': {
+    "&:focus": {
       backgroundColor: theme.palette.primary.main,
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
         color: theme.palette.common.white,
       },
     },
   },
 }))(MenuItem);
 
-const AdditionalMediaMenu = () => {
+const AdditionalMediaMenu = ({ onSetText }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [addTextModalOpen, setAddTextModalOpen] = useState(false);
 
@@ -93,9 +93,7 @@ const AdditionalMediaMenu = () => {
           <ListItemText primary="Add Text" />
         </StyledMenuItem>
       </StyledMenu>
-      <Dialog
-        open={addTextModalOpen}
-      >
+      <Dialog open={addTextModalOpen}>
         <DialogContent>
           <TextField
             id="outlined-multiline-static"
@@ -104,6 +102,7 @@ const AdditionalMediaMenu = () => {
             rows={6}
             defaultValue=""
             variant="outlined"
+            onBlur={(e) => onSetText(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
@@ -129,6 +128,6 @@ const AdditionalMediaMenu = () => {
       </Dialog>
     </div>
   );
-}
+};
 
 export default AdditionalMediaMenu;
