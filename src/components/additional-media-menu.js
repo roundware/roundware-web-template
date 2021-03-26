@@ -13,7 +13,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Dialog from "@material-ui/core/Dialog";
 import TextField from "@material-ui/core/TextField";
-import Badge from '@material-ui/core/Badge';
+import Badge from "@material-ui/core/Badge";
 
 const StyledMenu = withStyles({
   paper: {
@@ -52,6 +52,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, disabled }) => {
   const theme = useTheme();
   const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const isTinyScreen = useMediaQuery(theme.breakpoints.down(350));
+  const picker = useRef(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -61,68 +62,10 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, disabled }) => {
     setAnchorEl(null);
   };
 
-  const TextInputDialog = () => {
-    return (
-      <Dialog open={addTextModalOpen}>
-        <DialogContent
-          style={isExtraSmallScreen ? {width: 300} : {width: 500}}
-        >
-          <TextField
-            id="outlined-multiline-static"
-            label="Tap/Click to Type!"
-            multiline
-            rows={6}
-            defaultValue=""
-            variant="outlined"
-            style={{width: "100%"}}
-            onBlur={(e) => onSetText(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              setAddTextModalOpen(false);
-              setAnchorEl(null);
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setAddTextModalOpen(false);
-              setAnchorEl(null);
-            }}
-          >
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    )
-  }
-
-  const TextInputMenuItem = () => {
-    return(
-      <>
-      <StyledMenuItem
-        onClick={() => {
-          setAddTextModalOpen(true);
-        }}
-      >
-        <ListItemIcon>
-          <TextFieldsIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Add Text" />
-      </StyledMenuItem>
-      <TextInputDialog />
-      </>
-    )
-  }
-
-  if (process.env.ALLOW_PHOTOS === "true" && process.env.ALLOW_TEXT === "true") {
+  if (
+    process.env.ALLOW_PHOTOS === "true" &&
+    process.env.ALLOW_TEXT === "true"
+  ) {
     return (
       <div>
         <Button
@@ -154,88 +97,154 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, disabled }) => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <PhotoPickerMenuItem onSetImage={onSetImage} />
+          <PhotoPickerMenuItem picker={picker} onSetImage={onSetImage} />
           <TextInputMenuItem />
         </StyledMenu>
-
       </div>
     );
   } else if (process.env.ALLOW_PHOTOS === "true") {
-
     return (
       <>
-      <Button
-        size={isTinyScreen ? "small" : "medium"}
-        aria-controls="customized-menu"
-        aria-haspopup="true"
-        variant="contained"
-        color="primary"
-        startIcon={
+        <Button
+          size={isTinyScreen ? "small" : "medium"}
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          variant="contained"
+          color="primary"
+          startIcon={
             <Badge badgeContent={0} color="primary">
               <PhotoIcon />
             </Badge>
-        }
-        disabled={disabled}
-        onClick={() => picker.current.click()}
-      >
-        Add Photo
-      </Button>
-      <PhotoPickerInput />
+          }
+          disabled={disabled}
+          onClick={() => picker.current.click()}
+        >
+          Add Photo
+        </Button>
+        <PhotoPickerInput onSetImage={onSetImage} picker={picker} />
       </>
     );
   } else {
     return (
       <>
-      <Button
-        size={isTinyScreen ? "small" : "medium"}
-        aria-controls="customized-menu"
-        aria-haspopup="true"
-        variant="contained"
-        color="primary"
-        startIcon={
+        <Button
+          size={isTinyScreen ? "small" : "medium"}
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          variant="contained"
+          color="primary"
+          startIcon={
             <Badge badgeContent={0} color="primary">
               <TextFieldsIcon />
             </Badge>
-        }
-        disabled={disabled}
-        onClick={() => {
-          setAddTextModalOpen(true);
-        }}
-      >
-        Add Text
-      </Button>
-      <TextInputDialog />
+          }
+          disabled={disabled}
+          onClick={() => {
+            setAddTextModalOpen(true);
+          }}
+        >
+          Add Text
+        </Button>
+        <TextInputDialog
+          {...{
+            addTextModalOpen,
+            isExtraSmallScreen,
+            onSetText,
+            setAddTextModalOpen,
+            setAnchorEl,
+          }}
+        />
       </>
     );
   }
 };
 
-const PhotoPickerMenuItem = ({ onSetImage }) => {
+const TextInputDialog = ({
+  addTextModalOpen,
+  isExtraSmallScreen,
+  onSetText,
+  setAddTextModalOpen,
+  setAnchorEl,
+}) => {
   return (
-    <StyledMenuItem onClick={() => picker.current.click()}>
-      <PhotoPickerInput />
-      <ListItemIcon>
-        <PhotoIcon fontSize="small" />
-      </ListItemIcon>
-      <ListItemText primary="Add Photo" />
-    </StyledMenuItem>
+    <Dialog open={addTextModalOpen}>
+      <DialogContent
+        style={isExtraSmallScreen ? { width: 300 } : { width: 500 }}
+      >
+        <TextField
+          id="outlined-multiline-static"
+          label="Tap/Click to Type!"
+          multiline
+          rows={6}
+          defaultValue=""
+          variant="outlined"
+          style={{ width: "100%" }}
+          onBlur={(e) => onSetText(e.target.value)}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            setAddTextModalOpen(false);
+            setAnchorEl(null);
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            setAddTextModalOpen(false);
+            setAnchorEl(null);
+          }}
+        >
+          Submit
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
-const PhotoPickerInput = () => {
-  const picker = useRef(null);
-
+const TextInputMenuItem = ({ setAddTextModalOpen }) => {
   return (
-    <input
-      ref={picker}
-      type="file"
-      accept="image/jpeg, image/png, image/gif"
-      style={{ display: "none" }}
-      onChange={(e) => {
-        onSetImage(e.target.files[0]);
-      }}
-    />
+    <>
+      <StyledMenuItem
+        onClick={() => {
+          setAddTextModalOpen(true);
+        }}
+      >
+        <ListItemIcon>
+          <TextFieldsIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Add Text" />
+      </StyledMenuItem>
+      <TextInputDialog />
+    </>
   );
 };
 
+const PhotoPickerMenuItem = ({ onSetImage, picker }) => (
+  <StyledMenuItem onClick={() => picker.current.click()}>
+    <PhotoPickerInput onSetImage={onSetImage} picker={picker} />
+    <ListItemIcon>
+      <PhotoIcon fontSize="small" />
+    </ListItemIcon>
+    <ListItemText primary="Add Photo" />
+  </StyledMenuItem>
+);
+
+const PhotoPickerInput = ({ onSetImage, picker }) => (
+  <input
+    ref={picker}
+    type="file"
+    accept="image/jpeg, image/png, image/gif"
+    style={{ display: "none" }}
+    onChange={(e) => {
+      onSetImage(e.target.files[0]);
+    }}
+  />
+);
 export default AdditionalMediaMenu;
