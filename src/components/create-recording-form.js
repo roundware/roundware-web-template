@@ -408,10 +408,13 @@ const CreateRecordingForm = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          <AdditionalMediaMenu
-            onSetText={setTextAsset}
-            onSetImage={setImageAsset}
-          />
+          {(process.env.ALLOW_PHOTOS === "true" || process.env.ALLOW_TEXT === "true") ? (
+            <AdditionalMediaMenu
+              onSetText={setTextAsset}
+              onSetImage={setImageAsset}
+              disabled={draftMediaUrl === ""}
+            />
+          ) : null}
           <Button
             variant="contained"
             color="primary"
