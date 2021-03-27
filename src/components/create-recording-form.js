@@ -136,7 +136,7 @@ const CreateRecordingForm = () => {
   const [recorder, set_recorder] = useState();
   const [stream, set_stream] = useState();
   const [textAsset, setTextAsset] = useState(null);
-  const [imageAsset, setImageAsset] = useState(null);
+  const [imageAssets, setImageAssets] = useState([]);
   const [deleteModalOpen, set_delete_modal_open] = useState(false);
   const [legalModalOpen, set_legal_modal_open] = useState(false);
   const [saving, set_saving] = useState(false);
@@ -408,10 +408,11 @@ const CreateRecordingForm = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          {(process.env.ALLOW_PHOTOS === "true" || process.env.ALLOW_TEXT === "true") ? (
+          {process.env.ALLOW_PHOTOS === "true" ||
+          process.env.ALLOW_TEXT === "true" ? (
             <AdditionalMediaMenu
               onSetText={setTextAsset}
-              onSetImage={setImageAsset}
+              onSetImage={(file) => setImageAssets([...imageAssets, file])}
               disabled={draftMediaUrl === ""}
             />
           ) : null}
@@ -461,15 +462,11 @@ const CreateRecordingForm = () => {
                       { ...assetMeta, media_type: "text" }
                     );
                   }
-                  if (imageAsset) {
-                    await envelope.upload(
-                      imageAsset,
-                      imageAsset.name || dateStr + ".jpg",
-                      {
-                        ...assetMeta,
-                        media_type: "photo",
-                      }
-                    );
+                  for (const file of imageAssets) {
+                    await envelope.upload(file, file.name || dateStr + ".jpg", {
+                      ...assetMeta,
+                      media_type: "photo",
+                    });
                   }
                   set_success(asset);
                   updateAssets();

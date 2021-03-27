@@ -165,49 +165,44 @@ const TextInputDialog = ({
   onSetText,
   setAddTextModalOpen,
   setAnchorEl,
-}) => {
-  return (
-    <Dialog open={addTextModalOpen}>
-      <DialogContent
-        style={isExtraSmallScreen ? { width: 300 } : { width: 500 }}
+}) => (
+  <Dialog open={addTextModalOpen}>
+    <DialogContent style={isExtraSmallScreen ? { width: 300 } : { width: 500 }}>
+      <TextField
+        id="outlined-multiline-static"
+        label="Tap/Click to Type!"
+        multiline
+        rows={6}
+        defaultValue=""
+        variant="outlined"
+        style={{ width: "100%" }}
+        onBlur={(e) => onSetText(e.target.value)}
+      />
+    </DialogContent>
+    <DialogActions>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => {
+          setAddTextModalOpen(false);
+          setAnchorEl(null);
+        }}
       >
-        <TextField
-          id="outlined-multiline-static"
-          label="Tap/Click to Type!"
-          multiline
-          rows={6}
-          defaultValue=""
-          variant="outlined"
-          style={{ width: "100%" }}
-          onBlur={(e) => onSetText(e.target.value)}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            setAddTextModalOpen(false);
-            setAnchorEl(null);
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            setAddTextModalOpen(false);
-            setAnchorEl(null);
-          }}
-        >
-          Submit
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
+        Cancel
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          setAddTextModalOpen(false);
+          setAnchorEl(null);
+        }}
+      >
+        Submit
+      </Button>
+    </DialogActions>
+  </Dialog>
+);
 const TextInputMenuItem = ({ setAddTextModalOpen }) => {
   return (
     <>
