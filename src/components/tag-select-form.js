@@ -1,22 +1,22 @@
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
 import Checkbox from "@material-ui/core/Checkbox";
-import React, {useEffect, useState} from "react";
-import {useRoundware, useRoundwareDraft} from "../hooks";
+import React, { useEffect, useState } from "react";
+import { useRoundware, useRoundwareDraft } from "../hooks";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { CardContent } from "@material-ui/core";
-import {generatePath, useHistory } from "react-router-dom";
-import {wait} from "../utils";
+import { Card, CardContent, CardActions } from "@material-ui/core";
+import { generatePath, useHistory } from "react-router-dom";
+import { wait } from "../utils";
 
 const useStyles = makeStyles((theme) => {
   return {
-    root: {
+    container: {
       flexGrow: 1,
+      margin: "auto",
     },
     cardGrid: {
       marginBottom: theme.spacing(1),
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => {
       marginRight: theme.spacing(3),
       padding: theme.spacing(4),
       cursor: "pointer",
+      backgroundColor: theme.palette.grey[700],
       [theme.breakpoints.down('sm')]: {
         padding: theme.spacing(3),
       },
@@ -136,7 +137,7 @@ const TagSelectForm = ({match}) => {
     return null
   };
   return (
-    <div className={classes.root}>
+    <Card className={classes.container}>
       <Card className={classes.tagGroupHeader}>
         <CardContent>
           <Typography
@@ -194,7 +195,7 @@ const TagSelectForm = ({match}) => {
           Back
         </Button>
       </Container>
-    </div>
+    </Card>
   );
 };
 export default TagSelectForm;

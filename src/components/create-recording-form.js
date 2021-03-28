@@ -20,6 +20,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import Card from "@material-ui/core/Card";
 import { useHistory } from "react-router-dom";
 import AudioPlayer from "material-ui-audio-player";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
@@ -32,6 +33,10 @@ const visualizerOptions = {
 
 const useStyles = makeStyles((theme) => {
   return {
+    container: {
+      overflowX: "hidden",
+      padding: theme.spacing(2),
+    },
     iconButtonLabel: {
       display: "flex",
       flexDirection: "column",
@@ -145,7 +150,7 @@ const CreateRecordingForm = () => {
   const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
-  const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
+  const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down(350));
 
   const startRecording = () => {
     if (!navigator.mediaDevices) {
@@ -244,8 +249,13 @@ const CreateRecordingForm = () => {
     : "--";
 
   return (
-    <div style={{ overflowX: "hidden" }}>
-      <Grid container alignItems={"center"} direction={"column"} spacing={8}>
+    <Card className={classes.container}>
+      <Grid
+        container
+        alignItems={"center"}
+        direction={"column"}
+        spacing={8}
+      >
         <Grid item>
           <Container>
             {/*{ selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }*/}
@@ -268,7 +278,8 @@ const CreateRecordingForm = () => {
         </Grid>
         <ErrorDialog error={error} set_error={set_error} />
         <Grid item xs={12} className={classes.audioVisualizer}>
-          <canvas id="audio-visualizer" />
+          <canvas id="audio-visualizer"
+            style={{height: isExtraSmallScreen ? 100 : 150, width: 300}}/>
         </Grid>
 
         {draftMediaUrl ? (
@@ -286,12 +297,19 @@ const CreateRecordingForm = () => {
           </Grid>
         ) : null}
         {!draftMediaUrl && !isRecording ? (
-          <Grid item style={{ paddingBottom: 0 }}>
+          <Grid
+            item
+            style={{
+              paddingBottom: 0,
+              paddingTop: isExtraSmallScreen ? 8 : 32,
+            }}
+          >
             <IconButton
               disabled={draftMediaUrl !== ""}
               style={{
                 margin: "auto",
                 backgroundColor: isRecording ? "red" : "inherit",
+                padding: 0
               }}
               variant="contained"
               onClick={toggleRecording}
@@ -364,7 +382,14 @@ const CreateRecordingForm = () => {
             </CountdownCircleTimer>
           </Grid>
         ) : null}
-        <Grid container item>
+        <Grid
+          container item
+          style={{
+            paddingLeft: isExtraSmallScreen ? 8 : 32,
+            paddingRight: isExtraSmallScreen ? 8 : 32,
+            paddingTop: isExtraSmallScreen ? 16 : 32,
+          }}
+        >
           <Button
             style={{ margin: "auto" }}
             variant="contained"
@@ -521,7 +546,7 @@ const CreateRecordingForm = () => {
           </DialogActions>
         </Dialog>
       </Grid>
-    </div>
+    </Card>
   );
 };
 export default CreateRecordingForm;
