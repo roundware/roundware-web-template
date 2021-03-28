@@ -18,8 +18,8 @@ import InfoPopup from "./info-popup";
 import Helmet from "react-helmet";
 import ReactGA from "react-ga";
 
-import pealeLogoSmall from '../assets/peale-white.png';
 import favicon from "../assets/favicon.png";
+import logoSmall from "../assets/peale-white.png";
 
 ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
 ReactGA.pageview(window.location.pathname + window.location.search);
@@ -80,9 +80,11 @@ export const App = () => {
               {roundware._project ? roundware._project.projectName : ""}
             </NavLink>
           </Typography>
-          <img
-            src={pealeLogoSmall}
-            style={{height: 54}} />
+          <NavLink to="/">
+            <img
+              src={logoSmall}
+              style={{height: 54}} />
+          </NavLink>
         </Toolbar>
       </AppBar>
       <Toolbar/>
