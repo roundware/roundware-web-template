@@ -47,12 +47,12 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 const AdditionalMediaMenu = ({
-    onSetText,
-    onSetImage,
-    imageAssets,
-    textAsset,
-    disabled
-  }) => {
+  onSetText,
+  onSetImage,
+  imageAssets,
+  textAsset,
+  disabled,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [addTextModalOpen, setAddTextModalOpen] = useState(false);
   const theme = useTheme();
@@ -82,11 +82,16 @@ const AdditionalMediaMenu = ({
           color="primary"
           startIcon={
             <>
-              <Badge badgeContent={imageAssets.length} color="secondary">
+              <Badge
+                badgeContent={imageAssets.length}
+                showZero={false}
+                color="secondary"
+              >
                 <PhotoIcon />
               </Badge>
               <Badge
-                badgeContent={textAsset ? textAsset.length > 0 : 0}
+                badgeContent={textAsset ? textAsset.length : 0}
+                showZero={false}
                 color="secondary"
                 variant="dot"
               >
@@ -107,8 +112,21 @@ const AdditionalMediaMenu = ({
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <PhotoPickerMenuItem picker={picker} onSetImage={onSetImage} />
-          <TextInputMenuItem />
+          <PhotoPickerMenuItem
+            ref={picker}
+            onSetImage={onSetImage}
+            openPicker={() => picker.current.click()}
+          />
+          <TextInputMenuItem
+            {...{
+              textAsset,
+              addTextModalOpen,
+              isExtraSmallScreen,
+              onSetText,
+              setAddTextModalOpen,
+              setAnchorEl,
+            }}
+          />
         </StyledMenu>
       </div>
     );
@@ -131,7 +149,7 @@ const AdditionalMediaMenu = ({
         >
           Add Photo
         </Button>
-        <PhotoPickerInput onSetImage={onSetImage} picker={picker} />
+        <PhotoPickerInput onSetImage={onSetImage} ref={picker} />
       </>
     );
   } else {
@@ -145,7 +163,7 @@ const AdditionalMediaMenu = ({
           color="primary"
           startIcon={
             <Badge
-              badgeContent={textAsset ? textAsset.length > 0 : 0}
+              badgeContent={textAsset ? textAsset.length : 0}
               color="secondary"
               variant="dot"
             >
@@ -161,6 +179,7 @@ const AdditionalMediaMenu = ({
         </Button>
         <TextInputDialog
           {...{
+            textAsset,
             addTextModalOpen,
             isExtraSmallScreen,
             onSetText,
@@ -174,6 +193,7 @@ const AdditionalMediaMenu = ({
 };
 
 const TextInputDialog = ({
+  textAsset,
   addTextModalOpen,
   isExtraSmallScreen,
   onSetText,
@@ -187,7 +207,7 @@ const TextInputDialog = ({
         label="Tap/Click to Type!"
         multiline
         rows={6}
-        defaultValue=""
+        defaultValue={textAsset || ""}
         variant="outlined"
         style={{ width: "100%" }}
         onBlur={(e) => onSetText(e.target.value)}
@@ -217,8 +237,14 @@ const TextInputDialog = ({
     </DialogActions>
   </Dialog>
 );
-
-const TextInputMenuItem = ({ setAddTextModalOpen }) => {
+const TextInputMenuItem = ({
+  textAsset,
+  addTextModalOpen,
+  setAddTextModalOpen,
+  onSetText,
+  setAnchorEl,
+  isExtraSmallScreen,
+}) => {
   return (
     <>
       <StyledMenuItem
@@ -231,24 +257,35 @@ const TextInputMenuItem = ({ setAddTextModalOpen }) => {
         </ListItemIcon>
         <ListItemText primary="Add Text" />
       </StyledMenuItem>
-      <TextInputDialog />
+      <TextInputDialog
+        {...{
+          textAsset,
+          addTextModalOpen,
+          isExtraSmallScreen,
+          onSetText,
+          setAddTextModalOpen,
+          setAnchorEl,
+        }}
+      />
     </>
   );
 };
 
-const PhotoPickerMenuItem = ({ onSetImage, picker }) => (
-  <StyledMenuItem onClick={() => picker.current.click()}>
-    <PhotoPickerInput onSetImage={onSetImage} picker={picker} />
-    <ListItemIcon>
-      <PhotoIcon fontSize="small" />
-    </ListItemIcon>
-    <ListItemText primary="Add Photo" />
-  </StyledMenuItem>
+const PhotoPickerMenuItem = React.forwardRef(
+  ({ onSetImage, openPicker }, ref) => (
+    <StyledMenuItem onClick={openPicker}>
+      <PhotoPickerInput onSetImage={onSetImage} ref={ref} />
+      <ListItemIcon>
+        <PhotoIcon fontSize="small" />
+      </ListItemIcon>
+      <ListItemText primary="Add Photo" />
+    </StyledMenuItem>
+  )
 );
 
-const PhotoPickerInput = ({ onSetImage, picker }) => (
+const PhotoPickerInput = React.forwardRef(({ onSetImage }, ref) => (
   <input
-    ref={picker}
+    ref={ref}
     type="file"
     accept="image/jpeg, image/png, image/gif"
     style={{ display: "none" }}
@@ -256,5 +293,5 @@ const PhotoPickerInput = ({ onSetImage, picker }) => (
       onSetImage(e.target.files[0]);
     }}
   />
-);
+));
 export default AdditionalMediaMenu;
