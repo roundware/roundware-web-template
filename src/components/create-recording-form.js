@@ -383,6 +383,16 @@ const CreateRecordingForm = () => {
           </Grid>
         ) : null}
         <Grid
+          item
+          style={{ padding: 8 }}
+        >
+          {(draftMediaUrl == "" && !isRecording) ? (
+            <Typography variant={"subtitle1"}>
+              Tap to Record
+            </Typography>
+          ) : null}
+        </Grid>
+        <Grid
           container item
           style={{
             paddingLeft: isExtraSmallScreen ? 8 : 32,
