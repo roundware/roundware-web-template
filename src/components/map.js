@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import { RoundwareMapStyle } from "../map-style";
 import AssetLayer from "./asset-layer";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ListenerLocationMarker from "./listener-location-marker";
 import { useRoundware } from "../hooks";
-import distance from "@turf/distance"
+import distance from "@turf/distance";
 import AssetLoadingOverlay from "./asset-loading-overlay";
 import RangeCircleOverlay from "./range-circle-overlay";
 import WalkingModeButton from "./walking-mode-button";
@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => {
     },
   };
 });
+
 const RoundwareMap = (props) => {
   const classes = useStyles();
   const { roundware } = useRoundware();
