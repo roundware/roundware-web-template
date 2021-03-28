@@ -19,6 +19,7 @@ import Helmet from "react-helmet";
 import ReactGA from "react-ga";
 
 import pealeLogoSmall from '../assets/peale-white.png';
+import favicon from "../assets/favicon.png";
 
 ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
 ReactGA.pageview(window.location.pathname + window.location.search);
@@ -68,6 +69,7 @@ export const App = () => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>{roundware._project ? roundware._project.projectName : ""}</title>
+        <link rel="icon" type="image/png" href={favicon} sizes="16x16" />
       </Helmet>
       <AppBar
         className={classes.topBar}
