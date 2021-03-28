@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRoundwareDraft } from "../hooks";
+import { useRoundware, useRoundwareDraft } from "../hooks";
 import LocationSelectMarker from "./location-select-marker";
 import { RoundwareMapStyle } from "../map-style";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => {
 
 const LocationSelectForm = () => {
   const draftRecording = useRoundwareDraft();
+  const { roundware } = useRoundware();
   const theme = useTheme();
   const mapContainerStyle = {
     height: "100%",
@@ -183,7 +184,10 @@ const LocationSelectForm = () => {
           color="primary"
           variant={"contained"}
           onClick={() => {
-            history.push('/speak/recording')
+            history.push('/speak/recording');
+            if (roundware._mixer && roundware._mixer.playing) {
+              roundware._mixer.toggle(roundware._mixer.token)
+            }
           }}
         >
           Next
