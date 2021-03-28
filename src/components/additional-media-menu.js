@@ -46,7 +46,13 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-const AdditionalMediaMenu = ({ onSetText, onSetImage, disabled }) => {
+const AdditionalMediaMenu = ({
+    onSetText,
+    onSetImage,
+    imageAssets,
+    textAsset,
+    disabled
+  }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [addTextModalOpen, setAddTextModalOpen] = useState(false);
   const theme = useTheme();
@@ -76,10 +82,14 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, disabled }) => {
           color="primary"
           startIcon={
             <>
-              <Badge badgeContent={0} color="primary">
+              <Badge badgeContent={imageAssets.length} color="secondary">
                 <PhotoIcon />
               </Badge>
-              <Badge badgeContent={0} color="primary">
+              <Badge
+                badgeContent={textAsset ? textAsset.length > 0 : 0}
+                color="secondary"
+                variant="dot"
+              >
                 <TextFieldsIcon />
               </Badge>
             </>
@@ -112,7 +122,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, disabled }) => {
           variant="contained"
           color="primary"
           startIcon={
-            <Badge badgeContent={0} color="primary">
+            <Badge badgeContent={imageAssets.length} color="secondary">
               <PhotoIcon />
             </Badge>
           }
@@ -134,7 +144,11 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, disabled }) => {
           variant="contained"
           color="primary"
           startIcon={
-            <Badge badgeContent={0} color="primary">
+            <Badge
+              badgeContent={textAsset ? textAsset.length > 0 : 0}
+              color="secondary"
+              variant="dot"
+            >
               <TextFieldsIcon />
             </Badge>
           }
@@ -203,6 +217,7 @@ const TextInputDialog = ({
     </DialogActions>
   </Dialog>
 );
+
 const TextInputMenuItem = ({ setAddTextModalOpen }) => {
   return (
     <>

@@ -413,6 +413,8 @@ const CreateRecordingForm = () => {
             <AdditionalMediaMenu
               onSetText={setTextAsset}
               onSetImage={(file) => setImageAssets([...imageAssets, file])}
+              textAsset={textAsset}
+              imageAssets={imageAssets}
               disabled={draftMediaUrl === ""}
             />
           ) : null}
