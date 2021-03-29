@@ -32,8 +32,7 @@ const RoundwareMixerControl = props => {
     // when the control for the mixer is unmounted, clean up by stopping the mixer
     return () => {
       if (roundware._mixer &&  roundware._mixer.active) {
-        roundware._mixer.toggle(roundware._mixer.token)
-        roundware._mixer.stop();
+        roundware._mixer.toggle(roundware._mixer.token);
       }
   }}, [])
 
