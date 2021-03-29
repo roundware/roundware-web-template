@@ -10,14 +10,36 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import { lightTheme } from "../styles";
+import { useAsync } from "react-async";
 
 const AssetInfoWindow = ({ asset }) => {
-  const { selectedAsset, selectAsset } = useRoundware();
+  const { selectedAsset, selectAsset, roundware } = useRoundware();
 
   if (!selectedAsset) return null;
   if (selectedAsset.id !== asset.id) {
     return null;
   }
+  return (
+    <AssetInfoWindowInner
+      asset={selectedAsset}
+      selectAsset={selectAsset}
+      roundware={roundware}
+    />
+  );
+};
+
+const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
+  const [imageAssets, setImageAssets] = useState(null);
+  useEffect(() => {
+    roundware
+      .getAssets({
+        media_type: "photo",
+        envelope_id: asset.envelope_ids[0],
+      })
+      .then(setImageAssets);
+  }, [asset]);
+
+  const primaryImageUrl = imageAssets && imageAssets[0]?.file;
 
   const position = { lat: asset.latitude, lng: asset.longitude };
 
@@ -37,6 +59,9 @@ const AssetInfoWindow = ({ asset }) => {
               {moment(asset.created).format("LLL")}
             </Typography>
             <TagsDisplay tagIds={asset.tag_ids} />
+            {primaryImageUrl ? (
+              <img src={primaryImageUrl} width="100%" />
+            ) : null}
             <AssetPlayer style={{ width: "100%" }} asset={asset} />
             <AssetActionButtons asset={asset} />
           </Paper>
@@ -49,8 +74,8 @@ const AssetInfoWindow = ({ asset }) => {
 const AssetMarker = ({ asset, clusterer, oms }) => {
   const { selectAsset } = useRoundware();
   const iconPin = {
-    url: 'https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg',
-    scaledSize: new google.maps.Size(20, 20)
+    url: "https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg",
+    scaledSize: new google.maps.Size(20, 20),
   };
 
   return (
