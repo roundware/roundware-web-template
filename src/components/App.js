@@ -4,6 +4,7 @@ import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { LandingPage } from "./LandingPage";
 import { BrowserRouter, Switch, Route, NavLink, useLocation } from "react-router-dom";
+import { useMediaQuery } from "@material-ui/core";
 import Container from '@material-ui/core/Container';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -19,7 +20,8 @@ import Helmet from "react-helmet";
 import ReactGA from "react-ga";
 
 import favicon from "../assets/favicon.png";
-import logoSmall from "../assets/peale-white.png";
+import logoSmall from "../assets/rw-full-logo-wb.png";
+import logoMinimal from "../assets/rw-logo-minimal.png";
 
 ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
 ReactGA.pageview(window.location.pathname + window.location.search);
@@ -48,6 +50,9 @@ const useStyles = makeStyles((theme) => {
       color: "white",
       textDecoration: "none",
     },
+    navLogo: {
+      height: parseInt(process.env.NAV_LOGO_HEIGHT),
+    },
   };
 });
 
@@ -56,6 +61,7 @@ export const App = () => {
   const classes = useStyles();
   const { roundware } = useRoundware();
   let location = useLocation();
+  const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   useEffect(() => {
       ReactGA.pageview(window.location.pathname + window.location.search)
@@ -82,8 +88,9 @@ export const App = () => {
           </Typography>
           <NavLink to="/">
             <img
-              src={logoSmall}
-              style={{height: 54}} />
+              src={isExtraSmallScreen ? logoMinimal : logoSmall}
+              className={classes.navLogo}
+            />
           </NavLink>
         </Toolbar>
       </AppBar>

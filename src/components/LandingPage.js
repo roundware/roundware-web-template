@@ -7,6 +7,7 @@ import { useRoundware } from "../hooks";
 import Container from "@material-ui/core/Container";
 
 import landingHeaderImage from '../assets/bg-about.jpg';
+import banner from "../assets/rw-icon-cluster.png";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -38,6 +39,22 @@ const useStyles = makeStyles((theme) => {
         fontSize: "3em",
       },
     },
+    landingTagline: {
+      textAlign: "center",
+      height: "15vh",
+      paddingTop: 15,
+      [theme.breakpoints.down('xs')]: {
+        lineHeight: "1.2em",
+      },
+    },
+    landingBanner: {
+      width: "auto",
+      height: 100,
+      [theme.breakpoints.down("xs")]: {
+        width: "70%",
+        height: "auto",
+      },
+    },
   };
 });
 
@@ -62,19 +79,27 @@ export const LandingPage = (props) => {
             item
             style={{margin: 'auto', height: "15vh", "textAlign": "center", "paddingTop": 15}}
             sm={12}>
-            <Typography
+            {/*<Typography
               variant={"h2"}
-              className={classes.landingTitle}>
+              className={classes.landingTitle}
+            >
               {roundware._project && roundware._project.projectName}
-            </Typography>
+            </Typography>*/}
+            <img
+              src={banner}
+              className={classes.landingBanner}
+            />
           </Grid>
           <Grid
             item
             sm={12}>
             <Typography
               variant={"subtitle1"}
+              className={classes.landingTagline}
               style={{"textAlign": "center", height: "15vh"}}>
-              A Storytelling Project with the Peale and Museum on Main Street, Smithsonian
+              Contributory Audio Augmented Reality
+              <br />
+              for Art, Education and Documentary
             </Typography>
           </Grid>
         </Grid>
