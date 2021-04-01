@@ -28,6 +28,7 @@ export const VoteButton = ({ asset, votedClass, title, children }) => {
     <Button
       title={title}
       className={voted ? classes[votedClass] : null}
+      style={{minWidth: 30}}
       onClick={() => {
         if (!voted) {
           mark_voted(true);
@@ -65,6 +66,7 @@ const downloadAsset = async (asset) => {
   a.click();
   a.remove();
 };
+
 export const AssetActionButtons = ({ asset }) => {
   return (
     <div id="infoVoteBlock">
@@ -76,9 +78,8 @@ export const AssetActionButtons = ({ asset }) => {
       >
         <ThumbUpIcon />
       </VoteButton>
-
       <VoteButton
-        title="tell us you like this one!"
+        title="tell us you are concerned about this one!"
         asset={asset}
         voteType="flag"
         votedClass="flagged"
@@ -92,12 +93,14 @@ export const AssetActionButtons = ({ asset }) => {
             "_blank"
           );
         }}
+        style={{minWidth: 30}}
         title="go to contribution page"
       >
         <LinkIcon />
       </Button>
       <Button
         onClick={() => downloadAsset(asset)}
+        style={{minWidth: 30}}
         title="download this audio file"
       >
         <GetAppIcon />
