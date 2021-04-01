@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html --host 0.0.0.0",
     "build": "rm -rf dist && parcel build --no-source-maps src/index.html",
-    "deploy": "npm run build && surge --domain https://beherestories.surge.sh dist"
+    "deploy": "npm run build && surge --domain https://roundware.surge.sh dist"
   },
   "author": "Evan Babb",
   "license": "ISC",
