@@ -1,14 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
-import SkipNextIcon from '@material-ui/icons/SkipNext';
+import SkipNextIcon from "@material-ui/icons/SkipNext";
 import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import { useRoundware } from "../hooks";
 import { GeoListenMode } from "roundware-web-framework";
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const RoundwareMixerControl = props => {
   const { roundware, forceUpdate } = useRoundware();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const isPlaying = roundware._mixer && roundware._mixer.playing
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   if (roundware.activateMixer && !roundware._mixer) {
     roundware
@@ -73,17 +87,28 @@ const RoundwareMixerControl = props => {
         disabled={isPlaying ? false : true}
         onClick={() => {
           if (!roundware._mixer) {
-
+            return
           } else {
             const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
             trackIds.forEach(
               audioTrackId => roundware._mixer.skipTrack(audioTrackId)
             );
+            setSnackbarOpen(true);
           }
         }}
       >
         <SkipNextIcon />
       </Button>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success">
+          Remixing audio: skipping ahead!
+        </Alert>
+      </Snackbar>
     </>
   );
 };
