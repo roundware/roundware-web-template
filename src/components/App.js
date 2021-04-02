@@ -23,8 +23,10 @@ import favicon from "../assets/favicon.png";
 import logoSmall from "../assets/rw-full-logo-wb.png";
 import logoMinimal from "../assets/rw-logo-minimal.png";
 
-ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
-ReactGA.pageview(window.location.pathname + window.location.search);
+if (process.env.GOOGLE_ANALYTICS_ID !== "null") {
+  ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
+  ReactGA.pageview(window.location.pathname + window.location.search);
+}
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -60,14 +62,17 @@ export const App = () => {
   const [theme] = useState(defaultTheme);
   const classes = useStyles();
   const { roundware } = useRoundware();
-  let location = useLocation();
   const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
-  useEffect(() => {
-      ReactGA.pageview(window.location.pathname + window.location.search)
-    },
-    [location.pathname]
-  )
+  if (process.env.GOOGLE_ANALYTICS_ID !== "null") {
+    let location = useLocation();
+
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname + window.location.search)
+      },
+      [location.pathname]
+    )
+  }
 
   return (
     <ThemeProvider theme={theme}>
