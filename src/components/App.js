@@ -116,7 +116,11 @@ export const App = () => {
             <ListenFilterDrawer />
             <RoundwareMixerControl />
           </Route>
-          mixer: {roundware._mixer && JSON.stringify(roundware._mixer.mixParams)}
+          {process.env.DEBUG_MODE === "true" ? (
+            <div style={{color: "white"}}>
+              mixer: {roundware._mixer && JSON.stringify(roundware._mixer.mixParams)}
+            </div>
+          ) : null}
           <InfoPopup />
         </Toolbar>
       </AppBar>
