@@ -90,7 +90,7 @@ const useStylesAudioPlayer = makeStyles((theme) => {
         width: 500,
       },
       [theme.breakpoints.down("xs")]: {
-        width: "100vw",
+        width: "90vw",
       },
     },
     playIcon: {
@@ -341,10 +341,11 @@ const CreateRecordingForm = () => {
               onComplete={() => {
                 stopRecording();
               }}
+              trailColor="#000000"
               colors={[
-                ["#004777", 0.33],
-                ["#F7B801", 0.33],
-                ["#A30000", 0.33],
+                ["#DDDDDD", 0.33],
+                ["#DDDDDD", 0.33],
+                ["#719EE3", 0.33],
               ]}
             >
               {({ remainingTime }) => (
@@ -382,16 +383,17 @@ const CreateRecordingForm = () => {
             </CountdownCircleTimer>
           </Grid>
         ) : null}
-        <Grid
-          item
-          style={{ padding: 8 }}
-        >
-          {(draftMediaUrl == "" && !isRecording) ? (
-            <Typography variant={"subtitle1"}>
-              Tap to Record
-            </Typography>
-          ) : null}
-        </Grid>
+        {(draftMediaUrl == "" && !isRecording) ? (
+          <Grid
+            item
+            style={{ padding: 8 }}
+          >
+              <Typography variant={"subtitle1"}>
+                Tap to Record
+              </Typography>
+
+          </Grid>
+        ) : null}
         <Grid
           container item
           style={{
@@ -519,8 +521,8 @@ const CreateRecordingForm = () => {
           <DialogContent>
             <CircularProgress color={"primary"} style={{ margin: "auto" }} />
             <DialogContentText>
-              Uploading your recording now! Please keep this page open until we
-              finish uploading
+              Uploading your contribution now! Please keep this page open until we
+              finish uploading.
             </DialogContentText>
           </DialogContent>
         </Dialog>

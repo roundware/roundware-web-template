@@ -95,7 +95,7 @@ const AdditionalMediaMenu = ({
                 color="secondary"
                 variant="dot"
               >
-                <TextFieldsIcon />
+                <TextFieldsIcon style={{marginLeft: 10}}/>
               </Badge>
             </>
           }
@@ -116,6 +116,7 @@ const AdditionalMediaMenu = ({
             ref={picker}
             onSetImage={onSetImage}
             openPicker={() => picker.current.click()}
+            setAnchorEl={setAnchorEl}
           />
           <TextInputMenuItem
             {...{
@@ -149,7 +150,7 @@ const AdditionalMediaMenu = ({
         >
           Add Photo
         </Button>
-        <PhotoPickerInput onSetImage={onSetImage} ref={picker} />
+        <PhotoPickerInput onSetImage={onSetImage} ref={picker} setAnchorEl={setAnchorEl}/>
       </>
     );
   } else {
@@ -201,7 +202,7 @@ const TextInputDialog = ({
   setAnchorEl,
 }) => (
   <Dialog open={addTextModalOpen}>
-    <DialogContent style={isExtraSmallScreen ? { width: 300 } : { width: 500 }}>
+    <DialogContent style={isExtraSmallScreen ? { width: 254 } : { width: 500 }}>
       <TextField
         id="outlined-multiline-static"
         label="Tap/Click to Type!"
@@ -272,9 +273,9 @@ const TextInputMenuItem = ({
 };
 
 const PhotoPickerMenuItem = React.forwardRef(
-  ({ onSetImage, openPicker }, ref) => (
+  ({ onSetImage, openPicker, setAnchorEl }, ref) => (
     <StyledMenuItem onClick={openPicker}>
-      <PhotoPickerInput onSetImage={onSetImage} ref={ref} />
+      <PhotoPickerInput onSetImage={onSetImage} ref={ref} setAnchorEl={setAnchorEl}/>
       <ListItemIcon>
         <PhotoIcon fontSize="small" />
       </ListItemIcon>
@@ -283,7 +284,7 @@ const PhotoPickerMenuItem = React.forwardRef(
   )
 );
 
-const PhotoPickerInput = React.forwardRef(({ onSetImage }, ref) => (
+const PhotoPickerInput = React.forwardRef(({ onSetImage, setAnchorEl }, ref) => (
   <input
     ref={ref}
     type="file"
@@ -291,6 +292,7 @@ const PhotoPickerInput = React.forwardRef(({ onSetImage }, ref) => (
     style={{ display: "none" }}
     onChange={(e) => {
       onSetImage(e.target.files[0]);
+      setAnchorEl(null);
     }}
   />
 ));
