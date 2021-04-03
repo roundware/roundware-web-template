@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 
 export const TagFilterMenu = ({ tag_group }) => {
   const classes = useStyles();
-  const { selectTags, selectedTags } = useRoundware();
+  const { roundware, selectTags, selectedTags } = useRoundware();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleSnackbarClose = (event, reason) => {
@@ -34,6 +34,14 @@ export const TagFilterMenu = ({ tag_group }) => {
     const tag_ids = value ? value.map((t) => t.value) : null;
     selectTags(tag_ids, tag_group);
     setSnackbarOpen(true);
+    if (!roundware._mixer) {
+      return
+    } else {
+      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+      trackIds.forEach(
+        audioTrackId => roundware._mixer.skipTrack(audioTrackId)
+      );
+    }
   };
 
   const options = tag_group.display_items.map(

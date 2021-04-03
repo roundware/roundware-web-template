@@ -8,9 +8,53 @@ import { TagsDisplay } from "./asset-tags";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider as MuiThemeProvider, makeStyles } from "@material-ui/core/styles";
+import Modal from "@material-ui/core/Modal";
 import { lightTheme } from "../styles";
 import { useAsync } from "react-async";
+
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    position: "absolute",
+    height: "auto",
+    width: "auto",
+    maxHeight: "80%",
+    maxWidth: "80%",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    outline: 0,
+    minWidth: 300,
+  },
+}));
+
+const LightboxModal = ({ imageUrl }) => {
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <img src={imageUrl} width="150px" onClick={handleOpen} />
+      <Modal
+        open={open}
+        onClose={handleClose}
+      >
+        <div className={classes.paper}>
+          <img src={imageUrl} width="100%" />
+        </div>
+      </Modal>
+    </div>
+  );
+}
 
 const AssetInfoWindow = ({ asset }) => {
   const { selectedAsset, selectAsset, roundware } = useRoundware();
@@ -48,6 +92,7 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
       options={{
         disableAutoPan: false,
         pixelOffset: new google.maps.Size(0, -30),
+        maxWidth: 320,
       }}
       position={position}
       onCloseClick={() => selectAsset(null)}
@@ -60,9 +105,12 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
             </Typography>
             <TagsDisplay tagIds={asset.tag_ids} />
             {primaryImageUrl ? (
-              <img src={primaryImageUrl} width="100%" />
+              <LightboxModal imageUrl={primaryImageUrl} />
             ) : null}
-            <AssetPlayer style={{ width: "100%" }} asset={asset} />
+            <AssetPlayer
+              style={{ width: "100%", marginTop: 10 }}
+              asset={asset}
+            />
             <AssetActionButtons asset={asset} />
           </Paper>
         </Grid>

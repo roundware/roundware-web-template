@@ -35,12 +35,14 @@ const useStyles = makeStyles((theme) => ({
 
 const ListenFilterDrawer = () => {
   const classes = useStyles();
+
   const [state, setState] = useState({
     top: false,
     left: false,
     bottom: false,
     right: false,
   });
+
   const { roundware,
     userFilter, setUserFilter,
     afterDateFilter, setAfterDateFilter,
@@ -52,16 +54,38 @@ const ListenFilterDrawer = () => {
 
   const handleAfterDateChange = (date) => {
     setAfterDateFilter(moment(date).format());
+    if (!roundware._mixer) {
+      return
+    } else {
+      roundware._mixer.updateParams({
+        startDate: date,
+      })
+      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+      trackIds.forEach(
+        audioTrackId => roundware._mixer.skipTrack(audioTrackId)
+      );
+    }
   };
+
   const handleBeforeDateChange = (date) => {
     setBeforeDateFilter(moment(date).format());
+    if (!roundware._mixer) {
+      return
+    } else {
+      roundware._mixer.updateParams({
+        endDate: date,
+      })
+      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+      trackIds.forEach(
+        audioTrackId => roundware._mixer.skipTrack(audioTrackId)
+      );
+    }
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
