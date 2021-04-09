@@ -7,7 +7,7 @@
     "preinstall": "npx npm-force-resolutions",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html --host 0.0.0.0",
-    "build": "rm -rf dist && parcel build --no-source-maps src/index.html",
+    "build": "rm -rf dist && parcel build --no-source-maps src/index.html src/404.html",
     "deploy": "npm run build && surge --domain https://roundware.surge.sh dist"
   },
   "author": "Evan Babb",
