@@ -83,12 +83,11 @@ const TagSelectForm = ({match}) => {
   const tagGroup = tagGroups[tagGroupIndex] || {display_items: []};
 
   const choices = tagGroup.display_items.filter((item) => {
-      return (
-        item.parent_id === null ||
-        draftRecording.tags.indexOf(item.parent_id) !== -1
-      );
+    return (
+      item.parent_id === null ||
+      draftRecording.tags.indexOf(item.parent_id) !== -1
+    );
   });
-
 
   useEffect( () => {
     // make sure we're thinking about a loaded framework
@@ -103,8 +102,32 @@ const TagSelectForm = ({match}) => {
         return;
       }
     }
+  }, [choices, roundware.uiConfig])
+
+  useEffect(() => {
+    if (process.env.ALLOW_SPEAK_TAGS === "false") {
+      if (!roundware.uiConfig || !roundware.uiConfig.speak) {
+        return;
+      }
+      const defaultTags = process.env.DEFAULT_SPEAK_TAGS;
+      const tagIds = defaultTags.split(",").map(Number);
+      const uiItemIds = [];
+      roundware.uiConfig.speak.forEach((group) =>
+        group.display_items.forEach((item) => {
+          if (tagIds.includes(item.tag_id)) {
+            uiItemIds.push(item.id);
+          }
+        })
+      );
+      if (uiItemIds.length > 0) {
+        draftRecording.setTags(uiItemIds);
+        history.replace('/speak/location');
+      }
+    } else {
+      return
     }
-  , [choices, roundware.uiConfig])
+  }, [])
+
   const toggleTagSelected = (tagId) => {
     const isSelected = draftRecording.tags.indexOf(tagId) !== -1;
     let newTags;
