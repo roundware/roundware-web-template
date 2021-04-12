@@ -56,6 +56,25 @@ const LightboxModal = ({ imageUrl }) => {
   );
 }
 
+const TextDisplay = ({ textUrl }) => {
+  const [storedText, setStoredText] = useState(null)
+
+  useEffect(() => {
+    fetch(textUrl)
+      .then(function(response) {
+        response.text().then(function(text) {
+          setStoredText(text);
+        });
+      });
+  }, []);
+
+  return (
+    <div>
+      {storedText}
+    </div>
+  );
+}
+
 const AssetInfoWindow = ({ asset }) => {
   const { selectedAsset, selectAsset, roundware } = useRoundware();
 
@@ -74,6 +93,8 @@ const AssetInfoWindow = ({ asset }) => {
 
 const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
   const [imageAssets, setImageAssets] = useState(null);
+  const [textAssets, setTextAssets] = useState(null);
+
   useEffect(() => {
     roundware
       .getAssets({
@@ -83,7 +104,17 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
       .then(setImageAssets);
   }, [asset]);
 
+  useEffect(() => {
+    roundware
+      .getAssets({
+        media_type: "text",
+        envelope_id: asset.envelope_ids[0],
+      })
+      .then(setTextAssets);
+  }, [asset]);
+
   const primaryImageUrl = imageAssets && imageAssets[0]?.file;
+  const primaryTextUrl = textAssets && textAssets[0]?.file;
 
   const position = { lat: asset.latitude, lng: asset.longitude };
 
@@ -106,6 +137,9 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
             <TagsDisplay tagIds={asset.tag_ids} />
             {primaryImageUrl ? (
               <LightboxModal imageUrl={primaryImageUrl} />
+            ) : null}
+            {primaryTextUrl ? (
+              <TextDisplay textUrl={primaryTextUrl} />
             ) : null}
             <AssetPlayer
               style={{ width: "100%", marginTop: 10 }}
