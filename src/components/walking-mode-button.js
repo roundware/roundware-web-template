@@ -11,11 +11,14 @@ import ListenerLocationMarker from './listener-location-marker';
 const useStyles = makeStyles((theme) => {
   return {
     walkingModeButton: {
-      position: "absolute",
+      position: "fixed",
       zIndex: 100,
       left: 20,
-      bottom: 10,
+      bottom: 68,
       backgroundColor: "#cccccc",
+      "&:hover": {
+        backgroundColor: "#aaaaaa",
+      },
     },
   };
 });
