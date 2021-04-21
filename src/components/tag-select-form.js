@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => {
     container: {
       flexGrow: 1,
       margin: "auto",
+      marginBottom: 70,
     },
     cardGrid: {
       marginBottom: theme.spacing(1),

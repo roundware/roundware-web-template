@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => {
   return {
     container: {
       flexGrow: 1,
-      margin: "auto"
+      margin: "auto",
+      marginBottom: 70,
     },
     button: {
       margin: "auto"

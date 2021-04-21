@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme) => {
     appContainer: {
       display: "flex",
       flexGrow: 1,
-      overflow: "scroll",
     },
     title: {
       flexGrow: 1,
@@ -108,7 +107,6 @@ export const App = () => {
           <Route path="/debug" component={DebugPage} />
         </Switch>
       </div>
-      <Toolbar className={classes.bottomBar} />
       <AppBar position="fixed" className={classes.bottomBar}>
         <Toolbar
           style={{width: "100%", "justifyContent": "center"}}>

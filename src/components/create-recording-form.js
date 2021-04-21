@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => {
     container: {
       overflowX: "hidden",
       padding: theme.spacing(2),
+      marginBottom: 70,
     },
     iconButtonLabel: {
       display: "flex",
