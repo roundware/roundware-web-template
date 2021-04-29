@@ -7,8 +7,8 @@ import { useDeviceID } from "./hooks";
 export const DraftRecordingProvider = ({ roundware, children }) => {
   const [location, setLocation] = useState({
     latitude: null,
-    longitude: null
-  })
+    longitude: null,
+  });
   const [tags, setTags] = useState([]);
   const [acceptedAgreement, setAcceptedAgreement] = useState(false);
 
@@ -36,7 +36,7 @@ export const DraftRecordingProvider = ({ roundware, children }) => {
 
   const reset = () => {
     setTags([]);
-    setLocation({latitude: null, longitude: null});
+    setLocation({ latitude: null, longitude: null });
     setAcceptedAgreement(false);
   };
 
@@ -84,7 +84,7 @@ export const RoundwareProvider = (props) => {
   const [tagLookup, setTagLookup] = useState({});
   const [filteredAssets, setFilteredAssets] = useState([]);
   const deviceId = useDeviceID();
-  const [assetPage, setAssetPage] = useState([])
+  const [assetPage, setAssetPage] = useState([]);
   const [, forceUpdate] = useReducer((x) => !x, false);
 
   const sortAssets = (assets) => {
@@ -104,7 +104,7 @@ export const RoundwareProvider = (props) => {
     return sortedAssets;
   };
 
- useEffect(() => {
+  useEffect(() => {
     const sortedAssets = sortAssets(filteredAssets);
     if (sortedAssets.length < assetPageIndex * assetsPerPage) {
       setAssetPageIndex(0);
@@ -118,7 +118,13 @@ export const RoundwareProvider = (props) => {
     if (roundware._assetData) {
       setAssetsReady(true);
     }
-  }, [filteredAssets, assetPageIndex, assetsPerPage, sortField.name, sortField.asc])
+  }, [
+    filteredAssets,
+    assetPageIndex,
+    assetsPerPage,
+    sortField.name,
+    sortField.asc,
+  ]);
 
   useEffect(() => {
     if (!roundware.uiConfig.speak) {
@@ -142,15 +148,17 @@ export const RoundwareProvider = (props) => {
       tag_filter_groups.forEach(([_filter_group, tags]) => {
         if (filteredByTag) {
           // if we've already filtered out this asset based on another tag group, stop thinking about it
-          return
+          return;
         }
         if (tags.length) {
-          const hasMatch = tags.some((tag_id) => asset.tag_ids.indexOf(tag_id) !== -1);
+          const hasMatch = tags.some(
+            (tag_id) => asset.tag_ids.indexOf(tag_id) !== -1
+          );
           if (!hasMatch) {
             filteredByTag = true;
           }
         }
-      })
+      });
       if (filteredByTag) {
         return false;
       }
@@ -162,31 +170,42 @@ export const RoundwareProvider = (props) => {
         }
         const user_match = user_str.indexOf(userFilter) !== -1;
         if (!user_match) {
-          return false
+          return false;
         }
       }
       // then filter by start and end dates
       if (afterDateFilter && beforeDateFilter) {
-        const dateMatch = (asset.created <= beforeDateFilter && asset.created >= afterDateFilter) ? true : false;
+        const dateMatch =
+          asset.created <= beforeDateFilter && asset.created >= afterDateFilter
+            ? true
+            : false;
         if (!dateMatch) {
-          return false
+          return false;
         }
       }
       return true;
     });
   };
   // tells the provider to update assetData dependencies with the roundware _assetData source
-  const updateAssets = () => {
-    const filteredAssets = filterAssets(roundware._assetData);
+  const updateAssets = (assetData) => {
+    const filteredAssets = filterAssets(
+      assetData || roundware._assetData || []
+    );
     setFilteredAssets(filteredAssets);
-  }
+  };
 
   useEffect(() => {
     if (roundware._assetData) {
       const filteredAssets = filterAssets(roundware._assetData);
       setFilteredAssets(filteredAssets);
     }
-  }, [roundware._assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
+  }, [
+    roundware._assetData,
+    selectedTags,
+    userFilter,
+    afterDateFilter,
+    beforeDateFilter,
+  ]);
 
   const selectTags = (tags, group) => {
     const group_key = group.group_short_name;
@@ -198,10 +217,10 @@ export const RoundwareProvider = (props) => {
       newFilters[group_key] = tags;
     }
     setSelectedTags(newFilters);
-    Object.keys(newFilters).map(function(key) {
+    Object.keys(newFilters).map(function (key) {
       listenTagIds.push(...newFilters[key]);
-    })
-    roundware._mixer.updateParams({listenTagIds: listenTagIds});
+    });
+    roundware._mixer.updateParams({ listenTagIds: listenTagIds });
   };
 
   // when this provider is loaded, initialize roundware via api
@@ -223,12 +242,14 @@ export const RoundwareProvider = (props) => {
       speakerFilters: { activeyn: true },
       assetFilters: { submitted: true, media_type: "audio" },
       listenerLocation: initial_loc,
+      assetUpdateInterval: 30 * 1000,
     });
 
     roundware.connect().then(() => {
       // set the initial listener location to the project default
       roundware.updateLocation(roundware._project.location);
       roundware.onUpdateLocation = forceUpdate;
+      roundware.onUpdateAssets = updateAssets;
       setRoundware(roundware);
     });
   }, []);
@@ -241,25 +262,29 @@ export const RoundwareProvider = (props) => {
     }
   }, [roundware._project]);
 
-  const geoListenMode = ( roundware._mixer && roundware._mixer.mixParams.geoListenMode ) || GeoListenMode.DISABLED;
+  const geoListenMode =
+    (roundware._mixer && roundware._mixer.mixParams.geoListenMode) ||
+    GeoListenMode.DISABLED;
   const setGeoListenMode = (modeName) => {
     roundware.enableGeolocation(modeName);
     let prom;
     // console.log(`roundware._mixer.mixParams.geoListenMode: ${roundware._mixer.mixParams.geoListenMode}`);
     if (modeName === GeoListenMode.AUTOMATIC) {
-      prom = roundware._geoPosition.waitForInitialGeolocation()
+      prom = roundware._geoPosition.waitForInitialGeolocation();
       if (roundware._mixer) {
         roundware._mixer.updateParams({
           maxDist: roundware._project.recordingRadius,
-          recordingRadius: roundware._project.recordingRadius
-        })
+          recordingRadius: roundware._project.recordingRadius,
+        });
       }
     } else if (modeName === GeoListenMode.MANUAL) {
       // set maxDist to value calculated from range circle overlay
-      prom = new Promise((resolve, reject) => {resolve()});
+      prom = new Promise((resolve, reject) => {
+        resolve();
+      });
     }
-    prom.then(forceUpdate)
-  }
+    prom.then(forceUpdate);
+  };
 
   return (
     <RoundwareContext.Provider

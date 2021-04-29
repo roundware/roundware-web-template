@@ -30,19 +30,23 @@ const AssetLayer = (props) => {
   const map = useGoogleMap();
   const query = useQuery();
   const assets = assetPage;
-  const eid = parseInt(query.get("eid"))
+  const eid = parseInt(query.get("eid"));
+  const [lastSelected, setLastSelected] = useState(null);
   const [markerClusterer, setMarkerClusterer] = useState(null);
 
   useEffect(() => {
-    if (!eid) {
+    if (!eid || lastSelected === eid) {
       return;
     }
-    const asset = assets.find(a => a.envelope_ids.indexOf(eid) !== -1)
+    const asset = assets.find((a) => a.envelope_ids.indexOf(eid) !== -1);
     if (!asset) {
       // todo  present an error and clear bad query params when we can't find the asset we're looking for
       return;
     }
-    selectAsset(asset)
+    selectAsset(asset);
+    // On further asset pool updates, prevent the map from panning unprompted to
+    // the selected asset.
+    setLastSelected(eid);
   }, [assetPage, eid]);
 
   // when the selected asset changes, pan to it
@@ -82,8 +86,8 @@ const AssetLayer = (props) => {
     return new Promise((resolve, reject) => {
       const checkStart = Date.now();
       const checkLength = () => {
-        if (assetPage.length === markerClusterer.markers.length) {
-          resolve()
+        if (assetPage.length >= markerClusterer.markers.length) {
+          resolve();
         } else if (Date.now() > checkStart + 3000) {
           reject("asset page contains a different number of entries than the marker clusterer")
         } else {
@@ -101,7 +105,7 @@ const AssetLayer = (props) => {
     <MarkerClusterer
       maxZoom={12}
       minimumClusterSize={3}
-      onLoad={(c) => setMarkerClusterer(c)}
+      onLoad={setMarkerClusterer}
       options={{
         imagePath:
           "https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m",
