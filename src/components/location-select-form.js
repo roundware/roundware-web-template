@@ -14,6 +14,7 @@ import {
 import { makeStyles } from "@material-ui/styles";
 import ErrorDialog from "./error-dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { useHistory } from "react-router-dom";
 
 const getPosition = function (options) {
@@ -166,6 +167,7 @@ const LocationSelectForm = () => {
       <CardActions variant={"contained"} style={{}}>
         <Button
           className={classes.cardActionButton}
+          startIcon={<ArrowBackIosIcon />}
           aria-label="back"
           onClick={history.goBack}
           variant={"contained"}
