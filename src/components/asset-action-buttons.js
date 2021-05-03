@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useRoundware } from "../hooks";
 import Button from "@material-ui/core/Button";
-
 import LinkIcon from "@material-ui/icons/Link";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
@@ -41,10 +40,10 @@ export const VoteButton = ({ asset, votedClass, title, children }) => {
   );
 };
 
-const downloadAsset = async (asset) => {
+const downloadAsset = async (asset, projectName) => {
   let ext = (/(?:\.([^.]+))?$/).exec(asset.file)[1]
   let filename = asset.file
-  const supported = ['mp3', 'wav', 'mp4'];
+  const supported = ['mp3', 'wav', 'mp4', 'm4a'];
   if (supported.indexOf(ext) === -1) {
     ext = "mp3"
     filename = `${filename}.${ext}`
@@ -59,7 +58,7 @@ const downloadAsset = async (asset) => {
 
   const blobUrl = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.download = `${asset.projectName}_${asset.id}`;
+  a.download = `${projectName}_${asset.id}`;
   a.href = blobUrl;
   // For Firefox https://stackoverflow.com/a/32226068
   document.body.appendChild(a);
@@ -68,6 +67,9 @@ const downloadAsset = async (asset) => {
 };
 
 export const AssetActionButtons = ({ asset }) => {
+  const { roundware } = useRoundware();
+  const projectName = roundware._project.projectName;
+
   return (
     <div id="infoVoteBlock">
       <VoteButton
@@ -99,7 +101,7 @@ export const AssetActionButtons = ({ asset }) => {
         <LinkIcon />
       </Button>
       <Button
-        onClick={() => downloadAsset(asset)}
+        onClick={() => downloadAsset(asset, projectName)}
         style={{minWidth: 30}}
         title="download this audio file"
       >
