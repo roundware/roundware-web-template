@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { defaultTheme } from "../styles";
-import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
+import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { LandingPage } from "./LandingPage";
 import { BrowserRouter, Switch, Route, NavLink, useLocation } from "react-router-dom";
@@ -31,13 +31,13 @@ if (process.env.GOOGLE_ANALYTICS_ID !== "null") {
 const useStyles = makeStyles((theme) => {
   return {
     topBar: {
-      backgroundColor: theme.palette.primary,
+      backgroundColor: defaultTheme.palette.primary.main,
     },
     bottomBar: {
       top: "auto",
       bottom: 0,
       flexFlow: "row",
-      backgroundColor: theme.palette.grey[900],
+      backgroundColor: defaultTheme.palette.grey[900],
     },
     actionButton: {
       margin: "auto",
@@ -74,7 +74,7 @@ export const App = () => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <Helmet>
         <meta charSet="utf-8" />
@@ -122,6 +122,6 @@ export const App = () => {
           <InfoPopup />
         </Toolbar>
       </AppBar>
-    </ThemeProvider>
+    </MuiThemeProvider>
   );
 };
