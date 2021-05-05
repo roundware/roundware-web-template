@@ -1,13 +1,14 @@
 import { useRoundware } from "../hooks";
 import React, { Fragment, useState } from "react";
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogContentText from "@material-ui/core/DialogContentText";
 import Typography from "@material-ui/core/Typography";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import Divider from '@material-ui/core/Divider';
+import Divider from "@material-ui/core/Divider";
+import Link from "@material-ui/core/Link";
 
 {/*import assetMapGraphic from '../assets/bhs-map.jpg';*/}
 
@@ -54,22 +55,20 @@ const InfoPopup = () => {
           <Typography variant={"h6"} gutterBottom>
             <br />With Roundware, you can:
           </Typography>
-          <Typography gutterBottom>
-            <ul>
-              <li>
-                create a seamless, non-linear, location-sensitive layer of
-                audio in any geographic space mixed on the fly based on
-                participant input
-              </li>
-              <li>
-                collect audio from participants in real-time via iOS,
-                Android and web-based devices
-              </li>
-              <li>
-                tag collected audio with location and project-based metadata for filtering
-              </li>
-            </ul>
-          </Typography>
+          <ul>
+            <li>
+              create a seamless, non-linear, location-sensitive layer of
+              audio in any geographic space mixed on the fly based on
+              participant input
+            </li>
+            <li>
+              collect audio from participants in real-time via iOS,
+              Android and web-based devices
+            </li>
+            <li>
+              tag collected audio with location and project-based metadata for filtering
+            </li>
+          </ul>
           <Divider />
             <Typography variant={"h6"} gutterBottom>
               <br />Join the fun...
@@ -82,7 +81,10 @@ const InfoPopup = () => {
             </Typography>
             <Typography gutterBottom>
               You can check out codebases for the server and various frameworks
-              on our <a href="https://github.com/roundware">GitHub page</a>.
+              on our&nbsp;
+              <Link href="https://github.com/roundware">
+                GitHub page
+              </Link>.
             </Typography>
 
           {/*<a href="./listen">

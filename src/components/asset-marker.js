@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     height: "auto",
     width: "auto",
-    maxHeight: "80%",
-    maxWidth: "80%",
+    maxHeight: "90%",
+    maxWidth: "90%",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
@@ -48,9 +48,7 @@ const LightboxModal = ({ imageUrl }) => {
         open={open}
         onClose={handleClose}
       >
-        <div className={classes.paper}>
-          <img src={imageUrl} width="100%" />
-        </div>
+        <img src={imageUrl} className={classes.paper} />
       </Modal>
     </div>
   );
