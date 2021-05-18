@@ -94,12 +94,14 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
   const [textAssets, setTextAssets] = useState(null);
 
   useEffect(() => {
-    roundware
-      .getAssets({
-        media_type: "photo",
-        envelope_id: asset.envelope_ids[0],
-      })
-      .then(setImageAssets);
+    if (asset.envelope_ids.length > 0) {
+      roundware
+        .getAssets({
+          media_type: "photo",
+          envelope_id: asset.envelope_ids[0],
+        })
+        .then(setImageAssets);
+    }
   }, [asset]);
 
   useEffect(() => {
