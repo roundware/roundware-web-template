@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
 import MapIcon from '@material-ui/icons/Map';
 import ListenerLocationMarker from './listener-location-marker';
+import clsx from  "clsx";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -19,6 +20,9 @@ const useStyles = makeStyles((theme) => {
       "&:hover": {
         backgroundColor: "#aaaaaa",
       },
+    },
+    hidden: {
+      display: "none",
     },
   };
 });
@@ -34,6 +38,20 @@ const walkingModeButton = () => {
   const lng = loc && loc.longitude
   const center = { lat, lng }
   const ready = typeof(lat) === "number" && typeof(lng) === "number"
+  const availableListenModes = process.env.AVAILABLE_LISTEN_MODES;
+  const availableListenModesArray = availableListenModes.split(",").map(String);
+  const displayListenModeButton = availableListenModesArray.length == 2 ? true : false;
+
+  // set default GeoListenMode
+  useEffect(() => {
+    if (availableListenModesArray[0] == "map") {
+      console.log("default to map mode");
+      setGeoListenMode(GeoListenMode.MANUAL);
+    } else {
+      console.log("default to walking mode");
+      setGeoListenMode(GeoListenMode.AUTOMATIC);
+    }
+  }, [])
 
   // when the listenerLocation is updated, center the map
   useEffect(() => {
@@ -80,7 +98,12 @@ const walkingModeButton = () => {
   return (
     <div>
       <Button
-        className={classes.walkingModeButton}
+        className={
+          clsx(
+            classes.walkingModeButton,
+            displayListenModeButton ? null : classes.hidden
+          )
+        }
         color="primary"
         disabled={busy}
         onClick={toggleWalkingMode}
