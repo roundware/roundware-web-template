@@ -152,6 +152,7 @@ const AssetMarker = ({ asset, clusterer, oms }) => {
     const tracks = Object.values(roundware._mixer.playlist.trackIdMap);
     for (const t of tracks) {
       if (t.currentAsset && t.currentAsset.id == asset.id) {
+        // TODO Change this icon to the desired icon for currently playing assets.
         url =
           "https://fonts.gstatic.com/s/i/materialicons/settings/v15/24px.svg";
         break;
@@ -168,6 +169,7 @@ const AssetMarker = ({ asset, clusterer, oms }) => {
       }}
       clusterer={clusterer}
       onLoad={(m) => {
+        m.asset = asset;
         oms.addMarker(m, () => selectAsset(asset));
       }}
       noClustererRedraw={true}

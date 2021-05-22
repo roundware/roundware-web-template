@@ -98,6 +98,7 @@ const AssetLayer = (props) => {
     if (!(markerClusterer && markerClusterer.ready)) return;
     wait_for_full_page().then(recluster);
   }, [markerClusterer && markerClusterer.ready, assetPage]);
+
   return (
     <MarkerClusterer
       maxZoom={12}
@@ -106,6 +107,42 @@ const AssetLayer = (props) => {
       options={{
         imagePath:
           "https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m",
+      }}
+      calculator={(markers, numStyles) => {
+        // Most of this implementation is copied from the default calculator for
+        // React google maps. Change the `styles` property to configure how
+        // clusters look.
+        let index = 0;
+        const title = "";
+        const count = markers.length.toString();
+        let dv = count;
+        while (dv !== 0) {
+          dv = parseInt(dv, 10) / 10;
+          index++;
+        }
+
+        index = Math.min(index + 1, numStyles);
+
+        // Change style if any contained markers are being played.
+        for (const m of markers) {
+          if (roundware._mixer && roundware._mixer.playlist) {
+            const tracks = Object.values(roundware._mixer.playlist.trackIdMap);
+            for (const t of tracks) {
+              if (t.currentAsset && t.currentAsset.id == m.asset.id) {
+                // TODO Change this number to match whatever index in the
+                // `styles` list is your "currently playing" style.
+                index = 0;
+                break;
+              }
+            }
+          }
+        }
+
+        return {
+          text: count,
+          index: index,
+          title: title,
+        };
       }}
     >
       {(clusterer) => (
