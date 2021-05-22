@@ -209,7 +209,7 @@ const CreateRecordingForm = () => {
     stream.getTracks().forEach((track) => {
       track.stop();
     });
-    wait(100).then(wave.stopStream);
+    wait(100).then(() => wave.stopStream());
 
     set_is_recording(false);
   };
@@ -251,12 +251,7 @@ const CreateRecordingForm = () => {
 
   return (
     <Card className={classes.container}>
-      <Grid
-        container
-        alignItems={"center"}
-        direction={"column"}
-        spacing={8}
-      >
+      <Grid container alignItems={"center"} direction={"column"} spacing={8}>
         <Grid item>
           <Container>
             {/*{ selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }*/}
@@ -279,8 +274,10 @@ const CreateRecordingForm = () => {
         </Grid>
         <ErrorDialog error={error} set_error={set_error} />
         <Grid item xs={12} className={classes.audioVisualizer}>
-          <canvas id="audio-visualizer"
-            style={{height: isExtraSmallScreen ? 100 : 150, width: 300}}/>
+          <canvas
+            id="audio-visualizer"
+            style={{ height: isExtraSmallScreen ? 100 : 150, width: 300 }}
+          />
         </Grid>
 
         {draftMediaUrl ? (
@@ -310,7 +307,7 @@ const CreateRecordingForm = () => {
               style={{
                 margin: "auto",
                 backgroundColor: isRecording ? "red" : "inherit",
-                padding: 0
+                padding: 0,
               }}
               variant="contained"
               onClick={toggleRecording}
@@ -384,19 +381,14 @@ const CreateRecordingForm = () => {
             </CountdownCircleTimer>
           </Grid>
         ) : null}
-        {(draftMediaUrl == "" && !isRecording) ? (
-          <Grid
-            item
-            style={{ padding: 8 }}
-          >
-              <Typography variant={"subtitle1"}>
-                Tap to Record
-              </Typography>
-
+        {draftMediaUrl == "" && !isRecording ? (
+          <Grid item style={{ padding: 8 }}>
+            <Typography variant={"subtitle1"}>Tap to Record</Typography>
           </Grid>
         ) : null}
         <Grid
-          container item
+          container
+          item
           style={{
             paddingLeft: isExtraSmallScreen ? 8 : 32,
             paddingRight: isExtraSmallScreen ? 8 : 32,
@@ -522,8 +514,8 @@ const CreateRecordingForm = () => {
           <DialogContent>
             <CircularProgress color={"primary"} style={{ margin: "auto" }} />
             <DialogContentText>
-              Uploading your contribution now! Please keep this page open until we
-              finish uploading.
+              Uploading your contribution now! Please keep this page open until
+              we finish uploading.
             </DialogContentText>
           </DialogContent>
         </Dialog>

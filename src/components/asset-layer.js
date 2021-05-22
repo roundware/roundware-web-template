@@ -1,9 +1,9 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { MarkerClusterer, useGoogleMap } from "@react-google-maps/api";
 import AssetMarker from "./asset-marker";
 import { useQuery, useRoundware } from "../hooks";
 import { OverlappingMarkerSpiderfier } from "ts-overlapping-marker-spiderfier";
-import {wait} from "../utils";
+import { wait } from "../utils";
 
 const OverlappingMarkerSpiderfierComponent = (props) => {
   const map = useGoogleMap();
@@ -23,10 +23,14 @@ const OverlappingMarkerSpiderfierComponent = (props) => {
   return <Fragment>{props.children(spiderfier)}</Fragment>;
 };
 
-
-
 const AssetLayer = (props) => {
-  const { roundware, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
+  const {
+    roundware,
+    assetPage,
+    selectedAsset,
+    selectAsset,
+    assetsReady,
+  } = useRoundware();
   const map = useGoogleMap();
   const query = useQuery();
   const assets = assetPage;
@@ -54,34 +58,25 @@ const AssetLayer = (props) => {
     if (!selectedAsset) {
       return;
     }
-    const center = { lat: selectedAsset.latitude,
-                     lng: selectedAsset.longitude }
+    const center = {
+      lat: selectedAsset.latitude,
+      lng: selectedAsset.longitude,
+    };
     map.panTo(center);
-    roundware.updateLocation({latitude: selectedAsset.latitude, longitude: selectedAsset.longitude})
-    console.log(selectedAsset);
+    roundware.updateLocation({
+      latitude: selectedAsset.latitude,
+      longitude: selectedAsset.longitude,
+    });
   }, [selectedAsset]);
   if (!map) {
     return null;
   }
-  const markers = (clusterer) => {
-    return <OverlappingMarkerSpiderfierComponent
-      children={(oms) =>
-        assets.map( asset => (
-          <AssetMarker
-            key={asset.id}
-            asset={asset}
-            clusterer={clusterer}
-            oms={oms}
-          />
-        ))}
-    />
-  }
   const recluster = () => {
-    const markerObjs = markerClusterer.markers.slice()
-    markerClusterer.clearMarkers()
-    markerClusterer.repaint()
-    markerClusterer.addMarkers(markerObjs)
-  }
+    const markerObjs = markerClusterer.markers.slice();
+    markerClusterer.clearMarkers();
+    markerClusterer.repaint();
+    markerClusterer.addMarkers(markerObjs);
+  };
   const wait_for_full_page = async () => {
     return new Promise((resolve, reject) => {
       const checkStart = Date.now();
@@ -89,18 +84,20 @@ const AssetLayer = (props) => {
         if (assetPage.length >= markerClusterer.markers.length) {
           resolve();
         } else if (Date.now() > checkStart + 3000) {
-          reject("asset page contains a different number of entries than the marker clusterer")
+          reject(
+            "asset page contains a different number of entries than the marker clusterer"
+          );
         } else {
-          setTimeout(checkLength, 100)
+          setTimeout(checkLength, 100);
         }
       };
       checkLength();
     });
-  }
+  };
   useEffect(() => {
     if (!(markerClusterer && markerClusterer.ready)) return;
     wait_for_full_page().then(recluster);
-  }, [markerClusterer && markerClusterer.ready, assetPage])
+  }, [markerClusterer && markerClusterer.ready, assetPage]);
   return (
     <MarkerClusterer
       maxZoom={12}
@@ -110,9 +107,23 @@ const AssetLayer = (props) => {
         imagePath:
           "https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m",
       }}
-      children={markers}
-    />
+    >
+      {(clusterer) => (
+        <OverlappingMarkerSpiderfierComponent>
+          {(oms) =>
+            assets.map((asset) => (
+              <AssetMarker
+                key={asset.id}
+                asset={asset}
+                clusterer={clusterer}
+                oms={oms}
+              />
+            ))
+          }
+        </OverlappingMarkerSpiderfierComponent>
+      )}
+    </MarkerClusterer>
   );
-}
+};
 
 export default AssetLayer;

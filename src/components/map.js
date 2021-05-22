@@ -14,7 +14,7 @@ import WalkingModeButton from "./walking-mode-button";
 const useStyles = makeStyles((theme) => {
   return {
     roundwareMap: {
-      flexGrow: 1
+      flexGrow: 1,
     },
   };
 });
@@ -29,10 +29,15 @@ const RoundwareMap = (props) => {
   }
 
   const updateListenerLocation = () => {
-    if (!map) {return}
+    if (!map) {
+      return;
+    }
     const center = map.getCenter();
-    roundware.updateLocation({latitude: center.lat(), longitude: center.lng()})
-  }
+    roundware.updateLocation({
+      latitude: center.lat(),
+      longitude: center.lng(),
+    });
+  };
 
   // when the listener location changes, center the map
   return (

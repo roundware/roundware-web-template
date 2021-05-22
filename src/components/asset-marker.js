@@ -8,11 +8,13 @@ import { TagsDisplay } from "./asset-tags";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import { ThemeProvider as MuiThemeProvider, makeStyles } from "@material-ui/core/styles";
+import {
+  ThemeProvider as MuiThemeProvider,
+  makeStyles,
+} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import { lightTheme } from "../styles";
 import { useAsync } from "react-async";
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,34 +46,26 @@ const LightboxModal = ({ imageUrl }) => {
   return (
     <div>
       <img src={imageUrl} width="150px" onClick={handleOpen} />
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
+      <Modal open={open} onClose={handleClose}>
         <img src={imageUrl} className={classes.paper} />
       </Modal>
     </div>
   );
-}
+};
 
 const TextDisplay = ({ textUrl }) => {
-  const [storedText, setStoredText] = useState(null)
+  const [storedText, setStoredText] = useState(null);
 
   useEffect(() => {
-    fetch(textUrl)
-      .then(function(response) {
-        response.text().then(function(text) {
-          setStoredText(text);
-        });
+    fetch(textUrl).then(function (response) {
+      response.text().then(function (text) {
+        setStoredText(text);
       });
+    });
   }, []);
 
-  return (
-    <div>
-      {storedText}
-    </div>
-  );
-}
+  return <div>{storedText}</div>;
+};
 
 const AssetInfoWindow = ({ asset }) => {
   const { selectedAsset, selectAsset, roundware } = useRoundware();
@@ -138,9 +132,7 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
             {primaryImageUrl ? (
               <LightboxModal imageUrl={primaryImageUrl} />
             ) : null}
-            {primaryTextUrl ? (
-              <TextDisplay textUrl={primaryTextUrl} />
-            ) : null}
+            {primaryTextUrl ? <TextDisplay textUrl={primaryTextUrl} /> : null}
             <AssetPlayer
               style={{ width: "100%", marginTop: 10 }}
               asset={asset}
@@ -154,18 +146,30 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
 };
 
 const AssetMarker = ({ asset, clusterer, oms }) => {
-  const { selectAsset } = useRoundware();
-  const iconPin = {
-    url: "https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg",
-    scaledSize: new google.maps.Size(20, 20),
-  };
+  const { roundware, selectAsset } = useRoundware();
+  let url = "https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg";
+  if (roundware._mixer && roundware._mixer.playlist) {
+    const tracks = Object.values(roundware._mixer.playlist.trackIdMap);
+    for (const t of tracks) {
+      if (t.currentAsset && t.currentAsset.id == asset.id) {
+        url =
+          "https://fonts.gstatic.com/s/i/materialicons/settings/v15/24px.svg";
+        break;
+      }
+    }
+  }
 
   return (
     <Marker
       position={{ lat: asset.latitude, lng: asset.longitude }}
-      icon={iconPin}
+      icon={{
+        url,
+        scaledSize: new google.maps.Size(20, 20),
+      }}
       clusterer={clusterer}
-      onLoad={(m) => oms.addMarker(m, () => selectAsset(asset))}
+      onLoad={(m) => {
+        oms.addMarker(m, () => selectAsset(asset));
+      }}
       noClustererRedraw={true}
     >
       <AssetInfoWindow asset={asset} />
