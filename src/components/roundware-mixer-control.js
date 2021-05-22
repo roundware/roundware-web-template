@@ -12,43 +12,44 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const RoundwareMixerControl = props => {
+const RoundwareMixerControl = (props) => {
   const { roundware, forceUpdate } = useRoundware();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const isPlaying = roundware._mixer && roundware._mixer.playing
+  const isPlaying = roundware._mixer && roundware._mixer.playing;
 
   const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setSnackbarOpen(false);
   };
 
-  if (roundware.activateMixer && !roundware._mixer) {
-    roundware
-      .activateMixer({ geoListenMode: GeoListenMode.MANUAL })
-      .then((token, force) => {
-        const listen_tags = roundware.uiConfig.listen[0].display_items.map(
-          (i) => i.tag_id
-        );
-        roundware._mixer.updateParams({
-          listenerLocation: roundware._listenerLocation,
-          minDist: 0,
-          maxDist: 0,
-          recordingRadius: 0,
-          listenTagIds: listen_tags,
-        });
-        forceUpdate();
-      });
-  }
-
   useEffect(() => {
+    if (roundware._mixer) {
+      roundware
+        .activateMixer({ geoListenMode: GeoListenMode.MANUAL })
+        .then((token, force) => {
+          const listen_tags = roundware.uiConfig.listen[0].display_items.map(
+            (i) => i.tag_id
+          );
+          roundware._mixer.updateParams({
+            listenerLocation: roundware._listenerLocation,
+            minDist: 0,
+            maxDist: 0,
+            recordingRadius: 0,
+            listenTagIds: listen_tags,
+          });
+          forceUpdate();
+        });
+    }
+
     // when the control for the mixer is unmounted, clean up by stopping the mixer
     return () => {
-      if (roundware._mixer &&  roundware._mixer.active) {
+      if (roundware._mixer && roundware._mixer.active) {
         roundware._mixer.toggle(roundware._mixer.token);
       }
-  }}, [])
+    };
+  }, [roundware]);
 
   return (
     <>
@@ -87,11 +88,13 @@ const RoundwareMixerControl = props => {
         disabled={isPlaying ? false : true}
         onClick={() => {
           if (!roundware._mixer) {
-            return
+            return;
           } else {
-            const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
-            trackIds.forEach(
-              audioTrackId => roundware._mixer.skipTrack(audioTrackId)
+            const trackIds = Object.keys(
+              roundware._mixer.playlist.trackIdMap
+            ).map((id) => parseInt(id));
+            trackIds.forEach((audioTrackId) =>
+              roundware._mixer.skipTrack(audioTrackId)
             );
             setSnackbarOpen(true);
           }
@@ -103,7 +106,7 @@ const RoundwareMixerControl = props => {
         open={snackbarOpen}
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
         <Alert onClose={handleSnackbarClose} severity="success">
           Remixing audio: skipping ahead!
