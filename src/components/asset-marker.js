@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { InfoWindow, Marker, useGoogleMap } from "@react-google-maps/api";
+import {
+  InfoWindow,
+  Marker,
+  useGoogleMap,
+  Animation,
+} from "@react-google-maps/api";
 import moment from "moment";
 import AssetPlayer from "./asset-player";
 import { useRoundware } from "../hooks";
@@ -145,18 +150,22 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
   );
 };
 
+const defaultMarkerIcon =
+  "https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg";
+const playingMarkerIcon =
+  "https://fonts.gstatic.com/s/i/materialicons/settings/v15/24px.svg";
+
 const AssetMarker = ({ asset, clusterer, oms }) => {
-  const { roundware, selectAsset } = useRoundware();
-  let url = "https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg";
-  if (roundware._mixer && roundware._mixer.playlist) {
-    const tracks = Object.values(roundware._mixer.playlist.trackIdMap);
-    for (const t of tracks) {
-      if (t.currentAsset && t.currentAsset.id == asset.id) {
-        // TODO Change this icon to the desired icon for currently playing assets.
-        url =
-          "https://fonts.gstatic.com/s/i/materialicons/settings/v15/24px.svg";
-        break;
-      }
+  const { roundware, selectAsset, playingAssets } = useRoundware();
+  let url = defaultMarkerIcon;
+  let anim = null;
+  for (const a of playingAssets) {
+    if (a && a.id == asset.id) {
+      // TODO Change this icon to the desired icon for currently playing assets.
+      url = playingMarkerIcon;
+      anim = google.maps.Animation.BOUNCE;
+      console.log(`rendering current playing ${asset.id}`);
+      break;
     }
   }
 
@@ -167,12 +176,13 @@ const AssetMarker = ({ asset, clusterer, oms }) => {
         url,
         scaledSize: new google.maps.Size(20, 20),
       }}
+      animation={anim}
       clusterer={clusterer}
       onLoad={(m) => {
         m.asset = asset;
         oms.addMarker(m, () => selectAsset(asset));
       }}
-      noClustererRedraw={true}
+      noClustererRedraw={false}
     >
       <AssetInfoWindow asset={asset} />
     </Marker>

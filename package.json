@@ -45,7 +45,7 @@
     "react-router-dom": "^5.2.0",
     "react-select": "^3.2.0",
     "regenerator-runtime": "^0.13.7",
-    "roundware-web-framework": "^0.11.0-alpha.24",
+    "roundware-web-framework": "^0.11.0-alpha.25",
     "standardized-audio-context": "^24.1.20",
     "ts-overlapping-marker-spiderfier": "^1.0.3"
   },

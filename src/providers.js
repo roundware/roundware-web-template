@@ -83,6 +83,7 @@ export const RoundwareProvider = (props) => {
   const [assetsPerPage, setAssetsPerPage] = useState(10000);
   const [tagLookup, setTagLookup] = useState({});
   const [filteredAssets, setFilteredAssets] = useState([]);
+  const [playingAssets, setPlayingAssets] = useState([]);
   const deviceId = useDeviceID();
   const [assetPage, setAssetPage] = useState([]);
   const [, forceUpdate] = useReducer((x) => !x, false);
@@ -194,6 +195,10 @@ export const RoundwareProvider = (props) => {
     setFilteredAssets(filteredAssets);
   };
 
+  const updatePlaying = (assets) => {
+    setPlayingAssets(assets || []);
+  };
+
   useEffect(() => {
     if (roundware._assetData) {
       const filteredAssets = filterAssets(roundware._assetData);
@@ -250,6 +255,7 @@ export const RoundwareProvider = (props) => {
       roundware.updateLocation(roundware._project.location);
       roundware.onUpdateLocation = forceUpdate;
       roundware.onUpdateAssets = updateAssets;
+      roundware.onPlayAssets = updatePlaying;
       setRoundware(roundware);
     });
   }, []);
@@ -315,6 +321,7 @@ export const RoundwareProvider = (props) => {
         // computed properties
         assetPage,
         assetsReady,
+        playingAssets,
       }}
     >
       {props.children}

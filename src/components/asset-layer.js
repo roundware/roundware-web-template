@@ -30,6 +30,7 @@ const AssetLayer = (props) => {
     selectedAsset,
     selectAsset,
     assetsReady,
+    playingAssets,
   } = useRoundware();
   const map = useGoogleMap();
   const query = useQuery();
@@ -125,15 +126,12 @@ const AssetLayer = (props) => {
 
         // Change style if any contained markers are being played.
         for (const m of markers) {
-          if (roundware._mixer && roundware._mixer.playlist) {
-            const tracks = Object.values(roundware._mixer.playlist.trackIdMap);
-            for (const t of tracks) {
-              if (t.currentAsset && t.currentAsset.id == m.asset.id) {
-                // TODO Change this number to match whatever index in the
-                // `styles` list is your "currently playing" style.
-                index = 0;
-                break;
-              }
+          for (const a of playingAssets) {
+            if (a && a.id == m.asset.id) {
+              // TODO Change this number to match whatever index in the
+              // `styles` list is your "currently playing" style.
+              index = 0;
+              break;
             }
           }
         }
