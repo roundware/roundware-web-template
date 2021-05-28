@@ -72,6 +72,14 @@ const AssetLayer = (props) => {
   if (!map) {
     return null;
   }
+
+  // When a new asset starts playing, update the map markers and clusters.
+  useEffect(() => {
+    if (markerClusterer) {
+      markerClusterer.repaint();
+    }
+  }, [playingAssets]);
+
   const recluster = () => {
     const markerObjs = markerClusterer.markers.slice();
     markerClusterer.clearMarkers();
