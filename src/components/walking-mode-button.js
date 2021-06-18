@@ -38,6 +38,7 @@ const walkingModeButton = () => {
   const lng = loc && loc.longitude
   const center = { lat, lng }
   const ready = typeof(lat) === "number" && typeof(lng) === "number"
+  const isPlaying = roundware._mixer && roundware._mixer.playing
   const availableListenModes = process.env.AVAILABLE_LISTEN_MODES;
   const availableListenModesArray = availableListenModes.split(",").map(String);
   const displayListenModeButton = availableListenModesArray.length == 2 ? true : false;
@@ -64,27 +65,35 @@ const walkingModeButton = () => {
     }
   }, [lat, lng])
 
+  const enterMapMode = () => {
+    console.log("switching to map mode");
+    // zoom out
+    map.setZoom(5);
+    // enable map panning
+    map.setOptions({gestureHandling: "cooperative"});
+    // stop listening for location updates
+    setGeoListenMode(GeoListenMode.MANUAL);
+    // update text instructions?
+  };
+
+  const enterWalkingMode = () => {
+    console.log("switching to walking mode");
+    // disable map panning
+    map.setOptions({gestureHandling: "none"});
+    // zoom in
+    map.setZoom(19);
+    // determine user location and listen for updates
+    setGeoListenMode(GeoListenMode.AUTOMATIC);
+    // update text instructions?
+    // use spinner to indicate location is being determined initially?
+  };
+
   const toggleWalkingMode = () => {
     setBusy(true);
     if (geoListenMode === GeoListenMode.AUTOMATIC) {
-      console.log("switching to map mode");
-      // zoom out
-      map.setZoom(5);
-      // enable map panning
-      map.setOptions({gestureHandling: "cooperative"});
-      // stop listening for location updates
-      setGeoListenMode(GeoListenMode.MANUAL);
-      // update text instructions?
+      enterMapMode();
     } else if ([GeoListenMode.MANUAL, GeoListenMode.DISABLED].includes(geoListenMode)) {
-      console.log("switching to walking mode");
-      // disable map panning
-      map.setOptions({gestureHandling: "none"});
-      // zoom in
-      map.setZoom(17);
-      // determine user location and listen for updates
-      setGeoListenMode(GeoListenMode.AUTOMATIC);
-      // update text instructions?
-      // use spinner to indicate location is being determined initially
+      enterWalkingMode();
     }
     if (roundware._mixer) {
       const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
@@ -105,7 +114,7 @@ const walkingModeButton = () => {
           )
         }
         color="primary"
-        disabled={busy}
+        disabled={busy || !isPlaying}
         onClick={toggleWalkingMode}
       >
         {(geoListenMode === GeoListenMode.AUTOMATIC) ? (
