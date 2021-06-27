@@ -243,6 +243,7 @@ export const RoundwareProvider = (props) => {
       assetFilters: { submitted: true, media_type: "audio" },
       listenerLocation: initial_loc,
       assetUpdateInterval: 30 * 1000,
+      prefetchSpeakerAudio: true,
     });
 
     roundware.connect().then(() => {
