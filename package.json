@@ -22,7 +22,10 @@
     "@material-ui/pickers": "^3.3.10",
     "@react-google-maps/api": "^1.13.0",
     "@turf/distance": "^6.3.0",
-    "@types/react": "^17.0.4",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.4.1",
+    "@types/react": "^17.0.14",
+    "@types/react-dom": "^17.0.9",
     "audio-recorder-polyfill": "^0.4.1",
     "autosuggest-highlight": "^3.1.1",
     "core-js": "^3.11.0",
@@ -47,12 +50,15 @@
     "regenerator-runtime": "^0.13.7",
     "roundware-web-framework": "^0.11.0-alpha.19",
     "standardized-audio-context": "^24.1.20",
-    "ts-overlapping-marker-spiderfier": "^1.0.3"
+    "ts-overlapping-marker-spiderfier": "^1.0.3",
+    "typescript": "^4.3.5"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
     "@babel/preset-env": "^7.13.15",
     "@babel/preset-react": "^7.13.13",
+    "@types/material-ui": "^0.21.9",
+    "@types/react-router-dom": "^5.1.8",
     "babel-plugin-transform-imports": "^2.0.0",
     "dotenv": "^8.2.0",
     "parcel-bundler": "^1.12.5"
