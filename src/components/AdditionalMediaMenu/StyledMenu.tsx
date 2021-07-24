@@ -1,5 +1,5 @@
 import { MenuProps, withStyles } from '@material-ui/core';
-import { Menu, MenuItem } from 'material-ui';
+import { Menu, MenuItem } from '@material-ui/core';
 
 export const StyledMenu = withStyles({
 	paper: {

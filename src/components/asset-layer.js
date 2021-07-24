@@ -1,9 +1,9 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { MarkerClusterer, useGoogleMap } from "@react-google-maps/api";
 import AssetMarker from "./asset-marker";
 import { useQuery, useRoundware } from "../hooks";
 import { OverlappingMarkerSpiderfier } from "ts-overlapping-marker-spiderfier";
-import {wait} from "../utils";
+import { wait } from "../utils";
 
 const OverlappingMarkerSpiderfierComponent = (props) => {
   const map = useGoogleMap();
@@ -54,10 +54,12 @@ const AssetLayer = (props) => {
     if (!selectedAsset) {
       return;
     }
-    const center = { lat: selectedAsset.latitude,
-                     lng: selectedAsset.longitude }
+    const center = {
+      lat: selectedAsset.latitude,
+      lng: selectedAsset.longitude
+    }
     map.panTo(center);
-    roundware.updateLocation({latitude: selectedAsset.latitude, longitude: selectedAsset.longitude})
+    roundware.updateLocation({ latitude: selectedAsset.latitude, longitude: selectedAsset.longitude })
     console.log(selectedAsset);
   }, [selectedAsset]);
   if (!map) {
@@ -66,7 +68,7 @@ const AssetLayer = (props) => {
   const markers = (clusterer) => {
     return <OverlappingMarkerSpiderfierComponent
       children={(oms) =>
-        assets.map( asset => (
+        assets.map(asset => (
           <AssetMarker
             key={asset.id}
             asset={asset}

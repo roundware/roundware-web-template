@@ -37,7 +37,7 @@ export const TagFilterMenu = ({ tag_group }) => {
     if (!roundware._mixer) {
       return
     } else {
-      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map(id => parseInt(id));
       trackIds.forEach(
         audioTrackId => roundware._mixer.skipTrack(audioTrackId)
       );
@@ -66,7 +66,7 @@ export const TagFilterMenu = ({ tag_group }) => {
             id={tag_group.name}
             classes={classes}
             options={options}
-            getOptionLabel={(option) => option ? option.label: ""}
+            getOptionLabel={(option) => option ? option.label : ""}
             onChange={handleChange}
             getOptionSelected={option => selectedTagGroupTags.indexOf(option.value) !== -1}
             value={options.filter(o => selectedTagGroupTags.indexOf(o.value) !== -1)}

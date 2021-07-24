@@ -1,5 +1,6 @@
-import RoundwareContext, { IRoundwareContext } from 'context/RoundwareContext';
-import { useDeviceID } from 'hooks/useDeviceID';
+import * as React from 'react';
+import RoundwareContext, { IRoundwareContext } from '../context/RoundwareContext';
+import { useDeviceID } from '../hooks/useDeviceID';
 import moment from 'moment';
 import { useEffect, useReducer, useState } from 'react';
 import { GeoListenMode, Roundware } from 'roundware-web-framework';

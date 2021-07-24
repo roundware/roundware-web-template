@@ -45,10 +45,11 @@ const RoundwareMixerControl = props => {
   useEffect(() => {
     // when the control for the mixer is unmounted, clean up by stopping the mixer
     return () => {
-      if (roundware._mixer &&  roundware._mixer.active) {
+      if (roundware._mixer && roundware._mixer.active) {
         roundware._mixer.toggle(roundware._mixer.token);
       }
-  }}, [])
+    }
+  }, [])
 
   return (
     <>
@@ -89,7 +90,7 @@ const RoundwareMixerControl = props => {
           if (!roundware._mixer) {
             return
           } else {
-            const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+            const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map(id => parseInt(id));
             trackIds.forEach(
               audioTrackId => roundware._mixer.skipTrack(audioTrackId)
             );

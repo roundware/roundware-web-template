@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef }  from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import LocationOnIcon from '@material-ui/icons/LocationOn';

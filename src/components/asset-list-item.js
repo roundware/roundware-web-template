@@ -15,9 +15,8 @@ const AssetListItem = ({ asset, player }) => {
   const isSelected = selectedAsset && selectedAsset.id === asset.id;
   return (
     <div
-      className={`asset-list--item ${
-        isSelected ? "asset-list--item--selected" : ""
-      }`}
+      className={`asset-list--item ${isSelected ? "asset-list--item--selected" : ""
+        }`}
     >
       <div className="created">{moment(asset.created).format("LLL")}</div>
       <a className={asset.user && asset.user.username ? "" : "hidden"} href="#">

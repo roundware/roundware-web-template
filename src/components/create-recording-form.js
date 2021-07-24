@@ -24,7 +24,7 @@ import Card from "@material-ui/core/Card";
 import { useHistory } from "react-router-dom";
 import AudioPlayer from "material-ui-audio-player";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import AdditionalMediaMenu from "./additional-media-menu";
+import AdditionalMediaMenu from "./AdditionalMediaMenu";
 import { wait } from "../utils";
 
 const visualizerOptions = {
@@ -280,7 +280,7 @@ const CreateRecordingForm = () => {
         <ErrorDialog error={error} set_error={set_error} />
         <Grid item xs={12} className={classes.audioVisualizer}>
           <canvas id="audio-visualizer"
-            style={{height: isExtraSmallScreen ? 100 : 150, width: 300}}/>
+            style={{ height: isExtraSmallScreen ? 100 : 150, width: 300 }} />
         </Grid>
 
         {draftMediaUrl ? (
@@ -389,9 +389,9 @@ const CreateRecordingForm = () => {
             item
             style={{ padding: 8 }}
           >
-              <Typography variant={"subtitle1"}>
-                Tap to Record
-              </Typography>
+            <Typography variant={"subtitle1"}>
+              Tap to Record
+            </Typography>
 
           </Grid>
         ) : null}
@@ -447,7 +447,7 @@ const CreateRecordingForm = () => {
             </DialogActions>
           </Dialog>
           {process.env.ALLOW_PHOTOS === "true" ||
-          process.env.ALLOW_TEXT === "true" ? (
+            process.env.ALLOW_TEXT === "true" ? (
             <AdditionalMediaMenu
               onSetText={setTextAsset}
               onSetImage={(file) => setImageAssets([...imageAssets, file])}

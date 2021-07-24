@@ -28,7 +28,7 @@ const ListenerLocationMarker = () => {
       <Circle
         radius={roundware._project.recordingRadius}
         center={center}
-        onLoad={ circle => {
+        onLoad={circle => {
           const newBounds = circle.getBounds()
           map.panToBounds(newBounds)
         }}
@@ -57,7 +57,7 @@ const ListenerLocationMarker = () => {
         >
           <Typography
             variant="body2"
-            style={{"color": "black"}}
+            style={{ "color": "black" }}
           >
             You Are Here
           </Typography>

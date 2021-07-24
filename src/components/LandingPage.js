@@ -1,6 +1,6 @@
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { ActionButton } from "./actionButton";
+import ActionButton from "./ActionButton";
 import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRoundware } from "../hooks";
@@ -67,17 +67,17 @@ export const LandingPage = (props) => {
   }
   return (
     <Container
-      style={{"paddingRight": 0, "paddingLeft": 0}}>
+      style={{ "paddingRight": 0, "paddingLeft": 0 }}>
       <Grid
         container
         className={classes.landingHeader}>
         <Grid
           container
           justify="center"
-          style={{height: "100px"}}>
+          style={{ height: "100px" }}>
           <Grid
             item
-            style={{margin: 'auto', height: "15vh", "textAlign": "center", "paddingTop": 15}}
+            style={{ margin: 'auto', height: "15vh", "textAlign": "center", "paddingTop": 15 }}
             sm={12}>
             {/*<Typography
               variant={"h2"}
@@ -96,7 +96,7 @@ export const LandingPage = (props) => {
             <Typography
               variant={"subtitle1"}
               className={classes.landingTagline}
-              style={{"textAlign": "center", height: "15vh"}}>
+              style={{ "textAlign": "center", height: "15vh" }}>
               Contributory Audio Augmented Reality
               <br />
               for Art, Education and Documentary
@@ -106,12 +106,12 @@ export const LandingPage = (props) => {
         <Grid
           container
           justify="center"
-          style={{height: "200px"}}>
+          style={{ height: "200px" }}>
           <Grid item>
             <ActionButton
               label={"Listen"}
               linkTo={"/listen"}
-              style={{width: "100%"}}/>
+              style={{ width: "100%" }} />
           </Grid>
           <Grid item>
             <ActionButton

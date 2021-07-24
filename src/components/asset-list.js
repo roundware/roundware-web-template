@@ -29,9 +29,8 @@ const AssetList = (props) => {
       <div className="asset-list--header">
         <div className="header-controls">
           <button
-            className={`minimizeButton fa fa-${
-              minimized ? "expand-alt" : "compress-alt"
-            }`}
+            className={`minimizeButton fa fa-${minimized ? "expand-alt" : "compress-alt"
+              }`}
             onClick={() => set_minimized(!minimized)}
           />
           <button

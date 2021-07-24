@@ -75,8 +75,8 @@ const LocationSelectForm = () => {
   }
   const classes = useStyles();
   const history = useHistory();
-  const [error, set_error] = useState( null );
-  const [geolocating, set_geolocating] = useState( null );
+  const [error, set_error] = useState(null);
+  const [geolocating, set_geolocating] = useState(null);
   const gmapsLibraries = ["places"];
 
   useEffect(() => {
@@ -103,16 +103,16 @@ const LocationSelectForm = () => {
         })
         .catch(err => {
           set_error(err);
-        }).finally( () => {
-        set_geolocating(false);
-      });
+        }).finally(() => {
+          set_geolocating(false);
+        });
     }
   };
 
   return (
     <Card className={classes.container}>
       <ErrorDialog error={error} set_error={set_error} />
-      <CardContent style={{padding: 0}} >
+      <CardContent style={{ padding: 0 }} >
         <Typography
           variant={"h4"}
           className={classes.locationHeaderLabel}
@@ -180,7 +180,7 @@ const LocationSelectForm = () => {
           aria-label="use my location"
           onClick={getGeolocation}
         >
-          {geolocating ? <CircularProgress /> : "Use My Location" }
+          {geolocating ? <CircularProgress /> : "Use My Location"}
         </Button>
         <Button
           className={classes.cardActionButton}

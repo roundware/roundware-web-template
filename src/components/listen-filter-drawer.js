@@ -60,7 +60,7 @@ const ListenFilterDrawer = () => {
       roundware._mixer.updateParams({
         startDate: date,
       })
-      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map(id => parseInt(id));
       trackIds.forEach(
         audioTrackId => roundware._mixer.skipTrack(audioTrackId)
       );
@@ -75,7 +75,7 @@ const ListenFilterDrawer = () => {
       roundware._mixer.updateParams({
         endDate: date,
       })
-      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map( id => parseInt(id) );
+      const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map(id => parseInt(id));
       trackIds.forEach(
         audioTrackId => roundware._mixer.skipTrack(audioTrackId)
       );

@@ -1,5 +1,5 @@
-import DraftRecordingContext from 'context/DraftRecordingContext';
-import RoundwareContext from 'context/RoundwareContext';
+import DraftRecordingContext from '../context/DraftRecordingContext';
+import RoundwareContext from '../context/RoundwareContext';
 import { useContext } from 'react';
 
 import { useLocation } from 'react-router';

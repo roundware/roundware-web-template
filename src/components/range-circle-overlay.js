@@ -58,7 +58,7 @@ const RangeCircleOverlay = () => {
   const lat = loc && loc.latitude
   const lng = loc && loc.longitude
   const center = { lat, lng }
-  const ready = typeof(lat) === "number" && typeof(lng) === "number"
+  const ready = typeof (lat) === "number" && typeof (lng) === "number"
   const { ref, width, height } = useDimensions();
   const [resizeListener, set_resize_listener] = useState(null)
   const isPlaying = roundware._mixer && roundware._mixer.playing
@@ -115,7 +115,7 @@ const RangeCircleOverlay = () => {
   return (
     <Box
       className={classes.circleOverlay}
-      style={{"visibility": (geoListenMode === GeoListenMode.MANUAL && isPlaying) ? "inherit" : "hidden"}}
+      style={{ "visibility": (geoListenMode === GeoListenMode.MANUAL && isPlaying) ? "inherit" : "hidden" }}
     >
       <div
         ref={ref}

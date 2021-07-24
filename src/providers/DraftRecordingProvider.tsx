@@ -1,4 +1,4 @@
-import DraftRecordingContext, { IDraftRecordingContext } from 'context/DraftRecordingContext';
+import DraftRecordingContext, { IDraftRecordingContext } from '../context/DraftRecordingContext';
 import { useEffect, useState } from 'react';
 
 export const DraftRecordingProvider = ({ roundware, children }) => {

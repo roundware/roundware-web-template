@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Link from "@material-ui/core/Link";
 
-{/*import assetMapGraphic from '../assets/bhs-map.jpg';*/}
+{/*import assetMapGraphic from '../assets/bhs-map.jpg';*/ }
 
 
 const InfoPopup = () => {
@@ -25,7 +25,7 @@ const InfoPopup = () => {
   };
 
   return (
-    <div style={{position: "absolute", right: 10}}>
+    <div style={{ position: "absolute", right: 10 }}>
       <Button onClick={handleClickOpen}>
         INFO
       </Button>
@@ -70,22 +70,22 @@ const InfoPopup = () => {
             </li>
           </ul>
           <Divider />
-            <Typography variant={"h6"} gutterBottom>
-              <br />Join the fun...
-            </Typography>
-            <Typography gutterBottom>
-              Roundware is an actively-developed open-source project and is
-              free for anyone to use. It was initially developed for sound art
-              installations, but has since been used for innovative museum
-              audio tours as well as other educational purposes.
-            </Typography>
-            <Typography gutterBottom>
-              You can check out codebases for the server and various frameworks
-              on our&nbsp;
-              <Link href="https://github.com/roundware">
-                GitHub page
-              </Link>.
-            </Typography>
+          <Typography variant={"h6"} gutterBottom>
+            <br />Join the fun...
+          </Typography>
+          <Typography gutterBottom>
+            Roundware is an actively-developed open-source project and is
+            free for anyone to use. It was initially developed for sound art
+            installations, but has since been used for innovative museum
+            audio tours as well as other educational purposes.
+          </Typography>
+          <Typography gutterBottom>
+            You can check out codebases for the server and various frameworks
+            on our&nbsp;
+            <Link href="https://github.com/roundware">
+              GitHub page
+            </Link>.
+          </Typography>
 
           {/*<a href="./listen">
             <img id="map" src={assetMapGraphic} style={{width: "100%"}} />

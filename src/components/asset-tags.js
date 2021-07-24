@@ -8,7 +8,7 @@ export const TagDisplay = ({ tagId }) => {
     return (
       <>
         <span className="rw-tag">{description}</span>
-        <br/>
+        <br />
       </>
     )
   } else {

@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const TagSelectForm = ({match}) => {
+const TagSelectForm = ({ match }) => {
   const classes = useStyles();
   const { roundware } = useRoundware();
   const draftRecording = useRoundwareDraft();
@@ -81,7 +81,7 @@ const TagSelectForm = ({match}) => {
     tagGroupIndex = parseInt(match.params.tagGroupIndex);
   }
   const tagGroups = roundware.uiConfig && roundware.uiConfig.speak || {};
-  const tagGroup = tagGroups[tagGroupIndex] || {display_items: []};
+  const tagGroup = tagGroups[tagGroupIndex] || { display_items: [] };
 
   const choices = tagGroup.display_items.filter((item) => {
     return (
@@ -90,7 +90,7 @@ const TagSelectForm = ({match}) => {
     );
   });
 
-  useEffect( () => {
+  useEffect(() => {
     // make sure we're thinking about a loaded framework
     if (!roundware.uiConfig || !roundware.uiConfig.speak) {
       return;
@@ -133,24 +133,24 @@ const TagSelectForm = ({match}) => {
     const isSelected = draftRecording.tags.indexOf(tagId) !== -1;
     let newTags;
     if (isSelected) {
-      newTags = draftRecording.tags.filter( t => t !== tagId)
+      newTags = draftRecording.tags.filter(t => t !== tagId)
     } else {
       // other tags in this set of choices should be unselected
       const choiceIds = choices.map(c => c.id)
-      newTags = draftRecording.tags.filter( t => choiceIds.indexOf(t) === -1)
+      newTags = draftRecording.tags.filter(t => choiceIds.indexOf(t) === -1)
       newTags = [...newTags, tagId]
     }
     draftRecording.setTags(newTags);
     // let the ui respond to the selection before navigating
-    wait(500 ).then(
+    wait(500).then(
       () => {
-        if (isSelected) {return}
+        if (isSelected) { return }
         const isLastGroup = tagGroups.length <= tagGroupIndex + 1;
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
         if (isLastGroup) {
           history.push('/speak/location');
         } else {
-          const nextUrl = generatePath(match.path, {tagGroupIndex: tagGroupIndex + 1})
+          const nextUrl = generatePath(match.path, { tagGroupIndex: tagGroupIndex + 1 })
           history.push(nextUrl);
         }
       }
@@ -178,9 +178,8 @@ const TagSelectForm = ({match}) => {
           return (
             <Card
               key={choice.id}
-              className={`${classes.tagCard} ${
-                isSelected ? classes.selectedTagCard : ""
-              }`}
+              className={`${classes.tagCard} ${isSelected ? classes.selectedTagCard : ""
+                }`}
               onClick={(e) => {
                 toggleTagSelected(choice.id)
                 e.preventDefault()
@@ -194,7 +193,7 @@ const TagSelectForm = ({match}) => {
                     size={"medium"}
                   />
                 }
-                label={<Typography children={[choice.tag_display_text]}/>}
+                label={<Typography children={[choice.tag_display_text]} />}
               />
             </Card>
           );
@@ -211,7 +210,7 @@ const TagSelectForm = ({match}) => {
             if (tagGroupIndex === 0) {
               history.replace("/")
             } else {
-              const nextUrl = generatePath(match.path, {tagGroupIndex: tagGroupIndex - 1})
+              const nextUrl = generatePath(match.path, { tagGroupIndex: tagGroupIndex - 1 })
               history.replace(nextUrl);
             }
           }}

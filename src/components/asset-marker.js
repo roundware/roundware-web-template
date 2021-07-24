@@ -3,7 +3,7 @@ import { InfoWindow, Marker, useGoogleMap } from "@react-google-maps/api";
 import moment from "moment";
 import AssetPlayer from "./asset-player";
 import { useRoundware } from "../hooks";
-import { AssetActionButtons } from "./asset-action-buttons";
+import { AssetActionButtons } from "./AssetActionButtons";
 import { TagsDisplay } from "./asset-tags";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";

@@ -1,4 +1,4 @@
-import { useStyles } from 'components/ActionButton/styles';
+import { useStyles } from './styles';
 import { useRoundware } from 'hooks';
 import { useState } from 'react';
 

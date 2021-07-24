@@ -20,9 +20,8 @@ export const PhotoPickerMenuItem = React.forwardRef(({ onSetImage, openPicker, s
 
 interface PhotoPickerInput {
 	onSetImage: (file: HTMLInputElement[`files`][number]) => unknown;
-	ref: LegacyRef<HTMLInputElement>;
 }
-export const PhotoPickerInput = React.forwardRef(({ onSetImage, setAnchorEl, ref }: PhotoPickerInput | any) => (
+export const PhotoPickerInput = React.forwardRef(({ onSetImage, setAnchorEl }, ref: PhotoPickerInput | any) => (
 	<input
 		ref={ref}
 		type='file'

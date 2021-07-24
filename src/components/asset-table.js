@@ -88,9 +88,8 @@ const AssetTable = (props) => {
                       className={
                         asset.user && asset.user.username ? "" : "hidden"
                       }
-                      title={`see all of ${
-                        (asset.user && asset.user.username) || "anonymous"
-                      }'s submissions`}
+                      title={`see all of ${(asset.user && asset.user.username) || "anonymous"
+                        }'s submissions`}
                       onClick={() =>
                         setUserFilter(asset.user && asset.user.username)
                       }

@@ -8,9 +8,13 @@ import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
-import favicon from 'assets/favicon.png';
-import logoSmall from 'assets/rw-full-logo-wb.png';
-import logoMinimal from 'assets/rw-logo-minimal.png';
+
+// @ts-ignore
+import favicon from '../assets/favicon.png';
+// @ts-ignore
+import logoSmall from '../assets/rw-full-logo-wb.png';
+// @ts-ignore
+import logoMinimal from '../assets/rw-logo-minimal.png';
 import { useRoundware } from '../hooks';
 import { defaultTheme } from '../styles';
 import DebugPage from './DebugPage';
@@ -77,6 +81,7 @@ export const App = () => {
 				<title>{roundware._project ? roundware._project.projectName : ''}</title>
 				<link rel='icon' type='image/png' href={favicon} sizes='16x16' />
 			</Helmet>
+
 			<AppBar className={classes.topBar} position='fixed'>
 				<Toolbar className={classes.topBar}>
 					<Typography variant='h6' className={classes.title}>
