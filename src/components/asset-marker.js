@@ -59,8 +59,8 @@ const TextDisplay = ({ textUrl }) => {
 
   useEffect(() => {
     fetch(textUrl)
-      .then(function(response) {
-        response.text().then(function(text) {
+      .then(function (response) {
+        response.text().then(function (text) {
           setStoredText(text);
         });
       });
