@@ -1,63 +1,45 @@
-import { useMediaQuery } from '@material-ui/core';
+import { CircularProgress, useMediaQuery } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
+import { useRoundware } from '../../hooks';
+import { defaultTheme } from '../../styles';
+// @ts-ignore
+import favicon from '../../assets/favicon.png';
+// @ts-ignore
+import logoSmall from '../../assets/rw-full-logo-wb.png';
+// @ts-ignore
+import logoMinimal from '../../assets/rw-logo-minimal.png';
+import DebugPage from '../DebugPage';
+import InfoPopup from '../InfoPopup';
+import { LandingPage } from '../LandingPage';
+import ListenFilterDrawer from '../ListenFilterDrawer';
+import RoundwareMixerControl from '../RoundwareMixerControl';
+import useStyles from './styles';
 
-// @ts-ignore
-import favicon from '../assets/favicon.png';
-// @ts-ignore
-import logoSmall from '../assets/rw-full-logo-wb.png';
-// @ts-ignore
-import logoMinimal from '../assets/rw-logo-minimal.png';
-import { useRoundware } from '../hooks';
-import { defaultTheme } from '../styles';
-import DebugPage from './DebugPage';
-import InfoPopup from './info-popup';
-import { LandingPage } from './LandingPage';
-import ListenFilterDrawer from './listen-filter-drawer';
-import { ListenPage } from './ListenPage';
-import RoundwareMixerControl from './roundware-mixer-control';
-import SpeakPage from './SpeakPage';
+const ListenPageComponent = React.lazy(() => import('../ListenPage'));
+const ListenPage = () => (
+	<Suspense fallback={<CircularProgress />}>
+		<ListenPageComponent />
+	</Suspense>
+);
+const SpeakPageComponent = React.lazy(() => import('../SpeakPage'));
+const SpeakPage = () => (
+	<Suspense fallback={<CircularProgress />}>
+		<SpeakPageComponent />
+	</Suspense>
+);
 
 if (process.env.GOOGLE_ANALYTICS_ID !== 'null') {
 	ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
 	ReactGA.pageview(window.location.pathname + window.location.search);
 }
-
-const useStyles = makeStyles((theme) => {
-	return {
-		topBar: {
-			backgroundColor: defaultTheme.palette.primary.main,
-		},
-		bottomBar: {
-			top: 'auto',
-			bottom: 0,
-			flexFlow: 'row',
-			backgroundColor: defaultTheme.palette.grey[900],
-		},
-		actionButton: {
-			margin: 'auto',
-		},
-		appContainer: {
-			display: 'flex',
-			flexGrow: 1,
-		},
-		title: {
-			flexGrow: 1,
-			color: 'white',
-			textDecoration: 'none',
-		},
-		navLogo: {
-			height: parseInt(process.env.NAV_LOGO_HEIGHT),
-		},
-	};
-});
 
 export const App = () => {
 	const [theme] = useState(defaultTheme);

@@ -13,7 +13,7 @@ export const defaultTheme = createTheme({
 	},
 });
 
-export const lightTheme = createMuiTheme({
+export const lightTheme = createTheme({
 	palette: {
 		type: 'light',
 		primary: {

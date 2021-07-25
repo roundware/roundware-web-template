@@ -26,6 +26,7 @@
 		"@types/node": "^16.4.1",
 		"@types/react": "^17.0.15",
 		"@types/react-dom": "^17.0.9",
+		"@types/react-helmet": "^6.1.2",
 		"assets": "^3.0.1",
 		"audio-recorder-polyfill": "^0.4.1",
 		"autosuggest-highlight": "^3.1.1",
@@ -52,7 +53,7 @@
 		"react-router-dom": "^5.2.0",
 		"react-select": "^4.3.1",
 		"regenerator-runtime": "^0.13.9",
-		"roundware-web-framework": "^0.10.0",
+		"roundware-web-framework": "^0.11.0-alpha.19",
 		"standardized-audio-context": "^25.2.9",
 		"ts-overlapping-marker-spiderfier": "^1.0.3",
 		"typescript": "^4.3.5"

@@ -24,7 +24,7 @@ const RoundwareMixerControl = props => {
     setSnackbarOpen(false);
   };
 
-  if (roundware.activateMixer && !roundware._mixer) {
+  if (roundware.activateMixer && !roundware._mixer && GeoListenMode) {
     roundware
       .activateMixer({ geoListenMode: GeoListenMode.MANUAL })
       .then((token, force) => {

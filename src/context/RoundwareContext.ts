@@ -54,7 +54,7 @@ interface IRoundware {
 }
 
 export interface IRoundwareContext {
-	roundware: Partial<IRoundware>;
+	roundware: Partial<IRoundware> | any;
 	tagLookup: any;
 	sortField: any;
 	selectedTags: any;

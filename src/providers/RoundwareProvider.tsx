@@ -172,14 +172,14 @@ export const RoundwareProvider = (props) => {
 	}, []);
 
 	useEffect(() => {
-		if (roundware._project) {
-			roundware.loadAssetPool().then(() => {
+		if (roundware._project && typeof roundware.loadAssetPool == 'function') {
+			roundware?.loadAssetPool().then(() => {
 				setAssetsReady(true);
 			});
 		}
 	}, [roundware._project]);
 
-	const geoListenMode = (roundware._mixer && roundware._mixer.mixParams.geoListenMode) || GeoListenMode.DISABLED;
+	const geoListenMode = (roundware._mixer && roundware._mixer?.mixParams?.geoListenMode) || GeoListenMode?.DISABLED;
 	const setGeoListenMode = (modeName) => {
 		roundware.enableGeolocation(modeName);
 		let prom;
