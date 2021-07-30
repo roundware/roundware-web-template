@@ -8,14 +8,15 @@ import { useStyles } from './styles';
 interface Props {
 	label: string;
 	linkTo: string;
+	style?: React.CSSProperties;
 }
 
-const ActionButton = ({ label, linkTo }: Props) => {
+const ActionButton = ({ label, linkTo, style = {} }: Props) => {
 	const classes = useStyles();
 	const history = useHistory();
 
 	return (
-		<Grid container direction={'column'}>
+		<Grid container direction={'column'} style={style}>
 			<Grid item sm={9} md={6}>
 				<Button
 					aria-label={label}
