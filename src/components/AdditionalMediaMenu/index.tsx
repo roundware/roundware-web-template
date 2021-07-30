@@ -11,7 +11,7 @@ import { TextInputDialog, TextInputMenuItem } from './TextInput';
 
 interface AdditionalMediaMenuProps {
 	onSetText: string;
-	onSetImage: (string) => unknown;
+	onSetImage: (string: string) => unknown;
 	imageAssets: string;
 	textAsset: string;
 	disabled: boolean;
