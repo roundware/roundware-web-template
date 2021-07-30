@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime';
 
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import * as React from 'react';
+import React from 'react';
 
 import { App } from './components/App';
 
@@ -16,7 +16,7 @@ const mountNode = document.getElementById('app');
 ReactDOM.render(
 	<RoundwareProvider>
 		<BrowserRouter>
-			<App style={{ display: 'flex' }} />
+			<App />
 		</BrowserRouter>
 	</RoundwareProvider>,
 	mountNode
