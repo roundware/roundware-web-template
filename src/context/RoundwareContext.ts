@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 // this is the equivalent to the createStore method of Redux
 // https://redux.js.org/api/createstore
@@ -23,17 +23,17 @@ interface IRoundware {
 	_apiClient: unknown;
 	_user: unknown;
 	_geoPosition: {
-		waitForInitialGeolocation();
+		waitForInitialGeolocation(): any;
 	};
 	_session: unknown;
 	_mixer:
 		| {
 				updateParams({ listenTagIds, maxDist, recordingRadius }: { listenTagIds?: any[]; maxDist?: unknown; recordingRadius?: unknown }): void;
-				mixParams;
+				mixParams: any;
 		  }
 		| undefined;
 	_project: {
-		recordingRadius;
+		recordingRadius: any;
 	};
 	_triggerOnPlayAssets(): void;
 	updateLocation: (listenerLocation: any) => void;
@@ -81,6 +81,8 @@ export interface IRoundwareContext {
 	assetsReady: any;
 }
 
-const RoundwareContext: React.Context<Partial<IRoundwareContext>> = React.createContext({ roundware: undefined });
+const RoundwareContext: React.Context<IRoundwareContext> = React.createContext({
+	roundware: undefined,
+});
 
 export default RoundwareContext;
