@@ -1,8 +1,5 @@
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import deepPurple from '@material-ui/core/colors/deepPurple';
-
 //the createMuiTheme function was renamed to createTheme.
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme, makeStyles } from '@material-ui/core/styles';
 
 export const defaultTheme = createTheme({
 	palette: {
