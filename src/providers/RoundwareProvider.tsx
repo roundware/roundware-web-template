@@ -5,7 +5,8 @@ import moment from 'moment';
 import { useEffect, useReducer, useState } from 'react';
 import { GeoListenMode, Roundware } from 'roundware-web-framework';
 
-export const RoundwareProvider = (props) => {
+interface PropTypes {}
+const RoundwareProvider = (props: PropTypes) => {
 	const [roundware, setRoundware] = useState<IRoundwareContext[`roundware`]>({
 		uiConfig: {
 			speak: [],
@@ -23,13 +24,13 @@ export const RoundwareProvider = (props) => {
 	const [tagLookup, setTagLookup] = useState({});
 	const [filteredAssets, setFilteredAssets] = useState([]);
 	const deviceId = useDeviceID();
-	const [assetPage, setAssetPage] = useState([]);
+	const [assetPage, setAssetPage] = useState<any[]>([]);
 	const [, forceUpdate] = useReducer((x) => !x, false);
 
-	const sortAssets = (assets) => {
+	const sortAssets = (assets: any[]) => {
 		const sort_value = sortField.asc ? 1 : -1;
 
-		const sortEntries = (a, b) => {
+		const sortEntries = (a: any, b: any) => {
 			if (a[sortField.name] > b[sortField.name]) {
 				return sort_value;
 			}
@@ -49,7 +50,7 @@ export const RoundwareProvider = (props) => {
 			setAssetPageIndex(0);
 			return;
 		}
-		const page = sortedAssets.slice(assetPageIndex * assetsPerPage, assetPageIndex * assetsPerPage + assetsPerPage);
+		const page: any[] = sortedAssets.slice(assetPageIndex * assetsPerPage, assetPageIndex * assetsPerPage + assetsPerPage);
 		setAssetPage(page);
 		if (roundware._assetData) {
 			setAssetsReady(true);
@@ -236,3 +237,5 @@ export const RoundwareProvider = (props) => {
 		</RoundwareContext.Provider>
 	);
 };
+
+export default RoundwareProvider;
