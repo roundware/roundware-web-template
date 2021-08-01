@@ -11,9 +11,7 @@
 		"experimentalDecorators": true,
 		"lib": ["dom", "es2015"],
 		"allowSyntheticDefaultImports": true,
-		"baseUrl": "./src",
-
 		"typeRoots": ["node_modules/@types"]
 	},
-	"include": ["src/**/*"]
+	"include": ["src/**/*", "./index.d.ts"]
 }
