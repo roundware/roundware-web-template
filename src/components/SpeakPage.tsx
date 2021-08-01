@@ -4,12 +4,12 @@ import TagSelectForm from './TagSelectForm';
 import LocationSelectForm from './LocationSelectForm';
 import CreateRecordingForm from './CreateRecordingForm';
 import Grid from '@material-ui/core/Grid';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { DraftRecordingProvider } from '../providers/DraftRecordingProvider';
 
-const useStyles = () =>
-	makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => {
+	return {
 		root: {
 			paddingTop: theme.spacing(3),
 			paddingBottom: theme.spacing(3),
@@ -25,11 +25,18 @@ const useStyles = () =>
 		responsiveFormContainer: {
 			margin: 'auto',
 		},
-	}));
+	};
+});
 
-const SpeakPage = (props) => {
+interface SpeakPageProps {
+	match: {
+		isExact: boolean;
+		path: string;
+	};
+}
+const SpeakPage = (props: SpeakPageProps) => {
 	const { roundware } = useRoundware();
-	const classes = useStyles();
+	const styles = useStyles();
 	const history = useHistory();
 	useEffect(() => {
 		// if we are directed to the 'speak' page directly,
@@ -45,8 +52,8 @@ const SpeakPage = (props) => {
 
 	return (
 		<DraftRecordingProvider roundware={roundware}>
-			<Grid container className={classes.rootFormContainer}>
-				<Grid item className={classes.responsiveFormContainer} style={{ margin: 'auto' }} xs={12} sm={10} md={8} lg={6}>
+			<Grid container className={styles.rootFormContainer}>
+				<Grid item className={styles.responsiveFormContainer} style={{ margin: 'auto' }} xs={12} sm={10} md={8} lg={6}>
 					<Switch>
 						<Route path={`${props.match.path}/tags/:tagGroupIndex`} component={TagSelectForm} />
 						<Route path={`${props.match.path}/location`} component={LocationSelectForm} />
