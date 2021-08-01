@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import React, { useState } from 'react';
+import { useRoundware } from '../hooks';
 import { RoundwareMapStyle } from '../map-style';
 import AssetLayer from './AssetLayer';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import ListenerLocationMarker from './ListenerLocationMarker';
-import { useRoundware } from '../hooks';
-import distance from '@turf/distance';
 import AssetLoadingOverlay from './AssetLoadingOverlay';
 import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
@@ -19,10 +16,13 @@ const useStyles = makeStyles((theme) => {
 	};
 });
 
-const RoundwareMap = (props) => {
+interface RoundwareMapProps {
+	googleMapsApiKey: string;
+}
+const RoundwareMap = (props: RoundwareMapProps) => {
 	const classes = useStyles();
 	const { roundware } = useRoundware();
-	const [map, setMap] = useState(null);
+	const [map, setMap] = useState<google.maps.Map<Element> | undefined>();
 
 	if (!roundware._project) {
 		return null;
