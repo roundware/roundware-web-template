@@ -37,7 +37,7 @@ const walkingModeButton = () => {
 
 	// when the listenerLocation is updated, center the map
 	useEffect(() => {
-		if (ready) {
+		if (ready && map !== null) {
 			const c = map.getCenter();
 			console.log('new location provided by framework');
 			if (center.lat !== c.lat() || center.lng !== c.lng()) {
@@ -48,7 +48,7 @@ const walkingModeButton = () => {
 
 	const toggleWalkingMode = () => {
 		setBusy(true);
-		if (geoListenMode === GeoListenMode.AUTOMATIC) {
+		if (geoListenMode === GeoListenMode.AUTOMATIC && map !== null) {
 			console.log('switching to map mode');
 			// zoom out
 			map.setZoom(5);
@@ -57,7 +57,7 @@ const walkingModeButton = () => {
 			// stop listening for location updates
 			setGeoListenMode(GeoListenMode.MANUAL);
 			// update text instructions?
-		} else if ([GeoListenMode.MANUAL, GeoListenMode.DISABLED].includes(geoListenMode)) {
+		} else if ([GeoListenMode.MANUAL, GeoListenMode.DISABLED].includes(geoListenMode) && map !== null) {
 			console.log('switching to walking mode');
 			// disable map panning
 			map.setOptions({ gestureHandling: 'none' });
