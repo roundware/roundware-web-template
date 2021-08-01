@@ -17,5 +17,4 @@ const ListenPage = () => {
 	return <RoundwareMap className={classes.map} googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY} />;
 };
 
-// export default for supporting react lazy loading
 export default ListenPage;
