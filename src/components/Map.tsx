@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => {
 
 interface RoundwareMapProps {
 	googleMapsApiKey: string;
+	className: string;
 }
 const RoundwareMap = (props: RoundwareMapProps) => {
 	const classes = useStyles();
@@ -38,47 +39,49 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 
 	// when the listener location changes, center the map
 	return (
-		<LoadScript id='script-loader' googleMapsApiKey={props.googleMapsApiKey}>
-			<AssetLoadingOverlay />
-			<GoogleMap
-				mapContainerClassName={classes.roundwareMap}
-				onZoomChanged={updateListenerLocation}
-				onDragEnd={updateListenerLocation}
-				onLoad={(map) => {
-					setMap(map);
-					const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
-					map.mapTypes.set('styled_map', styledMapType);
-					map.setOptions({
-						center: { lat: 0, lng: 0 },
-						zoom: 5,
-						zoomControl: true,
-						draggable: true,
-						mapTypeControl: false,
-						streetViewControl: false,
-						draggableCursor: 'cursor',
-						fullscreenControl: false,
-						zoomControlOptions: {
-							style: google.maps.ZoomControlStyle.SMALL,
-							position: google.maps.ControlPosition.TOP_RIGHT,
-						},
-						rotateControl: false,
-						mapTypeId: 'styled_map',
-						mapTypeControlOptions: {
-							mapTypeIds: [google.maps.MapTypeId.SATELLITE, 'styled_map'],
-							style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-							position: google.maps.ControlPosition.BOTTOM_LEFT,
-						},
-					});
-				}}
-				onUnmount={(map) => {
-					// do your stuff before map is unmounted
-				}}
-			>
-				<AssetLayer />
-				<RangeCircleOverlay />
-				<WalkingModeButton />
-			</GoogleMap>
-		</LoadScript>
+		<div className={props.className}>
+			<LoadScript id='script-loader' googleMapsApiKey={props.googleMapsApiKey}>
+				<AssetLoadingOverlay />
+				<GoogleMap
+					mapContainerClassName={classes.roundwareMap}
+					onZoomChanged={updateListenerLocation}
+					onDragEnd={updateListenerLocation}
+					onLoad={(map) => {
+						setMap(map);
+						const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
+						map.mapTypes.set('styled_map', styledMapType);
+						map.setOptions({
+							center: { lat: 0, lng: 0 },
+							zoom: 5,
+							zoomControl: true,
+							draggable: true,
+							mapTypeControl: false,
+							streetViewControl: false,
+							draggableCursor: 'cursor',
+							fullscreenControl: false,
+							zoomControlOptions: {
+								style: google.maps.ZoomControlStyle.SMALL,
+								position: google.maps.ControlPosition.TOP_RIGHT,
+							},
+							rotateControl: false,
+							mapTypeId: 'styled_map',
+							mapTypeControlOptions: {
+								mapTypeIds: [google.maps.MapTypeId.SATELLITE, 'styled_map'],
+								style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+								position: google.maps.ControlPosition.BOTTOM_LEFT,
+							},
+						});
+					}}
+					onUnmount={(map) => {
+						// do your stuff before map is unmounted
+					}}
+				>
+					<AssetLayer />
+					<RangeCircleOverlay />
+					<WalkingModeButton />
+				</GoogleMap>
+			</LoadScript>
+		</div>
 	);
 };
 
