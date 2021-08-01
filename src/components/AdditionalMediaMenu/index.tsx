@@ -10,9 +10,9 @@ import { StyledMenu } from './StyledMenu';
 import { TextInputDialog, TextInputMenuItem } from './TextInput';
 
 interface AdditionalMediaMenuProps {
-	onSetText: string;
-	onSetImage: (string: string) => unknown;
-	imageAssets: string;
+	onSetText: React.Dispatch<React.SetStateAction<string>>;
+	onSetImage: (file: File) => void;
+	imageAssets: File[];
 	textAsset: string;
 	disabled: boolean;
 }
@@ -23,7 +23,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 	const theme = useTheme();
 	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 	const isTinyScreen = useMediaQuery(theme.breakpoints.down(350));
-	const picker = useRef(null);
+	const picker = useRef<HTMLInputElement | null>(null);
 
 	const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => setAnchorEl(event.currentTarget);
 
@@ -54,7 +54,15 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 					{isExtraSmallScreen ? 'Add' : 'Add Media'}
 				</Button>
 				<StyledMenu id='customized-menu' anchorEl={anchorEl} keepMounted autoFocus={false} open={Boolean(anchorEl)} onClose={handleClose}>
-					<PhotoPickerMenuItem ref={picker} onSetImage={onSetImage} openPicker={() => picker.current.click()} setAnchorEl={setAnchorEl} />
+					<PhotoPickerMenuItem
+						ref={picker}
+						onSetImage={onSetImage}
+						openPicker={() => {
+							// if picker is mounted
+							if (picker && picker.current) picker.current.click();
+						}}
+						setAnchorEl={setAnchorEl}
+					/>
 					<TextInputMenuItem
 						{...{
 							textAsset,
@@ -83,7 +91,9 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 						</Badge>
 					}
 					disabled={disabled}
-					onClick={() => picker.current.click()}
+					onClick={() => {
+						if (picker && picker.current) picker.current.click();
+					}}
 				>
 					Add Photo
 				</Button>

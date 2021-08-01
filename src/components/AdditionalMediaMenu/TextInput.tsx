@@ -1,8 +1,17 @@
+import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, ListItemIcon, ListItemText, TextField } from '@material-ui/core';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import { StyledMenuItem } from './StyledMenu';
 
-export const TextInputDialog = ({ textAsset, addTextModalOpen, isExtraSmallScreen, onSetText, setAddTextModalOpen, setAnchorEl }) => (
+interface TextInputDialogProps {
+	textAsset: unknown;
+	addTextModalOpen: boolean;
+	isExtraSmallScreen: boolean;
+	setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
+	onSetText: React.Dispatch<React.SetStateAction<string>>;
+	setAddTextModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export const TextInputDialog = ({ textAsset, addTextModalOpen, isExtraSmallScreen, onSetText, setAddTextModalOpen, setAnchorEl }: TextInputDialogProps) => (
 	<Dialog open={addTextModalOpen}>
 		<DialogContent style={isExtraSmallScreen ? { width: 254 } : { width: 500 }}>
 			<TextField id='outlined-multiline-static' label='Tap/Click to Type!' multiline rows={6} defaultValue={textAsset || ''} variant='outlined' style={{ width: '100%' }} onBlur={(e) => onSetText(e.target.value)} />
@@ -32,7 +41,7 @@ export const TextInputDialog = ({ textAsset, addTextModalOpen, isExtraSmallScree
 	</Dialog>
 );
 
-export const TextInputMenuItem = ({ textAsset, addTextModalOpen, setAddTextModalOpen, onSetText, setAnchorEl, isExtraSmallScreen }) => {
+export const TextInputMenuItem = ({ textAsset, addTextModalOpen, setAddTextModalOpen, onSetText, setAnchorEl, isExtraSmallScreen }: TextInputDialogProps) => {
 	return (
 		<>
 			<StyledMenuItem

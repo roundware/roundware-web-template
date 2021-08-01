@@ -4,11 +4,11 @@ import { StyledMenuItem } from './StyledMenu';
 import PhotoIcon from '@material-ui/icons/Photo';
 
 interface PhotoPickerMenuItemProps {
-	onClick: React.MouseEventHandler<{}>;
-	onSetImage: (string) => unknown;
-	openPicker: () => unknown;
+	onSetImage: (file: File) => void;
+	openPicker: React.MouseEventHandler<HTMLLIElement> | undefined;
+	setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
 }
-export const PhotoPickerMenuItem = React.forwardRef(({ onSetImage, openPicker, setAnchorEl, ref }: PhotoPickerMenuItemProps | any) => (
+export const PhotoPickerMenuItem = React.forwardRef<HTMLInputElement, PhotoPickerMenuItemProps>(({ onSetImage, openPicker, setAnchorEl }, ref) => (
 	<StyledMenuItem onClick={openPicker}>
 		<PhotoPickerInput onSetImage={onSetImage} ref={ref} setAnchorEl={setAnchorEl} />
 		<ListItemIcon>
@@ -18,18 +18,22 @@ export const PhotoPickerMenuItem = React.forwardRef(({ onSetImage, openPicker, s
 	</StyledMenuItem>
 ));
 
-interface PhotoPickerInput {
-	onSetImage: (file: HTMLInputElement[`files`][number]) => unknown;
+interface PhotoPickerInputProps {
+	onSetImage: (file: File) => void;
+	setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
 }
-export const PhotoPickerInput = React.forwardRef(({ onSetImage, setAnchorEl }, ref: PhotoPickerInput | any) => (
+
+export const PhotoPickerInput = React.forwardRef<HTMLInputElement, PhotoPickerInputProps>(({ onSetImage, setAnchorEl }, ref) => (
 	<input
 		ref={ref}
 		type='file'
 		accept='image/jpeg, image/png, image/gif'
 		style={{ display: 'none' }}
 		onChange={(e) => {
-			onSetImage(e.target.files[0]);
-			setAnchorEl(null);
+			if (e.target.files) {
+				onSetImage(Array.from(e.target.files)[0]);
+				setAnchorEl(null);
+			}
 		}}
 	/>
 ));
