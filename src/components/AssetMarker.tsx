@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { InfoWindow, Marker, useGoogleMap } from '@react-google-maps/api';
-import moment from 'moment';
-import AssetPlayer from './AssetPlayer';
-import { useRoundware } from '../hooks';
-import { AssetActionButtons } from './AssetActionButtons';
-import { TagsDisplay } from './AssetTags';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import { ThemeProvider as MuiThemeProvider, makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { InfoWindow, Marker } from '@react-google-maps/api';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useRoundware } from '../hooks';
 import { lightTheme } from '../styles';
-import { useAsync } from 'react-async';
+import { AssetActionButtons } from './AssetActionButtons';
+import AssetPlayer from './AssetPlayer';
+import { TagsDisplay } from './AssetTags';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -28,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const LightboxModal = ({ imageUrl }) => {
+const LightboxModal = ({ imageUrl }: { imageUrl: string }) => {
 	const classes = useStyles();
 	const [open, setOpen] = useState(false);
 
@@ -50,8 +49,8 @@ const LightboxModal = ({ imageUrl }) => {
 	);
 };
 
-const TextDisplay = ({ textUrl }) => {
-	const [storedText, setStoredText] = useState(null);
+const TextDisplay = ({ textUrl }: { textUrl: string }) => {
+	const [storedText, setStoredText] = useState<string>('');
 
 	useEffect(() => {
 		fetch(textUrl).then(function (response) {
@@ -64,7 +63,7 @@ const TextDisplay = ({ textUrl }) => {
 	return <div>{storedText}</div>;
 };
 
-const AssetInfoWindow = ({ asset }) => {
+const AssetInfoWindow = ({ asset }: any) => {
 	const { selectedAsset, selectAsset, roundware } = useRoundware();
 
 	if (!selectedAsset) return null;
@@ -74,9 +73,14 @@ const AssetInfoWindow = ({ asset }) => {
 	return <AssetInfoWindowInner asset={selectedAsset} selectAsset={selectAsset} roundware={roundware} />;
 };
 
-const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
-	const [imageAssets, setImageAssets] = useState(null);
-	const [textAssets, setTextAssets] = useState(null);
+interface AssetInfoWindowInnerProps {
+	asset: any;
+	selectAsset: any;
+	roundware: any;
+}
+const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInfoWindowInnerProps) => {
+	const [imageAssets, setImageAssets] = useState<any[]>([]);
+	const [textAssets, setTextAssets] = useState<any[]>([]);
 
 	useEffect(() => {
 		if (asset.envelope_ids.length > 0) {
@@ -129,7 +133,13 @@ const AssetInfoWindowInner = ({ asset, selectAsset, roundware }) => {
 	);
 };
 
-const AssetMarker = ({ asset, clusterer, oms }) => {
+interface AssetMarkerProps {
+	asset: any;
+	// types not provided by the library - Shreyas
+	clusterer: any;
+	oms: any;
+}
+const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
 	const { selectAsset } = useRoundware();
 	const iconPin = {
 		url: 'https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg',
