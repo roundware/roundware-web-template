@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useRoundware, useRoundwareDraft } from '../hooks';
-import LocationSelectMarker from './LocationSelectMarker';
-import { RoundwareMapStyle } from '../map-style';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import PlacesAutocomplete from './PlacesAutocomplete';
-import { Button, Card, CardContent, CardActions, Typography, useTheme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import ErrorDialog from './ErrorDialog';
+import { Button, Card, CardActions, CardContent, Typography, useTheme } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useRoundware, useRoundwareDraft } from '../hooks';
+import { RoundwareMapStyle } from '../map-style';
+import ErrorDialog from './ErrorDialog';
+import LocationSelectMarker from './LocationSelectMarker';
+import PlacesAutocomplete from './PlacesAutocomplete';
 
-const getPosition = function (options) {
+const getPosition = function (options?: PositionOptions): Promise<GeolocationPosition> {
 	return new Promise(function (resolve, reject) {
 		return navigator.geolocation.getCurrentPosition(resolve, reject, options);
 	});
 };
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles((theme: Theme) => {
 	return {
 		container: {
 			flexGrow: 1,
@@ -28,9 +29,8 @@ const useStyles = makeStyles((theme) => {
 			margin: 'auto',
 		},
 		cardActionButton: {
-			margin: {
-				right: theme.spacing(2),
-			},
+			marginRight: theme.spacing(2),
+
 			[theme.breakpoints.down('xs')]: {
 				paddingRight: theme.spacing(1),
 				paddingLeft: theme.spacing(1),
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 const LocationSelectForm = () => {
-	const draftRecording = useRoundwareDraft();
+	const draftRecording: any = useRoundwareDraft();
 	const { roundware } = useRoundware();
 	const theme = useTheme();
 	const mapContainerStyle = {
@@ -70,8 +70,8 @@ const LocationSelectForm = () => {
 	const classes = useStyles();
 	const history = useHistory();
 	const [error, set_error] = useState(null);
-	const [geolocating, set_geolocating] = useState(null);
-	const gmapsLibraries = ['places'];
+	const [geolocating, set_geolocating] = useState<boolean>(false);
+	const gmapsLibraries: Libraries = ['places'];
 
 	useEffect(() => {
 		if (draftRecording.tags.length === 0) {
@@ -104,6 +104,9 @@ const LocationSelectForm = () => {
 		}
 	};
 
+	if (!process.env.GOOGLE_MAPS_API_KEY) {
+		console.warn(`GOOGLE_MAPS_API_KEY was not provided! Script loading will fail.`);
+	}
 	return (
 		<Card className={classes.container}>
 			<ErrorDialog error={error} set_error={set_error} />
@@ -111,7 +114,7 @@ const LocationSelectForm = () => {
 				<Typography variant={'h4'} className={classes.locationHeaderLabel}>
 					Where are you recording today?
 				</Typography>
-				<LoadScript id='script-loader' googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY} libraries={gmapsLibraries}>
+				<LoadScript id='script-loader' googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries}>
 					<PlacesAutocomplete />
 					<div className={classes.mapContainerDiv}>
 						<GoogleMap
@@ -149,7 +152,8 @@ const LocationSelectForm = () => {
 					</div>
 				</LoadScript>
 			</CardContent>
-			<CardActions variant={'contained'} style={{}}>
+			{/* variant property does'nt exist here (removed) - Shreyas */}
+			<CardActions>
 				<Button className={classes.cardActionButton} startIcon={<ArrowBackIosIcon />} aria-label='back' onClick={history.goBack} variant={'contained'}>
 					Back
 				</Button>
