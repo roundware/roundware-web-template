@@ -5,9 +5,9 @@ import { useQuery, useRoundware } from '../hooks';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { wait } from '../utils';
 
-const OverlappingMarkerSpiderfierComponent = (props) => {
+const OverlappingMarkerSpiderfierComponent = (props: { children: (props: OverlappingMarkerSpiderfier | null) => React.ReactNode }) => {
 	const map = useGoogleMap();
-	const [spiderfier, set_spiderfier] = useState(null);
+	const [spiderfier, set_spiderfier] = useState<OverlappingMarkerSpiderfier | null>(null);
 	if (!map) {
 		return null;
 	}
@@ -23,20 +23,20 @@ const OverlappingMarkerSpiderfierComponent = (props) => {
 	return <Fragment>{props.children(spiderfier)}</Fragment>;
 };
 
-const AssetLayer = (props) => {
+const AssetLayer = () => {
 	const { roundware, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
 	const map = useGoogleMap();
 	const query = useQuery();
 	const assets = assetPage;
-	const eid = parseInt(query.get('eid'));
-	const [lastSelected, setLastSelected] = useState(null);
-	const [markerClusterer, setMarkerClusterer] = useState(null);
+	const eid = parseInt(query.get('eid') || '');
+	const [lastSelected, setLastSelected] = useState<number | undefined>();
+	const [markerClusterer, setMarkerClusterer] = useState<any | null>(null);
 
 	useEffect(() => {
 		if (!eid || lastSelected === eid) {
 			return;
 		}
-		const asset = assets.find((a) => a.envelope_ids.indexOf(eid) !== -1);
+		const asset = assets.find((a: any) => a.envelope_ids.indexOf(eid) !== -1);
 		if (!asset) {
 			// todo  present an error and clear bad query params when we can't find the asset we're looking for
 			return;
@@ -49,7 +49,7 @@ const AssetLayer = (props) => {
 
 	// when the selected asset changes, pan to it
 	useEffect(() => {
-		if (!selectedAsset) {
+		if (!selectedAsset || !map) {
 			return;
 		}
 		const center = {
@@ -63,8 +63,8 @@ const AssetLayer = (props) => {
 	if (!map) {
 		return null;
 	}
-	const markers = (clusterer) => {
-		return <OverlappingMarkerSpiderfierComponent children={(oms) => assets.map((asset) => <AssetMarker key={asset.id} asset={asset} clusterer={clusterer} oms={oms} />)} />;
+	const markers = (clusterer: JSX.Element) => {
+		return <OverlappingMarkerSpiderfierComponent children={(oms) => assets.map((asset: any) => <AssetMarker key={asset.id} asset={asset} clusterer={clusterer} oms={oms} />)} />;
 	};
 	const recluster = () => {
 		const markerObjs = markerClusterer.markers.slice();
@@ -73,7 +73,7 @@ const AssetLayer = (props) => {
 		markerClusterer.addMarkers(markerObjs);
 	};
 	const wait_for_full_page = async () => {
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			const checkStart = Date.now();
 			const checkLength = () => {
 				if (assetPage.length >= markerClusterer.markers.length) {
@@ -99,6 +99,7 @@ const AssetLayer = (props) => {
 			options={{
 				imagePath: 'https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m',
 			}}
+			// @ts-ignore types not provided by the library
 			children={markers}
 		/>
 	);
