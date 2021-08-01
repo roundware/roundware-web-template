@@ -133,21 +133,26 @@ const useStylesAudioPlayer = makeStyles((theme) => {
 });
 
 const CreateRecordingForm = () => {
-	const draftRecording = useRoundwareDraft();
+	const draftRecording: any = useRoundwareDraft();
 	const { roundware, tagLookup, updateAssets } = useRoundware();
 	let [wave, set_wave] = useState(new Wave());
 	const [isRecording, set_is_recording] = useState(false);
-	const [draftRecordingMedia, set_draft_recording_media] = useState();
+	const [draftRecordingMedia, set_draft_recording_media] = useState<any>();
 	const [draftMediaUrl, set_draft_media_url] = useState('');
-	const [recorder, set_recorder] = useState();
-	const [stream, set_stream] = useState();
-	const [textAsset, setTextAsset] = useState(null);
-	const [imageAssets, setImageAssets] = useState([]);
+	const [recorder, set_recorder] = useState<MediaRecorder | undefined>();
+	const [stream, set_stream] = useState<MediaStream | undefined>();
+	const [textAsset, setTextAsset] = useState<string>('');
+	const [imageAssets, setImageAssets] = useState<File[]>([]);
 	const [deleteModalOpen, set_delete_modal_open] = useState(false);
 	const [legalModalOpen, set_legal_modal_open] = useState(false);
 	const [saving, set_saving] = useState(false);
-	const [error, set_error] = useState(null);
-	const [success, set_success] = useState(null);
+	const [error, set_error] = useState<
+		| {
+				message: string;
+		  }
+		| undefined
+	>();
+	const [success, set_success] = useState<any | null>(null);
 	const history = useHistory();
 	const classes = useStyles();
 	const theme = useTheme();
@@ -160,7 +165,7 @@ const CreateRecordingForm = () => {
 			});
 			return;
 		} else {
-			set_error(null);
+			set_error(undefined);
 		}
 		navigator.mediaDevices
 			.getUserMedia({ audio: true })
@@ -171,7 +176,7 @@ const CreateRecordingForm = () => {
 				const newWave = new Wave();
 				set_wave(newWave);
 				newWave.fromStream(stream, 'audio-visualizer', visualizerOptions, false);
-				const recorder = new MediaRecorder(stream);
+				const recorder: MediaRecorder = new MediaRecorder(stream);
 				set_recorder(recorder);
 				// Set record to <audio> when recording will be finished
 				recorder.addEventListener('dataavailable', (e) => {
@@ -198,12 +203,14 @@ const CreateRecordingForm = () => {
 	}, [draftMediaUrl]);
 
 	const stopRecording = () => {
-		recorder.stop();
-		stream.getTracks().forEach((track) => {
-			track.stop();
-		});
+		if (typeof recorder !== 'undefined') {
+			recorder.stop();
+		}
+		if (stream)
+			stream.getTracks().forEach((track) => {
+				track.stop();
+			});
 		wait(100).then(wave.stopStream);
-
 		set_is_recording(false);
 	};
 
@@ -231,7 +238,7 @@ const CreateRecordingForm = () => {
 	}, [draftRecording.tags, draftRecording.location.latitude, draftRecording.location.longitude]);
 
 	// todo present the participant with the tags they picked
-	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag]);
+	const selected_tags = draftRecording.tags.map((tag: any) => tagLookup[tag]);
 
 	const maxRecordingLength = roundware._project ? roundware._project.maxRecordingLength : '--';
 
@@ -256,6 +263,8 @@ const CreateRecordingForm = () => {
 				{draftMediaUrl ? (
 					<Grid item>
 						{/*}<audio id={"draft-audio"} src={draftMediaUrl} controls />*/}
+						{/* id prop not availabe on this component prop types - Shreyas */}
+						{/* @ts-ignore */}
 						<AudioPlayer id='draft-audio' src={draftMediaUrl} useStyles={useStylesAudioPlayer} variation='primary' time='single' timePosition='end' volume={false} />
 					</Grid>
 				) : null}
@@ -274,11 +283,10 @@ const CreateRecordingForm = () => {
 								backgroundColor: isRecording ? 'red' : 'inherit',
 								padding: 0,
 							}}
-							variant='contained'
 							onClick={toggleRecording}
-							label={isRecording ? 'stop' : 'start'}
 						>
 							<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButton} />
+							{isRecording ? 'Stop' : 'Start'}
 						</IconButton>
 					</Grid>
 				) : null}
@@ -308,7 +316,7 @@ const CreateRecordingForm = () => {
 								['#719EE3', 0.33],
 							]}
 						>
-							{({ remainingTime }) => (
+							{({ remainingTime }: { remainingTime: number }) => (
 								<Grid container direction='column' alignItems='center'>
 									<Grid item>
 										<Typography variant='h3' style={{ textAlign: 'center' }}>
@@ -328,11 +336,10 @@ const CreateRecordingForm = () => {
 												backgroundColor: isRecording ? 'red' : 'inherit',
 												justifyContent: 'center',
 											}}
-											variant='contained'
 											onClick={toggleRecording}
-											label={isRecording ? 'stop' : 'start'}
 										>
 											<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButtonSmall} />
+											{isRecording ? 'Stop' : 'Start'}
 										</IconButton>
 									</Grid>
 								</Grid>
@@ -420,7 +427,7 @@ const CreateRecordingForm = () => {
 								const assetMeta = {
 									longitude: draftRecording.location.longitude,
 									latitude: draftRecording.location.latitude,
-									tag_ids: selected_tags.map((t) => t.tag_id),
+									tag_ids: selected_tags.map((t: any) => t.tag_id),
 								};
 								const dateStr = new Date().toISOString();
 
@@ -435,6 +442,8 @@ const CreateRecordingForm = () => {
 										await envelope.upload(new Blob([textAsset], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' });
 									}
 									for (const file of imageAssets) {
+										// roundware types not defined yet
+										// @ts-ignore
 										await envelope.upload(file, file.name || dateStr + '.jpg', {
 											...assetMeta,
 											media_type: 'photo',
