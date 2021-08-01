@@ -16,7 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import LabelIcon from '@material-ui/icons/Label';
-import { TagFilterMenu } from './AssetFilterPanel';
+import TagFilterMenu from './AssetFilterPanel/TagFilterMenu';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
