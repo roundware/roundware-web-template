@@ -6,7 +6,7 @@
 	"scripts": {
 		"preinstall": "npx npm-force-resolutions",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "parcel src/index.html ",
+		"start": "parcel ./src/index.html ",
 		"build": "rm -rf dist && parcel build --no-source-maps src/index.html src/404.html",
 		"deploy": "npm run build && surge --domain https://roundware.surge.sh dist"
 	},
@@ -36,8 +36,10 @@
 		"date-fns": "^2.23.0",
 		"hooks": "^0.3.2",
 		"material-ui-audio-player": "^1.6.6",
+		"minimist": "^1.2.5",
 		"moment": "^2.27.0",
 		"nanoid": "^3.1.23",
+		"normalize-package-data": "^3.0.2",
 		"prettier": "^2.3.2",
 		"prop-types": "^15.7.2",
 		"react": "^17.0.2",
