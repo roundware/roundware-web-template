@@ -1,2 +1,1 @@
-export const wait = (delay, value) =>
-  new Promise(resolve => setTimeout(resolve, delay, value));
+export const wait = <PromiseType>(delay: number, value?: any): Promise<PromiseType> => new Promise((resolve) => setTimeout(resolve, delay, value));
