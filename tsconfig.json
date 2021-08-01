@@ -10,6 +10,10 @@
 		"sourceMap": true,
 		"experimentalDecorators": true,
 		"lib": ["dom", "es2015"],
-		"allowSyntheticDefaultImports": true
-	}
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": "./src",
+
+		"typeRoots": ["node_modules/@types"]
+	},
+	"include": ["src/**/*"]
 }
