@@ -59,8 +59,9 @@ const RangeCircleOverlay = () => {
 	const lng = loc && loc.longitude;
 	const center = { lat, lng };
 	const ready = typeof lat === 'number' && typeof lng === 'number';
-	const { ref, width, height } = useDimensions();
-	const [resizeListener, set_resize_listener] = useState(null);
+	// Shreyas - use observe instead of ref
+	const { observe, width, height } = useDimensions<HTMLDivElement>();
+	const [resizeListener, set_resize_listener] = useState<google.maps.MapsEventListener | undefined>(undefined);
 	const isPlaying = roundware._mixer && roundware._mixer.playing;
 
 	// when the listenerLocation is updated, center the map
@@ -77,11 +78,11 @@ const RangeCircleOverlay = () => {
 		if (!map) {
 			return;
 		}
-		if (resizeListener !== null) {
+		if (resizeListener) {
 			resizeListener.remove();
 		}
 		if (!isPlaying) {
-			set_resize_listener(null);
+			set_resize_listener(undefined);
 			return;
 		}
 		const set_radius_with_circle_geom = () => {
@@ -114,7 +115,7 @@ const RangeCircleOverlay = () => {
 
 	return (
 		<Box className={classes.circleOverlay} style={{ visibility: geoListenMode === GeoListenMode.MANUAL && isPlaying ? 'inherit' : 'hidden' }}>
-			<div ref={ref} className={classes.circle} />
+			<div ref={observe} className={classes.circle} />
 		</Box>
 	);
 };
