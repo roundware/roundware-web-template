@@ -10,7 +10,7 @@ import { App } from './components/App';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { RoundwareProvider } from './providers/RoundwareProvider';
+import RoundwareProvider from './providers/RoundwareProvider';
 
 const mountNode = document.getElementById('app');
 ReactDOM.render(
