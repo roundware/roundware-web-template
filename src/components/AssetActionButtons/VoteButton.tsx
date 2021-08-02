@@ -1,14 +1,15 @@
-import { useStyles } from './styles';
-import { useRoundware } from 'hooks';
-import { useState } from 'react';
-
+import { useStyles, VoteButtonStyles } from './styles';
+import { useRoundware } from '../../hooks';
+import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
 interface VoteButtonProps {
 	children: React.ReactNode;
 	title: string;
-	votedClass: string;
+	votedClass: 'liked' | 'flagged';
+	voteType: 'like' | 'flag';
 	asset: any;
 }
-export const VoteButton = ({ asset, votedClass, title, children }: VoteButtonProps) => {
+export const VoteButton = ({ asset, voteType, votedClass, title, children }: VoteButtonProps) => {
 	const [voted, mark_voted] = useState(false);
 	const { roundware } = useRoundware();
 	const classes = useStyles();
@@ -16,7 +17,7 @@ export const VoteButton = ({ asset, votedClass, title, children }: VoteButtonPro
 	return (
 		<Button
 			title={title}
-			className={voted ? classes[votedClass] : null}
+			className={voted ? classes[votedClass] : undefined}
 			style={{ minWidth: 30 }}
 			onClick={() => {
 				if (!voted) {

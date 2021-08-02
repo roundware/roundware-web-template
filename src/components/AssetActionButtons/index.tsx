@@ -7,9 +7,9 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import FlagIcon from '@material-ui/icons/Flag';
 
 import { VoteButton } from './VoteButton';
-import { useRoundware } from 'hooks';
+import { useRoundware } from '../../hooks';
 
-const downloadAsset = async (asset, projectName) => {
+const downloadAsset = async (asset, projectName: string) => {
 	let ext = /(?:\.([^.]+))?$/.exec(asset.file)[1];
 	let filename = asset.file;
 	const supported = ['mp3', 'wav', 'mp4', 'm4a'];

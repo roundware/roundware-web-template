@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => {
 			textDecoration: 'none',
 		},
 		navLogo: {
-			height: parseInt(process.env.NAV_LOGO_HEIGHT),
+			height: parseInt(typeof process.env.NAV_LOGO_HEIGHT == 'string' ? process.env.NAV_LOGO_HEIGHT : '34'),
 		},
 	};
 });

@@ -1,5 +1,15 @@
 import { makeStyles } from '@material-ui/core';
 
+export type VoteButtonStyles = {
+	[index in 'liked' | 'flagged']: string;
+} & {
+	liked: {
+		color: string;
+	};
+	flagged: {
+		color: string;
+	};
+};
 export const useStyles = makeStyles((theme) => {
 	return {
 		liked: {
