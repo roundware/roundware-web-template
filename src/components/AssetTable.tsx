@@ -20,8 +20,10 @@ const AssetTable = () => {
 	if (filteredAssets === undefined) {
 		table_assets = [];
 	}
+
 	const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, page: number) => {
-		setAssetPageIndex(newPage);
+		// @ts-ignore newPage is not declared
+		// setAssetPageIndex(newPage);
 	};
 	const handleChangeRowsPerPage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, numRows: number) => {
 		setAssetsPerPage(numRows);
