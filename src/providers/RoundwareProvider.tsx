@@ -5,17 +5,19 @@ import moment from 'moment';
 import { useEffect, useReducer, useState } from 'react';
 import { GeoListenMode, Roundware } from 'roundware-web-framework';
 
-interface PropTypes {}
+interface PropTypes {
+	children: React.ReactNode;
+}
 const RoundwareProvider = (props: PropTypes) => {
-	const [roundware, setRoundware] = useState<IRoundwareContext[`roundware`]>({
+	const [roundware, setRoundware] = useState<Roundware | undefined>({
 		uiConfig: {
 			speak: [],
 		},
 	});
 	const [assetsReady, setAssetsReady] = useState(false);
-	const [beforeDateFilter, setBeforeDateFilter] = useState(moment().format());
-	const [afterDateFilter, setAfterDateFilter] = useState(null);
-	const [userFilter, setUserFilter] = useState('');
+	const [beforeDateFilter, setBeforeDateFilter] = useState<string>(moment().format());
+	const [afterDateFilter, setAfterDateFilter] = useState<string | undefined>(undefined);
+	const [userFilter, setUserFilter] = useState<string>('');
 	const [selectedAsset, selectAsset] = useState(null);
 	const [selectedTags, setSelectedTags] = useState({});
 	const [sortField, setSortField] = useState({ name: 'created', asc: false });
@@ -27,10 +29,10 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [assetPage, setAssetPage] = useState<any[]>([]);
 	const [, forceUpdate] = useReducer((x) => !x, false);
 
-	const sortAssets = (assets: any[]) => {
+	const sortAssets = (assets: IAssetData[]) => {
 		const sort_value = sortField.asc ? 1 : -1;
 
-		const sortEntries = (a: any, b: any) => {
+		const sortEntries = (a: IAssetData, b: IAssetData) => {
 			if (a[sortField.name] > b[sortField.name]) {
 				return sort_value;
 			}
@@ -58,17 +60,17 @@ const RoundwareProvider = (props: PropTypes) => {
 	}, [filteredAssets, assetPageIndex, assetsPerPage, sortField.name, sortField.asc]);
 
 	useEffect(() => {
-		if (!roundware.uiConfig.speak) {
+		if (!roundware?.uiConfig?.speak) {
 			return;
 		}
-		const tag_lookup = {};
+		const tag_lookup: ObjectUiConfig[`speak`][0][`display_items`] = {};
 		roundware.uiConfig.speak.forEach((group) =>
 			group.display_items.forEach((tag) => {
 				tag_lookup[tag.id] = tag;
 			})
 		);
 		setTagLookup(tag_lookup);
-	}, [roundware.uiConfig && roundware.uiConfig.speak]);
+	}, [roundware?.uiConfig && roundware?.uiConfig?.speak]);
 
 	const filterAssets = (asset_data) => {
 		return asset_data.filter((asset) => {
@@ -119,11 +121,11 @@ const RoundwareProvider = (props: PropTypes) => {
 	};
 
 	useEffect(() => {
-		if (roundware._assetData) {
+		if (roundware?._assetData) {
 			const filteredAssets = filterAssets(roundware._assetData);
 			setFilteredAssets(filteredAssets);
 		}
-	}, [roundware._assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
+	}, [roundware?._assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
 
 	const selectTags = (tags, group) => {
 		const group_key = group.group_short_name;
@@ -152,7 +154,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			longitude: process.env.INITIAL_LONGITUDE || 0,
 		};
 
-		const roundware = new Roundware(window, {
+		const roundwareOptions: IRoundwareConstructorOptions = {
 			deviceId: deviceId,
 			serverUrl: server_url,
 			projectId: project_id,
@@ -161,7 +163,8 @@ const RoundwareProvider = (props: PropTypes) => {
 			assetFilters: { submitted: true, media_type: 'audio' },
 			listenerLocation: initial_loc,
 			assetUpdateInterval: 30 * 1000,
-		});
+		};
+		const roundware: IRoundware = new Roundware(window, roundwareOptions);
 
 		roundware.connect().then(() => {
 			// set the initial listener location to the project default
@@ -178,9 +181,9 @@ const RoundwareProvider = (props: PropTypes) => {
 				setAssetsReady(true);
 			});
 		}
-	}, [roundware._project]);
+	}, [roundware?._project]);
 
-	const geoListenMode = (roundware._mixer && roundware._mixer?.mixParams?.geoListenMode) || GeoListenMode?.DISABLED;
+	const geoListenMode = (roundware?._mixer && roundware?._mixer?.mixParams?.geoListenMode) || GeoListenMode?.DISABLED;
 	const setGeoListenMode = (modeName) => {
 		roundware.enableGeolocation(modeName);
 		let prom;

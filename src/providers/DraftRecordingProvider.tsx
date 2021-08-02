@@ -1,7 +1,12 @@
 import DraftRecordingContext, { IDraftRecordingContext } from '../context/DraftRecordingContext';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Roundware } from 'roundware-web-framework';
 
-export const DraftRecordingProvider = ({ roundware, children }) => {
+interface DraftRecordingProviderProps {
+	// roundware: Roundware;
+	children: React.ReactNode;
+}
+export const DraftRecordingProvider = ({ roundware, children }: DraftRecordingProviderProps) => {
 	const [location, setLocation] = useState<IDraftRecordingContext[`location`]>({
 		latitude: null,
 		longitude: null,
