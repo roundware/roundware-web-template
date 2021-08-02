@@ -1,25 +1,27 @@
-import { Grid } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useState } from 'react';
+import { Grid, TextField } from '@material-ui/core';
+import Autocomplete, { AutocompleteChangeDetails } from '@material-ui/lab/Autocomplete';
+import React, { useState } from 'react';
 import { useRoundware } from '../../hooks';
 import useStyles from './styles';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { Snackbar } from '@material-ui/core';
+import { AutocompleteChangeReason } from '@material-ui/lab';
+import { TextFieldProps } from 'material-ui';
 
-function Alert(props) {
+function Alert(props: AlertProps) {
 	return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
-const TagFilterMenu = ({ tag_group }) => {
+const TagFilterMenu = ({ tag_group }: any) => {
 	const classes = useStyles();
 	const { roundware, selectTags, selectedTags } = useRoundware();
 	const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
 
-	const handleSnackbarClose = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
+	const handleSnackbarClose = (event: React.ChangeEvent<{}>, reason?: string) => {
+		if (reason && reason === 'clickaway') return;
 		setSnackbarOpen(false);
 	};
 
-	const handleChange = (evt, value, action, target) => {
+	const handleChange = (event: React.ChangeEvent<{}>, value: any[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<any> | undefined) => {
 		const tag_ids = value ? value.map((t) => t.value) : null;
 		selectTags(tag_ids, tag_group);
 		setSnackbarOpen(true);
@@ -31,7 +33,7 @@ const TagFilterMenu = ({ tag_group }) => {
 		}
 	};
 
-	const options = tag_group.display_items.map(({ tag_id, tag_display_text }) => {
+	const options = tag_group.display_items.map(({ tag_id, tag_display_text }: { tag_id: string; tag_display_text: string }) => {
 		return {
 			value: tag_id,
 			label: tag_display_text,
@@ -46,7 +48,8 @@ const TagFilterMenu = ({ tag_group }) => {
 		<>
 			<Grid item xs={12} className={`tag-filter-field tag-filter-select`}>
 				<label className='tag-filter-field--label'>
-					<Autocomplete multiple id={tag_group.name} classes={classes} options={options} getOptionLabel={(option) => (option ? option.label : '')} onChange={handleChange} getOptionSelected={(option) => selectedTagGroupTags.indexOf(option.value) !== -1} value={options.filter((o) => selectedTagGroupTags.indexOf(o.value) !== -1)} renderInput={(params) => <TextField {...params} variant='standard' label={tag_group.header_display_text} placeholder='Select one or more...' />}></Autocomplete>
+					{/* @ts-ignore TextFieldProps doesn't match from material ui given interface */}
+					<Autocomplete multiple id={tag_group.name} classes={classes} options={options} getOptionLabel={(option) => (option ? option.label : '')} onChange={handleChange} getOptionSelected={(option) => selectedTagGroupTags.indexOf(option.value) !== -1} value={options.filter((o: { value: unknown }) => selectedTagGroupTags.indexOf(o.value) !== -1)} renderInput={(params: TextFieldProps) => <TextField {...params} variant='standard' label={tag_group.header_display_text} placeholder='Select one or more...' />}></Autocomplete>
 				</label>
 			</Grid>
 			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
