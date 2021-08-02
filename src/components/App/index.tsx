@@ -10,11 +10,9 @@ import Helmet from 'react-helmet';
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { useRoundware } from '../../hooks';
 import { defaultTheme } from '../../styles';
-// @ts-ignore
+
 import favicon from '../../assets/favicon.png';
-// @ts-ignore
 import logoSmall from '../../assets/rw-full-logo-wb.png';
-// @ts-ignore
 import logoMinimal from '../../assets/rw-logo-minimal.png';
 import DebugPage from '../DebugPage';
 import InfoPopup from '../InfoPopup';
@@ -23,20 +21,11 @@ import ListenFilterDrawer from '../ListenFilterDrawer';
 import RoundwareMixerControl from '../RoundwareMixerControl';
 import useStyles from './styles';
 
-const ListenPageComponent = React.lazy(() => import('../ListenPage'));
-const ListenPage = () => (
-	<Suspense fallback={<CircularProgress />}>
-		<ListenPageComponent />
-	</Suspense>
-);
-const SpeakPageComponent = React.lazy(() => import('../SpeakPage'));
-const SpeakPage = () => (
-	<Suspense fallback={<CircularProgress />}>
-		<SpeakPageComponent />
-	</Suspense>
-);
+import ListenPage from '../ListenPage';
 
-if (process.env.GOOGLE_ANALYTICS_ID !== 'null') {
+import SpeakPage from '../SpeakPage';
+
+if (typeof process.env.GOOGLE_ANALYTICS_ID !== 'undefined' && process.env.GOOGLE_ANALYTICS_ID !== 'null' && typeof process.env.GOOGLE_ANALYTICS_ID == 'string') {
 	ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
 	ReactGA.pageview(window.location.pathname + window.location.search);
 }
@@ -45,7 +34,7 @@ export const App = () => {
 	const [theme] = useState(defaultTheme);
 	const classes = useStyles();
 	const { roundware } = useRoundware();
-	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
+	const isExtraSmallScreen = useMediaQuery<boolean>(theme.breakpoints.down('xs'));
 
 	if (process.env.GOOGLE_ANALYTICS_ID !== 'null') {
 		let location = useLocation();
