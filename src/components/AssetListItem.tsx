@@ -4,7 +4,11 @@ import AssetPlayer from './AssetPlayer';
 import { useRoundware } from '../hooks';
 import { TagsDisplay } from './AssetTags';
 
-const AssetListItem = ({ asset, player }) => {
+interface AssetListItemProps {
+	asset: any;
+	player?: boolean;
+}
+const AssetListItem = ({ asset, player }: AssetListItemProps) => {
 	const { roundware, selectedAsset, selectAsset } = useRoundware();
 	if (!roundware) {
 		return null;
