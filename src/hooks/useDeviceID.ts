@@ -1,6 +1,6 @@
 import { useCookies } from 'react-cookie';
 import { nanoid } from 'nanoid';
-export const useDeviceID = () => {
+export const useDeviceID = (): string => {
 	const [cookies, setCookie] = useCookies(['deviceId']);
 
 	if (!cookies['deviceId']) {
@@ -8,4 +8,6 @@ export const useDeviceID = () => {
 		const expiry = new Date(Number(new Date()) + millisecondsYear);
 		setCookie('deviceId', nanoid(), { expires: expiry });
 	}
+
+	return cookies[`deviceId`];
 };
