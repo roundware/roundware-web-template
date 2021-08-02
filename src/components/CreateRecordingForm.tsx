@@ -146,12 +146,7 @@ const CreateRecordingForm = () => {
 	const [deleteModalOpen, set_delete_modal_open] = useState(false);
 	const [legalModalOpen, set_legal_modal_open] = useState(false);
 	const [saving, set_saving] = useState(false);
-	const [error, set_error] = useState<
-		| {
-				message: string;
-		  }
-		| undefined
-	>();
+	const [error, set_error] = useState<Error | null>(null);
 	const [success, set_success] = useState<any | null>(null);
 	const history = useHistory();
 	const classes = useStyles();
@@ -161,11 +156,12 @@ const CreateRecordingForm = () => {
 	const startRecording = () => {
 		if (!navigator.mediaDevices) {
 			set_error({
-				message: "we can't get access to your microphone at this time",
+				name: `Microphone not accessible`,
+				message: "We can't get access to your microphone at this time",
 			});
 			return;
 		} else {
-			set_error(undefined);
+			set_error(null);
 		}
 		navigator.mediaDevices
 			.getUserMedia({ audio: true })
@@ -452,7 +448,7 @@ const CreateRecordingForm = () => {
 									set_success(asset);
 									updateAssets();
 								} catch (err) {
-									set_error({ message: err });
+									set_error(err);
 								}
 								set_saving(false);
 							}}
