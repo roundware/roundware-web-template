@@ -10,21 +10,21 @@ import { TagsDisplay } from './AssetTags';
 import TableBody from '@material-ui/core/TableBody';
 import moment from 'moment';
 import TablePagination from '@material-ui/core/TablePagination';
-import AssetFilterPanel from './asset-filter-panel';
+import AssetFilterPanel from './AssetFilterPanel';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
-const AssetTable = (props) => {
-	const { selectAsset, selectedAsset, filteredAssets, assetPage, assetsPerPage, assetPageIndex, setAssetsPerPage, setAssetPageIndex, setUserFilter, sortField, setSortField } = useRoundware();
+const AssetTable = () => {
+	const { selectAsset, selectedAsset, filteredAssets, assetPage, assetsPerPage, assetPageIndex, setAssetsPerPage, setAssetPageIndex, setUserFilter, sortField, setSortField }: any = useRoundware();
 
 	let table_assets = filteredAssets;
 	if (filteredAssets === undefined) {
 		table_assets = [];
 	}
-	const handleChangePage = (event, newPage) => {
+	const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, page: number) => {
 		setAssetPageIndex(newPage);
 	};
-	const handleChangeRowsPerPage = (event, numRows) => {
-		setAssetsPerPage(parseInt(numRows.key));
+	const handleChangeRowsPerPage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, numRows: number) => {
+		setAssetsPerPage(numRows);
 	};
 	return (
 		<Paper className={'asset-list'}>
@@ -50,7 +50,7 @@ const AssetTable = (props) => {
 					</TableHead>
 
 					<TableBody>
-						{assetPage.map((asset) => (
+						{assetPage.map((asset: any) => (
 							<TableRow hover selected={asset.id === selectedAsset && selectedAsset.id} tabIndex={-1} key={asset.id}>
 								<TableCell align='right' className='rowActions'>
 									<button
@@ -80,7 +80,7 @@ const AssetTable = (props) => {
 			</TableContainer>
 			{/*{ filteredAssets.length === 0 ? "No Recordings Found..." : null }*/}
 
-			<TablePagination component='div' backIconButtonProps={{ size: 'small' }} nextIconButtonProps={{ size: 'small' }} count={table_assets.length} rowsPerPage={assetsPerPage} page={assetPageIndex} onChangePage={handleChangePage} onChangeRowsPerPage={handleChangeRowsPerPage} rowsPerPageOptions={[5, 10]} />
+			<TablePagination component='div' backIconButtonProps={{ size: 'small' }} nextIconButtonProps={{ size: 'small' }} count={table_assets.length} rowsPerPage={assetsPerPage} page={assetPageIndex} onChangePage={handleChangePage} onPageChange={handleChangeRowsPerPage} rowsPerPageOptions={[5, 10]} />
 		</Paper>
 	);
 };
