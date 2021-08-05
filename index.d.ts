@@ -1,4 +1,3 @@
-declare module 'roundware-web-framework';
 declare module '@foobar404/wave';
 declare module 'audio-recorder-polyfill' {
 	interface MediaRecorderErrorEvent extends Event {
