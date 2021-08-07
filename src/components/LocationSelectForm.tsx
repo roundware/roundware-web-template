@@ -166,8 +166,8 @@ const LocationSelectForm = () => {
 					variant={'contained'}
 					onClick={() => {
 						history.push('/speak/recording');
-						if (roundware._mixer && roundware._mixer.playing) {
-							roundware._mixer.toggle(roundware._mixer.token);
+						if (roundware.mixer && roundware.mixer.playing) {
+							roundware.mixer.toggle(roundware.mixer.token);
 						}
 					}}
 				>

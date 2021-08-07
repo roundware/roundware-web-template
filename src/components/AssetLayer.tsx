@@ -33,6 +33,7 @@ const AssetLayer = () => {
 	const [markerClusterer, setMarkerClusterer] = useState<any | null>(null);
 
 	useEffect(() => {
+		console.log(assetPage);
 		if (!eid || lastSelected === eid) {
 			return;
 		}

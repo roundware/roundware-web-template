@@ -49,7 +49,7 @@ export const App = () => {
 			<CssBaseline />
 			<Helmet>
 				<meta charSet='utf-8' />
-				<title>{roundware._project ? roundware._project.projectName : ''}</title>
+				<title>{roundware.project ? roundware.project.projectName : ''}</title>
 				<link rel='icon' type='image/png' href={favicon} sizes='16x16' />
 			</Helmet>
 
@@ -57,7 +57,7 @@ export const App = () => {
 				<Toolbar className={classes.topBar}>
 					<Typography variant='h6' className={classes.title}>
 						<NavLink to='/' className={classes.title}>
-							{roundware._project ? roundware._project.projectName : ''}
+							{roundware.project ? roundware.project.projectName : ''}
 						</NavLink>
 					</Typography>
 					<NavLink to='/'>
@@ -80,7 +80,7 @@ export const App = () => {
 						<ListenFilterDrawer />
 						<RoundwareMixerControl />
 					</Route>
-					{process.env.DEBUG_MODE === 'true' ? <div style={{ color: 'white' }}>mixer: {roundware._mixer && JSON.stringify(roundware._mixer.mixParams)}</div> : null}
+					{process.env.DEBUG_MODE === 'true' ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
 					<InfoPopup />
 				</Toolbar>
 			</AppBar>

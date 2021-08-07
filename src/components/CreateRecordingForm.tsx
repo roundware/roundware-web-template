@@ -236,7 +236,7 @@ const CreateRecordingForm = () => {
 	// todo present the participant with the tags they picked
 	const selected_tags = draftRecording.tags.map((tag: any) => tagLookup[tag]);
 
-	const maxRecordingLength = roundware._project ? roundware._project.maxRecordingLength : '--';
+	const maxRecordingLength = roundware.project ? roundware.project.maxRecordingLength : '--';
 
 	return (
 		<Card className={classes.container}>

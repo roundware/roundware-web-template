@@ -54,7 +54,7 @@ const RangeCircleOverlay = () => {
 	const theme = useTheme();
 	const map = useGoogleMap();
 	const { roundware, forceUpdate, geoListenMode } = useRoundware();
-	const loc = roundware._listenerLocation;
+	const loc = roundware.listenerLocation;
 	const lat = loc && loc.latitude;
 	const lng = loc && loc.longitude;
 	const center = { lat, lng };
@@ -62,7 +62,7 @@ const RangeCircleOverlay = () => {
 	// Shreyas - use observe instead of ref
 	const { observe, width, height } = useDimensions<HTMLDivElement>();
 	const [resizeListener, set_resize_listener] = useState<google.maps.MapsEventListener | undefined>(undefined);
-	const isPlaying = roundware._mixer && roundware._mixer.playing;
+	const isPlaying = roundware.mixer && roundware.mixer.playing;
 
 	// when the listenerLocation is updated, center the map
 	useEffect(() => {
@@ -90,17 +90,17 @@ const RangeCircleOverlay = () => {
 			const metersPerPixel = (156543.03392 * Math.cos((map.getCenter().lat() * Math.PI) / 180)) / Math.pow(2, map.getZoom());
 			// todo: use the actual height / width of the circle element to get this value
 			const newRadius = (width / 2) * metersPerPixel;
-			// roundware._project.recordingRadius = newRadius;
+			// roundware.project.recordingRadius = newRadius;
 			// set listening range to project recordingRadius when in walking mode
 			// set listening range to overlay circle when in map mode
-			if (roundware._mixer) {
+			if (roundware.mixer) {
 				if (geoListenMode === GeoListenMode.AUTOMATIC) {
-					roundware._mixer.updateParams({
-						maxDist: roundware._project.recordingRadius,
-						recordingRadius: roundware._project.recordingRadius,
+					roundware.mixer.updateParams({
+						maxDist: roundware.project.recordingRadius,
+						recordingRadius: roundware.project.recordingRadius,
 					});
 				} else if (geoListenMode === GeoListenMode.MANUAL) {
-					roundware._mixer.updateParams({
+					roundware.mixer.updateParams({
 						maxDist: newRadius,
 						recordingRadius: newRadius,
 					});

@@ -29,7 +29,7 @@ const walkingModeButton = () => {
 	const map = useGoogleMap();
 	const classes = useStyles();
 	// const [walkingMode, setwalkingMode] = useState(false);
-	const loc = roundware._listenerLocation;
+	const loc = roundware.listenerLocation;
 	const lat = loc && loc.latitude;
 	const lng = loc && loc.longitude;
 	const center = { lat, lng };
@@ -68,9 +68,9 @@ const walkingModeButton = () => {
 			// update text instructions?
 			// use spinner to indicate location is being determined initially
 		}
-		if (roundware._mixer) {
-			const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map((id) => parseInt(id));
-			trackIds.forEach((audioTrackId) => roundware._mixer.skipTrack(audioTrackId));
+		if (roundware.mixer) {
+			const trackIds = Object.keys(roundware.mixer.playlist.trackIdMap).map((id) => parseInt(id));
+			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
 		}
 		setBusy(false);
 	};

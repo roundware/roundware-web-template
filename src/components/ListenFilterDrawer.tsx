@@ -47,27 +47,27 @@ const ListenFilterDrawer = () => {
 
 	const handleAfterDateChange = (date) => {
 		setAfterDateFilter(moment(date).format());
-		if (!roundware._mixer) {
+		if (!roundware.mixer) {
 			return;
 		} else {
-			roundware._mixer.updateParams({
+			roundware.mixer.updateParams({
 				startDate: date,
 			});
-			const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map((id) => parseInt(id));
-			trackIds.forEach((audioTrackId) => roundware._mixer.skipTrack(audioTrackId));
+			const trackIds = Object.keys(roundware.mixer.playlist.trackIdMap).map((id) => parseInt(id));
+			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
 		}
 	};
 
 	const handleBeforeDateChange = (date) => {
 		setBeforeDateFilter(moment(date).format());
-		if (!roundware._mixer) {
+		if (!roundware.mixer) {
 			return;
 		} else {
-			roundware._mixer.updateParams({
+			roundware.mixer.updateParams({
 				endDate: date,
 			});
-			const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map((id) => parseInt(id));
-			trackIds.forEach((audioTrackId) => roundware._mixer.skipTrack(audioTrackId));
+			const trackIds = Object.keys(roundware.mixer.playlist.trackIdMap).map((id) => parseInt(id));
+			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
 		}
 	};
 

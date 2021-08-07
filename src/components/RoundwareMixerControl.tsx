@@ -15,7 +15,7 @@ function Alert(props: AlertProps) {
 const RoundwareMixerControl = () => {
 	const { roundware, forceUpdate } = useRoundware();
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
-	const isPlaying = roundware._mixer && roundware._mixer.playing;
+	const isPlaying = roundware.mixer && roundware.mixer.playing;
 
 	const handleSnackbarClose = (event: React.SyntheticEvent<any, Event>, reason: SnackbarCloseReason) => {
 		if (reason === 'clickaway') {
@@ -24,11 +24,11 @@ const RoundwareMixerControl = () => {
 		setSnackbarOpen(false);
 	};
 
-	if (roundware.activateMixer && !roundware._mixer && GeoListenMode) {
+	if (roundware.activateMixer && !roundware.mixer && GeoListenMode) {
 		roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then((token: any, force: any) => {
 			const listen_tags = roundware.uiConfig.listen[0].display_items.map((i: any) => i.tag_id);
-			roundware._mixer.updateParams({
-				listenerLocation: roundware._listenerLocation,
+			roundware.mixer.updateParams({
+				listenerLocation: roundware.listenerLocation,
 				minDist: 0,
 				maxDist: 0,
 				recordingRadius: 0,
@@ -41,8 +41,8 @@ const RoundwareMixerControl = () => {
 	useEffect(() => {
 		// when the control for the mixer is unmounted, clean up by stopping the mixer
 		return () => {
-			if (roundware._mixer && roundware._mixer.active) {
-				roundware._mixer.toggle(roundware._mixer.token);
+			if (roundware.mixer && roundware.mixer.active) {
+				roundware.mixer.toggle(roundware.mixer.token);
 			}
 		};
 	}, []);
@@ -51,35 +51,35 @@ const RoundwareMixerControl = () => {
 		<>
 			<Button
 				onClick={() => {
-					if (!roundware._mixer) {
+					if (!roundware.mixer) {
 						roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then((token: any, force: any) => {
 							const listen_tags = roundware.uiConfig.listen[0].display_items.map((i: any) => i.tag_id);
-							roundware._mixer.updateParams({
-								listenerLocation: roundware._listenerLocation,
+							roundware.mixer.updateParams({
+								listenerLocation: roundware.listenerLocation,
 								minDist: 0,
 								maxDist: 0,
 								recordingRadius: 0,
 								listenTagIds: listen_tags,
 							});
-							roundware._mixer.toggle(token, force);
+							roundware.mixer.toggle(token, force);
 							forceUpdate();
 						});
 					} else {
-						roundware._mixer.toggle(roundware._mixer.token, false);
+						roundware.mixer.toggle(roundware.mixer.token, false);
 						forceUpdate();
 					}
 				}}
 			>
-				{roundware && roundware._mixer && roundware._mixer.playing ? <PauseCircleOutlineIcon fontSize='large' /> : <PlayCircleOutlineIcon fontSize='large' />}
+				{roundware && roundware.mixer && roundware.mixer.playing ? <PauseCircleOutlineIcon fontSize='large' /> : <PlayCircleOutlineIcon fontSize='large' />}
 			</Button>
 			<Button
 				disabled={isPlaying ? false : true}
 				onClick={() => {
-					if (!roundware._mixer) {
+					if (!roundware.mixer) {
 						return;
 					} else {
-						const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map((id) => parseInt(id));
-						trackIds.forEach((audioTrackId) => roundware._mixer.skipTrack(audioTrackId));
+						const trackIds = Object.keys(roundware.mixer.playlist.trackIdMap).map((id) => parseInt(id));
+						trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
 						setSnackbarOpen(true);
 					}
 				}}

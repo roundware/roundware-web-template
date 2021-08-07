@@ -37,7 +37,7 @@ const downloadAsset = async (asset, projectName: string) => {
 
 export const AssetActionButtons = ({ asset }) => {
 	const { roundware } = useRoundware();
-	const projectName = roundware._project.projectName;
+	const projectName = roundware.project.projectName;
 
 	return (
 		<div id='infoVoteBlock'>

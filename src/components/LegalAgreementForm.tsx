@@ -16,14 +16,14 @@ interface LegalAgreementFormProps {
 const LegalAgreementForm = ({ onAccept, onDecline }: LegalAgreementFormProps) => {
 	const { roundware, draftRecording }: any = useRoundware();
 	const [accepted_agreement, set_accepted_agreement] = useState<boolean>(false);
-	if (!roundware._project) {
+	if (!roundware.project) {
 		return null;
 	}
 	return (
 		<Fragment>
 			<DialogTitle>Content Agreement</DialogTitle>
 			<DialogContent>
-				<DialogContentText>{roundware._project.legalAgreement}</DialogContentText>
+				<DialogContentText>{roundware.project.legalAgreement}</DialogContentText>
 				<FormControlLabel
 					label={'I AGREE'}
 					control={
