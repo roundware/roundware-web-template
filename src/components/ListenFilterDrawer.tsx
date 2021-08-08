@@ -40,7 +40,7 @@ const ListenFilterDrawer = () => {
 		right: false,
 	});
 
-	const { roundware, userFilter, setUserFilter, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter } = useRoundware();
+	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter } = useRoundware();
 	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
 		return null;
 	}
