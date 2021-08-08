@@ -19,6 +19,7 @@ export interface IRoundwareContext {
 	assetPageIndex: number;
 	assetsPerPage: number;
 	geoListenMode: number;
+	userFilter: string;
 	// state modification functions
 	selectAsset: React.Dispatch<React.SetStateAction<IAssetData | undefined>>;
 	selectTags: (tags: number[] | null, group: ITagGroup) => void;
@@ -35,7 +36,7 @@ export interface IRoundwareContext {
 	>;
 	forceUpdate: React.DispatchWithoutAction;
 	setGeoListenMode: (modeName: number) => void;
-	updateAssets: (assetData: IAssetData[]) => void;
+	updateAssets: (assetData?: IAssetData[]) => void;
 	// computed properties
 	assetPage: IAssetData[];
 	assetsReady: boolean;

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRoundware } from '../../hooks';
 import TagSelectForm from './TagSelectForm';
 import LocationSelectForm from './LocationSelectForm';
-import CreateRecordingForm from '../CreateRecordingForm';
+import CreateRecordingForm from './CreateRecordingForm';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { Route, Switch, useHistory } from 'react-router-dom';

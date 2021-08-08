@@ -20,7 +20,7 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [assetsReady, setAssetsReady] = useState<IRoundwareContext[`assetsReady`]>(false);
 	const [beforeDateFilter, setBeforeDateFilter] = useState<IRoundwareContext[`beforeDateFilter`]>(moment().format());
 	const [afterDateFilter, setAfterDateFilter] = useState<IRoundwareContext[`afterDateFilter`]>(undefined);
-	const [userFilter, setUserFilter] = useState<string>('');
+	const [userFilter, setUserFilter] = useState<IRoundwareContext[`userFilter`]>('');
 	const [selectedAsset, selectAsset] = useState<IRoundwareContext[`selectedAsset`]>(undefined);
 	const [selectedTags, setSelectedTags] = useState<IRoundwareContext[`selectedTags`]>(null);
 	const [sortField, setSortField] = useState<IRoundwareContext[`sortField`]>({ name: 'created', asc: false });
@@ -229,6 +229,7 @@ const RoundwareProvider = (props: PropTypes) => {
 				assetPageIndex,
 				assetsPerPage,
 				geoListenMode,
+				userFilter,
 				// state modification functions
 				selectAsset,
 				selectTags,
