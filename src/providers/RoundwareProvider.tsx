@@ -17,19 +17,19 @@ const RoundwareProvider = (props: PropTypes) => {
 			speak: [],
 		},
 	} as unknown as Roundware);
-	const [assetsReady, setAssetsReady] = useState(false);
-	const [beforeDateFilter, setBeforeDateFilter] = useState<string>(moment().format());
-	const [afterDateFilter, setAfterDateFilter] = useState<string | undefined>(undefined);
+	const [assetsReady, setAssetsReady] = useState<IRoundwareContext[`assetsReady`]>(false);
+	const [beforeDateFilter, setBeforeDateFilter] = useState<IRoundwareContext[`beforeDateFilter`]>(moment().format());
+	const [afterDateFilter, setAfterDateFilter] = useState<IRoundwareContext[`afterDateFilter`]>(undefined);
 	const [userFilter, setUserFilter] = useState<string>('');
-	const [selectedAsset, selectAsset] = useState<IAssetData | undefined>(undefined);
-	const [selectedTags, setSelectedTags] = useState<ISelectedTags | null>(null);
-	const [sortField, setSortField] = useState({ name: 'created', asc: false });
+	const [selectedAsset, selectAsset] = useState<IRoundwareContext[`selectedAsset`]>(undefined);
+	const [selectedTags, setSelectedTags] = useState<IRoundwareContext[`selectedTags`]>(null);
+	const [sortField, setSortField] = useState<IRoundwareContext[`sortField`]>({ name: 'created', asc: false });
 	const [assetPageIndex, setAssetPageIndex] = useState(0);
 	const [assetsPerPage, setAssetsPerPage] = useState(10000);
-	const [tagLookup, setTagLookup] = useState<ITagLookup>({});
+	const [tagLookup, setTagLookup] = useState<IRoundwareContext[`tagLookup`]>({});
 	const [filteredAssets, setFilteredAssets] = useState<IAssetData[]>([]);
 	const deviceId = useDeviceID();
-	const [assetPage, setAssetPage] = useState<IAssetData[]>([]);
+	const [assetPage, setAssetPage] = useState<IRoundwareContext[`assetPage`]>([]);
 	const [, forceUpdate] = useReducer((x) => !x, false);
 
 	const sortAssets = (assets: IAssetData[]) => {
@@ -119,7 +119,7 @@ const RoundwareProvider = (props: PropTypes) => {
 		});
 	};
 	// tells the provider to update assetData dependencies with the roundware _assetData source
-	const updateAssets = (assetData: IAssetData[]) => {
+	const updateAssets: IRoundwareContext[`updateAssets`] = (assetData) => {
 		const filteredAssets = filterAssets(assetData || roundware.assetData || []);
 		setFilteredAssets(filteredAssets);
 	};
@@ -132,7 +132,7 @@ const RoundwareProvider = (props: PropTypes) => {
 		console.log(selectedTags);
 	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
 
-	const selectTags = (tags: number[] | null, group: ITagGroup) => {
+	const selectTags: IRoundwareContext[`selectTags`] = (tags, group) => {
 		const group_key = group.group_short_name!;
 		const newFilters = { ...selectedTags };
 		let listenTagIds: number[] = [];
