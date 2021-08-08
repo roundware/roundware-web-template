@@ -7,11 +7,15 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { Snackbar } from '@material-ui/core';
 import { AutocompleteChangeReason } from '@material-ui/lab';
 import { TextFieldProps } from 'material-ui';
+import { ITag, ITagGroup, IUiConfig } from 'roundware-web-framework/dist/types';
 
 function Alert(props: AlertProps) {
 	return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
-const TagFilterMenu = ({ tag_group }: any) => {
+interface TagFilterMenuProps {
+	tag_group: ITagGroup;
+}
+const TagFilterMenu = ({ tag_group }: TagFilterMenuProps) => {
 	const classes = useStyles();
 	const { roundware, selectTags, selectedTags } = useRoundware();
 	const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -21,28 +25,29 @@ const TagFilterMenu = ({ tag_group }: any) => {
 		setSnackbarOpen(false);
 	};
 
-	const handleChange = (event: React.ChangeEvent<{}>, value: any[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<any> | undefined) => {
+	const handleChange = (event: React.ChangeEvent<{}>, value: { value: number }[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<any> | undefined) => {
 		const tag_ids = value ? value.map((t) => t.value) : null;
+
 		selectTags(tag_ids, tag_group);
 		setSnackbarOpen(true);
-		if (!roundware._mixer) {
+		if (!roundware?.mixer) {
 			return;
 		} else {
-			const trackIds = Object.keys(roundware._mixer.playlist.trackIdMap).map((id) => parseInt(id));
-			trackIds.forEach((audioTrackId) => roundware._mixer.skipTrack(audioTrackId));
+			const trackIds = Object.keys(roundware.mixer.playlist?.trackIdMap || {}).map((id) => parseInt(id));
+			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
 		}
 	};
 
-	const options = tag_group.display_items.map(({ tag_id, tag_display_text }: { tag_id: string; tag_display_text: string }) => {
+	const options = tag_group.display_items.map(({ tag_id, tag_display_text }: ITag) => {
 		return {
 			value: tag_id,
 			label: tag_display_text,
 		};
 	});
 
-	const fieldId = `roundware-tag-${tag_group.header_display_text}`;
+	const fieldId = `roundware-tag-${tag_group?.header_display_text}`;
 
-	const selectedTagGroupTags = selectedTags[tag_group.group_short_name] || [];
+	const selectedTagGroupTags = selectedTags! ? selectedTags[tag_group.group_short_name!] : [] || [];
 
 	return (
 		<>

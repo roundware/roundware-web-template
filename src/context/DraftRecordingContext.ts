@@ -1,23 +1,24 @@
 import { Context, createContext, Dispatch, SetStateAction } from 'react';
+import { ITag } from 'roundware-web-framework/dist/types';
 
 export interface IDraftRecordingContext {
-	tags: any[];
+	tags: ITag[];
 	acceptedAgreement: boolean;
 	location: {
-		latitude: any;
-		longitude: any;
+		latitude: number | null;
+		longitude: number | null;
 	};
 	setLocation: Dispatch<
 		SetStateAction<{
-			latitude: any;
-			longitude: any;
+			latitude: number | null;
+			longitude: number | null;
 		}>
 	>;
-	setTags: Dispatch<SetStateAction<any[]>>;
-	selectTag: (tag: any, deselect: any) => void;
-	clearTags: (tags: any[]) => void;
-	reset: Function;
+	setTags: Dispatch<SetStateAction<ITag[]>>;
+	selectTag: (tag: ITag, deselect: ITag) => void;
+	clearTags: (tags: ITag[]) => void;
+	reset: () => void;
 }
-const DraftRecordingContext: Context<Partial<IDraftRecordingContext>> = createContext({});
+const DraftRecordingContext = createContext<IDraftRecordingContext>(undefined!);
 
 export default DraftRecordingContext;

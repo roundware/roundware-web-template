@@ -7,3 +7,10 @@ export interface ITagLookup {
 export interface ISelectedTags {
 	[group_key: string]: number[]; // tag_ids
 }
+
+export interface IMatch {
+	params: {
+		tagGroupIndex?: string;
+	};
+	path: string;
+}

@@ -14,7 +14,7 @@ export const LandingPage = () => {
 	const { roundware } = useRoundware();
 	const classes = useStyles();
 
-	if (!roundware._project || roundware._project.projectName === '(unknown)') {
+	if (!roundware.project || roundware.project.projectName === '(unknown)') {
 		return null;
 	}
 	return (
@@ -26,7 +26,7 @@ export const LandingPage = () => {
               variant={"h2"}
               className={classes.landingTitle}
             >
-              {roundware._project && roundware._project.projectName}
+              {roundware.project && roundware.project.projectName}
             </Typography>*/}
 						<img src={banner} className={classes.landingBanner} />
 					</Grid>

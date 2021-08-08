@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Roundware } from 'roundware-web-framework';
 
 interface DraftRecordingProviderProps {
-	// roundware: Roundware;
+	roundware: Roundware;
 	children: React.ReactNode;
 }
 export const DraftRecordingProvider = ({ roundware, children }: DraftRecordingProviderProps) => {
@@ -15,13 +15,19 @@ export const DraftRecordingProvider = ({ roundware, children }: DraftRecordingPr
 	const [acceptedAgreement, setAcceptedAgreement] = useState<IDraftRecordingContext[`acceptedAgreement`]>(false);
 
 	useEffect(() => {
-		if (!roundware._project || !roundware._project.location) {
+		if (!roundware.project || !roundware.project.location) {
 			return;
 		}
 		if (location.latitude === null || location.longitude === null) {
-			setLocation(roundware._project.location);
+			const location = roundware.project.location;
+			if (typeof location.latitude == 'number' && typeof location.longitude == 'number') {
+				setLocation({
+					latitude: location.latitude,
+					longitude: location.longitude,
+				});
+			}
 		}
-	}, [roundware._project && roundware._project.location]);
+	}, [roundware.project && roundware.project.location]);
 
 	const selectTag: IDraftRecordingContext[`selectTag`] = (tag, deselect) => {
 		const newTags = [...tags];

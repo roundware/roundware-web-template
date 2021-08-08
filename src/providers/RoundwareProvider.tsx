@@ -132,14 +132,14 @@ const RoundwareProvider = (props: PropTypes) => {
 		console.log(selectedTags);
 	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
 
-	const selectTags = (tags: number[], group: ITagGroup) => {
+	const selectTags = (tags: number[] | null, group: ITagGroup) => {
 		const group_key = group.group_short_name!;
 		const newFilters = { ...selectedTags };
 		let listenTagIds: number[] = [];
-		if (tags === null && newFilters[group_key]) {
+		if (tags == null && newFilters[group_key]) {
 			delete newFilters[group_key];
 		} else {
-			newFilters[group_key] = tags;
+			newFilters[group_key] = tags!;
 		}
 		setSelectedTags(newFilters);
 		Object.keys(newFilters).map(function (key) {
