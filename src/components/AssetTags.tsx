@@ -22,7 +22,7 @@ export const TagDisplay = ({ tagId }: TagDisplayProps) => {
 export const TagsDisplay = ({ tagIds }: { tagIds: number[] }) => {
 	return (
 		<div className='rw-tags'>
-			{tagIds.map((tagId: any) => (
+			{tagIds.map((tagId: number) => (
 				<React.Fragment key={tagId}>
 					<TagDisplay tagId={tagId} />
 				</React.Fragment>
