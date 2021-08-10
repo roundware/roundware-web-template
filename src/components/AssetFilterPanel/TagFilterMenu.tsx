@@ -1,5 +1,5 @@
 import { Grid, TextField } from '@material-ui/core';
-import Autocomplete, { AutocompleteChangeDetails } from '@material-ui/lab/Autocomplete';
+import Autocomplete, { AutocompleteChangeDetails, AutocompleteRenderInputParams } from '@material-ui/lab/Autocomplete';
 import React, { useState } from 'react';
 import { useRoundware } from '../../hooks';
 import useStyles from './styles';
@@ -47,14 +47,13 @@ const TagFilterMenu = ({ tag_group }: TagFilterMenuProps) => {
 
 	const fieldId = `roundware-tag-${tag_group?.header_display_text}`;
 
-	const selectedTagGroupTags = selectedTags! ? selectedTags[tag_group.group_short_name!] : [] || [];
+	const selectedTagGroupTags = (tag_group && tag_group.group_short_name && selectedTags && selectedTags[tag_group.group_short_name]) || [];
 
 	return (
 		<>
 			<Grid item xs={12} className={`tag-filter-field tag-filter-select`}>
 				<label className='tag-filter-field--label'>
-					{/* @ts-ignore TextFieldProps doesn't match from material ui given interface */}
-					<Autocomplete multiple id={tag_group.name} classes={classes} options={options} getOptionLabel={(option) => (option ? option.label : '')} onChange={handleChange} getOptionSelected={(option) => selectedTagGroupTags.indexOf(option.value) !== -1} value={options.filter((o: { value: unknown }) => selectedTagGroupTags.indexOf(o.value) !== -1)} renderInput={(params: TextFieldProps) => <TextField {...params} variant='standard' label={tag_group.header_display_text} placeholder='Select one or more...' />}></Autocomplete>
+					<Autocomplete multiple id={tag_group?.group_short_name} classes={classes} options={options} getOptionLabel={(option) => (option ? option.label : '')} onChange={handleChange} getOptionSelected={(option) => selectedTagGroupTags?.indexOf(option.value) !== -1} value={options.filter((o: { value: number }) => selectedTagGroupTags.indexOf(o.value) !== -1)} renderInput={(params: AutocompleteRenderInputParams) => <TextField {...params} variant='standard' label={tag_group.header_display_text} placeholder='Select one or more...' />}></Autocomplete>
 				</label>
 			</Grid>
 			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>

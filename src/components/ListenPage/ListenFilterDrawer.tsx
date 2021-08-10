@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import LabelIcon from '@material-ui/icons/Label';
 import TagFilterMenu from '../AssetFilterPanel/TagFilterMenu';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
@@ -45,31 +46,33 @@ const ListenFilterDrawer = () => {
 		return null;
 	}
 
-	// const handleAfterDateChange = (date) => {
-	// 	setAfterDateFilter(moment(date).format());
-	// 	if (!roundware.mixer) {
-	// 		return;
-	// 	} else {
-	// 		roundware.mixer.updateParams({
-	// 			startDate: date,
-	// 		});
-	// 		const trackIds = Object.keys(roundware.mixer?.playlist.trackIdMap || {}).map((id) => parseInt(id));
-	// 		trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
-	// 	}
-	// };
+	const handleAfterDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined): void => {
+		if (!date) return;
+		setAfterDateFilter(moment(date).format());
+		if (!roundware.mixer) {
+			return;
+		} else {
+			roundware.mixer.updateParams({
+				startDate: date,
+			});
+			const trackIds = Object.keys(roundware?.mixer?.playlist?.trackIdMap || {}).map((id) => parseInt(id));
+			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
+		}
+	};
 
-	// const handleBeforeDateChange = (date) => {
-	// 	setBeforeDateFilter(moment(date).format());
-	// 	if (!roundware.mixer) {
-	// 		return;
-	// 	} else {
-	// 		roundware.mixer.updateParams({
-	// 			endDate: date,
-	// 		});
-	// 		const trackIds = Object.keys(roundware.mixer.playlist.trackIdMap).map((id) => parseInt(id));
-	// 		trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
-	// 	}
-	// };
+	const handleBeforeDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
+		if (!date) return;
+		setBeforeDateFilter(moment(date).format());
+		if (!roundware.mixer) {
+			return;
+		} else {
+			roundware.mixer.updateParams({
+				endDate: date,
+			});
+			const trackIds = Object.keys(roundware?.mixer?.playlist?.trackIdMap || {}).map((id) => parseInt(id));
+			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
+		}
+	};
 
 	const toggleDrawer = (anchor: string, open: boolean) => (event?: any) => {
 		if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
@@ -94,7 +97,7 @@ const ListenFilterDrawer = () => {
 			</List>
 			<Divider />
 			<List>
-				{/* <ListItem>
+				<ListItem>
 					<MuiPickersUtilsProvider utils={DateFnsUtils}>
 						<KeyboardDatePicker
 							disableToolbar
@@ -127,7 +130,7 @@ const ListenFilterDrawer = () => {
 							}}
 						/>
 					</MuiPickersUtilsProvider>
-				</ListItem> */}
+				</ListItem>
 				<Divider />
 				<ListItem key='tags-header'>
 					<ListItemIcon>
