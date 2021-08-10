@@ -1,4 +1,5 @@
 import { MarkerClusterer, useGoogleMap } from '@react-google-maps/api';
+import { Clusterer } from '@react-google-maps/marker-clusterer';
 import React, { Fragment, useEffect, useState } from 'react';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { useQuery, useRoundware } from '../../../../hooks';
@@ -29,13 +30,13 @@ const AssetLayer = () => {
 	const assets = assetPage;
 	const eid = parseInt(query.get('eid') || '');
 	const [lastSelected, setLastSelected] = useState<number | undefined>();
-	const [markerClusterer, setMarkerClusterer] = useState<any | null>(null);
+	const [markerClusterer, setMarkerClusterer] = useState<Clusterer | null>(null);
 
 	useEffect(() => {
 		if (!eid || lastSelected === eid) {
 			return;
 		}
-		const asset = assets.find((a: any) => a.envelope_ids.indexOf(eid) !== -1);
+		const asset = assets.find((a) => a?.envelope_ids?.indexOf(eid) !== -1);
 		if (!asset) {
 			// todo  present an error and clear bad query params when we can't find the asset we're looking for
 			return;
@@ -62,20 +63,22 @@ const AssetLayer = () => {
 	if (!map) {
 		return null;
 	}
-	const markers = (clusterer: JSX.Element) => {
-		return <OverlappingMarkerSpiderfierComponent children={(oms) => assets.map((asset: any) => <AssetMarker key={asset.id} asset={asset} clusterer={clusterer} oms={oms} />)} />;
+	const markers = (clusterer: Clusterer) => {
+		return <OverlappingMarkerSpiderfierComponent children={(oms) => assets.map((asset: any) => <AssetMarker key={asset.id} asset={asset} clusterer={clusterer} oms={oms!} />)} />;
 	};
 	const recluster = () => {
-		const markerObjs = markerClusterer.markers.slice();
-		markerClusterer.clearMarkers();
-		markerClusterer.repaint();
-		markerClusterer.addMarkers(markerObjs);
+		if (markerClusterer) {
+			const markerObjs = markerClusterer.markers.slice();
+			markerClusterer.clearMarkers();
+			markerClusterer.repaint();
+			markerClusterer.addMarkers(markerObjs, false);
+		}
 	};
 	const wait_for_full_page = async () => {
 		return new Promise<void>((resolve, reject) => {
 			const checkStart = Date.now();
 			const checkLength = () => {
-				if (assetPage.length >= markerClusterer.markers.length) {
+				if (markerClusterer && assetPage.length >= markerClusterer.markers.length) {
 					resolve();
 				} else if (Date.now() > checkStart + 3000) {
 					reject('asset page contains a different number of entries than the marker clusterer');
@@ -98,7 +101,6 @@ const AssetLayer = () => {
 			options={{
 				imagePath: 'https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m',
 			}}
-			// @ts-ignore types not provided by the library
 			children={markers}
 		/>
 	);
