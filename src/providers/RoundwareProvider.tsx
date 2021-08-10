@@ -69,7 +69,6 @@ const RoundwareProvider = (props: PropTypes) => {
 		let tag_lookup: ITagLookup = {};
 		roundware.uiConfig.speak.forEach((group) =>
 			group.display_items.forEach((tag) => {
-				console.log(tag);
 				tag_lookup[tag.id] = tag;
 			})
 		);
@@ -129,7 +128,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			const filteredAssets = filterAssets(roundware.assetData);
 			setFilteredAssets(filteredAssets);
 		}
-		console.log(selectedTags);
+		
 	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
 
 	const selectTags: IRoundwareContext[`selectTags`] = (tags, group) => {
