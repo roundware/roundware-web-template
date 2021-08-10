@@ -2,9 +2,10 @@ import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, ListItemIcon, ListItemText, TextField } from '@material-ui/core';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import { StyledMenuItem } from './StyledMenu';
+import { ITextAsset } from '../../../../types';
 
 interface TextInputDialogProps {
-	textAsset: unknown;
+	textAsset: ITextAsset;
 	addTextModalOpen: boolean;
 	isExtraSmallScreen: boolean;
 	setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
