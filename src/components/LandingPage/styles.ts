@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core';
-// @ts-ignore
 import landingHeaderImage from '../../assets/bg-about.jpg';
 const useStyles = makeStyles((theme) => {
 	return {
