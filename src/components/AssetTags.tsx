@@ -2,7 +2,7 @@ import { useRoundware } from '../hooks';
 import React from 'react';
 
 interface TagDisplayProps {
-	tagId: unknown;
+	tagId: number;
 }
 export const TagDisplay = ({ tagId }: TagDisplayProps) => {
 	const { roundware } = useRoundware();
@@ -19,7 +19,7 @@ export const TagDisplay = ({ tagId }: TagDisplayProps) => {
 	}
 };
 
-export const TagsDisplay = ({ tagIds }: { tagIds: unknown[] }) => {
+export const TagsDisplay = ({ tagIds }: { tagIds: number[] }) => {
 	return (
 		<div className='rw-tags'>
 			{tagIds.map((tagId: any) => (
