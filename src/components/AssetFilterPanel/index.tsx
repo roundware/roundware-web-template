@@ -8,8 +8,8 @@ interface AssetFilterPanelProps {
 	hidden?: boolean;
 }
 const AssetFilterPanel = ({ hidden = false }: AssetFilterPanelProps) => {
-	const { uiConfig, userFilter, setUserFilter }: any = useRoundware();
-	if (!(uiConfig && uiConfig.listen)) {
+	const { roundware, userFilter, setUserFilter } = useRoundware();
+	if (!roundware.uiConfig || !roundware.uiConfig.listen) {
 		return null;
 	}
 	return (
@@ -20,7 +20,7 @@ const AssetFilterPanel = ({ hidden = false }: AssetFilterPanelProps) => {
 					<DebounceInput minLength={2} className='rw-text-filter' value={userFilter} onChange={({ target }) => setUserFilter(target.value)} debounceTimeout={150} />
 				</label>
 			</Grid>
-			{uiConfig.listen.map((tg: any) => (
+			{roundware.uiConfig.listen.map((tg: any) => (
 				<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
 			))}
 		</Grid>
