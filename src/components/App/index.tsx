@@ -17,8 +17,8 @@ import logoMinimal from '../../assets/rw-logo-minimal.png';
 import DebugPage from '../DebugPage';
 import InfoPopup from '../InfoPopup';
 import { LandingPage } from '../LandingPage';
-import ListenFilterDrawer from '../ListenFilterDrawer';
-import RoundwareMixerControl from '../RoundwareMixerControl';
+import ListenFilterDrawer from '../ListenPage/ListenFilterDrawer';
+import RoundwareMixerControl from '../ListenPage/RoundwareMixerControl';
 import useStyles from './styles';
 
 import ListenPage from '../ListenPage';
