@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { IAssetData } from 'roundware-web-framework/dist/types';
 import { useRoundware } from '../hooks';
 import AssetFilterPanel from './AssetFilterPanel';
 import AssetListItem from './AssetListItem';
 
 interface AssetListProps {
-	assets: any[];
+	assets: IAssetData[];
 }
 const AssetList = (props: AssetListProps) => {
-	const { roundware, selectAsset, selectedAsset, filteredAssets }: any = useRoundware();
+	const { roundware, selectAsset, selectedAsset } = useRoundware();
+
 	const [minimized, set_minimized] = useState(false);
 	const [showing_filters, show_filters] = useState(false);
 
@@ -16,10 +18,10 @@ const AssetList = (props: AssetListProps) => {
 	if (!roundware) {
 		assets = props.assets || [];
 	} else {
-		assets = filteredAssets || props.assets || [];
+		assets = props.assets || [];
 	}
 	// sortEntries is not implemented
-	const entries = assets.sort(sortEntries).map((asset: any) => {
+	const entries = assets.sort().map((asset: IAssetData) => {
 		return <AssetListItem key={asset.id} asset={asset} player={false} />;
 	});
 	return (
