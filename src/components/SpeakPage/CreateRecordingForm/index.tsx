@@ -28,6 +28,7 @@ import AdditionalMediaMenu from './AdditionalMediaMenu';
 import { wait } from '../../../utils';
 import { useStyles, useStylesAudioPlayer } from './styles';
 import { IAudioData } from 'roundware-web-framework/dist/types';
+import { ITextAsset } from '../../../types';
 const visualizerOptions = {
 	type: 'bars',
 };
@@ -41,7 +42,7 @@ const CreateRecordingForm = () => {
 	const [draftMediaUrl, set_draft_media_url] = useState('');
 	const [recorder, set_recorder] = useState<MediaRecorder | undefined>();
 	const [stream, set_stream] = useState<MediaStream | undefined>();
-	const [textAsset, setTextAsset] = useState<string>('');
+	const [textAsset, setTextAsset] = useState<ITextAsset>('');
 	const [imageAssets, setImageAssets] = useState<File[]>([]);
 	const [deleteModalOpen, set_delete_modal_open] = useState(false);
 	const [legalModalOpen, set_legal_modal_open] = useState(false);
@@ -133,8 +134,7 @@ const CreateRecordingForm = () => {
 		}
 	}, [draftRecording.tags, draftRecording.location.latitude, draftRecording.location.longitude]);
 
-	// @ts-ignore - todo present the participant with the tags they picked
-	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag]);
+	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag.id]);
 
 	const maxRecordingLength = roundware.project ? (roundware.project.maxRecordingLength ? roundware.project.maxRecordingLength : '--') : '--';
 
@@ -160,8 +160,7 @@ const CreateRecordingForm = () => {
 					<Grid item>
 						{/*}<audio id={"draft-audio"} src={draftMediaUrl} controls />*/}
 						{/* id prop not availabe on this component prop types - Shreyas */}
-						{/* @ts-ignore */}
-						<AudioPlayer id='draft-audio' src={draftMediaUrl} useStyles={useStylesAudioPlayer} variation='primary' time='single' timePosition='end' volume={false} />
+						<AudioPlayer src={draftMediaUrl} useStyles={useStylesAudioPlayer} variation='primary' time='single' timePosition='end' volume={false} />
 					</Grid>
 				) : null}
 				{!draftMediaUrl && !isRecording ? (
@@ -339,11 +338,11 @@ const CreateRecordingForm = () => {
 
 									// Add the text asset, if any.
 									if (textAsset) {
-										await envelope.upload(new Blob([textAsset], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' });
+										await envelope.upload(new Blob([textAsset.toString()], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' });
 									}
 									for (const file of imageAssets) {
 										// roundware types not defined yet
-										// @ts-ignore
+
 										await envelope.upload(file, file.name || dateStr + '.jpg', {
 											...assetMeta,
 											media_type: 'photo',

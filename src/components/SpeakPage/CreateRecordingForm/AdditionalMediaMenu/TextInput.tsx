@@ -9,7 +9,7 @@ interface TextInputDialogProps {
 	addTextModalOpen: boolean;
 	isExtraSmallScreen: boolean;
 	setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
-	onSetText: React.Dispatch<React.SetStateAction<string>>;
+	onSetText: React.Dispatch<React.SetStateAction<ITextAsset>>;
 	setAddTextModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const TextInputDialog = ({ textAsset, addTextModalOpen, isExtraSmallScreen, onSetText, setAddTextModalOpen, setAnchorEl }: TextInputDialogProps) => (

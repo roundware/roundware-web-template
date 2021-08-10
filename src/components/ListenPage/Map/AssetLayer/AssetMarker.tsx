@@ -3,20 +3,20 @@ import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { InfoWindow, Marker, MarkerProps } from '@react-google-maps/api';
+import { InfoWindow, Marker } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
-import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { Roundware } from 'roundware-web-framework';
+import { IAssetData } from 'roundware-web-framework/dist/types';
+import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
+import { IRoundwareContext } from '../../../../context/RoundwareContext';
 import { useRoundware } from '../../../../hooks';
 import { lightTheme } from '../../../../styles';
-import { AssetActionButtons } from './AssetActionButtons';
+import { IImageAsset } from '../../../../types';
 import AssetPlayer from '../../../AssetPlayer';
 import { TagsDisplay } from '../../../AssetTags';
-import { IAssetData } from 'roundware-web-framework/dist/types';
-import { Roundware } from 'roundware-web-framework';
-import { IRoundwareContext } from '../../../../context/RoundwareContext';
-import { IImageAsset, ITextAsset } from '../../../../types';
+import { AssetActionButtons } from './AssetActionButtons';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -86,7 +86,7 @@ interface AssetInfoWindowInnerProps {
 }
 const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInfoWindowInnerProps) => {
 	const [imageAssets, setImageAssets] = useState<IImageAsset[]>([]);
-	const [textAssets, setTextAssets] = useState<ITextAsset[]>([]);
+	const [textAssets, setTextAssets] = useState<IAssetData[]>([]);
 
 	useEffect(() => {
 		if (Array.isArray(asset?.envelope_ids) && asset?.envelope_ids?.length > 0) {

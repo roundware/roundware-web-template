@@ -15,4 +15,4 @@ export interface IMatch {
 	path: string;
 }
 export type IImageAsset = IAssetData;
-export type ITextAsset = IAssetData;
+export type ITextAsset = string;

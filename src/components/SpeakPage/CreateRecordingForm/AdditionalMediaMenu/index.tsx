@@ -5,15 +5,16 @@ import { useTheme } from '@material-ui/core/styles';
 import PhotoIcon from '@material-ui/icons/Photo';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import React, { useRef, useState } from 'react';
+import { ITextAsset } from '../../../../types';
 import { PhotoPickerInput, PhotoPickerMenuItem } from './PhotoPicker';
 import { StyledMenu } from './StyledMenu';
 import { TextInputDialog, TextInputMenuItem } from './TextInput';
 
 interface AdditionalMediaMenuProps {
-	onSetText: React.Dispatch<React.SetStateAction<string>>;
+	onSetText: React.Dispatch<React.SetStateAction<ITextAsset>>;
 	onSetImage: (file: File) => void;
 	imageAssets: File[];
-	textAsset: string;
+	textAsset: ITextAsset;
 	disabled: boolean;
 }
 
