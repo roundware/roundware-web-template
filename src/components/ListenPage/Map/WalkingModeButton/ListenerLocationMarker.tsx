@@ -44,12 +44,14 @@ const ListenerLocationMarker = () => {
 					zIndex: 1,
 				}}
 			/>
+
 			<Marker position={{ lat: center.lat, lng: center.lng }} icon={iconPin}>
 				<InfoWindow
 					options={{
 						disableAutoPan: false,
 						pixelOffset: new google.maps.Size(0, -30),
 					}}
+					position={{ lat: center.lat, lng: center.lng }}
 				>
 					<Typography variant='body2' style={{ color: 'black' }}>
 						You Are Here
