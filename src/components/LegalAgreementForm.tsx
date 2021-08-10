@@ -14,7 +14,7 @@ interface LegalAgreementFormProps {
 }
 
 const LegalAgreementForm = ({ onAccept, onDecline }: LegalAgreementFormProps) => {
-	const { roundware, draftRecording }: any = useRoundware();
+	const { roundware } = useRoundware();
 	const [accepted_agreement, set_accepted_agreement] = useState<boolean>(false);
 	if (!roundware.project) {
 		return null;
