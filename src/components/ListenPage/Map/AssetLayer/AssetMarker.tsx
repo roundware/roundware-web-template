@@ -147,7 +147,6 @@ interface AssetMarkerProps {
 	oms: OverlappingMarkerSpiderfier;
 }
 const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
-	console.log(asset);
 	const { selectAsset } = useRoundware();
 	const iconPin = {
 		url: 'https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg',
