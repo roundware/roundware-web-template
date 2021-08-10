@@ -14,15 +14,11 @@ import AssetFilterPanel from './AssetFilterPanel';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 const AssetTable = () => {
-	const { selectAsset, selectedAsset, filteredAssets, assetPage, assetsPerPage, assetPageIndex, setAssetsPerPage, setAssetPageIndex, setUserFilter, sortField, setSortField }: any = useRoundware();
+	const { selectAsset, selectedAsset, assetPage, assetsPerPage, assetPageIndex, setAssetsPerPage, setAssetPageIndex, setUserFilter, sortField, setSortField } = useRoundware();
 
-	let table_assets = filteredAssets;
-	if (filteredAssets === undefined) {
-		table_assets = [];
-	}
+	let table_assets = [];
 
 	const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, page: number) => {
-		// @ts-ignore newPage is not declared
 		// setAssetPageIndex(newPage);
 	};
 	const handleChangeRowsPerPage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, numRows: number) => {
@@ -53,7 +49,7 @@ const AssetTable = () => {
 
 					<TableBody>
 						{assetPage.map((asset: any) => (
-							<TableRow hover selected={asset.id === selectedAsset && selectedAsset.id} tabIndex={-1} key={asset.id}>
+							<TableRow hover selected={Boolean(selectedAsset && asset.id === selectedAsset.id)} tabIndex={-1} key={asset.id}>
 								<TableCell align='right' className='rowActions'>
 									<button
 										onClick={() => {
