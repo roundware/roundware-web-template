@@ -17,7 +17,7 @@ const RoundwareMixerControl = () => {
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 	const isPlaying = roundware.mixer && roundware.mixer.playing;
 
-	const handleSnackbarClose = (event: React.SyntheticEvent<unknown, Event>, reason: SnackbarCloseReason) => {
+	const handleSnackbarClose = (event: React.SyntheticEvent<unknown, Event>, reason?: SnackbarCloseReason) => {
 		if (reason === 'clickaway') {
 			return;
 		}
@@ -92,7 +92,6 @@ const RoundwareMixerControl = () => {
 				<SkipNextIcon />
 			</Button>
 			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
-				{/* @ts-ignore onClose property conflicts */}
 				<Alert onClose={handleSnackbarClose} severity='success'>
 					Remixing audio: skipping ahead!
 				</Alert>
