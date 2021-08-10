@@ -13,7 +13,7 @@ export interface IRoundwareContext {
 		asc: boolean;
 	};
 	selectedTags: ISelectedTags | null;
-	selectedAsset: IAssetData | undefined;
+	selectedAsset: IAssetData | null;
 	beforeDateFilter: string;
 	afterDateFilter: string | undefined;
 	assetPageIndex: number;
@@ -21,7 +21,7 @@ export interface IRoundwareContext {
 	geoListenMode: number;
 	userFilter: string;
 	// state modification functions
-	selectAsset: React.Dispatch<React.SetStateAction<IAssetData | undefined>>;
+	selectAsset: React.Dispatch<React.SetStateAction<IAssetData | null>>;
 	selectTags: (tags: number[] | null, group: ITagGroup) => void;
 	setUserFilter: React.Dispatch<React.SetStateAction<string>>;
 	setBeforeDateFilter: React.Dispatch<React.SetStateAction<string>>;

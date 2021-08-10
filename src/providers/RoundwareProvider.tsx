@@ -21,7 +21,7 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [beforeDateFilter, setBeforeDateFilter] = useState<IRoundwareContext[`beforeDateFilter`]>(moment().format());
 	const [afterDateFilter, setAfterDateFilter] = useState<IRoundwareContext[`afterDateFilter`]>(undefined);
 	const [userFilter, setUserFilter] = useState<IRoundwareContext[`userFilter`]>('');
-	const [selectedAsset, selectAsset] = useState<IRoundwareContext[`selectedAsset`]>(undefined);
+	const [selectedAsset, selectAsset] = useState<IRoundwareContext[`selectedAsset`]>(null);
 	const [selectedTags, setSelectedTags] = useState<IRoundwareContext[`selectedTags`]>(null);
 	const [sortField, setSortField] = useState<IRoundwareContext[`sortField`]>({ name: 'created', asc: false });
 	const [assetPageIndex, setAssetPageIndex] = useState(0);
@@ -128,7 +128,6 @@ const RoundwareProvider = (props: PropTypes) => {
 			const filteredAssets = filterAssets(roundware.assetData);
 			setFilteredAssets(filteredAssets);
 		}
-		
 	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
 
 	const selectTags: IRoundwareContext[`selectTags`] = (tags, group) => {
