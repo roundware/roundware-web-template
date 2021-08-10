@@ -3,9 +3,10 @@ import moment from 'moment';
 import AssetPlayer from './AssetPlayer';
 import { useRoundware } from '../hooks';
 import { TagsDisplay } from './AssetTags';
+import { IAssetData } from 'roundware-web-framework/dist/types';
 
 interface AssetListItemProps {
-	asset: any;
+	asset: IAssetData;
 	player?: boolean;
 }
 const AssetListItem = ({ asset, player }: AssetListItemProps) => {
@@ -23,7 +24,7 @@ const AssetListItem = ({ asset, player }: AssetListItemProps) => {
 			<a className={asset.user && asset.user.username ? '' : 'hidden'} href='#'>
 				<i className='fa fa-user-circle' />
 			</a>
-			<TagsDisplay tagIds={asset.tag_ids} />
+			<TagsDisplay tagIds={asset.tag_ids!} />
 			{player ? <AssetPlayer asset={asset} /> : null}
 			<button
 				onClick={() => {

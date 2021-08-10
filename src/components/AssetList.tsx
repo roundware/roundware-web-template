@@ -44,7 +44,3 @@ AssetList.propTypes = {
 };
 
 export default AssetList;
-
-function sortEntries(sortEntries: any) {
-	throw new Error('Function not implemented.');
-}
