@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Roundware } from 'roundware-web-framework';
-import { IAssetData, ITagGroup } from 'roundware-web-framework/dist/types';
+import { GeoListenModeType, IAssetData, ITagGroup } from 'roundware-web-framework/dist/types';
 import { ISelectedTags, ITagLookup } from '../types';
 
 // this is the equivalent to the createStore method of Redux
@@ -18,7 +18,7 @@ export interface IRoundwareContext {
 	afterDateFilter: string | undefined;
 	assetPageIndex: number;
 	assetsPerPage: number;
-	geoListenMode: number;
+	geoListenMode: GeoListenModeType;
 	userFilter: string;
 	// state modification functions
 	selectAsset: React.Dispatch<React.SetStateAction<IAssetData | null>>;
@@ -35,7 +35,7 @@ export interface IRoundwareContext {
 		}>
 	>;
 	forceUpdate: React.DispatchWithoutAction;
-	setGeoListenMode: (modeName: number) => void;
+	setGeoListenMode: (modeName: GeoListenModeType) => void;
 	updateAssets: (assetData?: IAssetData[]) => void;
 	// computed properties
 	assetPage: IAssetData[];
