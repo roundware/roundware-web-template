@@ -2,7 +2,7 @@ import { Context, createContext, Dispatch, SetStateAction } from 'react';
 import { ITag } from 'roundware-web-framework/dist/types';
 
 export interface IDraftRecordingContext {
-	tags: ITag[];
+	tags: number[];
 	acceptedAgreement: boolean;
 	location: {
 		latitude: number | null;
@@ -14,9 +14,9 @@ export interface IDraftRecordingContext {
 			longitude: number | null;
 		}>
 	>;
-	setTags: Dispatch<SetStateAction<ITag[]>>;
-	selectTag: (tag: ITag, deselect: ITag) => void;
-	clearTags: (tags: ITag[]) => void;
+	setTags: Dispatch<SetStateAction<number[]>>;
+	selectTag: (tag: number, deselect: number) => void;
+	clearTags: (tags: number[]) => void;
 	reset: () => void;
 }
 const DraftRecordingContext = createContext<IDraftRecordingContext>(undefined!);
