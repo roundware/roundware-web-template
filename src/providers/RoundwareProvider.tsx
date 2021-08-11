@@ -4,7 +4,7 @@ import { useDeviceID } from '../hooks/useDeviceID';
 import moment from 'moment';
 import { useEffect, useReducer, useState } from 'react';
 import { GeoListenMode, Roundware } from 'roundware-web-framework';
-import { Coordinates, IAssetData, ITag, ITagGroup, IUiConfig } from 'roundware-web-framework/dist/types';
+import { Coordinates, GeoListenModeType, IAssetData, ITag, ITagGroup, IUiConfig } from 'roundware-web-framework/dist/types';
 import { IRoundwareConstructorOptions } from 'roundware-web-framework/dist/types/roundware';
 import { ISelectedTags, ITagLookup } from '../types';
 interface PropTypes {
@@ -163,7 +163,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			deviceId: deviceId,
 			serverUrl: server_url,
 			projectId: project_id,
-			geoListenMode: true,
+			geoListenMode: GeoListenMode.MANUAL,
 			speakerFilters: { activeyn: true },
 			assetFilters: { submitted: true, media_type: 'audio' },
 			listenerLocation: initial_loc,
@@ -191,7 +191,7 @@ const RoundwareProvider = (props: PropTypes) => {
 	}, [roundware?.project]);
 
 	const geoListenMode = (roundware?.mixer && roundware?.mixer?.mixParams?.geoListenMode) || GeoListenMode?.DISABLED;
-	const setGeoListenMode = (modeName: number) => {
+	const setGeoListenMode = (modeName: GeoListenModeType) => {
 		roundware.enableGeolocation(modeName);
 		let prom: Promise<Coordinates | void>;
 		// console.log(`roundware.mixer.mixParams.geoListenMode: ${roundware.mixer.mixParams.geoListenMode}`);
