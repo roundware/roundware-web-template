@@ -134,7 +134,7 @@ const CreateRecordingForm = () => {
 		}
 	}, [draftRecording.tags, draftRecording.location.latitude, draftRecording.location.longitude]);
 
-	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag.id]);
+	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag]);
 
 	const maxRecordingLength = roundware.project ? (roundware.project.maxRecordingLength ? roundware.project.maxRecordingLength : '--') : '--';
 
