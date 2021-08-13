@@ -20,6 +20,7 @@ export interface IRoundwareContext {
 	assetsPerPage: number;
 	geoListenMode: GeoListenModeType;
 	userFilter: string;
+	playingAssets: IAssetData[];
 	// state modification functions
 	selectAsset: React.Dispatch<React.SetStateAction<IAssetData | null>>;
 	selectTags: (tags: number[] | null, group: ITagGroup) => void;

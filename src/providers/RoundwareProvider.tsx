@@ -30,10 +30,11 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [filteredAssets, setFilteredAssets] = useState<IAssetData[]>([]);
 	const deviceId = useDeviceID();
 	const [assetPage, setAssetPage] = useState<IRoundwareContext[`assetPage`]>([]);
-	const [, forceUpdate] = useReducer((x) => !x, false);
 	const [playingAssets, setPlayingAssets] = useState<IRoundwareContext[`playingAssets`]>([]);
+	const [, forceUpdate] = useReducer((x) => !x, false);
 
 	const updatePlaying = (assets: IAssetData[] | undefined) => {
+		console.log(`playing assets: `, assets);
 		setPlayingAssets(assets || []);
 	};
 
