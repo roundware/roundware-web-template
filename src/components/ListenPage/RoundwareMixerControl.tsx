@@ -24,36 +24,36 @@ const RoundwareMixerControl = () => {
 		setSnackbarOpen(false);
 	};
 
-	if (typeof roundware.activateMixer == 'function' && !roundware.mixer && GeoListenMode) {
-		roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
-			if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {
-				const listen_tags = roundware.uiConfig.listen[0].display_items.map((i) => i.tag_id);
-				roundware.mixer.updateParams({
-					listenerLocation: roundware.listenerLocation,
-					minDist: 0,
-					maxDist: 0,
-					recordingRadius: 0,
-					listenTagIds: listen_tags,
-				});
-				forceUpdate();
-			}
-		});
-	}
-
 	useEffect(() => {
+		if (roundware.mixer) {
+			roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
+				if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {
+					const listen_tags = roundware.uiConfig.listen[0].display_items.map((i) => i.tag_id);
+					roundware.mixer.updateParams({
+						listenerLocation: roundware.listenerLocation,
+						minDist: 0,
+						maxDist: 0,
+						recordingRadius: 0,
+						listenTagIds: listen_tags,
+					});
+					forceUpdate();
+				}
+			});
+		}
+
 		// when the control for the mixer is unmounted, clean up by stopping the mixer
 		return () => {
 			if (roundware.mixer && roundware.mixer.playing) {
 				roundware.mixer.toggle();
 			}
 		};
-	}, []);
+	}, [roundware]);
 
 	return (
 		<>
 			<Button
 				onClick={() => {
-					if (!roundware.mixer) {
+					if (!roundware.mixer || !roundware.mixer?.playlist) {
 						roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
 							if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {
 								const listen_tags = roundware.uiConfig.listen[0].display_items.map((i) => i.tag_id);
@@ -83,7 +83,6 @@ const RoundwareMixerControl = () => {
 						return;
 					} else {
 						const trackIds = Object.keys(roundware.mixer.playlist.trackIdMap || {}).map((id) => parseInt(id));
-						alert(trackIds);
 						trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
 						setSnackbarOpen(true);
 					}
