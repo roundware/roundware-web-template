@@ -31,6 +31,11 @@ const RoundwareProvider = (props: PropTypes) => {
 	const deviceId = useDeviceID();
 	const [assetPage, setAssetPage] = useState<IRoundwareContext[`assetPage`]>([]);
 	const [, forceUpdate] = useReducer((x) => !x, false);
+	const [playingAssets, setPlayingAssets] = useState<IRoundwareContext[`playingAssets`]>([]);
+
+	const updatePlaying = (assets: IAssetData[] | undefined) => {
+		setPlayingAssets(assets || []);
+	};
 
 	const sortAssets = (assets: IAssetData[]) => {
 		const sort_value = sortField.asc ? 1 : -1;
@@ -177,7 +182,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			roundware.updateLocation(roundware.project.location);
 			roundware.onUpdateLocation = forceUpdate;
 			roundware.onUpdateAssets = updateAssets;
-
+			roundware.onPlayAssets = updatePlaying;
 			setRoundware(roundware);
 		});
 	}, []);
@@ -228,6 +233,7 @@ const RoundwareProvider = (props: PropTypes) => {
 				assetsPerPage,
 				geoListenMode,
 				userFilter,
+				playingAssets,
 				// state modification functions
 				selectAsset,
 				selectTags,
