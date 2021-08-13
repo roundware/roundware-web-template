@@ -1,6 +1,7 @@
 import { MarkerClusterer, useGoogleMap } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
 import React, { Fragment, useEffect, useState } from 'react';
+import { IAssetData } from 'roundware-web-framework/dist/types';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { useQuery, useRoundware } from '../../../../hooks';
 import AssetMarker from './AssetMarker';
@@ -24,7 +25,7 @@ const OverlappingMarkerSpiderfierComponent = (props: { children: (props: Overlap
 };
 
 const AssetLayer = () => {
-	const { roundware, assetPage, selectedAsset, selectAsset, assetsReady } = useRoundware();
+	const { roundware, assetPage, selectedAsset, selectAsset, assetsReady, playingAssets } = useRoundware();
 	const map = useGoogleMap();
 	const query = useQuery();
 	const assets = assetPage;
@@ -64,8 +65,16 @@ const AssetLayer = () => {
 		return null;
 	}
 	const markers = (clusterer: Clusterer) => {
-		return <OverlappingMarkerSpiderfierComponent children={(oms) => assets.map((asset: any) => <AssetMarker key={asset.id} asset={asset} clusterer={clusterer} oms={oms!} />)} />;
+		return <OverlappingMarkerSpiderfierComponent children={(oms) => assets.map((asset: IAssetData) => <AssetMarker key={asset.id} asset={asset} clusterer={clusterer} oms={oms!} />)} />;
 	};
+
+	// When a new asset starts playing, update the map markers and clusters.
+	useEffect(() => {
+		if (markerClusterer) {
+			markerClusterer.repaint();
+		}
+	}, [playingAssets]);
+
 	const recluster = () => {
 		if (markerClusterer) {
 			const markerObjs = markerClusterer.markers.slice();
@@ -98,6 +107,40 @@ const AssetLayer = () => {
 			maxZoom={12}
 			minimumClusterSize={3}
 			onLoad={setMarkerClusterer}
+			calculator={(markers, numStyles) => {
+				// Most of this implementation is copied from the default calculator for
+				// React google maps. Change the `styles` property to configure how
+				// clusters look.
+				let index = 0;
+				const title = '';
+				const count = markers.length.toString();
+				let dv = parseInt(count);
+				while (dv !== 0) {
+					dv = parseInt(dv.toString(), 10) / 10;
+					index++;
+				}
+
+				index = Math.min(index + 1, numStyles);
+
+				// Change style if any contained markers are being played.
+				for (const m of markers) {
+					for (const a of playingAssets) {
+						// @ts-ignore
+						if (a && a.id == m.asset.id) {
+							// TODO Change this number to match whatever index in the
+							// `styles` list is your "currently playing" style.
+							index = 0;
+							break;
+						}
+					}
+				}
+
+				return {
+					text: count,
+					index: index,
+					title: title,
+				};
+			}}
 			options={{
 				imagePath: 'https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m',
 			}}

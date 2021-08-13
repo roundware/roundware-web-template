@@ -154,7 +154,17 @@ const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
 	};
 
 	return (
-		<Marker position={{ lat: asset.latitude!, lng: asset.longitude! }} icon={iconPin} clusterer={clusterer} onLoad={(m) => oms.addMarker(m, () => selectAsset(asset))} noClustererRedraw={true}>
+		<Marker
+			position={{ lat: asset.latitude!, lng: asset.longitude! }}
+			icon={iconPin}
+			clusterer={clusterer}
+			onLoad={(m) => {
+				//@ts-ignore
+				m.asset = asset;
+				oms.addMarker(m, () => selectAsset(asset));
+			}}
+			noClustererRedraw={true}
+		>
 			<AssetInfoWindow asset={asset} />
 		</Marker>
 	);
