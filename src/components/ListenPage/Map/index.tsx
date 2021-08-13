@@ -40,7 +40,6 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 	// when the listener location changes, center the map
 	return (
 		<LoadScript id='script-loader' googleMapsApiKey={props.googleMapsApiKey}>
-			<AssetLoadingOverlay />
 			<GoogleMap
 				mapContainerClassName={classes.roundwareMap + ' ' + props.className}
 				onZoomChanged={updateListenerLocation}
