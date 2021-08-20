@@ -1,6 +1,6 @@
 import { Grid, TextField } from '@material-ui/core';
 import Autocomplete, { AutocompleteChangeDetails, AutocompleteRenderInputParams } from '@material-ui/lab/Autocomplete';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useRoundware } from '../../hooks';
 import useStyles from './styles';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
@@ -8,6 +8,7 @@ import { Snackbar } from '@material-ui/core';
 import { AutocompleteChangeReason } from '@material-ui/lab';
 import { TextFieldProps } from 'material-ui';
 import { ITag, ITagGroup, IUiConfig } from 'roundware-web-framework/dist/types';
+import { URLContext } from '../../context/URLContext';
 
 function Alert(props: AlertProps) {
 	return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -25,11 +26,18 @@ const TagFilterMenu = ({ tag_group }: TagFilterMenuProps) => {
 		setSnackbarOpen(false);
 	};
 
+	const { addToURL, deleteFromURL } = useContext(URLContext);
+
 	const handleChange = (event: React.ChangeEvent<{}>, value: { value: number }[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<any> | undefined) => {
 		const tag_ids = value ? value.map((t) => t.value) : null;
 
 		selectTags(tag_ids, tag_group);
-
+		let string = '';
+		if (Array.isArray(tag_ids) && tag_ids.length > 0) {
+			tag_ids.forEach((tag) => (string = string + tag + ','));
+			deleteFromURL('tag_ids');
+			addToURL('tag_ids', string.slice(0, -1));
+		} else deleteFromURL('tag_ids');
 		if (!roundware?.mixer) {
 			return;
 		} else {
