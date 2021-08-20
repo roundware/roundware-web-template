@@ -27,26 +27,11 @@ const OverlappingMarkerSpiderfierComponent = (props: { children: (props: Overlap
 const AssetLayer = () => {
 	const { roundware, assetPage, selectedAsset, selectAsset, assetsReady, playingAssets } = useRoundware();
 	const map = useGoogleMap();
-	const query = useQuery();
+
 	const assets = assetPage;
-	const eid = parseInt(query.get('eid') || '');
+
 	const [lastSelected, setLastSelected] = useState<number | undefined>();
 	const [markerClusterer, setMarkerClusterer] = useState<Clusterer | null>(null);
-
-	useEffect(() => {
-		if (!eid || lastSelected === eid) {
-			return;
-		}
-		const asset = assets.find((a) => a?.envelope_ids?.indexOf(eid) !== -1);
-		if (!asset) {
-			// todo  present an error and clear bad query params when we can't find the asset we're looking for
-			return;
-		}
-		selectAsset(asset);
-		// On further asset pool updates, prevent the map from panning unprompted to
-		// the selected asset.
-		setLastSelected(eid);
-	}, [assetPage, eid]);
 
 	// when the selected asset changes, pan to it
 	useEffect(() => {
