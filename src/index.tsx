@@ -11,13 +11,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import RoundwareProvider from './providers/RoundwareProvider';
+import UiConfigProvider from './providers/UIConfigProvider';
 
 const mountNode = document.getElementById('app');
 ReactDOM.render(
 	<RoundwareProvider>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
+		<UiConfigProvider>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</UiConfigProvider>
 	</RoundwareProvider>,
 	mountNode
 );
