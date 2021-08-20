@@ -49,27 +49,40 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 
 	const position = { lat: asset.latitude!, lng: asset.longitude! };
 
-	const infoItemsResolver = (elementName: string) => {
+	const infoItemsResolver = (elementName: string, index: number, list: string[]) => {
+		function showDividerIfEligible(): React.ReactNode {
+			const nextItem = list[index + 1];
+			if (!nextItem) return null;
+			if (nextItem == 'tags' || nextItem == 'date' || nextItem == 'description') return <Divider style={{ marginTop: 5, marginBottom: 5 }} />;
+			return null;
+		}
+
 		switch (elementName) {
 			case 'date':
 				return (
-					<Typography key={elementName} variant='body2'>
-						{moment(asset.created).format('LLL')}
-					</Typography>
+					<div key={elementName}>
+						<Typography variant='body2'>{moment(asset.created).format('LLL')}</Typography>
+						{showDividerIfEligible()}
+					</div>
 				);
 
 			case 'tags':
-				return <TagsDisplay key={elementName} tagIds={Array.isArray(asset.tag_ids) ? asset.tag_ids : []} />;
+				return (
+					<div key={elementName}>
+						<TagsDisplay tagIds={Array.isArray(asset.tag_ids) ? asset.tag_ids : []} />
+						{showDividerIfEligible()}
+					</div>
+				);
 			case 'description':
 				if (asset?.description && asset?.description.length > 0)
 					return (
 						<div key={elementName}>
-							{/* <Divider style={{ marginTop: 5, marginBottom: 5 }} /> */}
 							{/* Example of asset description - eid=6328 */}
 							<Typography variant='caption'>Description:</Typography>
 							<Typography variant='subtitle2' style={{ fontSize: 13 }}>
 								{asset.description}
 							</Typography>
+							{showDividerIfEligible()}
 						</div>
 					);
 				return null;
@@ -78,7 +91,12 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 				return primaryImageUrl ? <LightboxModal key={elementName} imageUrl={primaryImageUrl} /> : null;
 
 			case 'text':
-				return primaryTextUrl ? <TextDisplay key={elementName} textUrl={primaryTextUrl} /> : null;
+				return primaryTextUrl ? (
+					<div key={elementName}>
+						<TextDisplay textUrl={primaryTextUrl} />
+						{showDividerIfEligible()}
+					</div>
+				) : null;
 
 			case 'audio':
 				return <AssetPlayer key={elementName} style={{ width: '100%', marginTop: 10 }} asset={asset} />;
@@ -103,7 +121,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 		>
 			<MuiThemeProvider theme={lightTheme}>
 				<Grid container direction={'column'}>
-					<Paper>{infoWindowOrder.map((item) => infoItemsResolver(item))}</Paper>
+					<Paper>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</Paper>
 				</Grid>
 			</MuiThemeProvider>
 		</InfoWindow>
