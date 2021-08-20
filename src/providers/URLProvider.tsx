@@ -43,7 +43,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		newParams.append(name, value);
 		history.push({
 			pathname: window.location.pathname,
-			search: newParams.toString(),
+			search: decodeURIComponent(newParams.toString()),
 		});
 	};
 	const deleteFromURL = (name: string) => {
@@ -51,7 +51,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		newParams.delete(name);
 		history.push({
 			pathname: window.location.pathname,
-			search: newParams.toString(),
+			search: decodeURIComponent(newParams.toString()),
 		});
 	};
 
