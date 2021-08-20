@@ -8,9 +8,9 @@ const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		// pass INFOWINDOW_DISPLAY_ITEMS var in env to set the order
 		// example: INFOWINDOW_DISPLAY_ITEMS=date,tags,description,text,audio,actions
-		const passedOrder = process.env.INFOWINDOW_DISPLAY_ITEMS;
-		if (passedOrder) {
-			setInfoWindowOrder(passedOrder.split(','));
+
+		if (process.env.INFOWINDOW_DISPLAY_ITEMS) {
+			setInfoWindowOrder(process.env.INFOWINDOW_DISPLAY_ITEMS.split(','));
 		}
 	}, []);
 
