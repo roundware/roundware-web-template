@@ -26,18 +26,11 @@ const TagFilterMenu = ({ tag_group }: TagFilterMenuProps) => {
 		setSnackbarOpen(false);
 	};
 
-	const { addToURL, deleteFromURL } = useContext(URLContext);
-
 	const handleChange = (event: React.ChangeEvent<{}>, value: { value: number }[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<any> | undefined) => {
 		const tag_ids = value ? value.map((t) => t.value) : null;
 
 		selectTags(tag_ids, tag_group);
-		let string = '';
-		if (Array.isArray(tag_ids) && tag_ids.length > 0) {
-			tag_ids.forEach((tag) => (string = string + tag + ','));
-			deleteFromURL('tag_ids');
-			addToURL('tag_ids', string.slice(0, -1));
-		} else deleteFromURL('tag_ids');
+
 		if (!roundware?.mixer) {
 			return;
 		} else {
