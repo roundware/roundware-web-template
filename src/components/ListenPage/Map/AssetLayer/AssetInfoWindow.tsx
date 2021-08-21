@@ -53,7 +53,8 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 		function showDividerIfEligible(): React.ReactNode {
 			const nextItem = list[index + 1];
 			if (!nextItem) return null;
-			if (nextItem == 'tags' || nextItem == 'date' || nextItem == 'description') return <Divider style={{ marginTop: 5, marginBottom: 5 }} />;
+
+			if (nextItem == 'tags' || nextItem == 'date' || (nextItem == 'description' && asset.description && asset.description.length > 0)) return <Divider style={{ marginTop: 5, marginBottom: 5 }} />;
 			return null;
 		}
 
