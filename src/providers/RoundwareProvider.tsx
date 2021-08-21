@@ -137,19 +137,24 @@ const RoundwareProvider = (props: PropTypes) => {
 	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
 
 	const selectTags: IRoundwareContext[`selectTags`] = (tags, group) => {
-		const group_key = group.group_short_name!;
-		const newFilters = { ...selectedTags };
-		let listenTagIds: number[] = [];
-		if (tags == null && newFilters[group_key]) {
-			delete newFilters[group_key];
-		} else {
-			newFilters[group_key] = tags!;
-		}
-		setSelectedTags(newFilters);
-		Object.keys(newFilters).map(function (key) {
-			listenTagIds.push(...newFilters[key]);
+		setSelectedTags((prev) => {
+			const group_key = group.group_short_name!;
+			const newFilters = prev ? { ...prev } : {};
+			let listenTagIds: number[] = [];
+			if (tags == null && newFilters[group_key]) {
+				delete newFilters[group_key];
+			} else {
+				newFilters[group_key] = tags!;
+			}
+
+			Object.keys(newFilters).map(function (key) {
+				listenTagIds.push(...newFilters[key]);
+			});
+
+			roundware.mixer.updateParams({ listenTagIds: listenTagIds });
+
+			return newFilters;
 		});
-		roundware.mixer.updateParams({ listenTagIds: listenTagIds });
 	};
 
 	// when this provider is loaded, initialize roundware via api
