@@ -57,7 +57,9 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 
 	useEffect(() => {
 		if (eid_get !== null && selectedAsset == null) deleteFromURL('eid');
-		if (eid_get == null && selectedAsset && Array.isArray(selectedAsset.envelope_ids)) addToURL('eid', selectedAsset.envelope_ids[0].toString());
+		if (selectedAsset && Array.isArray(selectedAsset.envelope_ids) && selectedAsset.envelope_ids[0] !== eid_get) {
+			addToURL('eid', selectedAsset.envelope_ids[0].toString());
+		}
 	}, [selectedAsset]);
 
 	// add and remove tag_ids
@@ -80,7 +82,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		const newParams = new URLSearchParams(location.search);
 		// remove previous value
 		if (newParams.get(name)) newParams.delete(name);
-		newParams.append(name, value);
+		value !== null && newParams.append(name, value);
 		history.push({
 			pathname: window.location.pathname,
 			search: decodeURIComponent(newParams.toString()),
