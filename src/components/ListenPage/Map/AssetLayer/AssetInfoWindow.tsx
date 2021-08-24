@@ -51,10 +51,10 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 
 	const infoItemsResolver = (elementName: string, index: number, list: string[]) => {
 		function showDividerIfEligible(): React.ReactNode {
-			const nextItem = list[index + 1];
-			if (!nextItem) return null;
-
-			if (nextItem == 'tags' || nextItem == 'date' || (nextItem == 'description' && asset.description && asset.description.length > 0)) return <Divider style={{ marginTop: 5, marginBottom: 5 }} />;
+			const prev = list[index - 1];
+			if (['description', 'text', 'tags', 'date'].includes(prev)) {
+				return <Divider style={{ marginTop: 5, marginBottom: 5 }} />;
+			}
 			return null;
 		}
 
@@ -62,28 +62,26 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			case 'date':
 				return (
 					<div key={elementName}>
-						<Typography variant='body2'>{moment(asset.created).format('LLL')}</Typography>
 						{showDividerIfEligible()}
+						<Typography variant='body2'>{moment(asset.created).format('LLL')}</Typography>
 					</div>
 				);
 
 			case 'tags':
 				return (
 					<div key={elementName}>
-						<TagsDisplay tagIds={Array.isArray(asset.tag_ids) ? asset.tag_ids : []} />
 						{showDividerIfEligible()}
+						<TagsDisplay tagIds={Array.isArray(asset.tag_ids) ? asset.tag_ids : []} />
 					</div>
 				);
 			case 'description':
-				if (asset?.description && asset?.description.length > 0)
+				if (asset.description)
 					return (
-						<div key={elementName}>
+						<div key={elementName} style={{ marginTop: 5 }}>
 							{/* Example of asset description - eid=6328 */}
-							<Typography variant='caption'>Description:</Typography>
-							<Typography variant='subtitle2' style={{ fontSize: 13 }}>
-								{asset.description}
-							</Typography>
 							{showDividerIfEligible()}
+							<Typography variant='body2'>Description:</Typography>
+							<div dangerouslySetInnerHTML={{ __html: asset.description }}></div>
 						</div>
 					);
 				return null;
@@ -94,8 +92,8 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			case 'text':
 				return primaryTextUrl ? (
 					<div key={elementName}>
-						<TextDisplay textUrl={primaryTextUrl} />
 						{showDividerIfEligible()}
+						<TextDisplay textUrl={primaryTextUrl!} />
 					</div>
 				) : null;
 
@@ -143,7 +141,7 @@ const LightboxModal = ({ imageUrl }: { imageUrl: string }) => {
 
 	return (
 		<div>
-			<img src={imageUrl} width='150px' onClick={handleOpen} />
+			<img src={imageUrl} width={150} onClick={handleOpen} />
 			<Modal open={open} onClose={handleClose}>
 				<img src={imageUrl} className={classes.paper} />
 			</Modal>
