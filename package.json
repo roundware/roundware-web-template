@@ -8,7 +8,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "parcel ./src/index.html ",
 		"build": "parcel build src/index.html",
-		"deploy": "npm run build && surge --domain https://roundware.surge.sh dist",
+		"deploy": "npm run build && cp ./dist/index.html ./dist/200.html && surge --domain https://roundware-typescript.surge.sh dist",
 		"roundware": "cd ../roundware-web-framework && npm run build && npm pack && cd ../roundware-web-template && rm -rf node_modules/roundware-web-framework/ &&  npm i file:../roundware-web-framework/roundware-web-framework-0.11.0-alpha.30.tgz"
 	},
 	"author": "Evan Babb",
