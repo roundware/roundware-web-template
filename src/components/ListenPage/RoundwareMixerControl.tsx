@@ -25,7 +25,7 @@ const RoundwareMixerControl = () => {
 	};
 
 	useEffect(() => {
-		if (roundware.mixer) {
+		if (roundware?.mixer) {
 			roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
 				if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {
 					const listen_tags = roundware.uiConfig.listen[0].display_items.map((i) => i.tag_id);
@@ -43,9 +43,7 @@ const RoundwareMixerControl = () => {
 
 		// when the control for the mixer is unmounted, clean up by stopping the mixer
 		return () => {
-			if (roundware.mixer && roundware.mixer.playing) {
-				roundware.mixer.toggle();
-			}
+			roundware?.mixer?.toggle(false);
 		};
 	}, [roundware]);
 
@@ -90,7 +88,7 @@ const RoundwareMixerControl = () => {
 			>
 				<SkipNextIcon />
 			</Button>
-			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} style={{ marginBottom: 50 }}>
 				<Alert onClose={handleSnackbarClose} severity='success'>
 					Remixing audio: skipping ahead!
 				</Alert>
