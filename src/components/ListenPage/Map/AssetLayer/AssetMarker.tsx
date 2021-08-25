@@ -1,11 +1,12 @@
 import { Marker } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IAssetData } from 'roundware-web-framework/dist/types';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { useRoundware } from '../../../../hooks';
 import { AssetInfoWindowInner } from './AssetInfoWindow';
-
+import marker from '../../../../assets/marker.svg';
+import marker2 from '../../../../assets/marker-secondary.svg';
 const AssetInfoWindow = ({ asset }: { asset: IAssetData }) => {
 	const { selectedAsset, selectAsset, roundware } = useRoundware();
 
@@ -22,16 +23,23 @@ interface AssetMarkerProps {
 	oms: OverlappingMarkerSpiderfier;
 }
 const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
-	const { selectAsset } = useRoundware();
+	const { roundware, selectAsset } = useRoundware();
 	const iconPin = {
-		url: 'https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg',
 		scaledSize: new google.maps.Size(20, 20),
+		fillOpacity: 1,
 	};
 
+	// let url = 'https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg';
+
+	const isPlaying = roundware?.mixer?.playlist && Array.isArray(roundware.currentlyPlayingAssets) && roundware.currentlyPlayingAssets.length > 0 && roundware.currentlyPlayingAssets[0].id === asset.id;
 	return (
 		<Marker
 			position={{ lat: asset.latitude!, lng: asset.longitude! }}
-			icon={iconPin}
+			icon={{
+				url: isPlaying ? marker2 : marker,
+				scaledSize: new google.maps.Size(isPlaying ? 23 : 20, isPlaying ? 23 : 20),
+				fillOpacity: 1,
+			}}
 			clusterer={clusterer}
 			onLoad={(m) => {
 				//@ts-ignore
