@@ -6,7 +6,7 @@ import { IRoundwareContext } from '../context/RoundwareContext';
 import { IURLContext, URLContext } from '../context/URLContext';
 import { useRoundware } from '../hooks';
 
-// this custom hook syncs filters and selected asset with URL get params
+// this syncs filters and selected asset with URL get params
 export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => {
 	const location = useLocation();
 	const history = useHistory();
