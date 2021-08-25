@@ -179,6 +179,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			assetFilters: { submitted: true, media_type: 'audio' },
 			listenerLocation: initial_loc,
 			assetUpdateInterval: 30 * 1000,
+			prefetchSpeakerAudio: true,
 			apiClient: undefined!,
 		};
 		const roundware = new Roundware(window, roundwareOptions);
