@@ -107,7 +107,7 @@ const CreateRecordingForm = () => {
 			stream.getTracks().forEach((track) => {
 				track.stop();
 			});
-		wait(100).then(wave.stopStream);
+		wait(100).then(() => wave.stopStream());
 		set_is_recording(false);
 	};
 
