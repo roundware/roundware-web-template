@@ -25,12 +25,12 @@ const OverlappingMarkerSpiderfierComponent = (props: { children: (props: Overlap
 };
 
 const AssetLayer = () => {
-	const { roundware, assetPage, selectedAsset, selectAsset, assetsReady, playingAssets } = useRoundware();
+	const { roundware, assetPage, selectedAsset, playingAssets } = useRoundware();
+
 	const map = useGoogleMap();
 
 	const assets = assetPage;
 
-	const [lastSelected, setLastSelected] = useState<number | undefined>();
 	const [markerClusterer, setMarkerClusterer] = useState<Clusterer | null>(null);
 
 	// when the selected asset changes, pan to it
@@ -44,6 +44,7 @@ const AssetLayer = () => {
 		};
 
 		map.panTo(center);
+		map.setZoom(12);
 		roundware.updateLocation({ latitude: selectedAsset.latitude, longitude: selectedAsset.longitude });
 	}, [selectedAsset]);
 	if (!map) {
@@ -110,8 +111,8 @@ const AssetLayer = () => {
 				// Change style if any contained markers are being played.
 				for (const m of markers) {
 					for (const a of playingAssets) {
-						// @ts-ignore
-						if (a && a.id == m.asset.id) {
+						// @ts-ignore = need to extend marker property to suporrt asset
+						if (a && a.id === m.asset.id) {
 							// TODO Change this number to match whatever index in the
 							// `styles` list is your "currently playing" style.
 							index = 0;
