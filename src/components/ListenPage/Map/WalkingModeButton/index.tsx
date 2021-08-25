@@ -107,7 +107,7 @@ const walkingModeButton = () => {
 
 	return (
 		<div>
-			<Button className={clsx(classes.walkingModeButton, displayListenModeButton ? null : classes.hidden)} color='primary' disabled={busy || roundware?.mixer?.playing} onClick={toggleWalkingMode}>
+			<Button className={clsx(classes.walkingModeButton, displayListenModeButton ? null : classes.hidden)} color='primary' disabled={busy || !roundware?.mixer?.playing} onClick={toggleWalkingMode}>
 				{geoListenMode === GeoListenMode.AUTOMATIC ? <MapIcon fontSize='large' /> : <DirectionsWalkIcon fontSize='large' />}
 			</Button>
 			{geoListenMode === GeoListenMode.AUTOMATIC ? <ListenerLocationMarker /> : null}
