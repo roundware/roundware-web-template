@@ -7,6 +7,7 @@ import { GeoListenMode, Roundware } from 'roundware-web-framework';
 import { Coordinates, GeoListenModeType, IAssetData, ITag, ITagGroup, IUiConfig } from 'roundware-web-framework/dist/types';
 import { IRoundwareConstructorOptions } from 'roundware-web-framework/dist/types/roundware';
 import { ISelectedTags, ITagLookup } from '../types';
+import { useMemo } from 'react';
 interface PropTypes {
 	children: React.ReactNode;
 }
@@ -29,7 +30,8 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [tagLookup, setTagLookup] = useState<IRoundwareContext[`tagLookup`]>({});
 	const [filteredAssets, setFilteredAssets] = useState<IAssetData[]>([]);
 	const deviceId = useDeviceID();
-	const [assetPage, setAssetPage] = useState<IRoundwareContext[`assetPage`]>([]);
+	const [assetPageNonMemoized, setAssetPage] = useState<IRoundwareContext[`assetPage`]>([]);
+	const assetPage = useMemo(() => assetPageNonMemoized, [assetPageNonMemoized]);
 	const [playingAssets, setPlayingAssets] = useState<IRoundwareContext[`playingAssets`]>([]);
 	const [, forceUpdate] = useReducer((x) => !x, false);
 
