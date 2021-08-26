@@ -53,4 +53,4 @@ const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
 	);
 };
 
-export default AssetMarker;
+export default React.memo(AssetMarker);
