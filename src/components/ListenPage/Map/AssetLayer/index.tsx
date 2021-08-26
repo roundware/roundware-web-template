@@ -44,7 +44,7 @@ const AssetLayer = () => {
 		};
 
 		map.panTo(center);
-		map.setZoom(12);
+		map.setZoom(17);
 		roundware.updateLocation({ latitude: selectedAsset.latitude, longitude: selectedAsset.longitude });
 	}, [selectedAsset]);
 	if (!map) {
