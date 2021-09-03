@@ -98,7 +98,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 				) : null;
 
 			case 'audio':
-				return <AssetPlayer key={elementName} style={{ width: '100%', marginTop: 10 }} asset={asset} />;
+				return <AssetPlayer key={elementName} style={{ width: '100%', marginTop: 10 }} asset={asset} captureEvents />;
 			case 'actions':
 				return <AssetActionButtons key={elementName} asset={asset} />;
 			default:
