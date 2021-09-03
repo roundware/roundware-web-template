@@ -1,4 +1,5 @@
-import { IAssetData, ITag } from 'roundware-web-framework/dist/types';
+import { ITag } from 'roundware-web-framework/dist/types';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 
 // all the reusable types here
 export interface ITagLookup {

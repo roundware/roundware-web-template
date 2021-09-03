@@ -1,13 +1,13 @@
+import moment from 'moment';
 import * as React from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
+import { GeoListenMode, Roundware } from 'roundware-web-framework';
+import { Coordinates, GeoListenModeType } from 'roundware-web-framework/dist/types';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+import { IRoundwareConstructorOptions } from 'roundware-web-framework/dist/types/roundware';
 import RoundwareContext, { IRoundwareContext } from '../context/RoundwareContext';
 import { useDeviceID } from '../hooks/useDeviceID';
-import moment from 'moment';
-import { useEffect, useReducer, useState } from 'react';
-import { GeoListenMode, Roundware } from 'roundware-web-framework';
-import { Coordinates, GeoListenModeType, IAssetData, ITag, ITagGroup, IUiConfig } from 'roundware-web-framework/dist/types';
-import { IRoundwareConstructorOptions } from 'roundware-web-framework/dist/types/roundware';
-import { ISelectedTags, ITagLookup } from '../types';
-import { useMemo } from 'react';
+import { ITagLookup } from '../types';
 interface PropTypes {
 	children: React.ReactNode;
 }

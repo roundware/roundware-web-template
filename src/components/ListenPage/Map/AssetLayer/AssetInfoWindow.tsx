@@ -3,7 +3,7 @@ import { InfoWindow } from '@react-google-maps/api';
 import moment from 'moment';
 import React, { useEffect, useState, useContext } from 'react';
 import { Roundware } from 'roundware-web-framework';
-import { IAssetData } from 'roundware-web-framework/dist/types';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { IRoundwareContext } from '../../../../context/RoundwareContext';
 import { UiConfigContext } from '../../../../context/UIContext';
 import { lightTheme } from '../../../../styles';

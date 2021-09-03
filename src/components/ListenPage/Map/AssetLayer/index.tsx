@@ -1,7 +1,7 @@
 import { MarkerClusterer, useGoogleMap } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
 import React, { Fragment, useEffect, useState } from 'react';
-import { IAssetData } from 'roundware-web-framework/dist/types';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { useQuery, useRoundware } from '../../../../hooks';
 import AssetMarker from './AssetMarker';

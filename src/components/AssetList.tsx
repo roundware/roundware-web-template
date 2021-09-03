@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { IAssetData } from 'roundware-web-framework/dist/types';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { useRoundware } from '../hooks';
 import AssetFilterPanel from './AssetFilterPanel';
 import AssetListItem from './AssetListItem';

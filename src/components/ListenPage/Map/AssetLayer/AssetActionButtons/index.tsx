@@ -8,7 +8,7 @@ import FlagIcon from '@material-ui/icons/Flag';
 
 import { VoteButton } from './VoteButton';
 import { useRoundware } from '../../../../../hooks';
-import { IAssetData } from 'roundware-web-framework/dist/types';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 
 const downloadAsset = async (asset: IAssetData, projectName: string) => {
 	if (!asset.file) return;
