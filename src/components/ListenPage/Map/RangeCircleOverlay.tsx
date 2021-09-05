@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useGoogleMap } from '@react-google-maps/api';
-import { useRoundware } from '../../../hooks';
+import React, { useEffect, useState } from 'react';
 import useDimensions from 'react-cool-dimensions';
 import { GeoListenMode } from 'roundware-web-framework';
+import { useRoundware } from '../../../hooks';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -54,25 +54,11 @@ const RangeCircleOverlay = () => {
 	const theme = useTheme();
 	const map = useGoogleMap();
 	const { roundware, forceUpdate, geoListenMode } = useRoundware();
-	const loc = roundware.listenerLocation;
-	const lat = loc && loc.latitude;
-	const lng = loc && loc.longitude;
-	const center = { lat: lat!, lng: lng! };
-	const ready = typeof lat === 'number' && typeof lng === 'number';
+
 	// Shreyas - use observe instead of ref
 	const { observe, width, height } = useDimensions<HTMLDivElement>();
 	const [resizeListener, set_resize_listener] = useState<google.maps.MapsEventListener | undefined>(undefined);
 	const isPlaying = roundware.mixer && roundware.mixer.playing;
-
-	// when the listenerLocation is updated, center the map
-	useEffect(() => {
-		if (ready && map) {
-			const c = map.getCenter();
-			if (center.lat !== c.lat() || center.lng !== c.lng()) {
-				if (typeof center.lat == 'number' && typeof center.lng == 'number') map.panTo(center);
-			}
-		}
-	}, [lat, lng]);
 
 	useEffect(() => {
 		if (!map) {
