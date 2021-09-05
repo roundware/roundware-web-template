@@ -32,12 +32,6 @@ const walkingModeButton = () => {
 	const [busy, setBusy] = useState(false);
 	const map = useGoogleMap();
 	const classes = useStyles();
-	// const [walkingMode, setwalkingMode] = useState(false);
-	const loc = roundware.listenerLocation;
-	const lat = loc && loc.latitude;
-	const lng = loc && loc.longitude;
-	const center = { lat: lat!, lng: lng! };
-	const ready = typeof lat === 'number' && typeof lng === 'number';
 
 	const availableListenModes = process.env.AVAILABLE_LISTEN_MODES || 'map, walking';
 	const availableListenModesArray = availableListenModes.split(',').map(String);
@@ -54,17 +48,6 @@ const walkingModeButton = () => {
 			setGeoListenMode(GeoListenMode.AUTOMATIC);
 		}
 	}, []);
-
-	// when the listenerLocation is updated, center the map
-	useEffect(() => {
-		if (ready && map !== null) {
-			const c = map.getCenter();
-			console.log('new location provided by framework');
-			if (center.lat !== c.lat() || center.lng !== c.lng()) {
-				map.panTo(center);
-			}
-		}
-	}, [lat, lng]);
 
 	const enterMapMode = () => {
 		if (!map) return;
