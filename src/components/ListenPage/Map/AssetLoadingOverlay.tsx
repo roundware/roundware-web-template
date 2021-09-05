@@ -22,12 +22,12 @@ const useStyles = makeStyles((theme) => {
 		},
 	};
 });
-const AssetLoadingOverlay = () => {
+const AssetLoadingOverlay = ({ show }: { show: boolean }) => {
 	const { roundware } = useRoundware();
 
 	const classes = useStyles();
 	return (
-		<Backdrop className={classes.backdrop} open={!Array.isArray(roundware.assetData)}>
+		<Backdrop className={classes.backdrop} open={!Array.isArray(roundware.assetData) && !show}>
 			<Card className={classes.loadingCard}>
 				<CircularProgress className={classes.loadingSpinner} />
 				<Typography className={classes.loadingMessage}>Loading audio...</Typography>

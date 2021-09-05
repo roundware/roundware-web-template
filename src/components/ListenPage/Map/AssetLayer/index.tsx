@@ -24,7 +24,7 @@ const OverlappingMarkerSpiderfierComponent = (props: { children: (props: Overlap
 	return <Fragment>{props.children(spiderfier)}</Fragment>;
 };
 
-const AssetLayer = () => {
+const AssetLayer = ({ onClustererLoad }: { onClustererLoad: () => void }) => {
 	const { roundware, assetPage, selectedAsset, playingAssets } = useRoundware();
 
 	const map = useGoogleMap();
@@ -33,6 +33,9 @@ const AssetLayer = () => {
 
 	const [markerClusterer, setMarkerClusterer] = useState<Clusterer | null>(null);
 
+	const handleOnLoad = (c: Clusterer) => {
+		setMarkerClusterer(c);
+	};
 	// when the selected asset changes, pan to it
 	useEffect(() => {
 		if (!selectedAsset || !map || typeof selectedAsset.latitude !== 'number' || typeof selectedAsset.longitude !== 'number') {
@@ -47,11 +50,14 @@ const AssetLayer = () => {
 		map.setZoom(17);
 		roundware.updateLocation({ latitude: selectedAsset.latitude, longitude: selectedAsset.longitude });
 	}, [selectedAsset]);
+
 	if (!map) {
 		return null;
 	}
+
 	const markers = (clusterer: Clusterer) => {
-		return <OverlappingMarkerSpiderfierComponent children={(oms) => assets.map((asset: IAssetData) => <AssetMarker key={asset.id} asset={asset} clusterer={clusterer} oms={oms!} />)} />;
+		const childrenRenderer = (oms: OverlappingMarkerSpiderfier | null) => assets.map((asset: IAssetData) => <AssetMarker key={asset.id} asset={asset} clusterer={clusterer} oms={oms!} />);
+		return <OverlappingMarkerSpiderfierComponent children={childrenRenderer} />;
 	};
 
 	// When a new asset starts playing, update the map markers and clusters.
@@ -86,53 +92,49 @@ const AssetLayer = () => {
 	};
 	useEffect(() => {
 		if (!(markerClusterer && markerClusterer.ready)) return;
+		onClustererLoad();
 		wait_for_full_page().then(recluster);
 	}, [markerClusterer && markerClusterer.ready, assetPage]);
-	return (
-		<MarkerClusterer
-			maxZoom={12}
-			minimumClusterSize={3}
-			onLoad={setMarkerClusterer}
-			calculator={(markers, numStyles) => {
-				// Most of this implementation is copied from the default calculator for
-				// React google maps. Change the `styles` property to configure how
-				// clusters look.
-				let index = 0;
-				const title = '';
-				const count = markers.length.toString();
-				let dv = parseInt(count);
-				while (dv !== 0) {
-					dv = parseInt(dv.toString(), 10) / 10;
-					index++;
+
+	const handleCalculation = (markers: unknown[], numStyles: number) => {
+		// Most of this implementation is copied from the default calculator for
+		// React google maps. Change the `styles` property to configure how
+		// clusters look.
+		let index = 0;
+		const title = '';
+		const count = markers.length.toString();
+		let dv = parseInt(count);
+		while (dv !== 0) {
+			dv = parseInt(dv.toString(), 10) / 10;
+			index++;
+		}
+
+		index = Math.min(index + 1, numStyles);
+
+		// Change style if any contained markers are being played.
+		for (const m of markers) {
+			for (const a of playingAssets) {
+				// @ts-ignore = need to extend marker property to suporrt asset
+				if (a && a.id === m.asset.id) {
+					// TODO Change this number to match whatever index in the
+					// `styles` list is your "currently playing" style.
+					index = 0;
+					break;
 				}
+			}
+		}
 
-				index = Math.min(index + 1, numStyles);
+		return {
+			text: count,
+			index: index,
+			title: title,
+		};
+	};
 
-				// Change style if any contained markers are being played.
-				for (const m of markers) {
-					for (const a of playingAssets) {
-						// @ts-ignore = need to extend marker property to suporrt asset
-						if (a && a.id === m.asset.id) {
-							// TODO Change this number to match whatever index in the
-							// `styles` list is your "currently playing" style.
-							index = 0;
-							break;
-						}
-					}
-				}
-
-				return {
-					text: count,
-					index: index,
-					title: title,
-				};
-			}}
-			options={{
-				imagePath: 'https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m',
-			}}
-			children={markers}
-		/>
-	);
+	const options = {
+		imagePath: 'https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m',
+	};
+	return <MarkerClusterer maxZoom={12} minimumClusterSize={3} onLoad={handleOnLoad} calculator={handleCalculation} options={options} zoomOnClick children={markers} />;
 };
 
 export default AssetLayer;

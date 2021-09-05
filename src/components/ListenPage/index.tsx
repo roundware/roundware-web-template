@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-import RoundwareMap from './Map';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { useQuery, useRoundware } from '../../hooks';
-import AssetLoadingOverlay from './Map/AssetLoadingOverlay';
+import React from 'react';
+import RoundwareMap from './Map';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -21,7 +19,6 @@ const ListenPage = () => {
 	}
 	return (
 		<>
-			<AssetLoadingOverlay />
 			<RoundwareMap className={classes.map} googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY} />
 		</>
 	);
