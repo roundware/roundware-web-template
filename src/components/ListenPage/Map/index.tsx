@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import React, { useState, useEffect } from 'react';
+import { Coordinates } from 'roundware-web-framework/dist/types';
 import { useRoundware } from '../../../hooks';
 import { RoundwareMapStyle } from '../../../styles/map-style';
 import AssetLayer from './AssetLayer';
@@ -25,37 +26,23 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 	const { roundware } = useRoundware();
 	const [map, setMap] = useState<google.maps.Map<Element> | undefined>();
 
-	const updateListenerLocation = () => {
+	const updateListenerLocation = (newLocation?: Coordinates) => {
 		if (!map) {
 			return;
 		}
-		const center = map.getCenter();
-		roundware.updateLocation({ latitude: center.lat(), longitude: center.lng() });
+		if (newLocation) roundware.updateLocation(newLocation);
+		else {
+			const center = map.getCenter();
+			roundware.updateLocation({ latitude: center.lat(), longitude: center.lng() });
+		}
 		console.log('updated location on framework');
 	};
 
-	// when the listenerLocation is updated, center the map
-	useEffect(() => {
-		const loc = roundware.listenerLocation;
-		const lat = loc && loc.latitude;
-		const lng = loc && loc.longitude;
-		const center = { lat: lat!, lng: lng! };
-		const ready = typeof lat === 'number' && typeof lng === 'number' && map;
-		if (ready) {
-			const c = map.getCenter();
-			if (center.lat !== c.lat() || center.lng !== c.lng()) {
-				console.log('new location provided by framework');
-				if (typeof center.lat == 'number' && typeof center.lng == 'number') map.panTo(center);
-			}
-		}
-	}, [roundware.listenerLocation]);
-
 	const onLoad = (map: google.maps.Map<Element>) => {
-		setMap(map);
 		const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
 		map.mapTypes.set('styled_map', styledMapType);
 		map.setOptions({
-			center: { lat: roundware.project.location.latitude || 0, lng: roundware.project.location.longitude || 0 },
+			center: { lat: roundware?.project?.location?.latitude || 0, lng: roundware?.project?.location?.longitude || 0 },
 			zoom: 5,
 			zoomControl: true,
 			draggable: true,
@@ -75,22 +62,16 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 				position: google.maps.ControlPosition.BOTTOM_LEFT,
 			},
 		});
-		setMapLoaded(true);
+		setMap(map);
 	};
 
-	const [clusturerLoaded, setClusturerLoaded] = useState(false);
-	const [mapLoaded, setMapLoaded] = useState(false);
-	const onClustererLoad = () => setClusturerLoaded(true);
-
-	if (!roundware.project) {
-		return null;
-	}
+	if (!roundware.project) return null;
 	return (
 		<>
-			<AssetLoadingOverlay show={clusturerLoaded && mapLoaded} />
 			<LoadScript id='script-loader' googleMapsApiKey={props.googleMapsApiKey}>
-				<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad} onProjectionChanged={updateListenerLocation}>
-					<AssetLayer onClustererLoad={onClustererLoad} />
+				<AssetLoadingOverlay />
+				<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad}>
+					<AssetLayer updateLocation={updateListenerLocation} />
 					<RangeCircleOverlay />
 					<WalkingModeButton />
 				</GoogleMap>
