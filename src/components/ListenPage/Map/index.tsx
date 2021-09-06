@@ -72,7 +72,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 				<AssetLoadingOverlay />
 				<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad}>
 					<AssetLayer updateLocation={updateListenerLocation} />
-					<RangeCircleOverlay />
+					<RangeCircleOverlay updateLocation={updateListenerLocation} />
 					<WalkingModeButton />
 				</GoogleMap>
 			</LoadScript>
