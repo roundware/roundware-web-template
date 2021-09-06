@@ -56,7 +56,14 @@ const RangeCircleOverlay = () => {
 	const { roundware, forceUpdate, geoListenMode } = useRoundware();
 
 	// Shreyas - use observe instead of ref
-	const { observe, width, height } = useDimensions<HTMLDivElement>();
+	const { observe, width, height } = useDimensions<HTMLDivElement>({
+		onResize: ({ observe, unobserve, width, height, entry }) => {
+			// Triggered whenever the size of the target is changed...
+
+			unobserve(); // To stop observing the current target element
+			observe(); // To re-start observing the current target element
+		},
+	});
 	const [resizeListener, set_resize_listener] = useState<google.maps.MapsEventListener | undefined>(undefined);
 	const isPlaying = roundware.mixer && roundware.mixer.playing;
 
@@ -94,7 +101,8 @@ const RangeCircleOverlay = () => {
 			}
 			forceUpdate();
 		};
-		const circleSizeListener = map.addListener('zoom_changed', set_radius_with_circle_geom);
+
+		const circleSizeListener = map.addListener('zoom_changed', () => set_radius_with_circle_geom());
 		set_resize_listener(circleSizeListener);
 		set_radius_with_circle_geom();
 	}, [map, width, isPlaying]);
