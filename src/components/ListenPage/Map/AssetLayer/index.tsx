@@ -1,6 +1,8 @@
 import { MarkerClusterer, useGoogleMap } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
+import { Cluster } from 'cluster';
 import React, { Fragment, useEffect, useState } from 'react';
+import { Coordinates } from 'roundware-web-framework/dist/types';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { useQuery, useRoundware } from '../../../../hooks';
@@ -24,18 +26,13 @@ const OverlappingMarkerSpiderfierComponent = (props: { children: (props: Overlap
 	return <Fragment>{props.children(spiderfier)}</Fragment>;
 };
 
-const AssetLayer = ({ onClustererLoad }: { onClustererLoad: () => void }) => {
+const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordinates) => void }) => {
 	const { roundware, assetPage, selectedAsset, playingAssets } = useRoundware();
 
 	const map = useGoogleMap();
-
 	const assets = assetPage;
-
 	const [markerClusterer, setMarkerClusterer] = useState<Clusterer | null>(null);
 
-	const handleOnLoad = (c: Clusterer) => {
-		setMarkerClusterer(c);
-	};
 	// when the selected asset changes, pan to it
 	useEffect(() => {
 		if (!selectedAsset || !map || typeof selectedAsset.latitude !== 'number' || typeof selectedAsset.longitude !== 'number') {
@@ -49,6 +46,7 @@ const AssetLayer = ({ onClustererLoad }: { onClustererLoad: () => void }) => {
 		map.panTo(center);
 		map.setZoom(17);
 		roundware.updateLocation({ latitude: selectedAsset.latitude, longitude: selectedAsset.longitude });
+		console.log(selectedAsset);
 	}, [selectedAsset]);
 
 	if (!map) {
@@ -92,7 +90,6 @@ const AssetLayer = ({ onClustererLoad }: { onClustererLoad: () => void }) => {
 	};
 	useEffect(() => {
 		if (!(markerClusterer && markerClusterer.ready)) return;
-		onClustererLoad();
 		wait_for_full_page().then(recluster);
 	}, [markerClusterer && markerClusterer.ready, assetPage]);
 
@@ -134,7 +131,12 @@ const AssetLayer = ({ onClustererLoad }: { onClustererLoad: () => void }) => {
 	const options = {
 		imagePath: 'https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m',
 	};
-	return <MarkerClusterer maxZoom={12} minimumClusterSize={3} onLoad={handleOnLoad} calculator={handleCalculation} options={options} zoomOnClick children={markers} />;
+
+	const handleClick = (cluster: any) => {
+		updateLocation({ latitude: cluster.center.lat(), longitude: cluster.center.lng() });
+	};
+
+	return <MarkerClusterer onClick={handleClick} onLoad={setMarkerClusterer} maxZoom={12} minimumClusterSize={3} calculator={handleCalculation} options={options} children={markers} />;
 };
 
 export default AssetLayer;
