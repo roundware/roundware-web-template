@@ -29,9 +29,30 @@ const useStyles = makeStyles((theme) => {
 
 const walkingModeButton = () => {
 	const { roundware, forceUpdate, geoListenMode, setGeoListenMode } = useRoundware();
+
+	if (!roundware?.project) return null;
 	const [busy, setBusy] = useState(false);
 	const map = useGoogleMap();
 	const classes = useStyles();
+
+	const loc = roundware.listenerLocation;
+	const lat = loc && loc.latitude;
+	const lng = loc && loc.longitude;
+	const center = { lat: lat!, lng: lng! };
+	const ready = typeof lat === 'number' && typeof lng === 'number';
+
+	// when the listenerLocation is updated, center the map
+	useEffect(() => {
+		if (ready) {
+			const c = map?.getCenter();
+			if (!c) return;
+			if (!center) return;
+			if (center.lat !== c?.lat() || center.lng !== c?.lng()) {
+				map?.panTo(center);
+				console.log('new location provided by framework');
+			}
+		}
+	}, [lat, lng]);
 
 	const availableListenModes = process.env.AVAILABLE_LISTEN_MODES || 'map, walking';
 	const availableListenModesArray = availableListenModes.split(',').map(String);
