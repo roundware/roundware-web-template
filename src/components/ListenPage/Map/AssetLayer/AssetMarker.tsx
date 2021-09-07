@@ -1,4 +1,4 @@
-import { Marker } from '@react-google-maps/api';
+import { Marker, useGoogleMap } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
 import React, { useEffect, useState } from 'react';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
@@ -29,9 +29,10 @@ const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
 		fillOpacity: 1,
 	};
 
+	const map = useGoogleMap();
 	// let url = 'https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg';
 
-	const isPlaying = roundware?.mixer?.playlist && Array.isArray(roundware.currentlyPlayingAssets) && roundware.currentlyPlayingAssets.length > 0 && roundware.currentlyPlayingAssets[0].id === asset.id;
+	const isPlaying = roundware?.mixer?.playlist && roundware.mixer.playlist.playing && Array.isArray(roundware.currentlyPlayingAssets) && roundware.currentlyPlayingAssets.length > 0 && roundware.currentlyPlayingAssets[0].id === asset.id;
 	return (
 		<Marker
 			position={{ lat: asset.latitude!, lng: asset.longitude! }}
@@ -40,6 +41,7 @@ const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
 				scaledSize: new google.maps.Size(isPlaying ? 23 : 20, isPlaying ? 23 : 20),
 				fillOpacity: 1,
 			}}
+			zIndex={isPlaying ? 101 : 100}
 			clusterer={clusterer}
 			onLoad={(m) => {
 				//@ts-ignore
