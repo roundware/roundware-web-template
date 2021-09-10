@@ -349,7 +349,8 @@ const CreateRecordingForm = () => {
 									set_success(asset);
 									updateAssets();
 								} catch (err) {
-									set_error(err || null);
+									// @ts-ignore
+									set_error(err);
 								}
 								set_saving(false);
 							}}
