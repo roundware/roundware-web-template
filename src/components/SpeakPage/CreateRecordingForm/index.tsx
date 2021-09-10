@@ -181,7 +181,6 @@ const CreateRecordingForm = () => {
 							onClick={toggleRecording}
 						>
 							<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButton} />
-							{isRecording ? 'Stop' : 'Start'}
 						</IconButton>
 					</Grid>
 				) : null}
@@ -234,7 +233,6 @@ const CreateRecordingForm = () => {
 											onClick={toggleRecording}
 										>
 											<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButtonSmall} />
-											{isRecording ? 'Stop' : 'Start'}
 										</IconButton>
 									</Grid>
 								</Grid>
@@ -242,11 +240,11 @@ const CreateRecordingForm = () => {
 						</CountdownCircleTimer>
 					</Grid>
 				) : null}
-				{draftMediaUrl == '' && !isRecording ? (
+				{draftMediaUrl == '' && (
 					<Grid item style={{ padding: 8 }}>
-						<Typography variant={'subtitle1'}>Tap to Record</Typography>
+						<Typography variant={'subtitle1'}>Tap to {isRecording ? `Stop` : `Record`}</Typography>
 					</Grid>
-				) : null}
+				)}
 				<Grid
 					container
 					item
@@ -351,7 +349,7 @@ const CreateRecordingForm = () => {
 									set_success(asset);
 									updateAssets();
 								} catch (err) {
-									set_error(err);
+									set_error(err || null);
 								}
 								set_saving(false);
 							}}
