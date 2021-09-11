@@ -88,7 +88,7 @@ const walkingModeButton = () => {
 		// disable map panning
 		map.setOptions({ gestureHandling: 'none' });
 		// zoom in
-		map.setZoom(19);
+		map.setZoom(22);
 		// determine user location and listen for updates
 		setGeoListenMode(GeoListenMode.AUTOMATIC);
 		// update text instructions?
