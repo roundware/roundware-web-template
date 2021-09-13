@@ -5,8 +5,8 @@ import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { useRoundware } from '../../../../hooks';
 import { AssetInfoWindowInner } from './AssetInfoWindow';
-import marker from '../../../../assets/marker.svg';
-import marker2 from '../../../../assets/marker-secondary.svg';
+import marker from 'url:../../../../assets/marker.svg';
+import marker2 from 'url:../../../../assets/marker-secondary.svg';
 const AssetInfoWindow = ({ asset }: { asset: IAssetData }) => {
 	const { selectedAsset, selectAsset, roundware } = useRoundware();
 

@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useRoundware } from '../../hooks';
 import Container from '@material-ui/core/Container';
 
-import banner from '../../assets/rw-icon-cluster.png';
+import banner from 'url:../../assets/rw-icon-cluster.png';
 
 import useStyles from './styles';
 

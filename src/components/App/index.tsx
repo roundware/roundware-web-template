@@ -11,9 +11,9 @@ import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { useRoundware } from '../../hooks';
 import { defaultTheme } from '../../styles';
 
-import favicon from '../../assets/favicon.png';
-import logoSmall from '../../assets/rw-full-logo-wb.png';
-import logoMinimal from '../../assets/rw-logo-minimal.png';
+import favicon from 'url:../../assets/favicon.png';
+import logoSmall from 'url:../../assets/rw-full-logo-wb.png';
+import logoMinimal from 'url:../../assets/rw-logo-minimal.png';
 import DebugPage from '../DebugPage';
 import InfoPopup from '../InfoPopup';
 import { LandingPage } from '../LandingPage';

@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import landingHeaderImage from '../../assets/bg-about.jpg';
+import landingHeaderImage from 'url:../../assets/bg-about.jpg';
 const useStyles = makeStyles((theme) => {
 	return {
 		topBar: {
