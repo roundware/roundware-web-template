@@ -50,7 +50,7 @@
 		"react-router": "^5.2.0",
 		"react-router-dom": "^5.2.0",
 		"regenerator-runtime": "^0.13.9",
-		"roundware-web-framework": "https://github.com/shreyas-jadhav/rwf-tarball/raw/main/roundware-web-framework-0.11.0-alpha.30.tgz",
+		"roundware-web-framework": "^0.12.0",
 		"ts-overlapping-marker-spiderfier": "^1.0.3"
 	},
 	"devDependencies": {
