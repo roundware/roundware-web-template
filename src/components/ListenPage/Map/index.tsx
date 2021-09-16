@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Coordinates } from 'roundware-web-framework/dist/types';
 import { useRoundware } from '../../../hooks';
 import { RoundwareMapStyle } from '../../../styles/map-style';
@@ -39,10 +39,18 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 	};
 
 	const onLoad = (map: google.maps.Map<Element>) => {
+		const {
+			southwest: { latitude: swLat, longitude: swLng },
+			northeast: { latitude: neLat, longitude: neLng },
+		} = roundware.getMapBounds();
+
+		const bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+
 		const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
 		map.mapTypes.set('styled_map', styledMapType);
+
 		map.setOptions({
-			center: { lat: roundware?.project?.location?.latitude || 0, lng: roundware?.project?.location?.longitude || 0 },
+			center: { lat: roundware?.project?.location?.latitude!, lng: roundware?.project?.location?.longitude! },
 			zoom: 5,
 			zoomControl: true,
 			draggable: true,
@@ -61,21 +69,27 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
 				position: google.maps.ControlPosition.BOTTOM_LEFT,
 			},
+			restriction: {
+				latLngBounds: bounds,
+				strictBounds: true,
+			},
 		});
+
 		setMap(map);
 	};
 
-	if (!roundware.project) return null;
 	return (
 		<>
-			<LoadScript id='script-loader' googleMapsApiKey={props.googleMapsApiKey}>
-				<AssetLoadingOverlay />
-				<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad}>
-					<AssetLayer updateLocation={updateListenerLocation} />
-					<RangeCircleOverlay updateLocation={updateListenerLocation} />
-					<WalkingModeButton />
-				</GoogleMap>
-			</LoadScript>
+			{roundware.project ? (
+				<LoadScript id='script-loader' googleMapsApiKey={props.googleMapsApiKey}>
+					<AssetLoadingOverlay />
+					<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad}>
+						<AssetLayer updateLocation={updateListenerLocation} />
+						<RangeCircleOverlay updateLocation={updateListenerLocation} />
+						<WalkingModeButton />
+					</GoogleMap>
+				</LoadScript>
+			) : null}
 		</>
 	);
 };
