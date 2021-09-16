@@ -74,7 +74,7 @@ export const App = () => {
 					<Route path='/debug' component={DebugPage} />
 				</Switch>
 			</div>
-			<AppBar position='fixed' className={classes.bottomBar}>
+			<AppBar position='sticky' className={classes.bottomBar}>
 				<Toolbar style={{ width: '100%', justifyContent: 'center' }}>
 					<Route path='/listen'>
 						<ListenFilterDrawer />
