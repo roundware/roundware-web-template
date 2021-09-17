@@ -39,13 +39,19 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 	};
 
 	const onLoad = (map: google.maps.Map<Element>) => {
-		const {
-			southwest: { latitude: swLat, longitude: swLng },
-			northeast: { latitude: neLat, longitude: neLng },
-		} = roundware.getMapBounds();
+		let restriction;
+		if (process.env.USE_LISTEN_MAP_BOUNDS === 'true') {
+			const {
+				southwest: { latitude: swLat, longitude: swLng },
+				northeast: { latitude: neLat, longitude: neLng },
+			} = roundware.getMapBounds();
 
-		const bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
-
+			const bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			restriction = {
+				latLngBounds: bounds,
+				strictBounds: true,
+			};
+		}
 		const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
 		map.mapTypes.set('styled_map', styledMapType);
 
@@ -69,10 +75,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
 				position: google.maps.ControlPosition.BOTTOM_LEFT,
 			},
-			restriction: {
-				latLngBounds: bounds,
-				strictBounds: true,
-			},
+			restriction,
 		});
 
 		setMap(map);
