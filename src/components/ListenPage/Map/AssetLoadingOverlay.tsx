@@ -2,7 +2,7 @@ import { Backdrop, Card, CircularProgress, Typography } from '@material-ui/core'
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useRoundware } from '../../../hooks';
-const useStyles = makeStyles((theme) => {
+export const useLoadingStyles = makeStyles((theme) => {
 	return {
 		backdrop: {
 			zIndex: theme.zIndex.drawer + 1,
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => {
 const AssetLoadingOverlay = () => {
 	const { roundware } = useRoundware();
 
-	const classes = useStyles();
+	const classes = useLoadingStyles();
 	return (
 		<Backdrop className={classes.backdrop} open={!Array.isArray(roundware.assetData)}>
 			<Card className={classes.loadingCard}>
