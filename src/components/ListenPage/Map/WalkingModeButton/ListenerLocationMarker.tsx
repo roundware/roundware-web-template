@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { Circle, InfoWindow, Marker, useGoogleMap } from '@react-google-maps/api';
 import React from 'react';
 import { useRoundware } from '../../../../hooks';
-
+import WalkingModePin from 'url:../../../../assets/walkingModePin.svg';
 const ListenerLocationMarker = () => {
 	const { roundware } = useRoundware();
 	const map = useGoogleMap();
@@ -18,7 +18,7 @@ const ListenerLocationMarker = () => {
 	// }
 
 	const iconPin = {
-		url: 'https://fonts.gstatic.com/s/i/materialicons/person_pin/v10/24px.svg',
+		url: WalkingModePin,
 		scaledSize: new google.maps.Size(30, 30),
 	};
 
