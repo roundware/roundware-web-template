@@ -138,12 +138,14 @@ const walkingModeButton = () => {
 				switch (e?.code) {
 					case 1:
 						// permission denied
-						setWalkingModeErrorMessage({ title: 'Permission Denied', message: 'Permission to access your location was denied! Please try again and allow to use walking mode.' });
+						setWalkingModeErrorMessage({ title: 'Permission Denied!', message: 'Permission to access your location was denied! Please try again and allow to use walking mode.' });
+						break;
+
+					case 3:
+						setWalkingModeErrorMessage({ title: 'Request Timed Out.', message: 'It is taking too long to determine your location! Please try again.' });
 						break;
 					case 2:
 					// position unavailable
-					case 3:
-					// timeout 3 seconds
 					default:
 						setWalkingModeErrorMessage({ title: 'Failed to determine location!', message: 'There was an error determining your location! Please try again.' });
 						break;
