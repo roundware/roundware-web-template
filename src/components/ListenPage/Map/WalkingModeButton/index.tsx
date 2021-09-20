@@ -10,7 +10,7 @@ import MapIcon from '@material-ui/icons/Map';
 import ListenerLocationMarker from './ListenerLocationMarker';
 import clsx from 'clsx';
 import LoadingOverlay from './LoadingOverlay';
-
+import * as messages from '../../../../locales/en_US.json';
 const useStyles = makeStyles((theme) => {
 	return {
 		walkingModeButton: {
@@ -104,10 +104,7 @@ const walkingModeButton = () => {
 
 		if (!navigator.geolocation) {
 			setWalkingModeStatus('error');
-			setWalkingModeErrorMessage({
-				title: 'Walking Mode not supported!',
-				message: "Your browser doesn't support Walking Mode.",
-			});
+			setWalkingModeErrorMessage(messages.errors.walkingModeNotSupported);
 			enterMapMode();
 		} else {
 			setWalkingModeStatus('locating');
@@ -130,7 +127,7 @@ const walkingModeButton = () => {
 					enableWalkingMode();
 				} else {
 					setWalkingModeStatus('error');
-					setWalkingModeErrorMessage({ title: 'Out of Range!', message: 'Walking Mode is currently not unavailable at your location! You can still continue with Map mode.' });
+					setWalkingModeErrorMessage(messages.errors.outOfRange);
 				}
 			} catch (e: any) {
 				setWalkingModeStatus('error');
@@ -138,16 +135,16 @@ const walkingModeButton = () => {
 				switch (e?.code) {
 					case 1:
 						// permission denied
-						setWalkingModeErrorMessage({ title: 'Permission Denied!', message: 'Permission to access your location was denied! Please try again and allow to use walking mode.' });
+						setWalkingModeErrorMessage(messages.errors.permissionDenied);
 						break;
 
 					case 3:
-						setWalkingModeErrorMessage({ title: 'Request Timed Out.', message: 'It is taking too long to determine your location! Please try again.' });
+						setWalkingModeErrorMessage(messages.errors.timeOut);
 						break;
 					case 2:
 					// position unavailable
 					default:
-						setWalkingModeErrorMessage({ title: 'Failed to determine location!', message: 'There was an error determining your location! Please try again.' });
+						setWalkingModeErrorMessage(messages.errors.failedToDetermineLocation);
 						break;
 				}
 				enterMapMode();

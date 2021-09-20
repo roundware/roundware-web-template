@@ -1,0 +1,15 @@
+{
+	"errors": {
+		"outOfRange": {
+			"title": "Out of Range!",
+			"message": "Walking Mode is currently not unavailable at your location! You can still continue with Map mode."
+		},
+		"permissionDenied": { "title": "Permission Denied!", "message": "Permission to access your location was denied! Please try again and allow to use walking mode." },
+		"timeOut": { "title": "Request Timed Out.", "message": "It is taking too long to determine your location! Please try again." },
+		"failedToDetermineLocation": { "title": "Failed to determine location!", "message": "There was an error determining your location! Please try again." },
+		"walkingModeNotSupported": {
+			"title": "Walking Mode not supported!",
+			"message": "Your browser doesn't support Walking Mode."
+		}
+	}
+}
