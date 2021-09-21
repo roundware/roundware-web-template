@@ -1,14 +1,13 @@
 import {
     Divider,
     Grid,
-    makeStyles,
     Modal,
-    MuiThemeProvider,
-    Theme,
+    ThemeProvider,
     StyledEngineProvider,
     Paper,
     Typography,
 } from '@mui/material';
+import {makeStyles} from '@mui/styles'
 import { InfoWindow } from '@react-google-maps/api';
 import moment from 'moment';
 import React, { useEffect, useState, useContext } from 'react';
@@ -129,11 +128,11 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			onCloseClick={() => selectAsset(null)}
 		>
 			<StyledEngineProvider injectFirst>
-                <MuiThemeProvider theme={lightTheme}>
+                <ThemeProvider theme={lightTheme}>
                     <Grid container direction={'column'}>
                         <Paper>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</Paper>
                     </Grid>
-                </MuiThemeProvider>
+                </ThemeProvider>
             </StyledEngineProvider>
 		</InfoWindow>
     );
@@ -174,7 +173,7 @@ const TextDisplay = ({ textUrl }: { textUrl: string }) => {
 	return <div>{storedText}</div>;
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	paper: {
 		position: 'absolute',
 		height: 'auto',

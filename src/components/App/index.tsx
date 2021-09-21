@@ -8,6 +8,7 @@ import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { useRoundware } from '../../hooks';
+import { defaultTheme } from '../../styles';
 
 import favicon from 'url:../../assets/favicon.png';
 import logoSmall from 'url:../../assets/rw-full-logo-wb.png';
@@ -29,6 +30,7 @@ if (typeof process.env.GOOGLE_ANALYTICS_ID !== 'undefined' && process.env.GOOGLE
 }
 
 export const App = () => {
+	const [theme] = useState(defaultTheme);
 	const classes = useStyles();
 	const { roundware } = useRoundware();
 	const isExtraSmallScreen = useMediaQuery<boolean>(theme.breakpoints.down('xs'));

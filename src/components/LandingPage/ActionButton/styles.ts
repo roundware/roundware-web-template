@@ -1,6 +1,6 @@
 import { makeStyles } from '@mui/material';
 
-export const useStyles = makeStyles((theme) => {
+export const useStyles = makeStyles((theme: { spacing: (arg0: number) => any; breakpoints: { down: (arg0: string) => any } }) => {
 	return {
 		actionButton: {
 			margin: theme.spacing(2),

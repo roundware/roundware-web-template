@@ -3,8 +3,9 @@ import { useRoundware } from '../../hooks';
 import 'date-fns';
 import moment from 'moment';
 import clsx from 'clsx';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 import { makeStyles } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -17,7 +18,8 @@ import Typography from '@mui/material/Typography';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import LabelIcon from '@mui/icons-material/Label';
 import TagFilterMenu from '../AssetFilterPanel/TagFilterMenu';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { MaterialUiPickersDate } from '@mui/lab';
+import { TextField, TextFieldProps } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
@@ -98,38 +100,38 @@ const ListenFilterDrawer = () => {
 			<Divider />
 			<List>
 				<ListItem>
-					<MuiPickersUtilsProvider utils={DateFnsUtils}>
-						<KeyboardDatePicker
-							disableToolbar
+					<LocalizationProvider dateAdapter={AdapterDateFns}>
+						<DatePicker
+							showToolbar={false}
 							variant='inline'
-							format='MM/dd/yyyy'
+							inputFormat='MM/dd/yyyy'
 							margin='normal'
 							id='start-date-picker-inline'
-							label='Start Date'
+							renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='Start Date' {...props} />}
 							value={afterDateFilter}
 							onChange={handleAfterDateChange}
 							KeyboardButtonProps={{
 								'aria-label': 'change start date',
 							}}
 						/>
-					</MuiPickersUtilsProvider>
+					</LocalizationProvider>
 				</ListItem>
 				<ListItem>
-					<MuiPickersUtilsProvider utils={DateFnsUtils}>
-						<KeyboardDatePicker
-							disableToolbar
+					<LocalizationProvider dateAdapter={AdapterDateFns}>
+						<DatePicker
+							showToolbar={false}
 							variant='inline'
-							format='MM/dd/yyyy'
+							inputFormat='MM/dd/yyyy'
 							margin='normal'
 							id='end-date-picker-inline'
-							label='End Date'
+							renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='End Date' {...props} />}
 							value={beforeDateFilter}
 							onChange={handleBeforeDateChange}
 							KeyboardButtonProps={{
 								'aria-label': 'change end date',
 							}}
 						/>
-					</MuiPickersUtilsProvider>
+					</LocalizationProvider>
 				</ListItem>
 				<Divider />
 				<ListItem key='tags-header'>

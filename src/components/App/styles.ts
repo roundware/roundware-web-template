@@ -1,7 +1,7 @@
-import { makeStyles } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { defaultTheme } from '../../styles';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(() => {
 	return {
 		topBar: {
 			backgroundColor: defaultTheme.palette.primary.main,
