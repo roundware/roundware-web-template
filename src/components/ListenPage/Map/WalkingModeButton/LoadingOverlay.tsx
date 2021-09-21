@@ -1,5 +1,5 @@
 import React from 'react';
-import { Backdrop, Card, CircularProgress, Typography } from '@material-ui/core';
+import { Card, CircularProgress, Typography, Backdrop } from '@material-ui/core';
 import { useLoadingStyles } from '../AssetLoadingOverlay';
 interface LoadingOverlayProps {
 	open: boolean;
@@ -7,6 +7,7 @@ interface LoadingOverlayProps {
 }
 const LoadingOverlay = ({ open, message }: LoadingOverlayProps) => {
 	const classes = useLoadingStyles();
+
 	return (
 		<Backdrop className={classes.backdrop} open={open}>
 			<Card className={classes.loadingCard}>
@@ -17,4 +18,4 @@ const LoadingOverlay = ({ open, message }: LoadingOverlayProps) => {
 	);
 };
 
-export default LoadingOverlay;
+export default React.memo(LoadingOverlay);
