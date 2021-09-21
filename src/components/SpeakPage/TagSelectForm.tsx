@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme) => {
 			padding: theme.spacing(4),
 			cursor: 'pointer',
 			backgroundColor: theme.palette.grey[700],
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				padding: theme.spacing(3),
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				marginLeft: theme.spacing(1),
 				marginRight: theme.spacing(1),
 				padding: theme.spacing(2, 1, 2, 3),
@@ -46,10 +46,10 @@ const useStyles = makeStyles((theme) => {
 			marginRight: theme.spacing(2),
 			backgroundColor: 'transparent',
 			boxShadow: 'none',
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				marginBottom: theme.spacing(0),
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				marginRight: theme.spacing(0),
 				marginLeft: theme.spacing(0),
 			},
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => {
 			[theme.breakpoints.only('sm')]: {
 				fontSize: '1.5rem',
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				fontSize: '1.2rem',
 			},
 		},

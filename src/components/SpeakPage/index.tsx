@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => {
 		rootFormContainer: {
 			paddingTop: '3rem',
 			paddingBottom: '3rem',
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				paddingTop: 0,
 				paddingBottom: 0,
 			},

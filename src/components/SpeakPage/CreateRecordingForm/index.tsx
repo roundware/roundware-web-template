@@ -52,7 +52,7 @@ const CreateRecordingForm = () => {
 	const history = useHistory();
 	const classes = useStyles();
 	const theme = useTheme();
-	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down(350));
+	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down(undefined));
 
 	const startRecording = () => {
 		if (!navigator.mediaDevices) {
@@ -139,7 +139,7 @@ const CreateRecordingForm = () => {
 	const maxRecordingLength = roundware.project ? (roundware.project.maxRecordingLength ? roundware.project.maxRecordingLength : '--') : '--';
 
 	return (
-		<Card className={classes.container}>
+        <Card className={classes.container}>
 			<Grid container alignItems={'center'} direction={'column'} spacing={8}>
 				<Grid item>
 					<Container>
@@ -172,14 +172,14 @@ const CreateRecordingForm = () => {
 						}}
 					>
 						<IconButton
-							disabled={draftMediaUrl !== ''}
-							style={{
+                            disabled={draftMediaUrl !== ''}
+                            style={{
 								margin: 'auto',
 								backgroundColor: isRecording ? 'red' : 'inherit',
 								padding: 0,
 							}}
-							onClick={toggleRecording}
-						>
+                            onClick={toggleRecording}
+                            size="large">
 							<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButton} />
 						</IconButton>
 					</Grid>
@@ -224,14 +224,14 @@ const CreateRecordingForm = () => {
 									</Grid>
 									<Grid item>
 										<IconButton
-											disabled={draftMediaUrl !== ''}
-											style={{
+                                            disabled={draftMediaUrl !== ''}
+                                            style={{
 												margin: 'auto',
 												backgroundColor: isRecording ? 'red' : 'inherit',
 												justifyContent: 'center',
 											}}
-											onClick={toggleRecording}
-										>
+                                            onClick={toggleRecording}
+                                            size="large">
 											<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButtonSmall} />
 										</IconButton>
 									</Grid>
@@ -397,6 +397,6 @@ const CreateRecordingForm = () => {
 				</Dialog>
 			</Grid>
 		</Card>
-	);
+    );
 };
 export default CreateRecordingForm;

@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => {
 		cardActionButton: {
 			marginRight: theme.spacing(2),
 
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				paddingRight: theme.spacing(1),
 				paddingLeft: theme.spacing(1),
 			},
@@ -39,20 +39,20 @@ const useStyles = makeStyles((theme: Theme) => {
 		locationHeaderLabel: {
 			fontSize: '2rem',
 			padding: theme.spacing(2, 1, 1, 1),
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				fontSize: '1.2rem',
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				fontSize: '1.2rem',
 			},
 		},
 		mapContainerDiv: {
 			height: '60vh',
 			margin: theme.spacing(2, 0),
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				height: '50vh',
 			},
-			[theme.breakpoints.down(350)]: {
+			[theme.breakpoints.down(undefined)]: {
 				height: '45vh',
 			},
 		},

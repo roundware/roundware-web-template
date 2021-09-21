@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) => {
 		},
 		landingTitle: {
 			fontSize: '6em',
-			[theme.breakpoints.down('md')]: {
+			[theme.breakpoints.down('lg')]: {
 				fontSize: '4em',
 			},
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				fontSize: '3em',
 			},
 		},
@@ -34,14 +34,14 @@ const useStyles = makeStyles((theme) => {
 			textAlign: 'center',
 			height: '15vh',
 			paddingTop: 15,
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				lineHeight: '1.2em',
 			},
 		},
 		landingBanner: {
 			width: 'auto',
 			height: 100,
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				width: '70%',
 				height: 'auto',
 			},

@@ -7,14 +7,14 @@ export const useStyles = makeStyles((theme) => {
 			width: 300,
 			// padding: 50
 			height: 100,
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				width: 250,
 				height: 75,
 			},
 		},
 		buttonLabel: {
 			margin: theme.spacing(2),
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				fontSize: '2rem',
 			},
 		},

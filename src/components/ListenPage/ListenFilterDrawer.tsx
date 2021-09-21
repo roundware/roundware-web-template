@@ -22,7 +22,7 @@ import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 const useStyles = makeStyles((theme) => ({
 	list: {
 		width: 300,
-		[theme.breakpoints.down(350)]: {
+		[theme.breakpoints.down(undefined)]: {
 			width: 250,
 		},
 	},

@@ -1,4 +1,14 @@
-import { Divider, Grid, makeStyles, Modal, MuiThemeProvider, Paper, Typography } from '@mui/material';
+import {
+    Divider,
+    Grid,
+    makeStyles,
+    Modal,
+    MuiThemeProvider,
+    Theme,
+    StyledEngineProvider,
+    Paper,
+    Typography,
+} from '@mui/material';
 import { InfoWindow } from '@react-google-maps/api';
 import moment from 'moment';
 import React, { useEffect, useState, useContext } from 'react';
@@ -109,7 +119,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 	const { infoWindowOrder } = useContext(UiConfigContext);
 
 	return (
-		<InfoWindow
+        <InfoWindow
 			options={{
 				disableAutoPan: false,
 				pixelOffset: new google.maps.Size(0, -30),
@@ -118,13 +128,15 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			position={position}
 			onCloseClick={() => selectAsset(null)}
 		>
-			<MuiThemeProvider theme={lightTheme}>
-				<Grid container direction={'column'}>
-					<Paper>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</Paper>
-				</Grid>
-			</MuiThemeProvider>
+			<StyledEngineProvider injectFirst>
+                <MuiThemeProvider theme={lightTheme}>
+                    <Grid container direction={'column'}>
+                        <Paper>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</Paper>
+                    </Grid>
+                </MuiThemeProvider>
+            </StyledEngineProvider>
 		</InfoWindow>
-	);
+    );
 };
 
 const LightboxModal = ({ imageUrl }: { imageUrl: string }) => {
