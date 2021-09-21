@@ -1,5 +1,5 @@
-import Box from '@material-ui/core/Box';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import { makeStyles, useTheme } from '@mui/material/styles';
 import { useGoogleMap } from '@react-google-maps/api';
 import React, { useEffect, useState } from 'react';
 import useDimensions from 'react-cool-dimensions';

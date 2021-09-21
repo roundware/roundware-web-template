@@ -1,5 +1,5 @@
 //the createMuiTheme function was renamed to createTheme.
-import { createTheme, makeStyles } from '@material-ui/core/styles';
+import { createTheme, makeStyles } from '@mui/material/styles';
 
 export const defaultTheme = createTheme({
 	palette: {

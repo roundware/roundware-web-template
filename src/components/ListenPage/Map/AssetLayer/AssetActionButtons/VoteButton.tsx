@@ -1,7 +1,7 @@
 import { useStyles, VoteButtonStyles } from './styles';
 import { useRoundware } from '../../../../../hooks';
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 interface VoteButtonProps {
 	children: React.ReactNode;
 	title: string;

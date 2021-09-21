@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import Button from '@material-ui/core/Button';
-import LinkIcon from '@material-ui/icons/Link';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import FlagIcon from '@material-ui/icons/Flag';
+import Button from '@mui/material/Button';
+import LinkIcon from '@mui/icons-material/Link';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import FlagIcon from '@mui/icons-material/Flag';
 
 import { VoteButton } from './VoteButton';
 import { useRoundware } from '../../../../../hooks';

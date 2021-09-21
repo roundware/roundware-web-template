@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core';
-import PhotoIcon from '@material-ui/icons/Photo';
+import { makeStyles } from '@mui/material';
+import PhotoIcon from '@mui/icons-material/Photo';
 export const useStyles = makeStyles((theme) => {
 	return {
 		container: {

@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/material/styles';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import React, { useState, useCallback } from 'react';
 import { Coordinates } from 'roundware-web-framework/dist/types';

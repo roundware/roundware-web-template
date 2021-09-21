@@ -1,4 +1,4 @@
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from '@mui/material/Dialog';
 import React from 'react';
 import LegalAgreementForm from '../LegalAgreementForm';
 

@@ -1,11 +1,11 @@
-import { Grid, TextField } from '@material-ui/core';
-import Autocomplete, { AutocompleteChangeDetails, AutocompleteRenderInputParams } from '@material-ui/lab/Autocomplete';
+import { Grid, TextField } from '@mui/material';
+import Autocomplete, { AutocompleteChangeDetails, AutocompleteRenderInputParams } from '@mui/lab/Autocomplete';
 import React, { useState, useContext } from 'react';
 import { useRoundware } from '../../hooks';
 import useStyles from './styles';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import { Snackbar } from '@material-ui/core';
-import { AutocompleteChangeReason } from '@material-ui/lab';
+import MuiAlert, { AlertProps } from '@mui/lab/Alert';
+import { Snackbar } from '@mui/material';
+import { AutocompleteChangeReason } from '@mui/lab';
 import { TextFieldProps } from 'material-ui';
 import { ITag, ITagGroup, IUiConfig } from 'roundware-web-framework/dist/types';
 import { URLContext } from '../../context/URLContext';

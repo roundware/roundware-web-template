@@ -1,6 +1,6 @@
 import React from 'react';
-import { MenuProps, withStyles } from '@material-ui/core';
-import { Menu, MenuItem } from '@material-ui/core';
+import { MenuProps, withStyles } from '@mui/material';
+import { Menu, MenuItem } from '@mui/material';
 
 export const StyledMenu = withStyles({
 	paper: {

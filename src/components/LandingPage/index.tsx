@@ -1,10 +1,10 @@
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import ActionButton from './ActionButton';
 import React, { Fragment } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/material/styles';
 import { useRoundware } from '../../hooks';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 
 import banner from 'url:../../assets/rw-icon-cluster.png';
 

@@ -1,4 +1,4 @@
-import { Divider, Grid, makeStyles, Modal, MuiThemeProvider, Paper, Typography } from '@material-ui/core';
+import { Divider, Grid, makeStyles, Modal, MuiThemeProvider, Paper, Typography } from '@mui/material';
 import { InfoWindow } from '@react-google-maps/api';
 import moment from 'moment';
 import React, { useEffect, useState, useContext } from 'react';

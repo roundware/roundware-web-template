@@ -1,9 +1,9 @@
-import { useMediaQuery } from '@material-ui/core';
-import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
-import { useTheme } from '@material-ui/core/styles';
-import PhotoIcon from '@material-ui/icons/Photo';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
+import { useMediaQuery } from '@mui/material';
+import Badge from '@mui/material/Badge';
+import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
+import PhotoIcon from '@mui/icons-material/Photo';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
 import React, { useRef, useState } from 'react';
 import { ITextAsset } from '../../../../types';
 import { PhotoPickerInput, PhotoPickerMenuItem } from './PhotoPicker';

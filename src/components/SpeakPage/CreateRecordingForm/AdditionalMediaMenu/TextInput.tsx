@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, ListItemIcon, ListItemText, TextField } from '@material-ui/core';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
+import { Button, Dialog, DialogActions, DialogContent, ListItemIcon, ListItemText, TextField } from '@mui/material';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { StyledMenuItem } from './StyledMenu';
 import { ITextAsset } from '../../../../types';
 

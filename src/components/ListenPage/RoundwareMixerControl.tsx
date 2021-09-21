@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import Button from '@material-ui/core/Button';
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import Button from '@mui/material/Button';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/lab/Alert';
 import { useRoundware } from '../../hooks';
 import { GeoListenMode } from 'roundware-web-framework';
 

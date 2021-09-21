@@ -1,9 +1,9 @@
-import { CircularProgress, useMediaQuery } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { CircularProgress, useMediaQuery } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import CssBaseline from '@mui/material/CssBaseline';
+import { MuiThemeProvider } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import React, { Suspense, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';

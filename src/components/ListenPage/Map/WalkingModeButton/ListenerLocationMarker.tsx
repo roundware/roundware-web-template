@@ -1,5 +1,5 @@
-import { useTheme } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { Circle, InfoWindow, Marker, useGoogleMap } from '@react-google-maps/api';
 import React from 'react';
 import { useRoundware } from '../../../../hooks';

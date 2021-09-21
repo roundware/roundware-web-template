@@ -7,20 +7,12 @@ import React from 'react';
 
 import { App } from './components/App';
 
-import RoundwareProvider from './providers/RoundwareProvider';
-import UiConfigProvider from './providers/UIConfigProvider';
-import { URLSyncProvider } from './providers/URLProvider';
+import Providers from './providers/Providers';
 
 const mountNode = document.getElementById('app');
 ReactDOM.render(
-	<RoundwareProvider>
-		<UiConfigProvider>
-			<BrowserRouter>
-				<URLSyncProvider>
-					<App />
-				</URLSyncProvider>
-			</BrowserRouter>
-		</UiConfigProvider>
-	</RoundwareProvider>,
+	<Providers>
+		<App />
+	</Providers>,
 	mountNode
 );
