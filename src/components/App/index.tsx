@@ -1,7 +1,7 @@
 import { CircularProgress, useMediaQuery } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
-import { MuiThemeProvider } from '@mui/material/styles';
+import { MuiThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { Suspense, useEffect, useState } from 'react';
@@ -34,7 +34,7 @@ export const App = () => {
 	const [theme] = useState(defaultTheme);
 	const classes = useStyles();
 	const { roundware } = useRoundware();
-	const isExtraSmallScreen = useMediaQuery<boolean>(theme.breakpoints.down('xs'));
+	const isExtraSmallScreen = useMediaQuery<boolean>(theme.breakpoints.down('sm'));
 
 	if (process.env.GOOGLE_ANALYTICS_ID !== 'null') {
 		let location = useLocation();
@@ -45,45 +45,47 @@ export const App = () => {
 	}
 
 	return (
-		<MuiThemeProvider theme={theme}>
-			<CssBaseline />
-			<Helmet>
-				<meta charSet='utf-8' />
-				<title>{roundware.project ? roundware.project.projectName : ''}</title>
-				<link rel='icon' type='image/png' href={favicon} sizes='16x16' />
-			</Helmet>
+        <StyledEngineProvider injectFirst>
+            <MuiThemeProvider theme={theme}>
+                <CssBaseline />
+                <Helmet>
+                    <meta charSet='utf-8' />
+                    <title>{roundware.project ? roundware.project.projectName : ''}</title>
+                    <link rel='icon' type='image/png' href={favicon} sizes='16x16' />
+                </Helmet>
 
-			<AppBar className={classes.topBar} position='fixed'>
-				<Toolbar className={classes.topBar}>
-					<Typography variant='h6' className={classes.title}>
-						<NavLink to='/' className={classes.title}>
-							{roundware.project ? roundware.project.projectName : ''}
-						</NavLink>
-					</Typography>
-					<NavLink to='/'>
-						<img src={isExtraSmallScreen ? logoMinimal : logoSmall} className={classes.navLogo} />
-					</NavLink>
-				</Toolbar>
-			</AppBar>
-			<Toolbar />
-			<div className={classes.appContainer}>
-				<Switch>
-					<Route exact path='/' component={LandingPage} />
-					<Route path='/listen' component={ListenPage} />
-					<Route path='/speak' component={SpeakPage} />
-					<Route path='/debug' component={DebugPage} />
-				</Switch>
-			</div>
-			<AppBar position='sticky' className={classes.bottomBar}>
-				<Toolbar style={{ width: '100%', justifyContent: 'center' }}>
-					<Route path='/listen'>
-						<ListenFilterDrawer />
-						<RoundwareMixerControl />
-					</Route>
-					{process.env.DEBUG_MODE === 'true' ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
-					<InfoPopup />
-				</Toolbar>
-			</AppBar>
-		</MuiThemeProvider>
-	);
+                <AppBar className={classes.topBar} position='fixed'>
+                    <Toolbar className={classes.topBar}>
+                        <Typography variant='h6' className={classes.title}>
+                            <NavLink to='/' className={classes.title}>
+                                {roundware.project ? roundware.project.projectName : ''}
+                            </NavLink>
+                        </Typography>
+                        <NavLink to='/'>
+                            <img src={isExtraSmallScreen ? logoMinimal : logoSmall} className={classes.navLogo} />
+                        </NavLink>
+                    </Toolbar>
+                </AppBar>
+                <Toolbar />
+                <div className={classes.appContainer}>
+                    <Switch>
+                        <Route exact path='/' component={LandingPage} />
+                        <Route path='/listen' component={ListenPage} />
+                        <Route path='/speak' component={SpeakPage} />
+                        <Route path='/debug' component={DebugPage} />
+                    </Switch>
+                </div>
+                <AppBar position='sticky' className={classes.bottomBar}>
+                    <Toolbar style={{ width: '100%', justifyContent: 'center' }}>
+                        <Route path='/listen'>
+                            <ListenFilterDrawer />
+                            <RoundwareMixerControl />
+                        </Route>
+                        {process.env.DEBUG_MODE === 'true' ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
+                        <InfoPopup />
+                    </Toolbar>
+                </AppBar>
+            </MuiThemeProvider>
+        </StyledEngineProvider>
+    );
 };
