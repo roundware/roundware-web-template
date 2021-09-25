@@ -182,6 +182,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			assetUpdateInterval: 30 * 1000,
 			prefetchSpeakerAudio: true,
 			apiClient: undefined!,
+			keepPausedAssets: process.env.KEEP_PAUSED_ASSETS === 'true',
 		};
 		const roundware = new Roundware(window, roundwareOptions);
 
