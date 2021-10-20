@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "commonjs",
+		"strict": true,
+		"jsx": "react",
+		"rootDir": "./src",
+		"outDir": "dist",
+		"incremental": true,
+		"sourceMap": true,
+		"experimentalDecorators": true,
+		"lib": ["dom", "es2015"],
+		"noImplicitAny": true,
+		"allowSyntheticDefaultImports": true,
+		"typeRoots": ["node_modules/@types"],
+		"resolveJsonModule": true
+	},
+	"include": ["src/**/*", "./index.d.ts"]
+}
