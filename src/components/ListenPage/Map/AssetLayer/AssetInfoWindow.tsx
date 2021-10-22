@@ -2,7 +2,7 @@ import { Button, Divider, Grid, makeStyles, Modal, MuiThemeProvider, Paper, Typo
 import { createStyles, withStyles } from '@material-ui/styles';
 import { InfoWindow } from '@react-google-maps/api';
 import moment from 'moment';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Roundware } from 'roundware-web-framework';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { IRoundwareContext } from '../../../../context/RoundwareContext';
@@ -13,7 +13,7 @@ import AssetPlayer from '../../../AssetPlayer';
 import { TagsDisplay } from '../../../AssetTags';
 import { AssetActionButtons } from './AssetActionButtons';
 import CloseIcon from '@material-ui/icons/Close';
-
+import Interweave from 'interweave';
 interface AssetInfoWindowInnerProps {
 	asset: IAssetData;
 	selectAsset: IRoundwareContext[`selectAsset`];
@@ -88,7 +88,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 							{/* Example of asset description - eid=6328 */}
 							{showDividerIfEligible()}
 							<Typography variant='body2'>Description:</Typography>
-							<div dangerouslySetInnerHTML={{ __html: description.length > 100 ? description.substr(0, 100) + '...' : description }}></div>
+							<Interweave content={description.length > 100 ? description.substr(0, 100) + '...' : description} />
 							{description.length > 100 && (
 								<Button onClick={() => setShowDialog(true)} size='small' className={classes.readMoreButton}>
 									Read more
@@ -101,7 +101,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 									</DialogTitle>
 									<DialogContent>
 										<DialogContentText>
-											<div dangerouslySetInnerHTML={{ __html: description }}></div>
+											<Interweave content={description} />
 										</DialogContentText>
 									</DialogContent>
 								</Dialog>
@@ -132,6 +132,11 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 
 	const { infoWindowOrder } = useContext(UiConfigContext);
 
+	const paperRef = useRef(null);
+	useEffect(() => {
+		// @ts-ignore
+		paperRef?.current?.blur?.();
+	}, [paperRef]);
 	return (
 		<InfoWindow
 			options={{
@@ -143,9 +148,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			onCloseClick={() => selectAsset(null)}
 		>
 			<MuiThemeProvider theme={lightTheme}>
-				<Grid container direction={'column'}>
-					<Paper>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</Paper>
-				</Grid>
+				<Paper ref={paperRef}>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</Paper>
 			</MuiThemeProvider>
 		</InfoWindow>
 	);
@@ -186,7 +189,7 @@ const TextDisplay = ({ textUrl }: { textUrl: string }) => {
 	const classes = useStyles();
 	return (
 		<div>
-			{storedText.length > 100 ? storedText?.slice(0, 100) + '...' : storedText}
+			<Interweave content={storedText.length > 100 ? storedText.substr(0, 100) + '...' : storedText} />
 			{storedText.length > 100 && (
 				<Button onClick={() => setShowDialog(true)} size='small' className={classes.readMoreButton}>
 					Read more
@@ -195,10 +198,12 @@ const TextDisplay = ({ textUrl }: { textUrl: string }) => {
 			{showDialog && (
 				<Dialog open={showDialog}>
 					<DialogTitle id='description' onClose={() => setShowDialog(false)}>
-						Text
+						Additional Info
 					</DialogTitle>
 					<DialogContent>
-						<DialogContentText>{storedText}</DialogContentText>
+						<DialogContentText>
+							<Interweave content={storedText} />
+						</DialogContentText>
 					</DialogContent>
 				</Dialog>
 			)}
