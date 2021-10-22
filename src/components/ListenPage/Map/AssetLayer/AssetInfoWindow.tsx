@@ -1,4 +1,5 @@
-import { Divider, Grid, makeStyles, Modal, MuiThemeProvider, Paper, Typography } from '@material-ui/core';
+import { Button, Divider, Grid, makeStyles, Modal, MuiThemeProvider, Paper, Typography, Dialog, DialogContent, DialogContentText, DialogTitle as MuiDialogTitle, IconButton, WithStyles, Theme } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import { InfoWindow } from '@react-google-maps/api';
 import moment from 'moment';
 import React, { useEffect, useState, useContext } from 'react';
@@ -11,6 +12,7 @@ import { IImageAsset } from '../../../../types';
 import AssetPlayer from '../../../AssetPlayer';
 import { TagsDisplay } from '../../../AssetTags';
 import { AssetActionButtons } from './AssetActionButtons';
+import CloseIcon from '@material-ui/icons/Close';
 
 interface AssetInfoWindowInnerProps {
 	asset: IAssetData;
@@ -21,6 +23,10 @@ interface AssetInfoWindowInnerProps {
 export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInfoWindowInnerProps) => {
 	const [imageAssets, setImageAssets] = useState<IImageAsset[]>([]);
 	const [textAssets, setTextAssets] = useState<IAssetData[]>([]);
+
+	const classes = useStyles();
+
+	const [showDialog, setShowDialog] = useState(false);
 
 	useEffect(() => {
 		if (Array.isArray(asset?.envelope_ids) && asset?.envelope_ids?.length > 0) {
@@ -57,6 +63,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			}
 			return null;
 		}
+		const description = asset.description;
 
 		switch (elementName) {
 			case 'date':
@@ -75,13 +82,30 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 					</div>
 				);
 			case 'description':
-				if (asset.description)
+				if (description)
 					return (
 						<div key={elementName} style={{ marginTop: 5 }}>
 							{/* Example of asset description - eid=6328 */}
 							{showDividerIfEligible()}
 							<Typography variant='body2'>Description:</Typography>
-							<div dangerouslySetInnerHTML={{ __html: asset.description }}></div>
+							<div dangerouslySetInnerHTML={{ __html: description.length > 100 ? description.substr(0, 100) + '...' : description }}></div>
+							{description.length > 100 && (
+								<Button onClick={() => setShowDialog(true)} size='small' className={classes.readMoreButton}>
+									Read more
+								</Button>
+							)}
+							{showDialog && (
+								<Dialog open={showDialog}>
+									<DialogTitle id='description' onClose={() => setShowDialog(false)}>
+										Description
+									</DialogTitle>
+									<DialogContent>
+										<DialogContentText>
+											<div dangerouslySetInnerHTML={{ __html: description }}></div>
+										</DialogContentText>
+									</DialogContent>
+								</Dialog>
+							)}
 						</div>
 					);
 				return null;
@@ -158,8 +182,28 @@ const TextDisplay = ({ textUrl }: { textUrl: string }) => {
 			});
 		});
 	}, []);
-
-	return <div>{storedText}</div>;
+	const [showDialog, setShowDialog] = useState(false);
+	const classes = useStyles();
+	return (
+		<div>
+			{storedText.length > 100 ? storedText?.slice(0, 100) + '...' : storedText}
+			{storedText.length > 100 && (
+				<Button onClick={() => setShowDialog(true)} size='small' className={classes.readMoreButton}>
+					Read more
+				</Button>
+			)}
+			{showDialog && (
+				<Dialog open={showDialog}>
+					<DialogTitle id='description' onClose={() => setShowDialog(false)}>
+						Text
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText>{storedText}</DialogContentText>
+					</DialogContent>
+				</Dialog>
+			)}
+		</div>
+	);
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -175,4 +219,39 @@ const useStyles = makeStyles((theme) => ({
 		outline: 0,
 		minWidth: 300,
 	},
+	readMoreButton: {
+		color: theme.palette.info.dark,
+	},
 }));
+const styles = (theme: Theme) =>
+	createStyles({
+		root: {
+			margin: 0,
+			padding: theme.spacing(2),
+		},
+		closeButton: {
+			position: 'absolute',
+			right: theme.spacing(1),
+			top: theme.spacing(1),
+			color: theme.palette.grey[500],
+		},
+	});
+export interface DialogTitleProps extends WithStyles<typeof styles> {
+	id: string;
+	children: React.ReactNode;
+	onClose: () => void;
+}
+
+const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
+	const { children, classes, onClose, ...other } = props;
+	return (
+		<MuiDialogTitle disableTypography className={classes.root} {...other}>
+			<Typography variant='h6'>{children}</Typography>
+			{onClose ? (
+				<IconButton aria-label='close' className={classes.closeButton} onClick={onClose}>
+					<CloseIcon />
+				</IconButton>
+			) : null}
+		</MuiDialogTitle>
+	);
+});
