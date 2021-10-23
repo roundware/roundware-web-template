@@ -132,11 +132,6 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 
 	const { infoWindowOrder } = useContext(UiConfigContext);
 
-	const paperRef = useRef(null);
-	useEffect(() => {
-		// @ts-ignore
-		paperRef?.current?.blur?.();
-	}, [paperRef]);
 	return (
 		<InfoWindow
 			options={{
@@ -148,7 +143,10 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			onCloseClick={() => selectAsset(null)}
 		>
 			<MuiThemeProvider theme={lightTheme}>
-				<Paper ref={paperRef}>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</Paper>
+				<Paper>
+					<button style={{ display: 'none', position: 'fixed' }} />
+					{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}
+				</Paper>
 			</MuiThemeProvider>
 		</InfoWindow>
 	);
