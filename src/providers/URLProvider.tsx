@@ -57,7 +57,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 
 	useEffect(() => {
 		if (eid_get !== null && selectedAsset == null) deleteFromURL('eid');
-		if (selectedAsset && Array.isArray(selectedAsset.envelope_ids) && selectedAsset.envelope_ids[0] !== eid_get) {
+		if (selectedAsset && Array.isArray(selectedAsset.envelope_ids) && selectedAsset.envelope_ids.length > 0 && selectedAsset.envelope_ids[0] !== eid_get) {
 			addToURL('eid', selectedAsset.envelope_ids[0].toString());
 		}
 	}, [selectedAsset]);
