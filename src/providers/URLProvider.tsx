@@ -84,7 +84,10 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		if (selectedAsset && selectedAsset.id && selectedAsset.id) {
 			values[1] = selectedAsset.id.toString();
 		} else deleteFromURL('aid');
-		addToURL(names, values);
+
+		/** add aid only when eid not available */
+		if (values[0]) addToURL(names[0], values[0]);
+		else addToURL(names, values);
 	}, [selectedAsset]);
 
 	// add and remove tag_ids
