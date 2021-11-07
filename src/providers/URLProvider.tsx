@@ -86,7 +86,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		} else deleteFromURL('aid');
 
 		/** add aid only when eid not available */
-		if (values[0]) addToURL(names[0], values[0]);
+		if (values[0]) addToURL(names, [values[0], null]);
 		else addToURL(names, values);
 	}, [selectedAsset]);
 
