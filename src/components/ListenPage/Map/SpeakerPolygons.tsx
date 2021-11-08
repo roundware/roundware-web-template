@@ -1,15 +1,18 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useRoundware } from '../../../hooks';
 import { polygonToGoogleMapPaths } from '../../../utils';
-import { Polygon, PolygonProps } from '@react-google-maps/api';
+import { useGoogleMap, Polygon, PolygonProps } from '@react-google-maps/api';
+import { speakerPolygonColors as colors, speakerPolygonOptions } from '../../../styles/speaker';
+import CustomMapControl from './CustomControl';
 interface Props {}
 
-const colors = process.env.SPEAKER_STROKE_COLORS?.split(`,`) || ['blue'];
 const getColorForIndex = (index: number): string => {
 	return colors[index % colors.length];
 };
 const SpeakerPolygons = (props: Props) => {
 	const { roundware } = useRoundware();
+
+	const [options, setOptions] = useState<PolygonProps[`options`]>(speakerPolygonOptions);
 
 	const googleMapPolygonProps: PolygonProps[] = useMemo(() => {
 		if (!Array.isArray(roundware.speakers())) return [];
@@ -21,11 +24,8 @@ const SpeakerPolygons = (props: Props) => {
 				const prop: PolygonProps = {
 					path: polygonToGoogleMapPaths(s.shape),
 					options: {
-						clickable: false,
-						draggable: false,
-						editable: false,
-						fillOpacity: 0,
-						strokeOpacity: 1,
+						...options,
+						fillColor: getColorForIndex(index),
 						strokeColor: getColorForIndex(index),
 					},
 					// @ts-ignore
@@ -33,14 +33,29 @@ const SpeakerPolygons = (props: Props) => {
 				};
 				return [prop];
 			});
-	}, [roundware.project]);
+	}, [roundware.project, options]);
 
-	console.log(googleMapPolygonProps);
 	return (
 		<div>
-			{googleMapPolygonProps.map((p) => (
-				<Polygon {...p} />
-			))}
+			{process.env.DEBUG_MODE == 'true' && (
+				<CustomMapControl position={window.google.maps.ControlPosition.LEFT_CENTER}>
+					<div>
+						<p>fillOpacity</p>
+						<input type='number' value={options?.fillOpacity} onChange={(e) => setOptions((prev) => ({ ...prev, fillOpacity: Number(e.target.value) }))} />
+					</div>
+
+					<div>
+						<p>strokeOpacity</p>
+						<input type='number' value={options?.strokeOpacity} onChange={(e) => setOptions((prev) => ({ ...prev, strokeOpacity: Number(e.target.value) }))} />
+					</div>
+
+					<div>
+						<p>strokeWeight</p>
+						<input type='number' value={options?.strokeWeight} onChange={(e) => setOptions((prev) => ({ ...prev, strokeWeight: Number(e.target.value) }))} />
+					</div>
+				</CustomMapControl>
+			)}
+			{Array.isArray(googleMapPolygonProps) && googleMapPolygonProps.map((p) => <Polygon {...p} />)}
 		</div>
 	);
 };
