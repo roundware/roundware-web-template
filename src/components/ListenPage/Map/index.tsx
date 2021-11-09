@@ -8,7 +8,7 @@ import AssetLayer from './AssetLayer';
 import AssetLoadingOverlay from './AssetLoadingOverlay';
 import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
-
+import SpeakerPolygons from './SpeakerPolygons';
 const useStyles = makeStyles((theme) => {
 	return {
 		roundwareMap: {
@@ -90,6 +90,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
 						<WalkingModeButton />
+						{process.env.SHOW_SPEAKERS_ON_MAP == 'true' && <SpeakerPolygons />}
 					</GoogleMap>
 				</LoadScript>
 			) : null}
