@@ -1,17 +1,10 @@
-import { Grid, SnackbarCloseReason, SnackbarProps, TextField } from '@mui/material';
-import Autocomplete, { AutocompleteProps, AutocompleteChangeDetails, AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
-import React, { useState, useContext } from 'react';
+import { Grid, Snackbar, SnackbarProps, TextField, AlertProps, Alert } from '@mui/material';
+import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
+import React, { useState } from 'react';
+import { ITag, ITagGroup } from 'roundware-web-framework/dist/types';
 import { useRoundware } from '../../hooks';
 import useStyles from './styles';
-import MuiAlert, { AlertProps } from '@mui/lab/Alert';
-import { Snackbar } from '@mui/material';
-import { TextFieldProps } from 'material-ui';
-import { ITag, ITagGroup, IUiConfig } from 'roundware-web-framework/dist/types';
-import { URLContext } from '../../context/URLContext';
 
-function Alert(props: AlertProps) {
-	return <MuiAlert elevation={6} variant='filled' {...props} />;
-}
 interface TagFilterMenuProps {
 	tag_group: ITagGroup;
 }
@@ -42,6 +35,7 @@ const TagFilterMenu = ({ tag_group }: TagFilterMenuProps) => {
 			const trackIds = Object.keys(roundware.mixer.playlist?.trackIdMap || {}).map((id) => parseInt(id));
 			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
 		}
+		setSnackbarOpen(true);
 	};
 
 	const options = tag_group.display_items.map(({ tag_id, tag_display_text }: ITag) => {
@@ -63,7 +57,9 @@ const TagFilterMenu = ({ tag_group }: TagFilterMenuProps) => {
 				</label>
 			</Grid>
 			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
-				<Alert severity='success'>Success! Filters updated.</Alert>
+				<Alert elevation={6} variant='filled' severity='success'>
+					Success! Filters updated.
+				</Alert>
 			</Snackbar>
 		</>
 	);
