@@ -1,28 +1,25 @@
-import { CircularProgress, useMediaQuery } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
-import { useRoundware } from '../../hooks';
-import { defaultTheme } from '../../styles';
-
 import favicon from 'url:../../assets/favicon.png';
 import logoSmall from 'url:../../assets/rw-full-logo-wb.png';
 import logoMinimal from 'url:../../assets/rw-logo-minimal.png';
+import { useRoundware } from '../../hooks';
+import { defaultTheme } from '../../styles';
 import DebugPage from '../DebugPage';
 import InfoPopup from '../InfoPopup';
 import { LandingPage } from '../LandingPage';
+import ListenPage from '../ListenPage';
 import ListenFilterDrawer from '../ListenPage/ListenFilterDrawer';
 import RoundwareMixerControl from '../ListenPage/RoundwareMixerControl';
-import useStyles from './styles';
-
-import ListenPage from '../ListenPage';
-
 import SpeakPage from '../SpeakPage';
+import useStyles from './styles';
 
 if (typeof process.env.GOOGLE_ANALYTICS_ID !== 'undefined' && process.env.GOOGLE_ANALYTICS_ID !== 'null' && typeof process.env.GOOGLE_ANALYTICS_ID == 'string') {
 	ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
