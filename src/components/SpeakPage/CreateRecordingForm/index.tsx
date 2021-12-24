@@ -376,7 +376,7 @@ const CreateRecordingForm = () => {
 							color={'primary'}
 							disabled={success == null}
 							onClick={() => {
-								if (success !== null) {
+								if (success !== null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
 									history.push(`/listen?eid=${success.envelope_ids[0]}`);
 								}
 							}}

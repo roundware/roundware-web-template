@@ -36,7 +36,6 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [, forceUpdate] = useReducer((x) => !x, false);
 
 	const updatePlaying = (assets: IAssetData[] | undefined) => {
-		console.log(`playing assets: `, assets);
 		setPlayingAssets(assets || []);
 	};
 
@@ -183,6 +182,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			assetUpdateInterval: 30 * 1000,
 			prefetchSpeakerAudio: true,
 			apiClient: undefined!,
+			keepPausedAssets: process.env.KEEP_PAUSED_ASSETS === 'true',
 		};
 		const roundware = new Roundware(window, roundwareOptions);
 
@@ -210,14 +210,12 @@ const RoundwareProvider = (props: PropTypes) => {
 		let prom: Promise<Coordinates | void>;
 		// console.log(`roundware.mixer.mixParams.geoListenMode: ${roundware.mixer.mixParams.geoListenMode}`);
 		if (modeName === GeoListenMode.AUTOMATIC) {
-			prom = roundware.geoPosition.waitForInitialGeolocation();
 			if (roundware.mixer) {
 				roundware.mixer.updateParams({
 					maxDist: roundware.project.recordingRadius,
 					recordingRadius: roundware.project.recordingRadius,
 				});
 			}
-			prom.then(forceUpdate);
 		} else if (modeName === GeoListenMode.MANUAL) {
 			// set maxDist to value calculated from range circle overlay
 			prom = new Promise<void>((resolve, reject) => {

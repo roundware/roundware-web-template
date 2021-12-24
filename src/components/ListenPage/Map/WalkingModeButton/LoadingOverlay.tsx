@@ -18,4 +18,4 @@ const LoadingOverlay = ({ open, message }: LoadingOverlayProps) => {
 	);
 };
 
-export default LoadingOverlay;
+export default React.memo(LoadingOverlay);

@@ -54,7 +54,7 @@ export const AssetActionButtons = ({ asset }: { asset: IAssetData }) => {
 			</VoteButton>
 			<Button
 				onClick={() => {
-					if (Array.isArray(asset.envelope_ids)) window.open(`/listen?eid=${asset.envelope_ids[0]}`, '_blank');
+					if (Array.isArray(asset.envelope_ids) && asset.envelope_ids.length > 0) window.open(`/listen?eid=${asset.envelope_ids[0]}`, '_blank');
 				}}
 				style={{ minWidth: 30 }}
 				title='go to contribution page'
