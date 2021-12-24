@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import ActionButton from './ActionButton';
 import React, { Fragment } from 'react';
-import { makeStyles } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import { useRoundware } from '../../hooks';
 import Container from '@mui/material/Container';
 

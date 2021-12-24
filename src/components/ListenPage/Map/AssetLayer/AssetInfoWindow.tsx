@@ -1,5 +1,5 @@
 import { Divider, Grid, Modal, ThemeProvider, StyledEngineProvider, Paper, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { makeStyles, withStyles } from '@mui/styles';
 import { InfoWindow } from '@react-google-maps/api';
 import moment from 'moment';
 import React, { useEffect, useState, useContext, useRef } from 'react';
@@ -210,7 +210,7 @@ const TextDisplay = ({ textUrl }: { textUrl: string }) => {
 	);
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
 	paper: {
 		position: 'absolute',
 		height: 'auto',

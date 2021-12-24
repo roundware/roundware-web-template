@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import PhotoIcon from '@mui/icons-material/Photo';
 export const useStyles = makeStyles((theme) => {
 	return {

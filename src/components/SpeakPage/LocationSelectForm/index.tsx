@@ -1,6 +1,6 @@
 import { Button, Card, CardActions, CardContent, Typography, useTheme } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import { makeStyles, Theme } from '@mui/material/styles';
+import { makeStyles, Theme } from '@mui/styles';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';

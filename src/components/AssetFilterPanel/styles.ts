@@ -1,6 +1,6 @@
-import { makeStyles } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	paper: {
 		backgroundColor: '#525252',
 	},

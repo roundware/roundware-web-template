@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import landingHeaderImage from 'url:../../assets/bg-about.jpg';
 const useStyles = makeStyles((theme) => {
 	return {

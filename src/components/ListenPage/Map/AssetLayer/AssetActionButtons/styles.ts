@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 export type VoteButtonStyles = {
 	[index in 'liked' | 'flagged']: string;

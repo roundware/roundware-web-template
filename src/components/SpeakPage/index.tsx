@@ -4,7 +4,7 @@ import TagSelectForm from './TagSelectForm';
 import LocationSelectForm from './LocationSelectForm';
 import CreateRecordingForm from './CreateRecordingForm';
 import Grid from '@mui/material/Grid';
-import { makeStyles } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { DraftRecordingProvider } from '../../providers/DraftRecordingProvider';
 

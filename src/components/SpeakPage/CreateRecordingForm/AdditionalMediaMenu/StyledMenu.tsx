@@ -1,7 +1,7 @@
 import React from 'react';
-import { MenuProps, withStyles } from '@mui/material';
+import { MenuProps } from '@mui/material';
 import { Menu, MenuItem } from '@mui/material';
-
+import withStyles from '@mui/styles/withStyles';
 export const StyledMenu = withStyles({
 	paper: {
 		border: '1px solid #d3d4d5',

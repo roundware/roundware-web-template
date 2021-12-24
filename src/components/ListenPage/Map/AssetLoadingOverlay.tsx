@@ -1,6 +1,6 @@
 import { Backdrop, Card, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
-import makeStyles from '@mui/material/styles/makeStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRoundware } from '../../../hooks';
 export const useLoadingStyles = makeStyles((theme) => {
 	return {
