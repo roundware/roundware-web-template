@@ -1,12 +1,12 @@
 import { Marker, useGoogleMap } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
+import marker2 from 'url:../../../../assets/marker-secondary.svg';
+import marker from 'url:../../../../assets/marker.svg';
 import { useRoundware } from '../../../../hooks';
 import { AssetInfoWindowInner } from './AssetInfoWindow';
-import marker from 'url:../../../../assets/marker.svg';
-import marker2 from 'url:../../../../assets/marker-secondary.svg';
 const AssetInfoWindow = ({ asset }: { asset: IAssetData }) => {
 	const { selectedAsset, selectAsset, roundware } = useRoundware();
 
