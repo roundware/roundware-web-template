@@ -5,13 +5,12 @@ import RoundwareProvider from './RoundwareProvider';
 import UiConfigProvider from './UIConfigProvider';
 import { URLSyncProvider } from './URLProvider';
 import { defaultTheme } from '../styles';
-
-
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
+	// eslint-disable-next-line @typescript-eslint/no-empty-interface
+	interface DefaultTheme extends Theme {}
 }
-
 
 interface Props {
 	children: React.ReactNode;
@@ -20,18 +19,20 @@ interface Props {
 const Providers = (props: Props) => {
 	const [theme] = useState(defaultTheme);
 	return (
-        <RoundwareProvider>
+		<RoundwareProvider>
 			<UiConfigProvider>
 				<BrowserRouter>
 					<URLSyncProvider>
 						<StyledEngineProvider injectFirst>
-                            <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
-                        </StyledEngineProvider>
+							<ThemeProvider theme={theme}>
+								<LocalizationProvider dateAdapter={AdapterDateFns}>{props.children}</LocalizationProvider>
+							</ThemeProvider>
+						</StyledEngineProvider>
 					</URLSyncProvider>
 				</BrowserRouter>
 			</UiConfigProvider>
 		</RoundwareProvider>
-    );
+	);
 };
 
 export default Providers;
