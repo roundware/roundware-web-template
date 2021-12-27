@@ -12,7 +12,7 @@ import { IImageAsset } from '../../../../types';
 import AssetPlayer from '../../../AssetPlayer';
 import { TagsDisplay } from '../../../AssetTags';
 import { AssetActionButtons } from './AssetActionButtons';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import { Theme } from '@mui/material';
 import Interweave from 'interweave';
 interface AssetInfoWindowInnerProps {
