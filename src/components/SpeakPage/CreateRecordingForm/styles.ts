@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme) => {
 			[theme.breakpoints.down('sm')]: {
 				height: 150,
 			},
-			[theme.breakpoints.down(undefined)]: {
+			[theme.breakpoints.down('xs')]: {
 				height: 100,
 			},
 		},
