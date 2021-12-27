@@ -23,7 +23,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 	const [addTextModalOpen, setAddTextModalOpen] = useState(false);
 	const theme = useTheme();
 	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-	const isTinyScreen = useMediaQuery(theme.breakpoints.down(undefined));
+	const isTinyScreen = useMediaQuery(theme.breakpoints.down('xs'));
 	const picker = useRef<HTMLInputElement | null>(null);
 
 	const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => setAnchorEl(event.currentTarget);
