@@ -1,8 +1,8 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import { Polygon, PolygonProps } from '@react-google-maps/api';
+import React, { useMemo, useState } from 'react';
 import { useRoundware } from '../../../hooks';
-import { polygonToGoogleMapPaths } from '../../../utils';
-import { useGoogleMap, Polygon, PolygonProps } from '@react-google-maps/api';
 import { speakerPolygonColors as colors, speakerPolygonOptions } from '../../../styles/speaker';
+import { polygonToGoogleMapPaths } from '../../../utils';
 import CustomMapControl from './CustomControl';
 interface Props {}
 
@@ -41,17 +41,17 @@ const SpeakerPolygons = (props: Props) => {
 				<CustomMapControl position={window.google.maps.ControlPosition.LEFT_CENTER}>
 					<div>
 						<p>fillOpacity</p>
-						<input type='number' value={options?.fillOpacity} onChange={(e) => setOptions((prev) => ({ ...prev, fillOpacity: Number(e.target.value) }))} />
+						<input type='number' value={options?.fillOpacity?.toString()} onChange={(e) => setOptions((prev) => ({ ...prev, fillOpacity: Number(e.target.value) }))} />
 					</div>
 
 					<div>
 						<p>strokeOpacity</p>
-						<input type='number' value={options?.strokeOpacity} onChange={(e) => setOptions((prev) => ({ ...prev, strokeOpacity: Number(e.target.value) }))} />
+						<input type='number' value={options?.strokeOpacity?.toString()} onChange={(e) => setOptions((prev) => ({ ...prev, strokeOpacity: Number(e.target.value) }))} />
 					</div>
 
 					<div>
 						<p>strokeWeight</p>
-						<input type='number' value={options?.strokeWeight} onChange={(e) => setOptions((prev) => ({ ...prev, strokeWeight: Number(e.target.value) }))} />
+						<input type='number' value={options?.strokeWeight?.toString()} onChange={(e) => setOptions((prev) => ({ ...prev, strokeWeight: Number(e.target.value) }))} />
 					</div>
 				</CustomMapControl>
 			)}
