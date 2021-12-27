@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => {
 		},
 		tagGroupHeader: {
 			marginBottom: theme.spacing(3),
+			marginTop: theme.spacing(2),
 			marginLeft: theme.spacing(2),
 			marginRight: theme.spacing(2),
 			backgroundColor: 'transparent',
