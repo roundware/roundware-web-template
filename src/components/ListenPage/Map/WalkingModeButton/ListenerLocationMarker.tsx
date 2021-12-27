@@ -29,7 +29,7 @@ const ListenerLocationMarker = () => {
 				center={center}
 				onLoad={(circle) => {
 					const newBounds = circle.getBounds();
-					if (map !== null) map.panToBounds(newBounds);
+					if (map !== null && newBounds) map.panToBounds(newBounds);
 				}}
 				options={{
 					strokeColor: theme.palette.secondary.light,
