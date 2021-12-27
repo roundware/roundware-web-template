@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
-import { useRoundware } from '../../hooks';
-import 'date-fns';
-import moment from 'moment';
-import clsx from 'clsx';
-
+import FilterListIcon from '@mui/icons-material/FilterList';
+import LabelIcon from '@mui/icons-material/Label';
 import DatePicker from '@mui/lab/DatePicker';
-import { makeStyles } from '@mui/styles';
-import Drawer from '@mui/material/Drawer';
+import { TextField, TextFieldProps } from '@mui/material';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import LabelIcon from '@mui/icons-material/Label';
+import { makeStyles } from '@mui/styles';
+import clsx from 'clsx';
+import 'date-fns';
+import React, { useState } from 'react';
+import { useRoundware } from '../../hooks';
 import TagFilterMenu from '../AssetFilterPanel/TagFilterMenu';
-
-import { TextField, TextFieldProps } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
