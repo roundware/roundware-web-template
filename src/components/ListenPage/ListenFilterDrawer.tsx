@@ -3,8 +3,7 @@ import { useRoundware } from '../../hooks';
 import 'date-fns';
 import moment from 'moment';
 import clsx from 'clsx';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
 import DatePicker from '@mui/lab/DatePicker';
 import { makeStyles } from '@mui/styles';
 import Drawer from '@mui/material/Drawer';
@@ -18,13 +17,13 @@ import Typography from '@mui/material/Typography';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import LabelIcon from '@mui/icons-material/Label';
 import TagFilterMenu from '../AssetFilterPanel/TagFilterMenu';
-import { MaterialUiPickersDate } from '@mui/lab';
+
 import { TextField, TextFieldProps } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
 		width: 300,
-		[theme.breakpoints.down(undefined)]: {
+		[theme.breakpoints.down('sm')]: {
 			width: 250,
 		},
 	},
@@ -48,9 +47,10 @@ const ListenFilterDrawer = () => {
 		return null;
 	}
 
-	const handleAfterDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined): void => {
+	const handleAfterDateChange = (date: Date | null, value?: string | null | undefined): void => {
 		if (!date) return;
-		setAfterDateFilter(moment(date).format());
+		setAfterDateFilter(date);
+
 		if (!roundware.mixer) {
 			return;
 		} else {
@@ -62,9 +62,9 @@ const ListenFilterDrawer = () => {
 		}
 	};
 
-	const handleBeforeDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
+	const handleBeforeDateChange = (date: Date | null, value?: string | null | undefined) => {
 		if (!date) return;
-		setBeforeDateFilter(moment(date).format());
+		setBeforeDateFilter(date);
 		if (!roundware.mixer) {
 			return;
 		} else {
@@ -100,38 +100,10 @@ const ListenFilterDrawer = () => {
 			<Divider />
 			<List>
 				<ListItem>
-					<LocalizationProvider dateAdapter={AdapterDateFns}>
-						<DatePicker
-							showToolbar={false}
-							variant='inline'
-							inputFormat='MM/dd/yyyy'
-							margin='normal'
-							id='start-date-picker-inline'
-							renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='Start Date' {...props} />}
-							value={afterDateFilter}
-							onChange={handleAfterDateChange}
-							KeyboardButtonProps={{
-								'aria-label': 'change start date',
-							}}
-						/>
-					</LocalizationProvider>
+					<DatePicker label='Start Date' showToolbar={false} inputFormat='MM/dd/yyyy' renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='Start Date' {...props} />} value={afterDateFilter} onChange={handleAfterDateChange} />
 				</ListItem>
 				<ListItem>
-					<LocalizationProvider dateAdapter={AdapterDateFns}>
-						<DatePicker
-							showToolbar={false}
-							variant='inline'
-							inputFormat='MM/dd/yyyy'
-							margin='normal'
-							id='end-date-picker-inline'
-							renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='End Date' {...props} />}
-							value={beforeDateFilter}
-							onChange={handleBeforeDateChange}
-							KeyboardButtonProps={{
-								'aria-label': 'change end date',
-							}}
-						/>
-					</LocalizationProvider>
+					<DatePicker label='End Date' showToolbar={false} inputFormat='MM/dd/yyyy' renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='End Date' {...props} />} value={beforeDateFilter} onChange={handleBeforeDateChange} />
 				</ListItem>
 				<Divider />
 				<ListItem key='tags-header'>
