@@ -6,6 +6,8 @@ export const useStyles = makeStyles((theme) => {
 			overflowX: 'hidden',
 			padding: theme.spacing(2),
 			marginBottom: 70,
+			backgroundColor: theme.palette.background.default,
+			color: theme.palette.text.primary,
 		},
 		iconButtonLabel: {
 			display: 'flex',
