@@ -11,6 +11,7 @@ export const useLoadingStyles = makeStyles((theme) => {
 		loadingCard: {
 			display: 'flex',
 			flexDirection: 'column',
+			backgroundColor: theme.palette.grey[900],
 		},
 		loadingMessage: {
 			padding: theme.spacing(2),
