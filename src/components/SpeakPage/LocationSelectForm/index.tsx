@@ -1,9 +1,9 @@
-import { Button, Card, CardActions, CardContent, Typography, useTheme } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Typography, useTheme, Theme } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import { makeStyles, Theme } from '@mui/styles';
+import { makeStyles } from '@mui/styles';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
+import { GoogleMap, LoadScript, LoadScriptProps } from '@react-google-maps/api';
+
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRoundware, useRoundwareDraft } from '../../../hooks';
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => {
 			[theme.breakpoints.down('sm')]: {
 				height: '50vh',
 			},
-			[theme.breakpoints.down(undefined)]: {
+			[theme.breakpoints.down('xs')]: {
 				height: '45vh',
 			},
 		},
@@ -71,7 +71,7 @@ const LocationSelectForm = () => {
 	const history = useHistory();
 	const [error, set_error] = useState<Error | null>(null);
 	const [geolocating, set_geolocating] = useState<boolean>(false);
-	const gmapsLibraries: Libraries = ['places'];
+	const gmapsLibraries = ['places'];
 
 	useEffect(() => {
 		if (draftRecording.tags.length === 0) {
@@ -114,7 +114,7 @@ const LocationSelectForm = () => {
 				<Typography variant={'h4'} className={classes.locationHeaderLabel}>
 					Where are you recording today?
 				</Typography>
-				<LoadScript id='script-loader' googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries}>
+				<LoadScript id='script-loader' googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries as LoadScriptProps[`libraries`]}>
 					<PlacesAutocomplete />
 					<div className={classes.mapContainerDiv}>
 						<GoogleMap
