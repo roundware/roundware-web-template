@@ -12,7 +12,7 @@ export const PhotoPickerMenuItem = React.forwardRef<HTMLInputElement, PhotoPicke
 	<StyledMenuItem onClick={openPicker}>
 		<PhotoPickerInput onSetImage={onSetImage} ref={ref} setAnchorEl={setAnchorEl} />
 		<ListItemIcon>
-			<PhotoIcon fontSize='small' />
+			<PhotoIcon color='primary' fontSize='small' />
 		</ListItemIcon>
 		<ListItemText primary='Add Photo' />
 	</StyledMenuItem>

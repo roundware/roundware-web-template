@@ -14,10 +14,19 @@ interface TextInputDialogProps {
 }
 export const TextInputDialog = ({ textAsset, addTextModalOpen, isExtraSmallScreen, onSetText, setAddTextModalOpen, setAnchorEl }: TextInputDialogProps) => (
 	<Dialog open={addTextModalOpen}>
-		<DialogContent style={isExtraSmallScreen ? { width: 254 } : { width: 500 }}>
+		<DialogContent
+			style={isExtraSmallScreen ? { width: 254 } : { width: 500 }}
+			sx={(theme) => ({
+				backgroundColor: theme.palette.background.default,
+			})}
+		>
 			<TextField id='outlined-multiline-static' label='Tap/Click to Type!' multiline rows={6} defaultValue={textAsset || ''} variant='outlined' style={{ width: '100%' }} onBlur={(e) => onSetText(e.target.value)} />
 		</DialogContent>
-		<DialogActions>
+		<DialogActions
+			sx={(theme) => ({
+				backgroundColor: theme.palette.background.default,
+			})}
+		>
 			<Button
 				variant='contained'
 				color='secondary'
@@ -51,7 +60,7 @@ export const TextInputMenuItem = ({ textAsset, addTextModalOpen, setAddTextModal
 				}}
 			>
 				<ListItemIcon>
-					<TextFieldsIcon fontSize='small' />
+					<TextFieldsIcon color='primary' fontSize='small' />
 				</ListItemIcon>
 				<ListItemText primary='Add Text' />
 			</StyledMenuItem>
