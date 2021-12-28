@@ -35,7 +35,7 @@ const LegalAgreementForm = ({ onAccept, onDecline }: LegalAgreementFormProps) =>
 								set_accepted_agreement(e.target.checked);
 							}}
 							sx={(theme) => ({
-								color: theme.palette.common.black,
+								// color: theme.palette.common.black,
 								// '&.Mui-checked': {
 								// 	color: theme.pale,
 								// },
