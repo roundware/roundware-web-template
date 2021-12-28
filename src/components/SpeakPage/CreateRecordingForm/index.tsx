@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { useRoundware, useRoundwareDraft } from '../../../hooks';
-import Button from '@mui/material/Button';
-import MediaRecorder from 'audio-recorder-polyfill';
-import { useTheme } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
-import { IconButton, useMediaQuery } from '@mui/material';
-import MicIcon from '@mui/icons-material/Mic';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
 import Wave from '@foobar404/wave';
-import LegalAgreementForm from '../../LegalAgreementForm';
-import DialogContentText from '@mui/material/DialogContentText';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MicIcon from '@mui/icons-material/Mic';
+import { IconButton, useMediaQuery } from '@mui/material';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
+import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import ErrorDialog from '../../ErrorDialog';
-import Dialog from '@mui/material/Dialog';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CircularProgress from '@mui/material/CircularProgress';
+import DialogContentText from '@mui/material/DialogContentText';
+import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Card from '@mui/material/Card';
-import { useHistory } from 'react-router-dom';
-import AudioPlayer from 'material-ui-audio-player';
+import MediaRecorder from 'audio-recorder-polyfill';
+import React, { useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import AdditionalMediaMenu from './AdditionalMediaMenu';
-import { wait } from '../../../utils';
-import { useStyles, useStylesAudioPlayer } from './styles';
+import { useHistory } from 'react-router-dom';
 import { IAudioData } from 'roundware-web-framework/dist/types';
+import { useRoundware, useRoundwareDraft } from '../../../hooks';
 import { ITextAsset } from '../../../types';
+import { wait } from '../../../utils';
+import AudioPlayer from '../../AudioPlayer';
+import ErrorDialog from '../../ErrorDialog';
+import LegalAgreementForm from '../../LegalAgreementForm';
+import AdditionalMediaMenu from './AdditionalMediaMenu';
+import { useStyles } from './styles';
+
 const visualizerOptions = {
 	type: 'bars',
 };
@@ -140,32 +140,36 @@ const CreateRecordingForm = () => {
 
 	return (
 		<Card className={classes.container}>
-			<Grid container alignItems={'center'} direction={'column'} spacing={8}>
+			<Grid container alignItems={'center'} direction={'column'} spacing={8} justifyContent='center'>
 				<Grid item mt={3}>
 					<Container>
 						{/*{ selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }*/}
 						{
-							<Typography variant={'h5'} className={classes.tagGroupHeaderLabel} key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].id : 1}>
+							<Typography variant={'h5'} className={classes.tagGroupHeaderLabel} key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].id : 1} gutterBottom>
 								{selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].tag_display_text : 'No selected tags'}
 							</Typography>
 						}
 					</Container>
 				</Grid>
 				<ErrorDialog error={error} set_error={set_error} />
-				<Grid item xs={12} className={classes.audioVisualizer}>
-					<canvas id='audio-visualizer' style={{ height: isExtraSmallScreen ? 100 : 150, width: 300 }} />
-				</Grid>
+				{!draftMediaUrl && (
+					<Grid item xs={12} className={classes.audioVisualizer}>
+						<canvas id='audio-visualizer' style={{ height: isExtraSmallScreen ? 100 : 150, width: 300 }} />
+					</Grid>
+				)}
 
 				{draftMediaUrl ? (
 					<Grid item>
 						{/*}<audio id={"draft-audio"} src={draftMediaUrl} controls />*/}
 						{/* id prop not availabe on this component prop types - Shreyas */}
-						<AudioPlayer src={draftMediaUrl} useStyles={useStylesAudioPlayer} variation='primary' time='single' timePosition='end' volume={false} />
+						{/* <AudioCard src={draftMediaUrl} mute={false} forward={false} backward={false} width={300} volume={false} /> */}
+						<AudioPlayer size='large' src={draftMediaUrl} />
 					</Grid>
 				) : null}
 				{!draftMediaUrl && !isRecording ? (
 					<Grid
 						item
+						xs={12}
 						style={{
 							paddingBottom: 0,
 							paddingTop: isExtraSmallScreen ? 8 : 32,
@@ -243,8 +247,10 @@ const CreateRecordingForm = () => {
 					</Grid>
 				) : null}
 				{draftMediaUrl == '' && (
-					<Grid item style={{ padding: 8 }}>
-						<Typography variant={'subtitle1'}>Tap to {isRecording ? `Stop` : `Record`}</Typography>
+					<Grid item xs={12} style={{ padding: 8 }} justifyContent='center'>
+						<Typography textAlign='center' variant={'subtitle1'}>
+							Tap to {isRecording ? `Stop` : `Record`}
+						</Typography>
 					</Grid>
 				)}
 				<Grid
