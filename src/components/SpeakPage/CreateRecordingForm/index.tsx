@@ -140,7 +140,7 @@ const CreateRecordingForm = () => {
 
 	return (
 		<Card className={classes.container}>
-			<Grid container alignItems={'center'} direction={'column'} spacing={8} justifyContent='center'>
+			<Grid container alignItems={'center'} direction={'column'} spacing={2} justifyContent='center'>
 				<Grid item mt={3}>
 					<Container>
 						{/*{ selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }*/}
@@ -159,7 +159,7 @@ const CreateRecordingForm = () => {
 				)}
 
 				{draftMediaUrl ? (
-					<Grid item>
+					<Grid item xs={12}>
 						{/*}<audio id={"draft-audio"} src={draftMediaUrl} controls />*/}
 						{/* id prop not availabe on this component prop types - Shreyas */}
 						{/* <AudioCard src={draftMediaUrl} mute={false} forward={false} backward={false} width={300} volume={false} /> */}
@@ -199,7 +199,7 @@ const CreateRecordingForm = () => {
           </Typography>
         </Grid>*/}
 				{isRecording ? (
-					<Grid item>
+					<Grid item xs={12}>
 						<CountdownCircleTimer
 							isPlaying
 							duration={parseInt(maxRecordingLength.toString())}
@@ -247,7 +247,7 @@ const CreateRecordingForm = () => {
 					</Grid>
 				) : null}
 				{draftMediaUrl == '' && (
-					<Grid item xs={12} style={{ padding: 8 }} justifyContent='center'>
+					<Grid item xs={12} justifyContent='center'>
 						<Typography textAlign='center' variant={'subtitle1'}>
 							Tap to {isRecording ? `Stop` : `Record`}
 						</Typography>
