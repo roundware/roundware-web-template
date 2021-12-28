@@ -8,6 +8,15 @@ export const defaultTheme = createTheme({
 			main: '#719EE3',
 		},
 	},
+	components: {
+		MuiButton: {
+			styleOverrides: {
+				textPrimary: {
+					color: '#ffffff !important',
+				},
+			},
+		},
+	},
 });
 
 export const lightTheme = createTheme({
