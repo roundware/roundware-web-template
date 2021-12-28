@@ -21,9 +21,6 @@
 		"@emotion/react": "^11.4.1",
 		"@emotion/styled": "^11.3.0",
 		"@foobar404/wave": "git+https://github.com/probabble/Wave.js.git#main",
-		"@material-ui/icons": "^4.9.1",
-		"@material-ui/lab": "^4.0.0-alpha.60",
-		"@material-ui/pickers": "^3.3.10",
 		"@mui/icons-material": "^5.0.0",
 		"@mui/lab": "^5.0.0-alpha.47",
 		"@mui/material": "^5.0.0",
@@ -41,6 +38,7 @@
 		"interweave": "^12.9.0",
 		"lodash": "^4.17.21",
 		"material-ui-audio-player": "^1.6.6",
+		"material-ui-player": "^1.0.2",
 		"minimist": "^1.2.5",
 		"moment": "^2.29.1",
 		"nanoid": "^3.1.23",
@@ -59,7 +57,8 @@
 		"react-router-dom": "^5.2.0",
 		"regenerator-runtime": "^0.13.9",
 		"roundware-web-framework": "0.12.4",
-		"ts-overlapping-marker-spiderfier": "^1.0.3"
+		"ts-overlapping-marker-spiderfier": "^1.0.3",
+		"wavesurfer-react": "^2.0.11"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.15.0",
