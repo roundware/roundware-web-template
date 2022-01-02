@@ -3,10 +3,11 @@ import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';
-import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
+import { NavLink, Route, Switch, useLocation, Link } from 'react-router-dom';
 import favicon from 'url:../../assets/favicon.png';
 import logoSmall from 'url:../../assets/rw-full-logo-wb.png';
 import logoMinimal from 'url:../../assets/rw-logo-minimal.png';
@@ -19,6 +20,7 @@ import ListenPage from '../ListenPage';
 import ListenFilterDrawer from '../ListenPage/ListenFilterDrawer';
 import RoundwareMixerControl from '../ListenPage/RoundwareMixerControl';
 import SpeakPage from '../SpeakPage';
+import SpeakButton from './SpeakButton';
 import useStyles from './styles';
 
 if (typeof process.env.GOOGLE_ANALYTICS_ID !== 'undefined' && process.env.GOOGLE_ANALYTICS_ID !== 'null' && typeof process.env.GOOGLE_ANALYTICS_ID == 'string') {
@@ -73,6 +75,9 @@ export const App = () => {
 			<AppBar position='sticky' className={classes.bottomBar}>
 				<Toolbar style={{ width: '100%', justifyContent: 'center' }}>
 					<Route path='/listen'>
+						<Link to={`/speak`}>
+							<SpeakButton />
+						</Link>
 						<ListenFilterDrawer />
 						<RoundwareMixerControl />
 					</Route>
