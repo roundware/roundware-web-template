@@ -6,6 +6,7 @@ import { Coordinates, GeoListenModeType } from 'roundware-web-framework/dist/typ
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { IRoundwareConstructorOptions } from 'roundware-web-framework/dist/types/roundware';
 import RoundwareContext, { IRoundwareContext } from '../context/RoundwareContext';
+import useDebounce from '../hooks/useDebounce';
 import { useDeviceID } from '../hooks/useDeviceID';
 import { ITagLookup } from '../types';
 interface PropTypes {
@@ -24,6 +25,8 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [userFilter, setUserFilter] = useState<IRoundwareContext[`userFilter`]>('');
 	const [selectedAsset, selectAsset] = useState<IRoundwareContext[`selectedAsset`]>(null);
 	const [selectedTags, setSelectedTags] = useState<IRoundwareContext[`selectedTags`]>(null);
+	const [descriptionFilter, setDescriptionFilter] = useState<IRoundwareContext[`descriptionFilter`]>(null);
+	const debouncedDescriptionFilter = useDebounce(descriptionFilter, 800);
 	const [sortField, setSortField] = useState<IRoundwareContext[`sortField`]>({ name: 'created', asc: false });
 	const [assetPageIndex, setAssetPageIndex] = useState(0);
 	const [assetsPerPage, setAssetsPerPage] = useState(10000);
@@ -121,6 +124,11 @@ const RoundwareProvider = (props: PropTypes) => {
 					return false;
 				}
 			}
+
+			if (descriptionFilter) {
+				const descMatch = asset.description?.toLowerCase().indexOf(descriptionFilter.toLowerCase()) !== -1;
+				if (!descMatch) return false;
+			}
 			return true;
 		});
 	};
@@ -135,7 +143,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			const filteredAssets = filterAssets(roundware.assetData);
 			setFilteredAssets(filteredAssets);
 		}
-	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
+	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter, debouncedDescriptionFilter]);
 
 	const selectTags: IRoundwareContext[`selectTags`] = (tags, group) => {
 		setSelectedTags((prev) => {
@@ -241,6 +249,7 @@ const RoundwareProvider = (props: PropTypes) => {
 				geoListenMode,
 				userFilter,
 				playingAssets,
+				descriptionFilter,
 				// state modification functions
 				selectAsset,
 				selectTags,
@@ -253,6 +262,7 @@ const RoundwareProvider = (props: PropTypes) => {
 				forceUpdate,
 				setGeoListenMode,
 				updateAssets,
+				setDescriptionFilter,
 				// computed properties
 				assetPage,
 				assetsReady,
