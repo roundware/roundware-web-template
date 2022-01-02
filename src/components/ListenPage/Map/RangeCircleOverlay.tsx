@@ -1,5 +1,5 @@
-import Box from '@material-ui/core/Box';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import { makeStyles, useTheme } from '@mui/styles';
 import { useGoogleMap } from '@react-google-maps/api';
 import React, { useEffect, useState } from 'react';
 import useDimensions from 'react-cool-dimensions';
@@ -80,9 +80,16 @@ const RangeCircleOverlay = ({ updateLocation }: { updateLocation: (newLocation: 
 			return;
 		}
 		const set_radius_with_circle_geom = () => {
-			updateLocation({ latitude: map?.getCenter().lat(), longitude: map?.getCenter().lng() });
+			if (!map) return;
+			const mapCenter = map.getCenter();
+
+			if (!mapCenter) return;
+			const lat = mapCenter?.lat();
+			const lng = mapCenter?.lng();
+
+			updateLocation({ latitude: lat, longitude: lng });
 			// from https://gis.stackexchange.com/questions/7430/what-ratio-scales-do-google-maps-zoom-levels-correspond-to
-			const metersPerPixel = (156543.03392 * Math.cos((map.getCenter().lat() * Math.PI) / 180)) / Math.pow(2, map.getZoom());
+			const metersPerPixel = (156543.03392 * Math.cos((lat * Math.PI) / 180)) / Math.pow(2, map.getZoom()!);
 			// todo: use the actual height / width of the circle element to get this value
 			const newRadius = (width / 2) * metersPerPixel;
 			// roundware.project.recordingRadius = newRadius;

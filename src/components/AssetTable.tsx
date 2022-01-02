@@ -1,17 +1,17 @@
 import { useRoundware } from '../hooks';
 import React from 'react';
-import TableContainer from '@material-ui/core/TableContainer';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 import { TagsDisplay } from './AssetTags';
-import TableBody from '@material-ui/core/TableBody';
+import TableBody from '@mui/material/TableBody';
 import moment from 'moment';
-import TablePagination from '@material-ui/core/TablePagination';
+import TablePagination from '@mui/material/TablePagination';
 import AssetFilterPanel from './AssetFilterPanel';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
+import TableSortLabel from '@mui/material/TableSortLabel';
 
 const AssetTable = () => {
 	const { selectAsset, selectedAsset, assetPage, assetsPerPage, assetPageIndex, setAssetsPerPage, setAssetPageIndex, setUserFilter, sortField, setSortField } = useRoundware();
@@ -25,7 +25,7 @@ const AssetTable = () => {
 		setAssetsPerPage(numRows);
 	};
 	return (
-		<Paper className={'asset-list'}>
+        <Paper className={'asset-list'}>
 			<AssetFilterPanel />
 			<TableContainer>
 				<Table stickyHeader size='small' className={'asset-table'} aria-label='media submission table'>
@@ -78,8 +78,8 @@ const AssetTable = () => {
 			</TableContainer>
 			{/*{ filteredAssets.length === 0 ? "No Recordings Found..." : null }*/}
 
-			<TablePagination component='div' backIconButtonProps={{ size: 'small' }} nextIconButtonProps={{ size: 'small' }} count={table_assets.length} rowsPerPage={assetsPerPage} page={assetPageIndex} onChangePage={handleChangePage} onPageChange={handleChangeRowsPerPage} rowsPerPageOptions={[5, 10]} />
+			<TablePagination component='div' backIconButtonProps={{ size: 'small' }} nextIconButtonProps={{ size: 'small' }} count={table_assets.length} rowsPerPage={assetsPerPage} page={assetPageIndex} onPageChange={handleChangePage} onPageChange={handleChangeRowsPerPage} rowsPerPageOptions={[5, 10]} />
 		</Paper>
-	);
+    );
 };
 export default AssetTable;

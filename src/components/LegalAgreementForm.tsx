@@ -1,12 +1,14 @@
-import { useRoundware } from '../hooks';
+import { Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { ThemeProvider } from '@mui/styles';
 import React, { Fragment, useState } from 'react';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import { DialogContentText } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
+import { useRoundware } from '../hooks';
+import { lightTheme } from '../styles';
 
 interface LegalAgreementFormProps {
 	onAccept: React.MouseEventHandler<HTMLButtonElement>;
@@ -23,7 +25,7 @@ const LegalAgreementForm = ({ onAccept, onDecline }: LegalAgreementFormProps) =>
 		<Fragment>
 			<DialogTitle>Content Agreement</DialogTitle>
 			<DialogContent>
-				<DialogContentText>{roundware.project.legalAgreement}</DialogContentText>
+				<Typography variant='body1'>{roundware.project.legalAgreement}</Typography>
 				<FormControlLabel
 					label={'I AGREE'}
 					control={
@@ -32,9 +34,15 @@ const LegalAgreementForm = ({ onAccept, onDecline }: LegalAgreementFormProps) =>
 							onChange={(e) => {
 								set_accepted_agreement(e.target.checked);
 							}}
+							sx={(theme) => ({
+								// color: theme.palette.common.black,
+								// '&.Mui-checked': {
+								// 	color: theme.pale,
+								// },
+							})}
 						/>
 					}
-				></FormControlLabel>
+				/>
 			</DialogContent>
 
 			<DialogActions>

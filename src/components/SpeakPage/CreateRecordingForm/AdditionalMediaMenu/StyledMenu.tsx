@@ -1,7 +1,7 @@
 import React from 'react';
-import { MenuProps, withStyles } from '@material-ui/core';
-import { Menu, MenuItem } from '@material-ui/core';
-
+import { MenuProps } from '@mui/material';
+import { Menu, MenuItem } from '@mui/material';
+import withStyles from '@mui/styles/withStyles';
 export const StyledMenu = withStyles({
 	paper: {
 		border: '1px solid #d3d4d5',
@@ -27,10 +27,11 @@ export const StyledMenu = withStyles({
 export const StyledMenuItem = withStyles((theme) => ({
 	root: {
 		'&:focus': {
-			backgroundColor: theme.palette.primary.main,
+			backgroundColor: theme.palette.primary.dark,
 			'& .MuiListItemIcon-root, & .MuiListItemText-primary': {
 				color: theme.palette.common.white,
 			},
 		},
+		color: theme.palette.common.black,
 	},
 }))(MenuItem);

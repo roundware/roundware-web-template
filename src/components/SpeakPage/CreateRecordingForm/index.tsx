@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { useRoundware, useRoundwareDraft } from '../../../hooks';
-import Button from '@material-ui/core/Button';
-import MediaRecorder from 'audio-recorder-polyfill';
-import { useTheme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import { IconButton, useMediaQuery } from '@material-ui/core';
-import MicIcon from '@material-ui/icons/Mic';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-
 import Wave from '@foobar404/wave';
-import LegalAgreementForm from '../../LegalAgreementForm';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import ErrorDialog from '../../ErrorDialog';
-import Dialog from '@material-ui/core/Dialog';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import { useHistory } from 'react-router-dom';
-import AudioPlayer from 'material-ui-audio-player';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MicIcon from '@mui/icons-material/Mic';
+import { IconButton, useMediaQuery } from '@mui/material';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import MediaRecorder from 'audio-recorder-polyfill';
+import React, { useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import AdditionalMediaMenu from './AdditionalMediaMenu';
-import { wait } from '../../../utils';
-import { useStyles, useStylesAudioPlayer } from './styles';
+import { useHistory } from 'react-router-dom';
 import { IAudioData } from 'roundware-web-framework/dist/types';
+import { useRoundware, useRoundwareDraft } from '../../../hooks';
 import { ITextAsset } from '../../../types';
+import { wait } from '../../../utils';
+import AudioPlayer from '../../AudioPlayer';
+import ErrorDialog from '../../ErrorDialog';
+import LegalAgreementForm from '../../LegalAgreementForm';
+import AdditionalMediaMenu from './AdditionalMediaMenu';
+import { useStyles } from './styles';
+
 const visualizerOptions = {
 	type: 'bars',
 };
@@ -52,7 +52,7 @@ const CreateRecordingForm = () => {
 	const history = useHistory();
 	const classes = useStyles();
 	const theme = useTheme();
-	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down(350));
+	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const startRecording = () => {
 		if (!navigator.mediaDevices) {
@@ -140,32 +140,36 @@ const CreateRecordingForm = () => {
 
 	return (
 		<Card className={classes.container}>
-			<Grid container alignItems={'center'} direction={'column'} spacing={8}>
-				<Grid item>
+			<Grid container alignItems={'center'} direction={'column'} spacing={2} justifyContent='center'>
+				<Grid item mt={3}>
 					<Container>
 						{/*{ selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }*/}
 						{
-							<Typography variant={'h5'} className={classes.tagGroupHeaderLabel} key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].id : 1}>
+							<Typography variant={'h5'} className={classes.tagGroupHeaderLabel} key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].id : 1} gutterBottom>
 								{selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].tag_display_text : 'No selected tags'}
 							</Typography>
 						}
 					</Container>
 				</Grid>
 				<ErrorDialog error={error} set_error={set_error} />
-				<Grid item xs={12} className={classes.audioVisualizer}>
-					<canvas id='audio-visualizer' style={{ height: isExtraSmallScreen ? 100 : 150, width: 300 }} />
-				</Grid>
+				{!draftMediaUrl && (
+					<Grid item xs={12} className={classes.audioVisualizer}>
+						<canvas id='audio-visualizer' style={{ height: isExtraSmallScreen ? 100 : 150, width: 300 }} />
+					</Grid>
+				)}
 
 				{draftMediaUrl ? (
-					<Grid item>
+					<Grid item xs={12}>
 						{/*}<audio id={"draft-audio"} src={draftMediaUrl} controls />*/}
 						{/* id prop not availabe on this component prop types - Shreyas */}
-						<AudioPlayer src={draftMediaUrl} useStyles={useStylesAudioPlayer} variation='primary' time='single' timePosition='end' volume={false} />
+						{/* <AudioCard src={draftMediaUrl} mute={false} forward={false} backward={false} width={300} volume={false} /> */}
+						<AudioPlayer size='large' src={draftMediaUrl} />
 					</Grid>
 				) : null}
 				{!draftMediaUrl && !isRecording ? (
 					<Grid
 						item
+						xs={12}
 						style={{
 							paddingBottom: 0,
 							paddingTop: isExtraSmallScreen ? 8 : 32,
@@ -179,6 +183,7 @@ const CreateRecordingForm = () => {
 								padding: 0,
 							}}
 							onClick={toggleRecording}
+							size='large'
 						>
 							<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButton} />
 						</IconButton>
@@ -194,7 +199,7 @@ const CreateRecordingForm = () => {
           </Typography>
         </Grid>*/}
 				{isRecording ? (
-					<Grid item>
+					<Grid item xs={12}>
 						<CountdownCircleTimer
 							isPlaying
 							duration={parseInt(maxRecordingLength.toString())}
@@ -231,6 +236,7 @@ const CreateRecordingForm = () => {
 												justifyContent: 'center',
 											}}
 											onClick={toggleRecording}
+											size='large'
 										>
 											<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButtonSmall} />
 										</IconButton>
@@ -241,8 +247,10 @@ const CreateRecordingForm = () => {
 					</Grid>
 				) : null}
 				{draftMediaUrl == '' && (
-					<Grid item style={{ padding: 8 }}>
-						<Typography variant={'subtitle1'}>Tap to {isRecording ? `Stop` : `Record`}</Typography>
+					<Grid item xs={12} justifyContent='center'>
+						<Typography textAlign='center' variant={'subtitle1'}>
+							Tap to {isRecording ? `Stop` : `Record`}
+						</Typography>
 					</Grid>
 				)}
 				<Grid

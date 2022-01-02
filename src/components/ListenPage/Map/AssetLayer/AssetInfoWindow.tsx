@@ -1,5 +1,5 @@
-import { Button, Divider, Grid, makeStyles, Modal, MuiThemeProvider, Paper, Typography, Dialog, DialogContent, DialogContentText, DialogTitle as MuiDialogTitle, IconButton, WithStyles, Theme } from '@material-ui/core';
-import { createStyles, withStyles } from '@material-ui/styles';
+import { Divider, Grid, Modal, ThemeProvider, StyledEngineProvider, Paper, Typography, Button, Dialog, DialogContent, DialogContentText, DialogTitle as MuiDialogTitle, IconButton } from '@mui/material';
+import { makeStyles, withStyles, createStyles, WithStyles } from '@mui/styles';
 import { InfoWindow } from '@react-google-maps/api';
 import moment from 'moment';
 import React, { useEffect, useState, useContext, useRef } from 'react';
@@ -12,7 +12,8 @@ import { IImageAsset } from '../../../../types';
 import AssetPlayer from '../../../AssetPlayer';
 import { TagsDisplay } from '../../../AssetTags';
 import { AssetActionButtons } from './AssetActionButtons';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
+import { Theme } from '@mui/material';
 import Interweave from 'interweave';
 interface AssetInfoWindowInnerProps {
 	asset: IAssetData;
@@ -142,12 +143,13 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			position={position}
 			onCloseClick={() => selectAsset(null)}
 		>
-			<MuiThemeProvider theme={lightTheme}>
-				<Paper>
-					<button style={{ display: 'none', position: 'fixed' }} />
-					{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}
-				</Paper>
-			</MuiThemeProvider>
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={lightTheme}>
+					<Grid container direction={'column'}>
+						<Paper>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</Paper>
+					</Grid>
+				</ThemeProvider>
+			</StyledEngineProvider>
 		</InfoWindow>
 	);
 };
@@ -246,12 +248,12 @@ export interface DialogTitleProps extends WithStyles<typeof styles> {
 }
 
 const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
-	const { children, classes, onClose, ...other } = props;
+	const { children, onClose, ...other } = props;
 	return (
-		<MuiDialogTitle disableTypography className={classes.root} {...other}>
+		<MuiDialogTitle {...other}>
 			<Typography variant='h6'>{children}</Typography>
 			{onClose ? (
-				<IconButton aria-label='close' className={classes.closeButton} onClick={onClose}>
+				<IconButton aria-label='close' onClick={onClose}>
 					<CloseIcon />
 				</IconButton>
 			) : null}

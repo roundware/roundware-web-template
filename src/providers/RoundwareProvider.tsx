@@ -19,8 +19,8 @@ const RoundwareProvider = (props: PropTypes) => {
 		},
 	} as unknown as Roundware);
 	const [assetsReady, setAssetsReady] = useState<IRoundwareContext[`assetsReady`]>(false);
-	const [beforeDateFilter, setBeforeDateFilter] = useState<IRoundwareContext[`beforeDateFilter`]>(moment().format());
-	const [afterDateFilter, setAfterDateFilter] = useState<IRoundwareContext[`afterDateFilter`]>(undefined);
+	const [beforeDateFilter, setBeforeDateFilter] = useState<IRoundwareContext[`beforeDateFilter`]>(new Date());
+	const [afterDateFilter, setAfterDateFilter] = useState<IRoundwareContext[`afterDateFilter`]>(null);
 	const [userFilter, setUserFilter] = useState<IRoundwareContext[`userFilter`]>('');
 	const [selectedAsset, selectAsset] = useState<IRoundwareContext[`selectedAsset`]>(null);
 	const [selectedTags, setSelectedTags] = useState<IRoundwareContext[`selectedTags`]>(null);
@@ -116,7 +116,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			}
 			// then filter by start and end dates
 			if (afterDateFilter && beforeDateFilter) {
-				const dateMatch = asset.created! <= beforeDateFilter && asset.created! >= afterDateFilter ? true : false;
+				const dateMatch = asset.created! <= beforeDateFilter.toISOString() && asset.created! >= afterDateFilter.toISOString() ? true : false;
 				if (!dateMatch) {
 					return false;
 				}

@@ -1,12 +1,12 @@
-import { Card, CardContent } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Container from '@material-ui/core/Container';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { Card, CardContent } from '@mui/material';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import makeStyles from '@mui/styles/makeStyles';
+import Typography from '@mui/material/Typography';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import React, { useEffect } from 'react';
 import { generatePath, useHistory } from 'react-router-dom';
 import { useRoundware, useRoundwareDraft } from '../../hooks';
@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme) => {
 			padding: theme.spacing(4),
 			cursor: 'pointer',
 			backgroundColor: theme.palette.grey[700],
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				padding: theme.spacing(3),
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				marginLeft: theme.spacing(1),
 				marginRight: theme.spacing(1),
 				padding: theme.spacing(2, 1, 2, 3),
@@ -42,14 +42,15 @@ const useStyles = makeStyles((theme) => {
 		},
 		tagGroupHeader: {
 			marginBottom: theme.spacing(3),
+			marginTop: theme.spacing(2),
 			marginLeft: theme.spacing(2),
 			marginRight: theme.spacing(2),
 			backgroundColor: 'transparent',
 			boxShadow: 'none',
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				marginBottom: theme.spacing(0),
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				marginRight: theme.spacing(0),
 				marginLeft: theme.spacing(0),
 			},
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => {
 			[theme.breakpoints.only('sm')]: {
 				fontSize: '1.5rem',
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				fontSize: '1.2rem',
 			},
 		},

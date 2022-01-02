@@ -15,8 +15,8 @@ export interface IRoundwareContext {
 	};
 	selectedTags: ISelectedTags | null;
 	selectedAsset: IAssetData | null;
-	beforeDateFilter: string;
-	afterDateFilter: string | undefined;
+	beforeDateFilter: Date | null;
+	afterDateFilter: Date | null;
 	assetPageIndex: number;
 	assetsPerPage: number;
 	geoListenMode: GeoListenModeType;
@@ -26,8 +26,8 @@ export interface IRoundwareContext {
 	selectAsset: React.Dispatch<React.SetStateAction<IAssetData | null>>;
 	selectTags: (tags: number[] | null, group: ITagGroup) => void;
 	setUserFilter: React.Dispatch<React.SetStateAction<string>>;
-	setBeforeDateFilter: React.Dispatch<React.SetStateAction<string>>;
-	setAfterDateFilter: React.Dispatch<React.SetStateAction<string | undefined>>;
+	setBeforeDateFilter: React.Dispatch<React.SetStateAction<Date | null>>;
+	setAfterDateFilter: React.Dispatch<React.SetStateAction<Date | null>>;
 	setAssetPageIndex: React.Dispatch<React.SetStateAction<number>>;
 	setAssetsPerPage: React.Dispatch<React.SetStateAction<number>>;
 	setSortField: React.Dispatch<

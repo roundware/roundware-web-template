@@ -1,6 +1,6 @@
-import { Backdrop, Card, CircularProgress, Typography } from '@material-ui/core';
+import { Backdrop, Card, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRoundware } from '../../../hooks';
 export const useLoadingStyles = makeStyles((theme) => {
 	return {
@@ -11,6 +11,7 @@ export const useLoadingStyles = makeStyles((theme) => {
 		loadingCard: {
 			display: 'flex',
 			flexDirection: 'column',
+			backgroundColor: theme.palette.grey[900],
 		},
 		loadingMessage: {
 			padding: theme.spacing(2),

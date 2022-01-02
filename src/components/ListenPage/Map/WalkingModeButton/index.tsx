@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useRoundware } from '../../../../hooks';
 import { GeoListenMode } from 'roundware-web-framework';
 import { useGoogleMap } from '@react-google-maps/api';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
-import MapIcon from '@material-ui/icons/Map';
+import { makeStyles, useTheme } from '@mui/styles';
+import Button from '@mui/material/Button';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import MapIcon from '@mui/icons-material/Map';
 import ListenerLocationMarker from './ListenerLocationMarker';
 import clsx from 'clsx';
 import LoadingOverlay from './LoadingOverlay';
@@ -56,7 +56,7 @@ const walkingModeButton = () => {
 		}
 	}, [lat, lng]);
 
-	const availableListenModes = process.env.AVAILABLE_LISTEN_MODES || 'map, walking';
+	const availableListenModes = process.env.AVAILABLE_LISTEN_MODES || 'map,walking';
 	const availableListenModesArray = availableListenModes.split(',').map(String);
 
 	const displayListenModeButton = availableListenModesArray.length == 2 ? true : false;
@@ -108,20 +108,23 @@ const walkingModeButton = () => {
 			enterMapMode();
 		} else {
 			setWalkingModeStatus('locating');
-			roundware.geoPosition.enable();
 			try {
+				roundware.geoPosition.enable();
 				const location = await roundware.geoPosition.waitForInitialGeolocation();
+
 				if (process.env.USE_LISTEN_MAP_BOUNDS !== 'true') {
 					setWalkingModeStatus('eligible');
 					enableWalkingMode();
 					return;
 				}
 				const userlatlng = new google.maps.LatLng(location.latitude!, location.longitude!);
+
 				const {
 					southwest: { latitude: swLat, longitude: swLng },
 					northeast: { latitude: neLat, longitude: neLng },
 				} = roundware.getMapBounds();
 				const bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+
 				if (!bounds || bounds.contains(userlatlng)) {
 					setWalkingModeStatus('eligible');
 					enableWalkingMode();

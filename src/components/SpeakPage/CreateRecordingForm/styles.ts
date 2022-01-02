@@ -1,11 +1,13 @@
-import { makeStyles } from '@material-ui/core';
-import PhotoIcon from '@material-ui/icons/Photo';
+import makeStyles from '@mui/styles/makeStyles';
+import PhotoIcon from '@mui/icons-material/Photo';
 export const useStyles = makeStyles((theme) => {
 	return {
 		container: {
 			overflowX: 'hidden',
 			padding: theme.spacing(2),
 			marginBottom: 70,
+			backgroundColor: theme.palette.background.default,
+			color: theme.palette.text.primary,
 		},
 		iconButtonLabel: {
 			display: 'flex',
@@ -14,7 +16,7 @@ export const useStyles = makeStyles((theme) => {
 		iconButton: {
 			height: 150,
 			width: 150,
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				height: 100,
 				width: 100,
 			},
@@ -22,7 +24,7 @@ export const useStyles = makeStyles((theme) => {
 		iconButtonSmall: {
 			height: 50,
 			width: 50,
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				height: 30,
 				width: 30,
 			},
@@ -32,10 +34,10 @@ export const useStyles = makeStyles((theme) => {
 			padding: '0 !important',
 			height: 150,
 			width: 300,
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				height: 150,
 			},
-			[theme.breakpoints.down(350)]: {
+			[theme.breakpoints.down('xs')]: {
 				height: 100,
 			},
 		},
@@ -45,7 +47,7 @@ export const useStyles = makeStyles((theme) => {
 		tagGroupHeaderLabel: {
 			marginTop: theme.spacing(2),
 			fontSize: '2rem',
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				fontSize: '1.2rem',
 			},
 		},
@@ -56,10 +58,10 @@ export const useStylesAudioPlayer = makeStyles((theme) => {
 	return {
 		root: {
 			width: 700,
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				width: 500,
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				width: '90vw',
 			},
 		},

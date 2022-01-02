@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import Button from '@material-ui/core/Button';
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import Button from '@mui/material/Button';
+import Snackbar, { SnackbarProps } from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { useRoundware } from '../../hooks';
 import { GeoListenMode } from 'roundware-web-framework';
-
-function Alert(props: AlertProps) {
-	return <MuiAlert elevation={6} variant='filled' {...props} />;
-}
 
 const RoundwareMixerControl = () => {
 	const { roundware, forceUpdate } = useRoundware();
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 	const isPlaying = roundware.mixer && roundware.mixer.playing;
 
-	const handleSnackbarClose = (event: React.SyntheticEvent<unknown, Event>, reason?: SnackbarCloseReason) => {
+	const handleSnackbarClose: SnackbarProps[`onClose`] = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
 		}
@@ -89,7 +85,7 @@ const RoundwareMixerControl = () => {
 				<SkipNextIcon />
 			</Button>
 			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} style={{ marginBottom: 50 }}>
-				<Alert onClose={handleSnackbarClose} severity='success'>
+				<Alert elevation={6} severity='success'>
 					Remixing audio: skipping ahead!
 				</Alert>
 			</Snackbar>

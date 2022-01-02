@@ -1,28 +1,26 @@
+import FilterListIcon from '@mui/icons-material/FilterList';
+import LabelIcon from '@mui/icons-material/Label';
+import DatePicker from '@mui/lab/DatePicker';
+import { TextField, TextFieldProps } from '@mui/material';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
+import clsx from 'clsx';
+import 'date-fns';
 import React, { useState } from 'react';
 import { useRoundware } from '../../hooks';
-import 'date-fns';
-import moment from 'moment';
-import clsx from 'clsx';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import LabelIcon from '@material-ui/icons/Label';
 import TagFilterMenu from '../AssetFilterPanel/TagFilterMenu';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
 		width: 300,
-		[theme.breakpoints.down(350)]: {
+		[theme.breakpoints.down('sm')]: {
 			width: 250,
 		},
 	},
@@ -46,9 +44,10 @@ const ListenFilterDrawer = () => {
 		return null;
 	}
 
-	const handleAfterDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined): void => {
+	const handleAfterDateChange = (date: Date | null, value?: string | null | undefined): void => {
 		if (!date) return;
-		setAfterDateFilter(moment(date).format());
+		setAfterDateFilter(date);
+
 		if (!roundware.mixer) {
 			return;
 		} else {
@@ -60,9 +59,9 @@ const ListenFilterDrawer = () => {
 		}
 	};
 
-	const handleBeforeDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
+	const handleBeforeDateChange = (date: Date | null, value?: string | null | undefined) => {
 		if (!date) return;
-		setBeforeDateFilter(moment(date).format());
+		setBeforeDateFilter(date);
 		if (!roundware.mixer) {
 			return;
 		} else {
@@ -98,38 +97,10 @@ const ListenFilterDrawer = () => {
 			<Divider />
 			<List>
 				<ListItem>
-					<MuiPickersUtilsProvider utils={DateFnsUtils}>
-						<KeyboardDatePicker
-							disableToolbar
-							variant='inline'
-							format='MM/dd/yyyy'
-							margin='normal'
-							id='start-date-picker-inline'
-							label='Start Date'
-							value={afterDateFilter}
-							onChange={handleAfterDateChange}
-							KeyboardButtonProps={{
-								'aria-label': 'change start date',
-							}}
-						/>
-					</MuiPickersUtilsProvider>
+					<DatePicker label='Start Date' showToolbar={false} inputFormat='MM/dd/yyyy' renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='Start Date' {...props} />} value={afterDateFilter} onChange={handleAfterDateChange} />
 				</ListItem>
 				<ListItem>
-					<MuiPickersUtilsProvider utils={DateFnsUtils}>
-						<KeyboardDatePicker
-							disableToolbar
-							variant='inline'
-							format='MM/dd/yyyy'
-							margin='normal'
-							id='end-date-picker-inline'
-							label='End Date'
-							value={beforeDateFilter}
-							onChange={handleBeforeDateChange}
-							KeyboardButtonProps={{
-								'aria-label': 'change end date',
-							}}
-						/>
-					</MuiPickersUtilsProvider>
+					<DatePicker label='End Date' showToolbar={false} inputFormat='MM/dd/yyyy' renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='End Date' {...props} />} value={beforeDateFilter} onChange={handleBeforeDateChange} />
 				</ListItem>
 				<Divider />
 				<ListItem key='tags-header'>

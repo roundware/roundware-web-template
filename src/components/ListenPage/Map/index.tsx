@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import React, { useState, useCallback } from 'react';
 import { Coordinates } from 'roundware-web-framework/dist/types';
@@ -24,7 +24,7 @@ interface RoundwareMapProps {
 const RoundwareMap = (props: RoundwareMapProps) => {
 	const classes = useStyles();
 	const { roundware } = useRoundware();
-	const [map, setMap] = useState<google.maps.Map<Element> | undefined>();
+	const [map, setMap] = useState<google.maps.Map | undefined>();
 
 	const updateListenerLocation = (newLocation?: Coordinates) => {
 		if (!map) {
@@ -33,12 +33,12 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 		if (newLocation) roundware.updateLocation(newLocation);
 		else {
 			const center = map.getCenter();
-			roundware.updateLocation({ latitude: center.lat(), longitude: center.lng() });
+			if (center) roundware.updateLocation({ latitude: center.lat(), longitude: center.lng() });
 		}
 		console.log('updated location on framework');
 	};
 
-	const onLoad = (map: google.maps.Map<Element>) => {
+	const onLoad = (map: google.maps.Map) => {
 		let restriction;
 		if (process.env.USE_LISTEN_MAP_BOUNDS === 'true') {
 			const {

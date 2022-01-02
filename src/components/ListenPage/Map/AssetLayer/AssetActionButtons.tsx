@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
+import makeStyles from '@mui/styles/makeStyles';
+import IconButton from '@mui/material/IconButton';
+import LinkIcon from '@mui/icons-material/Link';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import FlagIcon from '@mui/icons-material/Flag';
 
-import Button from '@material-ui/core/Button';
-import LinkIcon from '@material-ui/icons/Link';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import FlagIcon from '@material-ui/icons/Flag';
-
-import { VoteButton } from './VoteButton';
-import { useRoundware } from '../../../../../hooks';
+import { useRoundware } from '../../../../hooks';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 
 const downloadAsset = async (asset: IAssetData, projectName: string) => {
@@ -52,7 +51,7 @@ export const AssetActionButtons = ({ asset }: { asset: IAssetData }) => {
 			<VoteButton title='tell us you are concerned about this one!' asset={asset} voteType='flag' votedClass='flagged'>
 				<FlagIcon />
 			</VoteButton>
-			<Button
+			<IconButton
 				onClick={() => {
 					if (Array.isArray(asset.envelope_ids) && asset.envelope_ids.length > 0) window.open(`/listen?eid=${asset.envelope_ids[0]}`, '_blank');
 				}}
@@ -60,10 +59,54 @@ export const AssetActionButtons = ({ asset }: { asset: IAssetData }) => {
 				title='go to contribution page'
 			>
 				<LinkIcon />
-			</Button>
-			<Button onClick={() => downloadAsset(asset, projectName)} style={{ minWidth: 30 }} title='download this audio file'>
+			</IconButton>
+			<IconButton onClick={() => downloadAsset(asset, projectName)} style={{ minWidth: 30 }} title='download this audio file'>
 				<GetAppIcon />
-			</Button>
+			</IconButton>
 		</div>
 	);
 };
+export type VoteButtonStyles = {
+	[index in 'liked' | 'flagged']: string;
+} & {
+	liked: {
+		color: string;
+	};
+	flagged: {
+		color: string;
+	};
+};
+export const VoteButton = ({ asset, voteType, votedClass, title, children }: { asset: IAssetData; voteType: 'like' | 'flag'; votedClass: `flagged` | `liked`; title: string; children?: React.ReactNode }) => {
+	const [voted, mark_voted] = useState(false);
+	const { roundware } = useRoundware();
+
+	return (
+		<IconButton
+			title={title}
+			color={voted ? (votedClass == 'flagged' ? `error` : `info`) : undefined}
+			style={{ minWidth: 30 }}
+			onClick={() => {
+				if (!voted) {
+					mark_voted(true);
+					roundware.vote(asset.id, voteType);
+				}
+			}}
+		>
+			{children}
+		</IconButton>
+	);
+};
+
+export const useStyles = makeStyles((theme) => {
+	return {
+		liked: {
+			color: theme.palette.info.main,
+		},
+		flagged: {
+			color: theme.palette.error.main,
+		},
+		vote: {
+			color: theme.palette.grey[600],
+		},
+	};
+});
