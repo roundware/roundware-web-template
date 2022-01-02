@@ -10,6 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+
 import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
 import 'date-fns';
@@ -39,7 +40,7 @@ const ListenFilterDrawer = () => {
 		right: false,
 	});
 
-	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter } = useRoundware();
+	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter, setDescriptionFilter, descriptionFilter } = useRoundware();
 	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
 		return null;
 	}
@@ -54,6 +55,7 @@ const ListenFilterDrawer = () => {
 			roundware.mixer.updateParams({
 				startDate: date,
 			});
+
 			const trackIds = Object.keys(roundware?.mixer?.playlist?.trackIdMap || {}).map((id) => parseInt(id));
 			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
 		}
@@ -80,6 +82,7 @@ const ListenFilterDrawer = () => {
 		setState({ ...state, [anchor]: open });
 	};
 
+	const handleOnDescriptionChange: TextFieldProps[`onChange`] = (e) => setDescriptionFilter(e.target.value);
 	const list = (anchor: string) => (
 		<div
 			className={clsx(classes.list, {
@@ -117,6 +120,13 @@ const ListenFilterDrawer = () => {
 							<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
 						</ListItem>
 					))}
+				<Divider />
+				<ListItem>
+					<ListItemText>Description Filter</ListItemText>
+				</ListItem>
+				<ListItem>
+					<TextField rows={3} multiline fullWidth placeholder='Type something...' onChange={handleOnDescriptionChange} value={descriptionFilter || ''} />
+				</ListItem>
 			</List>
 		</div>
 	);
