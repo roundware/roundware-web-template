@@ -4,7 +4,7 @@ import { GeoListenMode } from 'roundware-web-framework';
 import { useGoogleMap } from '@react-google-maps/api';
 import { makeStyles, useTheme } from '@mui/styles';
 import Button from '@mui/material/Button';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from '@mui/material';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import MapIcon from '@mui/icons-material/Map';
 import ListenerLocationMarker from './ListenerLocationMarker';
@@ -43,6 +43,8 @@ const walkingModeButton = () => {
 	const center = { lat: lat!, lng: lng! };
 	const ready = typeof lat === 'number' && typeof lng === 'number';
 
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 	// when the listenerLocation is updated, center the map
 	useEffect(() => {
 		if (ready) {
@@ -57,20 +59,23 @@ const walkingModeButton = () => {
 	}, [lat, lng]);
 
 	const availableListenModes = process.env.AVAILABLE_LISTEN_MODES || 'map,walking';
-	const availableListenModesArray = availableListenModes.split(',').map(String);
+	const availableListenModesArray = availableListenModes.split(',');
 
 	const displayListenModeButton = availableListenModesArray.length == 2 ? true : false;
 
 	// set default GeoListenMode
 	useEffect(() => {
-		if (availableListenModesArray[0] == 'map') {
+		if (availableListenModesArray[0] == 'device') {
+			console.log(`default based on screen width [${isMobile ? `Mobile` : `Desktop`}]`);
+			isMobile ? enterWalkingMode() : enterMapMode();
+		} else if (availableListenModesArray[0] == 'map') {
 			console.log('default to map mode');
 			setGeoListenMode(GeoListenMode.MANUAL);
 		} else {
 			console.log('default to walking mode');
 			setGeoListenMode(GeoListenMode.AUTOMATIC);
 		}
-	}, []);
+	}, [isMobile]);
 
 	const enterMapMode = () => {
 		if (!map) return;
@@ -171,7 +176,7 @@ const walkingModeButton = () => {
 
 	return (
 		<div>
-			<LoadingOverlay open={walkingModeStatus === 'locating'} message='Locating...' />
+			<LoadingOverlay open={walkingModeStatus === 'locating'} message={'Locating... \nPlease allow location permissions.'} />
 			<Dialog open={walkingModeStatus === ('error' || 'out-of-range')}>
 				<DialogTitle>{walkingModeErrorMessage?.title}</DialogTitle>
 				<DialogContent>
