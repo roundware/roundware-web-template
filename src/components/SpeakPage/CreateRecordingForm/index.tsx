@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 import MediaRecorder from 'audio-recorder-polyfill';
 import React, { useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import { useHistory } from 'react-router-dom';
+import { Prompt, useHistory } from 'react-router-dom';
 import { IAudioData } from 'roundware-web-framework/dist/types';
 import { useRoundware, useRoundwareDraft } from '../../../hooks';
 import { ITextAsset } from '../../../types';
@@ -140,6 +140,8 @@ const CreateRecordingForm = () => {
 
 	return (
 		<Card className={classes.container}>
+			<Prompt when={!!draftMediaUrl} message={`Are you sure you want to leave without submitting your recording? If you do, your recording will be deleted. Delete?`} />
+
 			<Grid container alignItems={'center'} direction={'column'} spacing={2} justifyContent='center'>
 				<Grid item mt={3}>
 					<Container>
