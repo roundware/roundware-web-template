@@ -54,6 +54,47 @@ const ListenFilterDrawer = () => {
 	};
 
 	const handleOnDescriptionChange: TextFieldProps[`onChange`] = (e) => setDescriptionFilter(e.target.value);
+
+	const availableFilters = process.env.AVAILABLE_LISTEN_FILTERS ? process.env.AVAILABLE_LISTEN_FILTERS.split(',') : [];
+
+	const filterLookup: {
+		[index: string]: JSX.Element;
+	} = {
+		date: (
+			<ListItem>
+				<DateFilterMenu />
+			</ListItem>
+		),
+		tags: (
+			<>
+				<ListItem key='tags-header'>
+					<ListItemIcon>
+						<LabelIcon />
+					</ListItemIcon>
+					<ListItemText primary='Filter by Tags' />
+				</ListItem>
+				{roundware &&
+					roundware.uiConfig &&
+					Array.isArray(roundware.uiConfig.listen) &&
+					roundware.uiConfig.listen.map((tg) => (
+						<ListItem key={'list-item' + tg.group_short_name}>
+							<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
+						</ListItem>
+					))}
+			</>
+		),
+		description: (
+			<>
+				<ListItem>
+					<ListItemText>Description Filter</ListItemText>
+				</ListItem>
+				<ListItem>
+					<TextField rows={3} multiline fullWidth placeholder='Type something...' onChange={handleOnDescriptionChange} value={descriptionFilter || ''} />
+				</ListItem>
+			</>
+		),
+	};
+
 	const list = (anchor: string) => (
 		<div
 			className={clsx(classes.list, {
@@ -70,37 +111,12 @@ const ListenFilterDrawer = () => {
 			</List>
 			<Divider />
 			<List>
-				{/* <ListItem>
-					<DatePicker label='Start Date' showToolbar={false} inputFormat='MM/dd/yyyy' renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='Start Date' {...props} />} value={afterDateFilter} onChange={handleAfterDateChange} />
-				</ListItem>
-				<ListItem>
-					<DatePicker label='End Date' showToolbar={false} inputFormat='MM/dd/yyyy' renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='End Date' {...props} />} value={beforeDateFilter} onChange={handleBeforeDateChange} />
-				</ListItem> */}
-				<ListItem>
-					<DateFilterMenu />
-				</ListItem>
-				<Divider />
-				<ListItem key='tags-header'>
-					<ListItemIcon>
-						<LabelIcon />
-					</ListItemIcon>
-					<ListItemText primary='Filter by Tags' />
-				</ListItem>
-				{roundware &&
-					roundware.uiConfig &&
-					Array.isArray(roundware.uiConfig.listen) &&
-					roundware.uiConfig.listen.map((tg) => (
-						<ListItem key={'list-item' + tg.group_short_name}>
-							<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
-						</ListItem>
-					))}
-				<Divider />
-				<ListItem>
-					<ListItemText>Description Filter</ListItemText>
-				</ListItem>
-				<ListItem>
-					<TextField rows={3} multiline fullWidth placeholder='Type something...' onChange={handleOnDescriptionChange} value={descriptionFilter || ''} />
-				</ListItem>
+				{availableFilters.map((f) => (
+					<>
+						{filterLookup[f]}
+						<Divider />
+					</>
+				))}
 			</List>
 		</div>
 	);
