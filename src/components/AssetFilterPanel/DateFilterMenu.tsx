@@ -10,7 +10,10 @@ function DateFilterMenu() {
 
 	const handleChange = (event: SelectChangeEvent) => {
 		setDateRange(event.target.value);
-		if (event.target.value !== 'custom') {
+		if (event.target.value == 'all') {
+			setAfterDateFilter(null);
+			setBeforeDateFilter(null);
+		} else if (event.target.value !== 'custom') {
 			const endDate = subDays(new Date(), Number(event.target.value));
 			handleAfterDateChange(endDate);
 			handleBeforeDateChange(new Date());
@@ -65,6 +68,8 @@ function DateFilterMenu() {
 					<MenuItem value={'365'}>Last Year</MenuItem>
 					<Divider />
 					<MenuItem value={'custom'}>Custom Range</MenuItem>
+					<Divider />
+					<MenuItem value={'all'}>All Dates</MenuItem>
 				</Select>
 			</FormControl>
 			{dateRange == 'custom' && (
