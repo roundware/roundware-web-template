@@ -140,7 +140,14 @@ const CreateRecordingForm = () => {
 
 	return (
 		<Card className={classes.container}>
-			<Prompt when={!!draftMediaUrl} message={`Are you sure you want to leave without submitting your recording? If you do, your recording will be deleted.`} />
+			<Prompt
+				when={!!draftMediaUrl}
+				message={JSON.stringify({
+					message: `Are you sure you want to leave without submitting your recording? If you do, your recording will be deleted.`,
+					stay: `Keep Recording`,
+					leave: `Delete Recording`,
+				})}
+			/>
 
 			<Grid container alignItems={'center'} direction={'column'} spacing={2} justifyContent='center'>
 				<Grid item mt={3}>
