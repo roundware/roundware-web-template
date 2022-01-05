@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Dialog, DialogContent, DialogTitle, DialogActions, Button } from '@mui/material';
-import { ThemeProvider } from '@mui/styles';
+import { ThemeProvider, Dialog, DialogContent, DialogTitle, DialogActions, Button } from '@mui/material';
+
 import { defaultTheme } from '../styles';
 const UserConfirmation = (message: string, callback: (bool: boolean) => any) => {
 	const container = document.createElement('div');
 	container.setAttribute('custom-confirmation-navigation', '');
 	document.body.appendChild(container);
+	const parsedMessage = JSON.parse(message);
 	const closeModal = (callbackState: boolean) => {
 		ReactDOM.unmountComponentAtNode(container);
 		document.body.removeChild(container);
@@ -16,13 +17,13 @@ const UserConfirmation = (message: string, callback: (bool: boolean) => any) => 
 		<ThemeProvider theme={defaultTheme}>
 			<Dialog open={true}>
 				<DialogTitle>Warning</DialogTitle>
-				<DialogContent>{message}</DialogContent>
+				<DialogContent>{parsedMessage?.message}</DialogContent>
 				<DialogActions>
 					<Button variant='contained' onClick={() => closeModal(false)} color='success'>
-						Stay
+						{parsedMessage?.stay}
 					</Button>
 					<Button variant='contained' onClick={() => closeModal(true)} color='error'>
-						Leave
+						{parsedMessage?.leave}
 					</Button>
 				</DialogActions>
 			</Dialog>
