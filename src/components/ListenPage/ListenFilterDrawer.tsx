@@ -89,7 +89,7 @@ const ListenFilterDrawer = () => {
 					<ListItemText>Description Filter</ListItemText>
 				</ListItem>
 				<ListItem>
-					<TextField rows={3} multiline fullWidth placeholder='Type something...' onChange={handleOnDescriptionChange} value={descriptionFilter || ''} />
+					<TextField rows={2} multiline fullWidth placeholder='Type something...' onChange={handleOnDescriptionChange} value={descriptionFilter || ''} />
 				</ListItem>
 			</>
 		),
