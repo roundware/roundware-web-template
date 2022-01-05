@@ -73,16 +73,28 @@ export const App = () => {
 				</Switch>
 			</div>
 			<AppBar position='sticky' className={classes.bottomBar}>
-				<Toolbar style={{ width: '100%', justifyContent: 'center' }}>
+				<Toolbar style={{ width: '100%', justifyContent: 'space-between' }}>
 					<Route path='/listen'>
-						<Link to={`/speak`}>
-							<SpeakButton />
-						</Link>
-						<ListenFilterDrawer />
-						<RoundwareMixerControl />
+						<div>
+							<Link to={`/speak`}>
+								<SpeakButton />
+							</Link>
+						</div>
+						<div>
+							<ListenFilterDrawer />
+							<RoundwareMixerControl />
+						</div>
+					</Route>
+					<Route path={`/`} exact>
+						<div />
+					</Route>
+					<Route path={`/speak`}>
+						<div />
 					</Route>
 					{process.env.DEBUG_MODE === 'true' ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
-					<InfoPopup />
+					<div>
+						<InfoPopup />
+					</div>
 				</Toolbar>
 			</AppBar>
 		</>
