@@ -22,7 +22,7 @@ const InfoPopup = () => {
 	};
 
 	return (
-		<div style={{ position: 'absolute', right: 10 }}>
+		<div>
 			<Button onClick={handleClickOpen}>INFO</Button>
 			<Dialog open={open} onClose={handleClose} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
 				<DialogTitle id='alert-dialog-title'>What is Roundware?</DialogTitle>
