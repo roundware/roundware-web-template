@@ -18,7 +18,7 @@ function getWidth() {
 
 export const getDefaultListenMode = () => {
 	const isMobile = getWidth() < 600;
-	alert(`is mobile? ` + isMobile);
+
 	if (process.env.GEO_LISTEN_MODE == 'device') {
 		return isMobile ? GeoListenMode.AUTOMATIC : GeoListenMode.MANUAL;
 	}

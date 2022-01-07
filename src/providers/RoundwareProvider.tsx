@@ -213,7 +213,7 @@ const RoundwareProvider = (props: PropTypes) => {
 		}
 	}, [roundware?.project]);
 
-	const geoListenMode = roundware?.mixer?.mixParams?.geoListenMode || getDefaultListenMode();
+	const geoListenMode = (roundware?.mixer && roundware?.mixer?.mixParams?.geoListenMode) || GeoListenMode?.DISABLED;
 	const setGeoListenMode = (modeName: GeoListenModeType) => {
 		roundware.enableGeolocation(modeName);
 		let prom: Promise<Coordinates | void>;
