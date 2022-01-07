@@ -9,7 +9,7 @@ import { useRoundware } from '../../hooks';
 import { GeoListenMode } from 'roundware-web-framework';
 
 const RoundwareMixerControl = () => {
-	const { roundware, forceUpdate, geoListenMode } = useRoundware();
+	const { roundware, forceUpdate } = useRoundware();
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 	const isPlaying = roundware.mixer && roundware.mixer.playing;
 
@@ -22,7 +22,7 @@ const RoundwareMixerControl = () => {
 
 	useEffect(() => {
 		if (roundware?.mixer) {
-			roundware.activateMixer({ geoListenMode }).then(() => {
+			roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
 				if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {
 					const listen_tags = roundware.uiConfig.listen[0].display_items.map((i) => i.tag_id);
 					roundware.mixer.updateParams({
@@ -48,7 +48,7 @@ const RoundwareMixerControl = () => {
 			<Button
 				onClick={() => {
 					if (!roundware.mixer || !roundware.mixer?.playlist) {
-						roundware.activateMixer({ geoListenMode }).then(() => {
+						roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
 							if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {
 								const listen_tags = roundware.uiConfig.listen[0].display_items.map((i) => i.tag_id);
 								roundware.mixer.updateParams({
