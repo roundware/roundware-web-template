@@ -75,10 +75,10 @@ const walkingModeButton = () => {
 			isMobile ? enterWalkingMode() : enterMapMode();
 		} else if (availableListenModesArray[0] == 'map') {
 			console.log('default to map mode');
-			setGeoListenMode(GeoListenMode.MANUAL);
+			enterMapMode();
 		} else {
 			console.log('default to walking mode');
-			setGeoListenMode(GeoListenMode.AUTOMATIC);
+			enterWalkingMode();
 		}
 	}, [isMobile]);
 
@@ -173,6 +173,7 @@ const walkingModeButton = () => {
 						setWalkingModeErrorMessage(messages.errors.failedToDetermineLocation);
 						break;
 				}
+				alert(`Error occurred: ${JSON.stringify(e)}`);
 				enterMapMode();
 			}
 		}
