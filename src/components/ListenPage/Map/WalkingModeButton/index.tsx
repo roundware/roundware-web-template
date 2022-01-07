@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRoundware } from '../../../../hooks';
 import { GeoListenMode } from 'roundware-web-framework';
 import { useGoogleMap } from '@react-google-maps/api';
@@ -63,8 +63,11 @@ const walkingModeButton = () => {
 
 	const displayListenModeButton = availableListenModes == 'device' || availableListenModesArray.length == 2 ? true : false;
 
+	const [init, setInit] = useState(false);
 	// set default GeoListenMode
 	useEffect(() => {
+		if (init) return;
+		setInit(true);
 		if (availableListenModesArray[0] == 'device') {
 			console.log(`default based on screen width [${isMobile ? `Mobile` : `Desktop`}]`);
 			isMobile ? enterWalkingMode() : enterMapMode();
