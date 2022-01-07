@@ -83,6 +83,7 @@ const walkingModeButton = () => {
 	}, [isMobile]);
 
 	const enterMapMode = () => {
+		alert(`enter map called`);
 		if (!map) return;
 		console.log('switching to map mode');
 		// zoom out
@@ -98,6 +99,7 @@ const walkingModeButton = () => {
 	const [walkingModeErrorMessage, setWalkingModeErrorMessage] = useState<null | { title: string; message: string }>(null);
 
 	const enableWalkingMode = () => {
+		alert(`enable walking called`);
 		if (!map) return console.log('map not available yet!');
 		console.log('switching to walking mode');
 		// disable map panning
@@ -109,6 +111,7 @@ const walkingModeButton = () => {
 	};
 
 	const enterWalkingMode = async () => {
+		alert(`enter walking called`);
 		// will check if eligible to enter walking mode
 		if (!map) return;
 
@@ -173,7 +176,7 @@ const walkingModeButton = () => {
 						setWalkingModeErrorMessage(messages.errors.failedToDetermineLocation);
 						break;
 				}
-				alert(`Error occurred: ${JSON.stringify(e)}`);
+				
 				enterMapMode();
 			}
 		}
