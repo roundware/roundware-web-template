@@ -51,6 +51,7 @@ export const App = () => {
 					<meta charSet='utf-8' />
 					<title>{roundware.project ? roundware.project.projectName : ''}</title>
 					<link rel='icon' type='image/png' href={favicon} sizes='16x16' />
+					<meta name='theme-color' content={theme.palette.primary.main} />
 				</Helmet>
 
 				<AppBar className={classes.topBar} position='fixed'>
