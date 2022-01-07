@@ -44,7 +44,9 @@ const walkingModeButton = () => {
 	const ready = typeof lat === 'number' && typeof lng === 'number';
 
 	const theme = useTheme();
-	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
+		noSsr: true,
+	});
 	// when the listenerLocation is updated, center the map
 	useEffect(() => {
 		if (ready) {
