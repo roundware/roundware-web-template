@@ -9,6 +9,7 @@ import RoundwareContext, { IRoundwareContext } from '../context/RoundwareContext
 import useDebounce from '../hooks/useDebounce';
 import { useDeviceID } from '../hooks/useDeviceID';
 import { ITagLookup } from '../types';
+import { getDefaultListenMode } from '../utils';
 interface PropTypes {
 	children: React.ReactNode;
 }
@@ -183,7 +184,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			deviceId: deviceId,
 			serverUrl: server_url,
 			projectId: project_id,
-			geoListenMode: GeoListenMode.MANUAL,
+			geoListenMode: getDefaultListenMode(),
 			speakerFilters: { activeyn: true },
 			assetFilters: { submitted: true, media_type: 'audio' },
 			listenerLocation: initial_loc,
