@@ -22,6 +22,8 @@ export interface IRoundwareContext {
 	geoListenMode: GeoListenModeType;
 	userFilter: string;
 	playingAssets: IAssetData[];
+
+	descriptionFilter: string | null;
 	// state modification functions
 	selectAsset: React.Dispatch<React.SetStateAction<IAssetData | null>>;
 	selectTags: (tags: number[] | null, group: ITagGroup) => void;
@@ -36,6 +38,7 @@ export interface IRoundwareContext {
 			asc: boolean;
 		}>
 	>;
+	setDescriptionFilter: React.Dispatch<React.SetStateAction<string | null>>;
 	forceUpdate: React.DispatchWithoutAction;
 	setGeoListenMode: (modeName: GeoListenModeType) => void;
 	updateAssets: (assetData?: IAssetData[]) => void;

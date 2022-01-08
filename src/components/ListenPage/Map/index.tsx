@@ -89,7 +89,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 					<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad}>
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
-						<WalkingModeButton />
+						{map && roundware.mixer?.playlist && <WalkingModeButton />}
 						{process.env.SHOW_SPEAKERS_ON_MAP == 'true' && <SpeakerPolygons />}
 					</GoogleMap>
 				</LoadScript>

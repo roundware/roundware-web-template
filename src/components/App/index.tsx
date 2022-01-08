@@ -3,10 +3,11 @@ import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';
-import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
+import { NavLink, Route, Switch, useLocation, Link, BrowserRouter } from 'react-router-dom';
 import favicon from 'url:../../assets/favicon.png';
 import logoSmall from 'url:../../assets/rw-full-logo-wb.png';
 import logoMinimal from 'url:../../assets/rw-logo-minimal.png';
@@ -19,8 +20,9 @@ import ListenPage from '../ListenPage';
 import ListenFilterDrawer from '../ListenPage/ListenFilterDrawer';
 import RoundwareMixerControl from '../ListenPage/RoundwareMixerControl';
 import SpeakPage from '../SpeakPage';
+import SpeakButton from './SpeakButton';
 import useStyles from './styles';
-
+import UserConfirmation from '../UserConfirmation';
 if (typeof process.env.GOOGLE_ANALYTICS_ID !== 'undefined' && process.env.GOOGLE_ANALYTICS_ID !== 'null' && typeof process.env.GOOGLE_ANALYTICS_ID == 'string') {
 	ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
 	ReactGA.pageview(window.location.pathname + window.location.search);
@@ -42,44 +44,63 @@ export const App = () => {
 
 	return (
 		<>
-			<CssBaseline />
-			<Helmet>
-				<meta charSet='utf-8' />
-				<title>{roundware.project ? roundware.project.projectName : ''}</title>
-				<link rel='icon' type='image/png' href={favicon} sizes='16x16' />
-			</Helmet>
+			<BrowserRouter getUserConfirmation={(message, callback) => UserConfirmation(message, callback)}>
+				<CssBaseline />
 
-			<AppBar className={classes.topBar} position='fixed'>
-				<Toolbar className={classes.topBar}>
-					<Typography variant='h6' className={classes.title}>
-						<NavLink to='/' className={classes.title}>
-							{roundware.project ? roundware.project.projectName : ''}
+				<Helmet>
+					<meta charSet='utf-8' />
+					<title>{roundware.project ? roundware.project.projectName : ''}</title>
+					<link rel='icon' type='image/png' href={favicon} sizes='16x16' />
+					<meta name='theme-color' content={theme.palette.primary.main} />
+				</Helmet>
+
+				<AppBar className={classes.topBar} position='fixed'>
+					<Toolbar className={classes.topBar}>
+						<Typography variant='h6' className={classes.title}>
+							<NavLink to='/' className={classes.title}>
+								{roundware.project ? roundware.project.projectName : ''}
+							</NavLink>
+						</Typography>
+						<NavLink to='/'>
+							<img src={isExtraSmallScreen ? logoMinimal : logoSmall} className={classes.navLogo} />
 						</NavLink>
-					</Typography>
-					<NavLink to='/'>
-						<img src={isExtraSmallScreen ? logoMinimal : logoSmall} className={classes.navLogo} />
-					</NavLink>
-				</Toolbar>
-			</AppBar>
-			<Toolbar />
-			<div className={classes.appContainer}>
-				<Switch>
-					<Route exact path='/' component={LandingPage} />
-					<Route path='/listen' component={ListenPage} />
-					<Route path='/speak' component={SpeakPage} />
-					<Route path='/debug' component={DebugPage} />
-				</Switch>
-			</div>
-			<AppBar position='sticky' className={classes.bottomBar}>
-				<Toolbar style={{ width: '100%', justifyContent: 'center' }}>
-					<Route path='/listen'>
-						<ListenFilterDrawer />
-						<RoundwareMixerControl />
-					</Route>
-					{process.env.DEBUG_MODE === 'true' ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
-					<InfoPopup />
-				</Toolbar>
-			</AppBar>
+					</Toolbar>
+				</AppBar>
+				<Toolbar />
+				<div className={classes.appContainer}>
+					<Switch>
+						<Route exact path='/' component={LandingPage} />
+						<Route path='/listen' component={ListenPage} />
+						<Route path='/speak' component={SpeakPage} />
+						<Route path='/debug' component={DebugPage} />
+					</Switch>
+				</div>
+				<AppBar position='sticky' className={classes.bottomBar}>
+					<Toolbar style={{ width: '100%', justifyContent: 'space-between' }}>
+						<Route path='/listen'>
+							<div>
+								<Link to={`/speak`}>
+									<SpeakButton />
+								</Link>
+							</div>
+							<div>
+								<ListenFilterDrawer />
+								<RoundwareMixerControl />
+							</div>
+						</Route>
+						<Route path={`/`} exact>
+							<div />
+						</Route>
+						<Route path={`/speak`}>
+							<div />
+						</Route>
+						{process.env.DEBUG_MODE === 'true' ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
+						<div>
+							<InfoPopup />
+						</div>
+					</Toolbar>
+				</AppBar>
+			</BrowserRouter>
 		</>
 	);
 };
