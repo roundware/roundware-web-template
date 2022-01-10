@@ -29,10 +29,7 @@ const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
 		fillOpacity: 1,
 	};
 
-	const map = useGoogleMap();
-	// let url = 'https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg';
-
-	const isPlaying = roundware?.mixer?.playlist && roundware.mixer.playlist.playing && Array.isArray(roundware.currentlyPlayingAssets) && roundware.currentlyPlayingAssets.length > 0 && roundware.currentlyPlayingAssets[0].id === asset.id;
+	const isPlaying = roundware?.mixer?.playlist && roundware.mixer.playlist.playing && Array.isArray(roundware.currentlyPlayingAssets) && roundware.currentlyPlayingAssets.length > 0 && roundware.currentlyPlayingAssets?.some((a) => a.id == asset.id);
 	return (
 		<Marker
 			position={{ lat: asset.latitude!, lng: asset.longitude! }}
