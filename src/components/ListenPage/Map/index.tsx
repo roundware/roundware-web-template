@@ -30,12 +30,14 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 		if (!map) {
 			return;
 		}
-		if (newLocation) roundware.updateLocation(newLocation);
-		else {
+		let location = newLocation;
+		if (!location) {
 			const center = map.getCenter();
-			if (center) roundware.updateLocation({ latitude: center.lat(), longitude: center.lng() });
+			location = { latitude: center!.lat(), longitude: center!.lng() };
 		}
-		console.log('updated location on framework');
+
+		roundware.updateLocation(location!);
+		console.log('updated location on framework', location);
 	};
 
 	const onLoad = (map: google.maps.Map) => {
