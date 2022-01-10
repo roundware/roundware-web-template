@@ -7,6 +7,7 @@ import { URLSyncProvider } from './URLProvider';
 import { defaultTheme } from '../styles';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import NoSleepProvider from './NoSleepProvider';
 declare module '@mui/styles/defaultTheme' {
 	// eslint-disable-next-line @typescript-eslint/no-empty-interface
 	interface DefaultTheme extends Theme {}
@@ -19,19 +20,21 @@ interface Props {
 const Providers = (props: Props) => {
 	const [theme] = useState(defaultTheme);
 	return (
-		<RoundwareProvider>
-			<UiConfigProvider>
-				<BrowserRouter>
-					<URLSyncProvider>
-						<StyledEngineProvider injectFirst>
-							<ThemeProvider theme={theme}>
-								<LocalizationProvider dateAdapter={AdapterDateFns}>{props.children}</LocalizationProvider>
-							</ThemeProvider>
-						</StyledEngineProvider>
-					</URLSyncProvider>
-				</BrowserRouter>
-			</UiConfigProvider>
-		</RoundwareProvider>
+		<NoSleepProvider>
+			<RoundwareProvider>
+				<UiConfigProvider>
+					<BrowserRouter>
+						<URLSyncProvider>
+							<StyledEngineProvider injectFirst>
+								<ThemeProvider theme={theme}>
+									<LocalizationProvider dateAdapter={AdapterDateFns}>{props.children}</LocalizationProvider>
+								</ThemeProvider>
+							</StyledEngineProvider>
+						</URLSyncProvider>
+					</BrowserRouter>
+				</UiConfigProvider>
+			</RoundwareProvider>
+		</NoSleepProvider>
 	);
 };
 
