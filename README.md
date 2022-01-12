@@ -11,7 +11,7 @@ PORT=1234
 
 # Roundware Configuration
 
-Open `src/config.json`
+Open `[src/config.json](src/config.json)`
 
 # Development
 
