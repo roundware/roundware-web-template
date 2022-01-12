@@ -104,7 +104,7 @@ const LocationSelectForm = () => {
 		}
 	};
 
-	if (!process.env.GOOGLE_MAPS_API_KEY) {
+	if (!process.env.REACT_APP_GOOGLE_MAPS_API_KEY) {
 		console.warn(`GOOGLE_MAPS_API_KEY was not provided! Script loading will fail.`);
 	}
 	return (
@@ -114,7 +114,7 @@ const LocationSelectForm = () => {
 				<Typography variant={'h4'} className={classes.locationHeaderLabel}>
 					Where are you recording today?
 				</Typography>
-				<LoadScript id='script-loader' googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries as LoadScriptProps[`libraries`]}>
+				<LoadScript id='script-loader' googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries as LoadScriptProps[`libraries`]}>
 					<PlacesAutocomplete />
 					<div className={classes.mapContainerDiv}>
 						<GoogleMap

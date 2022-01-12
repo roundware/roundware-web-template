@@ -6,7 +6,7 @@ import { makeStyles } from '@mui/styles';
 import { useRoundware } from '../../hooks';
 import Container from '@mui/material/Container';
 
-import banner from 'url:../../assets/rw-icon-cluster.png';
+import banner from '../../assets/rw-icon-cluster.png';
 
 import useStyles from './styles';
 

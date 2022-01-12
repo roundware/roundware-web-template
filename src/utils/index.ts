@@ -1,5 +1,5 @@
 import { GeoListenMode } from 'roundware-web-framework';
-
+import config from 'config.json';
 export const wait = <PromiseType>(delay: number, value?: any): Promise<PromiseType> => new Promise((resolve) => setTimeout(resolve, delay, value));
 
 /** gets google map paths from geojson polygon
@@ -19,10 +19,10 @@ function getWidth() {
 export const getDefaultListenMode = () => {
 	const isMobile = getWidth() < 600;
 
-	if (process.env.GEO_LISTEN_MODE == 'device') {
+	if (config.GEO_LISTEN_MODE == 'device') {
 		return isMobile ? GeoListenMode.AUTOMATIC : GeoListenMode.MANUAL;
 	}
-	const listenMode = (process.env.GEO_LISTEN_MODE || 'map,walking').split(`,`)[0];
+	const listenMode = (config.GEO_LISTEN_MODE || 'map,walking').split(`,`)[0];
 	if (listenMode == 'map') return GeoListenMode.MANUAL;
 	return GeoListenMode.AUTOMATIC;
 };

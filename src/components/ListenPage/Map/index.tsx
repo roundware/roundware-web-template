@@ -8,6 +8,7 @@ import AssetLayer from './AssetLayer';
 import AssetLoadingOverlay from './AssetLoadingOverlay';
 import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
+import config from 'config.json';
 import SpeakerPolygons from './SpeakerPolygons';
 const useStyles = makeStyles((theme) => {
 	return {
@@ -42,7 +43,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 
 	const onLoad = (map: google.maps.Map) => {
 		let restriction;
-		if (process.env.USE_LISTEN_MAP_BOUNDS === 'true') {
+		if (config.USE_LISTEN_MAP_BOUNDS === true) {
 			const {
 				southwest: { latitude: swLat, longitude: swLng },
 				northeast: { latitude: neLat, longitude: neLng },
@@ -92,7 +93,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
 						{map && roundware.mixer?.playlist && <WalkingModeButton />}
-						{process.env.SHOW_SPEAKERS_ON_MAP == 'true' && <SpeakerPolygons />}
+						{config.SHOW_SPEAKERS_ON_MAP == true && <SpeakerPolygons />}
 					</GoogleMap>
 				</LoadScript>
 			) : null}

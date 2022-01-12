@@ -1,0 +1,30 @@
+{
+	"ROUNDWARE_SERVER_URL": "https://dev.roundware.com/api/2",
+	"ROUNDWARE_SERVER_BASE_URL": "https://dev.roundware.com/",
+	"ROUNDWARE_DEFAULT_PROJECT_ID": 12,
+	"ROUNDWARE_INITIAL_LATITUDE": 50,
+	"ROUNDWARE_INITIAL_LONGITUDE": 15,
+
+	"ALLOW_PHOTOS": true,
+	"ALLOW_TEXT": true,
+
+	"USE_LISTEN_MAP_BOUNDS": false,
+
+	"KEEP_PAUSED_ASSETS": true,
+
+	"GEO_LISTEN_MODE": "device",
+	"NAV_LOGO_HEIGHT": 34,
+	"DEBUG_MODE": false,
+	"ALLOW_SPEAK_TAGS": true,
+
+	"DEFAULT_SPEAK_TAGS": [91, 218],
+
+	"AVAILABLE_LISTEN_MODES": "device",
+
+	"INFOWINDOW_DISPLAY_ITEMS": ["date", "tags", "photo", "description", "text", "audio", "actions"],
+
+	"SHOW_SPEAKERS_ON_MAP": true,
+	"SPEAKER_STROKE_COLORS": ["#044389", "#FCFF4B", "#FFAD05", "#7CAFC4", "#63A375", "#EF27A6"],
+
+	"AVAILABLE_LISTEN_FILTERS": ["date", "description", "tags"]
+}

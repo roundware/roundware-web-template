@@ -4,6 +4,7 @@ import { useRoundware } from '../../../hooks';
 import { speakerPolygonColors as colors, speakerPolygonOptions } from '../../../styles/speaker';
 import { polygonToGoogleMapPaths } from '../../../utils';
 import CustomMapControl from './CustomControl';
+import config from 'config.json';
 interface Props {}
 
 const getColorForIndex = (index: number): string => {
@@ -37,7 +38,7 @@ const SpeakerPolygons = (props: Props) => {
 
 	return (
 		<div>
-			{process.env.DEBUG_MODE == 'true' && (
+			{config.DEBUG_MODE === true && (
 				<CustomMapControl position={window.google.maps.ControlPosition.LEFT_CENTER}>
 					<div>
 						<p>fillOpacity</p>

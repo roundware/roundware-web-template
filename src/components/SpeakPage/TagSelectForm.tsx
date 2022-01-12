@@ -12,7 +12,7 @@ import { generatePath, useHistory } from 'react-router-dom';
 import { useRoundware, useRoundwareDraft } from '../../hooks';
 import { IMatch } from '../../types';
 import { wait } from '../../utils';
-
+import config from 'config.json';
 const useStyles = makeStyles((theme) => {
 	return {
 		container: {
@@ -108,17 +108,17 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 	}, [choices, roundware.uiConfig]);
 
 	useEffect(() => {
-		if (process.env.ALLOW_SPEAK_TAGS === 'false') {
+		if (config.ALLOW_SPEAK_TAGS !== true) {
 			if (!roundware.uiConfig || !roundware.uiConfig.speak) {
 				return;
 			}
-			const defaultTags = process.env.DEFAULT_SPEAK_TAGS;
+			const defaultTags = config.DEFAULT_SPEAK_TAGS;
 
 			if (!defaultTags) {
 				console.warn(`env variable DEFAULT_SPEAK_TAGS was undefined`);
 				return;
 			}
-			const tagIds = defaultTags.split(',').map(Number);
+			const tagIds = defaultTags;
 			const uiItemIds: any[] = [];
 			roundware.uiConfig.speak.forEach((group: any) =>
 				group.display_items.forEach((item: any) => {

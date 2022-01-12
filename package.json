@@ -5,9 +5,9 @@
 	"scripts": {
 		"preinstall": "npx npm-force-resolutions",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "parcel ./src/index.html",
+		"start": "react-scripts start",
 		"deploy": "npm run build && cp ./dist/index.html ./dist/200.html && surge --domain https://roundware-typescript.surge.sh dist",
-		"build": "parcel build src/index.html src/404.html",
+		"build": "react-scripts build",
 		"install-rwf": "cd ../roundware-web-framework && npm run build && npm pack && cd ../roundware-web-template && rm -rf node_modules/roundware-web-framework/ &&  npm i file:../roundware-web-framework/roundware-web-framework-0.11.0-alpha.30.tgz"
 	},
 	"author": "Evan Babb",
@@ -56,11 +56,13 @@
 		"react-helmet": "^6.1.0",
 		"react-router": "^5.2.0",
 		"react-router-dom": "^5.2.0",
+		"react-scripts": "^5.0.0",
 		"regenerator-runtime": "^0.13.9",
 		"roundware-web-framework": "0.12.4",
 		"ts-overlapping-marker-spiderfier": "^1.0.3",
 		"wavesurfer-react": "^2.0.11",
-		"wavesurfer.js": "^5.2.0"
+		"wavesurfer.js": "^5.2.0",
+		"webpack-manifest-plugin": "^4.1.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.15.0",
@@ -81,5 +83,17 @@
 	},
 	"resolutions": {
 		"@babel/preset-env": "7.13.8"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	}
 }

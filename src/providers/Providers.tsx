@@ -9,7 +9,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import NoSleepProvider from './NoSleepProvider';
 declare module '@mui/styles/defaultTheme' {
-	// eslint-disable-next-line @typescript-eslint/no-empty-interface
 	interface DefaultTheme extends Theme {}
 }
 

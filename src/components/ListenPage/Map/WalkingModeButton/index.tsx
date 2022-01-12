@@ -10,7 +10,8 @@ import MapIcon from '@mui/icons-material/Map';
 import ListenerLocationMarker from './ListenerLocationMarker';
 import clsx from 'clsx';
 import LoadingOverlay from './LoadingOverlay';
-import * as messages from '../../../../locales/en_US.json';
+import messages from '../../../../locales/en_US.json';
+import config from 'config.json';
 const useStyles = makeStyles((theme) => {
 	return {
 		walkingModeButton: {
@@ -60,7 +61,7 @@ const walkingModeButton = () => {
 		}
 	}, [lat, lng]);
 
-	const availableListenModes = process.env.AVAILABLE_LISTEN_MODES || 'map,walking';
+	const availableListenModes = config.AVAILABLE_LISTEN_MODES || 'map,walking';
 	const availableListenModesArray = availableListenModes.split(',');
 
 	const displayListenModeButton = availableListenModes == 'device' || availableListenModesArray.length == 2 ? true : false;
@@ -129,7 +130,7 @@ const walkingModeButton = () => {
 				const location = await roundware.geoPosition.waitForInitialGeolocation();
 
 				// not need to check if user location is within bounds
-				if (process.env.USE_LISTEN_MAP_BOUNDS !== 'true') {
+				if (config.USE_LISTEN_MAP_BOUNDS !== true) {
 					setWalkingModeStatus('eligible');
 					enableWalkingMode();
 					return;

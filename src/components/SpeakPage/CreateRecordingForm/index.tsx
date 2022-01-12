@@ -28,7 +28,7 @@ import ErrorDialog from '../../ErrorDialog';
 import LegalAgreementForm from '../../LegalAgreementForm';
 import AdditionalMediaMenu from './AdditionalMediaMenu';
 import { useStyles } from './styles';
-
+import config from 'config.json';
 const visualizerOptions = {
 	type: 'bars',
 };
@@ -312,7 +312,7 @@ const CreateRecordingForm = () => {
 							</Button>
 						</DialogActions>
 					</Dialog>
-					{process.env.ALLOW_PHOTOS === 'true' || process.env.ALLOW_TEXT === 'true' ? <AdditionalMediaMenu onSetText={setTextAsset} onSetImage={(file) => setImageAssets([...imageAssets, file])} textAsset={textAsset} imageAssets={imageAssets} disabled={draftMediaUrl === ''} /> : null}
+					{config.ALLOW_PHOTOS === true || config.ALLOW_TEXT === true ? <AdditionalMediaMenu onSetText={setTextAsset} onSetImage={(file) => setImageAssets([...imageAssets, file])} textAsset={textAsset} imageAssets={imageAssets} disabled={draftMediaUrl === ''} /> : null}
 					<Button
 						variant='contained'
 						color='primary'

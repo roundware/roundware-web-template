@@ -10,6 +10,7 @@ import useDebounce from '../hooks/useDebounce';
 import { useDeviceID } from '../hooks/useDeviceID';
 import { ITagLookup } from '../types';
 import { getDefaultListenMode } from '../utils';
+import config from 'config.json';
 interface PropTypes {
 	children: React.ReactNode;
 }
@@ -169,15 +170,15 @@ const RoundwareProvider = (props: PropTypes) => {
 
 	// when this provider is loaded, initialize roundware via api
 	useEffect(() => {
-		const project_id = Number(process.env.ROUNDWARE_DEFAULT_PROJECT_ID);
-		const server_url = process.env.ROUNDWARE_SERVER_URL;
+		const project_id = config.ROUNDWARE_DEFAULT_PROJECT_ID;
+		const server_url = config.ROUNDWARE_SERVER_URL;
 		if (typeof server_url == 'undefined') return console.error(`ROUNDWARE_SERVER_URL was missing from env variables`);
 		if (typeof project_id == 'undefined') return console.error(`ROUNDWARE_DEFAULT_PROJECT_ID was missing from env variables`);
 		// maybe we build the site with a default listener location,
 		// otherwise we go to null island
 		const initial_loc = {
-			latitude: Number(process.env.INITIAL_LATITUDE) || 0,
-			longitude: Number(process.env.INITIAL_LONGITUDE) || 0,
+			latitude: config.ROUNDWARE_INITIAL_LATITUDE || 0,
+			longitude: config.ROUNDWARE_INITIAL_LONGITUDE || 0,
 		};
 
 		const roundwareOptions: IRoundwareConstructorOptions = {
@@ -191,7 +192,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			assetUpdateInterval: 30 * 1000,
 			prefetchSpeakerAudio: true,
 			apiClient: undefined!,
-			keepPausedAssets: process.env.KEEP_PAUSED_ASSETS === 'true',
+			keepPausedAssets: config.KEEP_PAUSED_ASSETS == true,
 		};
 		const roundware = new Roundware(window, roundwareOptions);
 

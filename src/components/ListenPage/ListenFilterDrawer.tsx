@@ -10,7 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-
+import config from 'config.json';
 import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
 import 'date-fns';
@@ -55,7 +55,7 @@ const ListenFilterDrawer = () => {
 
 	const handleOnDescriptionChange: TextFieldProps[`onChange`] = (e) => setDescriptionFilter(e.target.value);
 
-	const availableFilters = process.env.AVAILABLE_LISTEN_FILTERS ? process.env.AVAILABLE_LISTEN_FILTERS.split(',') : [];
+	const availableFilters = config.AVAILABLE_LISTEN_FILTERS || [];
 
 	const filterLookup: {
 		[index: string]: JSX.Element;

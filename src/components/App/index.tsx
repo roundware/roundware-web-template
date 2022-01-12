@@ -8,9 +8,9 @@ import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';
 import { NavLink, Route, Switch, useLocation, Link, BrowserRouter } from 'react-router-dom';
-import favicon from 'url:../../assets/favicon.png';
-import logoSmall from 'url:../../assets/rw-full-logo-wb.png';
-import logoMinimal from 'url:../../assets/rw-logo-minimal.png';
+import favicon from '../../assets/favicon.png';
+import logoSmall from '../../assets/rw-full-logo-wb.png';
+import logoMinimal from '../../assets/rw-logo-minimal.png';
 import { useRoundware } from '../../hooks';
 import { defaultTheme } from '../../styles';
 import DebugPage from '../DebugPage';
@@ -22,9 +22,10 @@ import RoundwareMixerControl from '../ListenPage/RoundwareMixerControl';
 import SpeakPage from '../SpeakPage';
 import SpeakButton from './SpeakButton';
 import useStyles from './styles';
+import config from 'config.json';
 import UserConfirmation from '../UserConfirmation';
-if (typeof process.env.GOOGLE_ANALYTICS_ID !== 'undefined' && process.env.GOOGLE_ANALYTICS_ID !== 'null' && typeof process.env.GOOGLE_ANALYTICS_ID == 'string') {
-	ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
+if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
+	ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 	ReactGA.pageview(window.location.pathname + window.location.search);
 }
 
@@ -34,7 +35,7 @@ export const App = () => {
 	const { roundware } = useRoundware();
 	const isExtraSmallScreen = useMediaQuery<boolean>(theme.breakpoints.down('xs'));
 
-	if (process.env.GOOGLE_ANALYTICS_ID !== 'null') {
+	if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
 		let location = useLocation();
 
 		useEffect(() => {
@@ -94,7 +95,7 @@ export const App = () => {
 						<Route path={`/speak`}>
 							<div />
 						</Route>
-						{process.env.DEBUG_MODE === 'true' ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
+						{config.DEBUG_MODE === true ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
 						<div>
 							<InfoPopup />
 						</div>

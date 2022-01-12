@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { WaveSurfer, WaveForm, Region } from 'wavesurfer-react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions';
 import { IconButton, Grid, LinearProgress, Box } from '@mui/material';
@@ -23,9 +23,9 @@ const AudioPlayer = ({ size = 'small', src }: PropTypes): JSX.Element | null => 
 	const [loading, setLoading] = useState(true);
 
 	const [progress, setProgress] = useState(0);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 	const wavesurferRef = React.useRef<any>();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 	const handleMount = React.useCallback(
 		(waveSurfer: any) => {
 			wavesurferRef.current = waveSurfer;
