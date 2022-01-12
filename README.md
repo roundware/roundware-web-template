@@ -8,6 +8,11 @@ REACT_APP_GOOGLE_ANALYTICS_ID='put your real google analytics api key in .env.lo
 PORT=1234
 ```
 
+
+# Roundware Configuration
+
+Open `src/config.json`
+
 # Development
 
 `npm start`
