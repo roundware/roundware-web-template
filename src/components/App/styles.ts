@@ -1,7 +1,8 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import config from 'config.json';
 import { defaultTheme } from '../../styles';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(() => {
 	return {
 		topBar: {
 			backgroundColor: defaultTheme.palette.primary.main,
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => {
 			textDecoration: 'none',
 		},
 		navLogo: {
-			height: parseInt(typeof process.env.NAV_LOGO_HEIGHT == 'string' ? process.env.NAV_LOGO_HEIGHT : '34'),
+			height: config.NAV_LOGO_HEIGHT || 34,
 		},
 	};
 });

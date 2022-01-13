@@ -3,8 +3,8 @@ import { useRoundware } from '../../hooks';
 import TagSelectForm from './TagSelectForm';
 import LocationSelectForm from './LocationSelectForm';
 import CreateRecordingForm from './CreateRecordingForm';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@mui/material/Grid';
+import { makeStyles } from '@mui/styles';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { DraftRecordingProvider } from '../../providers/DraftRecordingProvider';
 
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => {
 		rootFormContainer: {
 			paddingTop: '3rem',
 			paddingBottom: '3rem',
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				paddingTop: 0,
 				paddingBottom: 0,
 			},

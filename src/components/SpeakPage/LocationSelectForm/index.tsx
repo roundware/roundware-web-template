@@ -1,9 +1,9 @@
-import { Button, Card, CardActions, CardContent, Typography, useTheme } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
+import { Button, Card, CardActions, CardContent, Typography, useTheme, Theme } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import { makeStyles } from '@mui/styles';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { GoogleMap, LoadScript, LoadScriptProps } from '@react-google-maps/api';
+
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRoundware, useRoundwareDraft } from '../../../hooks';
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => {
 		cardActionButton: {
 			marginRight: theme.spacing(2),
 
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				paddingRight: theme.spacing(1),
 				paddingLeft: theme.spacing(1),
 			},
@@ -39,20 +39,20 @@ const useStyles = makeStyles((theme: Theme) => {
 		locationHeaderLabel: {
 			fontSize: '2rem',
 			padding: theme.spacing(2, 1, 1, 1),
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('md')]: {
 				fontSize: '1.2rem',
 			},
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				fontSize: '1.2rem',
 			},
 		},
 		mapContainerDiv: {
 			height: '60vh',
 			margin: theme.spacing(2, 0),
-			[theme.breakpoints.down('xs')]: {
+			[theme.breakpoints.down('sm')]: {
 				height: '50vh',
 			},
-			[theme.breakpoints.down(350)]: {
+			[theme.breakpoints.down('xs')]: {
 				height: '45vh',
 			},
 		},
@@ -71,7 +71,7 @@ const LocationSelectForm = () => {
 	const history = useHistory();
 	const [error, set_error] = useState<Error | null>(null);
 	const [geolocating, set_geolocating] = useState<boolean>(false);
-	const gmapsLibraries: Libraries = ['places'];
+	const gmapsLibraries = ['places'];
 
 	useEffect(() => {
 		if (draftRecording.tags.length === 0) {
@@ -104,7 +104,7 @@ const LocationSelectForm = () => {
 		}
 	};
 
-	if (!process.env.GOOGLE_MAPS_API_KEY) {
+	if (!process.env.REACT_APP_GOOGLE_MAPS_API_KEY) {
 		console.warn(`GOOGLE_MAPS_API_KEY was not provided! Script loading will fail.`);
 	}
 	return (
@@ -114,7 +114,7 @@ const LocationSelectForm = () => {
 				<Typography variant={'h4'} className={classes.locationHeaderLabel}>
 					Where are you recording today?
 				</Typography>
-				<LoadScript id='script-loader' googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries}>
+				<LoadScript id='script-loader' googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries as LoadScriptProps[`libraries`]}>
 					<PlacesAutocomplete />
 					<div className={classes.mapContainerDiv}>
 						<GoogleMap

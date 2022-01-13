@@ -1,5 +1,5 @@
+import { Backdrop, Card, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
-import { Card, CircularProgress, Typography, Backdrop } from '@material-ui/core';
 import { useLoadingStyles } from '../AssetLoadingOverlay';
 interface LoadingOverlayProps {
 	open: boolean;

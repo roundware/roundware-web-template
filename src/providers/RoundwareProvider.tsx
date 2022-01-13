@@ -6,8 +6,11 @@ import { Coordinates, GeoListenModeType } from 'roundware-web-framework/dist/typ
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { IRoundwareConstructorOptions } from 'roundware-web-framework/dist/types/roundware';
 import RoundwareContext, { IRoundwareContext } from '../context/RoundwareContext';
+import useDebounce from '../hooks/useDebounce';
 import { useDeviceID } from '../hooks/useDeviceID';
 import { ITagLookup } from '../types';
+import { getDefaultListenMode } from '../utils';
+import config from 'config.json';
 interface PropTypes {
 	children: React.ReactNode;
 }
@@ -19,11 +22,13 @@ const RoundwareProvider = (props: PropTypes) => {
 		},
 	} as unknown as Roundware);
 	const [assetsReady, setAssetsReady] = useState<IRoundwareContext[`assetsReady`]>(false);
-	const [beforeDateFilter, setBeforeDateFilter] = useState<IRoundwareContext[`beforeDateFilter`]>(moment().format());
-	const [afterDateFilter, setAfterDateFilter] = useState<IRoundwareContext[`afterDateFilter`]>(undefined);
+	const [beforeDateFilter, setBeforeDateFilter] = useState<IRoundwareContext[`beforeDateFilter`]>(new Date());
+	const [afterDateFilter, setAfterDateFilter] = useState<IRoundwareContext[`afterDateFilter`]>(null);
 	const [userFilter, setUserFilter] = useState<IRoundwareContext[`userFilter`]>('');
 	const [selectedAsset, selectAsset] = useState<IRoundwareContext[`selectedAsset`]>(null);
 	const [selectedTags, setSelectedTags] = useState<IRoundwareContext[`selectedTags`]>(null);
+	const [descriptionFilter, setDescriptionFilter] = useState<IRoundwareContext[`descriptionFilter`]>(null);
+	const debouncedDescriptionFilter = useDebounce(descriptionFilter, 800);
 	const [sortField, setSortField] = useState<IRoundwareContext[`sortField`]>({ name: 'created', asc: false });
 	const [assetPageIndex, setAssetPageIndex] = useState(0);
 	const [assetsPerPage, setAssetsPerPage] = useState(10000);
@@ -116,10 +121,15 @@ const RoundwareProvider = (props: PropTypes) => {
 			}
 			// then filter by start and end dates
 			if (afterDateFilter && beforeDateFilter) {
-				const dateMatch = asset.created! <= beforeDateFilter && asset.created! >= afterDateFilter ? true : false;
+				const dateMatch = asset.created! <= beforeDateFilter.toISOString() && asset.created! >= afterDateFilter.toISOString() ? true : false;
 				if (!dateMatch) {
 					return false;
 				}
+			}
+
+			if (descriptionFilter) {
+				const descMatch = asset.description?.toLowerCase().indexOf(descriptionFilter.toLowerCase()) !== -1;
+				if (!descMatch) return false;
 			}
 			return true;
 		});
@@ -135,7 +145,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			const filteredAssets = filterAssets(roundware.assetData);
 			setFilteredAssets(filteredAssets);
 		}
-	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter]);
+	}, [roundware?.assetData, selectedTags, userFilter, afterDateFilter, beforeDateFilter, debouncedDescriptionFilter]);
 
 	const selectTags: IRoundwareContext[`selectTags`] = (tags, group) => {
 		setSelectedTags((prev) => {
@@ -160,29 +170,29 @@ const RoundwareProvider = (props: PropTypes) => {
 
 	// when this provider is loaded, initialize roundware via api
 	useEffect(() => {
-		const project_id = Number(process.env.ROUNDWARE_DEFAULT_PROJECT_ID);
-		const server_url = process.env.ROUNDWARE_SERVER_URL;
+		const project_id = config.ROUNDWARE_DEFAULT_PROJECT_ID;
+		const server_url = config.ROUNDWARE_SERVER_URL;
 		if (typeof server_url == 'undefined') return console.error(`ROUNDWARE_SERVER_URL was missing from env variables`);
 		if (typeof project_id == 'undefined') return console.error(`ROUNDWARE_DEFAULT_PROJECT_ID was missing from env variables`);
 		// maybe we build the site with a default listener location,
 		// otherwise we go to null island
 		const initial_loc = {
-			latitude: Number(process.env.INITIAL_LATITUDE) || 0,
-			longitude: Number(process.env.INITIAL_LONGITUDE) || 0,
+			latitude: config.ROUNDWARE_INITIAL_LATITUDE || 0,
+			longitude: config.ROUNDWARE_INITIAL_LONGITUDE || 0,
 		};
 
 		const roundwareOptions: IRoundwareConstructorOptions = {
 			deviceId: deviceId,
 			serverUrl: server_url,
 			projectId: project_id,
-			geoListenMode: GeoListenMode.MANUAL,
+			geoListenMode: getDefaultListenMode(),
 			speakerFilters: { activeyn: true },
 			assetFilters: { submitted: true, media_type: 'audio' },
 			listenerLocation: initial_loc,
 			assetUpdateInterval: 30 * 1000,
 			prefetchSpeakerAudio: true,
 			apiClient: undefined!,
-			keepPausedAssets: process.env.KEEP_PAUSED_ASSETS === 'true',
+			keepPausedAssets: config.KEEP_PAUSED_ASSETS == true,
 		};
 		const roundware = new Roundware(window, roundwareOptions);
 
@@ -241,6 +251,7 @@ const RoundwareProvider = (props: PropTypes) => {
 				geoListenMode,
 				userFilter,
 				playingAssets,
+				descriptionFilter,
 				// state modification functions
 				selectAsset,
 				selectTags,
@@ -253,6 +264,7 @@ const RoundwareProvider = (props: PropTypes) => {
 				forceUpdate,
 				setGeoListenMode,
 				updateAssets,
+				setDescriptionFilter,
 				// computed properties
 				assetPage,
 				assetsReady,

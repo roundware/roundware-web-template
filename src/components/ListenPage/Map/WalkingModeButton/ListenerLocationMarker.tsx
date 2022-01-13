@@ -1,9 +1,9 @@
-import { useTheme } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { Circle, InfoWindow, Marker, useGoogleMap } from '@react-google-maps/api';
 import React from 'react';
 import { useRoundware } from '../../../../hooks';
-import WalkingModePin from 'url:../../../../assets/walkingModePin.svg';
+import WalkingModePin from '../../../../assets/walkingModePin.svg';
 const ListenerLocationMarker = () => {
 	const { roundware } = useRoundware();
 	const map = useGoogleMap();
@@ -29,7 +29,7 @@ const ListenerLocationMarker = () => {
 				center={center}
 				onLoad={(circle) => {
 					const newBounds = circle.getBounds();
-					if (map !== null) map.panToBounds(newBounds);
+					if (map !== null && newBounds) map.panToBounds(newBounds);
 				}}
 				options={{
 					strokeColor: theme.palette.secondary.light,

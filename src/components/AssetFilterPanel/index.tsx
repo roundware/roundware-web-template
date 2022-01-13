@@ -1,4 +1,4 @@
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { useRoundware } from '../../hooks';

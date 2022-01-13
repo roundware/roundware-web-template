@@ -1,9 +1,9 @@
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useStyles } from './styles';
+import { makeStyles } from '@mui/styles';
 
 interface Props {
 	label: string;
@@ -37,3 +37,24 @@ const ActionButton = ({ label, linkTo, style = {} }: Props) => {
 };
 
 export default ActionButton;
+
+export const useStyles = makeStyles((theme: { spacing: (arg0: number) => any; breakpoints: { down: (arg0: string) => any } }) => {
+	return {
+		actionButton: {
+			margin: theme.spacing(2),
+			width: 300,
+			// padding: 50
+			height: 100,
+			[theme.breakpoints.down('md')]: {
+				width: 250,
+				height: 75,
+			},
+		},
+		buttonLabel: {
+			margin: theme.spacing(2),
+			[theme.breakpoints.down('md')]: {
+				fontSize: '2rem',
+			},
+		},
+	};
+});

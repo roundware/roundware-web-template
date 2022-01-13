@@ -1,7 +1,7 @@
-import { ListItemIcon, ListItemText } from '@material-ui/core';
+import { ListItemIcon, ListItemText } from '@mui/material';
 import React, { LegacyRef } from 'react';
 import { StyledMenuItem } from './StyledMenu';
-import PhotoIcon from '@material-ui/icons/Photo';
+import PhotoIcon from '@mui/icons-material/Photo';
 
 interface PhotoPickerMenuItemProps {
 	onSetImage: (file: File) => void;
@@ -12,7 +12,7 @@ export const PhotoPickerMenuItem = React.forwardRef<HTMLInputElement, PhotoPicke
 	<StyledMenuItem onClick={openPicker}>
 		<PhotoPickerInput onSetImage={onSetImage} ref={ref} setAnchorEl={setAnchorEl} />
 		<ListItemIcon>
-			<PhotoIcon fontSize='small' />
+			<PhotoIcon color='primary' fontSize='small' />
 		</ListItemIcon>
 		<ListItemText primary='Add Photo' />
 	</StyledMenuItem>

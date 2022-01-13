@@ -1,25 +1,34 @@
 //the createMuiTheme function was renamed to createTheme.
-import { createTheme, makeStyles } from '@material-ui/core/styles';
-
+import { createTheme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 export const defaultTheme = createTheme({
 	palette: {
-		type: 'dark',
+		mode: 'dark',
 		primary: {
 			main: '#719EE3',
+		},
+	},
+	components: {
+		MuiButton: {
+			styleOverrides: {
+				textPrimary: {
+					color: '#ffffff !important',
+				},
+			},
 		},
 	},
 });
 
 export const lightTheme = createTheme({
 	palette: {
-		type: 'light',
+		mode: 'light',
 		primary: {
 			main: '#159095',
 		},
 	},
 });
 
-export const useDefaultStyles = makeStyles((theme) => ({
+export const useDefaultStyles = makeStyles(() => ({
 	root: {
 		height: '100vh',
 		display: 'flex',

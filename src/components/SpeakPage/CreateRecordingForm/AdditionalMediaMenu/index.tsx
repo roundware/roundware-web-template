@@ -1,15 +1,15 @@
-import { useMediaQuery } from '@material-ui/core';
-import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
-import { useTheme } from '@material-ui/core/styles';
-import PhotoIcon from '@material-ui/icons/Photo';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
+import { useMediaQuery } from '@mui/material';
+import Badge from '@mui/material/Badge';
+import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
+import PhotoIcon from '@mui/icons-material/Photo';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
 import React, { useRef, useState } from 'react';
 import { ITextAsset } from '../../../../types';
 import { PhotoPickerInput, PhotoPickerMenuItem } from './PhotoPicker';
 import { StyledMenu } from './StyledMenu';
 import { TextInputDialog, TextInputMenuItem } from './TextInput';
-
+import config from 'config.json';
 interface AdditionalMediaMenuProps {
 	onSetText: React.Dispatch<React.SetStateAction<ITextAsset>>;
 	onSetImage: (file: File) => void;
@@ -22,15 +22,15 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 	const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 	const [addTextModalOpen, setAddTextModalOpen] = useState(false);
 	const theme = useTheme();
-	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
-	const isTinyScreen = useMediaQuery(theme.breakpoints.down(350));
+	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+	const isTinyScreen = useMediaQuery(theme.breakpoints.down('xs'));
 	const picker = useRef<HTMLInputElement | null>(null);
 
 	const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => setAnchorEl(event.currentTarget);
 
 	const handleClose = () => setAnchorEl(null);
 
-	if (process.env.ALLOW_PHOTOS === 'true' && process.env.ALLOW_TEXT === 'true') {
+	if (config.ALLOW_PHOTOS == true && config.ALLOW_TEXT == true) {
 		return (
 			<div>
 				<Button
@@ -77,7 +77,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 				</StyledMenu>
 			</div>
 		);
-	} else if (process.env.ALLOW_PHOTOS === 'true') {
+	} else if (config.ALLOW_PHOTOS == true) {
 		return (
 			<>
 				<Button

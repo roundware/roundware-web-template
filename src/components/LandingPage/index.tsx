@@ -1,22 +1,25 @@
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import ActionButton from './ActionButton';
 import React, { Fragment } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import { useRoundware } from '../../hooks';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 
-import banner from 'url:../../assets/rw-icon-cluster.png';
+import banner from '../../assets/rw-icon-cluster.png';
 
 import useStyles from './styles';
 
 export const LandingPage = () => {
-	const { roundware } = useRoundware();
+	const {
+		roundware: { project },
+	} = useRoundware();
 	const classes = useStyles();
 
-	if (!roundware.project || roundware.project.projectName === '(unknown)') {
+	if (!project || project.projectName === '(unknown)') {
 		return null;
 	}
+
 	return (
 		<Container style={{ paddingRight: 0, paddingLeft: 0 }}>
 			<Grid container className={classes.landingHeader}>
@@ -39,12 +42,17 @@ export const LandingPage = () => {
 					</Grid>
 				</Grid>
 				<Grid container justifyContent='center' style={{ height: '200px' }}>
-					<Grid item>
-						<ActionButton label={'Listen'} linkTo={'/listen'} style={{ width: '100%' }} />
-					</Grid>
-					<Grid item>
-						<ActionButton label={'Speak'} linkTo={'/speak'} />
-					</Grid>
+					{project.data?.listen_enabled && (
+						<Grid item>
+							<ActionButton label={'Listen'} linkTo={'/listen'} style={{ width: '100%' }} />
+						</Grid>
+					)}
+
+					{project.data?.speak_enabled && (
+						<Grid item>
+							<ActionButton label={'Speak'} linkTo={'/speak'} />
+						</Grid>
+					)}
 				</Grid>
 			</Grid>
 		</Container>

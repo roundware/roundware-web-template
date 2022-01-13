@@ -1,14 +1,14 @@
 import { useRoundware } from '../hooks';
 import React, { Fragment, useState } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Typography from '@material-ui/core/Typography';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import Link from '@material-ui/core/Link';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Typography from '@mui/material/Typography';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Link from '@mui/material/Link';
 
 const InfoPopup = () => {
 	const [open, setOpen] = useState(false);
@@ -22,7 +22,7 @@ const InfoPopup = () => {
 	};
 
 	return (
-		<div style={{ position: 'absolute', right: 10 }}>
+		<div>
 			<Button onClick={handleClickOpen}>INFO</Button>
 			<Dialog open={open} onClose={handleClose} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
 				<DialogTitle id='alert-dialog-title'>What is Roundware?</DialogTitle>

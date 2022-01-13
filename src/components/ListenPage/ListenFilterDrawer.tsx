@@ -1,28 +1,28 @@
+import FilterListIcon from '@mui/icons-material/FilterList';
+import LabelIcon from '@mui/icons-material/Label';
+import DatePicker from '@mui/lab/DatePicker';
+import { TextField, TextFieldProps } from '@mui/material';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import config from 'config.json';
+import { makeStyles } from '@mui/styles';
+import clsx from 'clsx';
+import 'date-fns';
 import React, { useState } from 'react';
 import { useRoundware } from '../../hooks';
-import 'date-fns';
-import moment from 'moment';
-import clsx from 'clsx';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import LabelIcon from '@material-ui/icons/Label';
+import DateFilterMenu from '../AssetFilterPanel/DateFilterMenu';
 import TagFilterMenu from '../AssetFilterPanel/TagFilterMenu';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
 		width: 300,
-		[theme.breakpoints.down(350)]: {
+		[theme.breakpoints.down('sm')]: {
 			width: 250,
 		},
 	},
@@ -41,44 +41,58 @@ const ListenFilterDrawer = () => {
 		right: false,
 	});
 
-	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter } = useRoundware();
+	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter, setDescriptionFilter, descriptionFilter } = useRoundware();
 	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
 		return null;
 	}
-
-	const handleAfterDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined): void => {
-		if (!date) return;
-		setAfterDateFilter(moment(date).format());
-		if (!roundware.mixer) {
-			return;
-		} else {
-			roundware.mixer.updateParams({
-				startDate: date,
-			});
-			const trackIds = Object.keys(roundware?.mixer?.playlist?.trackIdMap || {}).map((id) => parseInt(id));
-			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
-		}
-	};
-
-	const handleBeforeDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
-		if (!date) return;
-		setBeforeDateFilter(moment(date).format());
-		if (!roundware.mixer) {
-			return;
-		} else {
-			roundware.mixer.updateParams({
-				endDate: date,
-			});
-			const trackIds = Object.keys(roundware?.mixer?.playlist?.trackIdMap || {}).map((id) => parseInt(id));
-			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
-		}
-	};
 
 	const toggleDrawer = (anchor: string, open: boolean) => (event?: any) => {
 		if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
 			return;
 		}
 		setState({ ...state, [anchor]: open });
+	};
+
+	const handleOnDescriptionChange: TextFieldProps[`onChange`] = (e) => setDescriptionFilter(e.target.value);
+
+	const availableFilters = config.AVAILABLE_LISTEN_FILTERS || [];
+
+	const filterLookup: {
+		[index: string]: JSX.Element;
+	} = {
+		date: (
+			<ListItem>
+				<DateFilterMenu />
+			</ListItem>
+		),
+		tags: (
+			<>
+				<ListItem key='tags-header'>
+					<ListItemIcon>
+						<LabelIcon />
+					</ListItemIcon>
+					<ListItemText primary='Filter by Tags' />
+				</ListItem>
+				{roundware &&
+					roundware.uiConfig &&
+					Array.isArray(roundware.uiConfig.listen) &&
+					roundware.uiConfig.listen.map((tg) => (
+						<ListItem key={'list-item' + tg.group_short_name}>
+							<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
+						</ListItem>
+					))}
+			</>
+		),
+		description: (
+			<>
+				<ListItem>
+					<ListItemText>Description Filter</ListItemText>
+				</ListItem>
+				<ListItem>
+					<TextField rows={2} multiline fullWidth placeholder='Type something...' onChange={handleOnDescriptionChange} value={descriptionFilter || ''} />
+				</ListItem>
+			</>
+		),
 	};
 
 	const list = (anchor: string) => (
@@ -97,55 +111,12 @@ const ListenFilterDrawer = () => {
 			</List>
 			<Divider />
 			<List>
-				<ListItem>
-					<MuiPickersUtilsProvider utils={DateFnsUtils}>
-						<KeyboardDatePicker
-							disableToolbar
-							variant='inline'
-							format='MM/dd/yyyy'
-							margin='normal'
-							id='start-date-picker-inline'
-							label='Start Date'
-							value={afterDateFilter}
-							onChange={handleAfterDateChange}
-							KeyboardButtonProps={{
-								'aria-label': 'change start date',
-							}}
-						/>
-					</MuiPickersUtilsProvider>
-				</ListItem>
-				<ListItem>
-					<MuiPickersUtilsProvider utils={DateFnsUtils}>
-						<KeyboardDatePicker
-							disableToolbar
-							variant='inline'
-							format='MM/dd/yyyy'
-							margin='normal'
-							id='end-date-picker-inline'
-							label='End Date'
-							value={beforeDateFilter}
-							onChange={handleBeforeDateChange}
-							KeyboardButtonProps={{
-								'aria-label': 'change end date',
-							}}
-						/>
-					</MuiPickersUtilsProvider>
-				</ListItem>
-				<Divider />
-				<ListItem key='tags-header'>
-					<ListItemIcon>
-						<LabelIcon />
-					</ListItemIcon>
-					<ListItemText primary='Filter by Tags' />
-				</ListItem>
-				{roundware &&
-					roundware.uiConfig &&
-					Array.isArray(roundware.uiConfig.listen) &&
-					roundware.uiConfig.listen.map((tg) => (
-						<ListItem key={'list-item' + tg.group_short_name}>
-							<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
-						</ListItem>
-					))}
+				{availableFilters.map((f) => (
+					<>
+						{filterLookup[f]}
+						<Divider />
+					</>
+				))}
 			</List>
 		</div>
 	);
@@ -156,7 +127,14 @@ const ListenFilterDrawer = () => {
 				<Button onClick={toggleDrawer('filter', true)}>
 					<FilterListIcon fontSize='large' />
 				</Button>
-				<Drawer anchor={'right'} open={Boolean(state['filter'])} onClose={toggleDrawer('filter', false)}>
+				<Drawer
+					anchor={'right'}
+					open={Boolean(state['filter'])}
+					onClose={toggleDrawer('filter', false)}
+					ModalProps={{
+						keepMounted: true,
+					}}
+				>
 					{list('right')}
 				</Drawer>
 			</React.Fragment>

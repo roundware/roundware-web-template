@@ -1,4 +1,5 @@
 declare module '@foobar404/wave';
+declare module 'wavesurfer-react';
 declare module 'audio-recorder-polyfill' {
 	interface MediaRecorderErrorEvent extends Event {
 		name: string;

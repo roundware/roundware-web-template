@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import React, { useState, useCallback } from 'react';
 import { Coordinates } from 'roundware-web-framework/dist/types';
@@ -8,7 +8,8 @@ import AssetLayer from './AssetLayer';
 import AssetLoadingOverlay from './AssetLoadingOverlay';
 import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
-
+import config from 'config.json';
+import SpeakerPolygons from './SpeakerPolygons';
 const useStyles = makeStyles((theme) => {
 	return {
 		roundwareMap: {
@@ -24,23 +25,25 @@ interface RoundwareMapProps {
 const RoundwareMap = (props: RoundwareMapProps) => {
 	const classes = useStyles();
 	const { roundware } = useRoundware();
-	const [map, setMap] = useState<google.maps.Map<Element> | undefined>();
+	const [map, setMap] = useState<google.maps.Map | undefined>();
 
 	const updateListenerLocation = (newLocation?: Coordinates) => {
 		if (!map) {
 			return;
 		}
-		if (newLocation) roundware.updateLocation(newLocation);
-		else {
+		let location = newLocation;
+		if (!location) {
 			const center = map.getCenter();
-			roundware.updateLocation({ latitude: center.lat(), longitude: center.lng() });
+			location = { latitude: center!.lat(), longitude: center!.lng() };
 		}
-		console.log('updated location on framework');
+
+		roundware.updateLocation(location!);
+		console.log('updated location on framework', location);
 	};
 
-	const onLoad = (map: google.maps.Map<Element>) => {
+	const onLoad = (map: google.maps.Map) => {
 		let restriction;
-		if (process.env.USE_LISTEN_MAP_BOUNDS === 'true') {
+		if (config.USE_LISTEN_MAP_BOUNDS === true) {
 			const {
 				southwest: { latitude: swLat, longitude: swLng },
 				northeast: { latitude: neLat, longitude: neLng },
@@ -89,7 +92,8 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 					<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad}>
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
-						<WalkingModeButton />
+						{map && roundware.mixer?.playlist && <WalkingModeButton />}
+						{config.SHOW_SPEAKERS_ON_MAP == true && <SpeakerPolygons />}
 					</GoogleMap>
 				</LoadScript>
 			) : null}
