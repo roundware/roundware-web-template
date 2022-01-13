@@ -52,7 +52,7 @@
 		"react-router": "^5.2.0",
 		"react-router-dom": "^5.2.0",
 		"regenerator-runtime": "^0.13.9",
-		"roundware-web-framework": "^0.12.3",
+		"roundware-web-framework": "https://github.com/shreyas-jadhav/roundware-web-framework/raw/listenfixes/roundware-web-framework-0.12.5.tgz",
 		"svgo": "^2.6.1",
 		"ts-overlapping-marker-spiderfier": "^1.0.3"
 	},
