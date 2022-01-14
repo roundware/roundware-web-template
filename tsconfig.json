@@ -6,7 +6,7 @@
 		"jsx": "react",
 		"rootDir": "./src",
 		"outDir": "dist",
-		"incremental": true,
+
 		"sourceMap": true,
 		"experimentalDecorators": true,
 		"lib": ["dom", "es2015"],
