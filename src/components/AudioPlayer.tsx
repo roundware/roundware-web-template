@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { WaveSurfer, WaveForm, Region } from 'wavesurfer-react';
-
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Box, IconButton, LinearProgress } from '@mui/material';
+import React, { useState } from 'react';
+// @ts-ignore
+import { WaveForm, WaveSurfer } from 'wavesurfer-react';
 // @ts-ignore
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions';
-import { IconButton, Grid, LinearProgress, Box } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
 
 const plugins = [
 	{
