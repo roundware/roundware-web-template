@@ -3,7 +3,7 @@
 Create or open `.env`:
 
 ```
-REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyCmYUeVE8rq7no5-uWa1Js1JCY154WM8Is
+REACT_APP_GOOGLE_MAPS_API_KEY='put your real google maps api key in .env.local'
 REACT_APP_GOOGLE_ANALYTICS_ID='put your real google analytics api key in .env.local'
 PORT=1234
 ```
