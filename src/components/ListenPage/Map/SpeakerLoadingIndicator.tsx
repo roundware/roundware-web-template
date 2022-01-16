@@ -17,13 +17,13 @@ const SpeakerLoadingIndicator = (props: Props) => {
 			player.onLoadingProgress((per: number) => {
 				if (per <= 100)
 					setLoadingSpeakers((prev) => [
-						...prev.filter((s) => s.id != sp.id),
+						...prev.filter((s) => s.id != sp.speakerId),
 						{
-							id: sp.id,
+							id: sp.speakerId,
 							value: per,
 						},
 					]);
-				else setLoadingSpeakers((prev) => [...prev.filter((s) => s.id != sp.id)]);
+				else setLoadingSpeakers((prev) => [...prev.filter((s) => s.id != sp.speakerId)]);
 			});
 		});
 	}, [roundware?.mixer?.speakerTracks]);
