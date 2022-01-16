@@ -9,23 +9,24 @@ interface Props {}
 
 const SpeakerLoadingIndicator = (props: Props) => {
 	const { roundware } = useRoundware();
-	const speakerPlayers = roundware.mixer.speakerTracks?.map((s) => s.player);
+
 	const [loadingSpeakers, setLoadingSpeakers] = useState<{ id: number; value: number }[]>([]);
 	useEffect(() => {
-		speakerPlayers?.forEach((p) =>
-			p.onLoadingProgress((per: number) => {
+		roundware.mixer.speakerTracks?.forEach((s) => {
+			const player = s.player;
+			player.onLoadingProgress((per: number) => {
 				if (per <= 100)
 					setLoadingSpeakers((prev) => [
-						...prev.filter((s) => s.id != p.id),
+						...prev.filter((s) => s.id != player.id),
 						{
-							id: p.id,
+							id: player.id,
 							value: per,
 						},
 					]);
-				else setLoadingSpeakers((prev) => [...prev.filter((s) => s.id != p.id)]);
-			})
-		);
-	}, [speakerPlayers]);
+				else setLoadingSpeakers((prev) => [...prev.filter((s) => s.id != player.id)]);
+			});
+		});
+	}, [roundware?.mixer?.speakerTracks]);
 
 	if (loadingSpeakers.every((s) => s.value == 100)) return null;
 	return (
