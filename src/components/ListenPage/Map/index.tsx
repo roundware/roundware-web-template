@@ -10,6 +10,7 @@ import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
 import config from 'config.json';
 import SpeakerPolygons from './SpeakerPolygons';
+import SpeakerLoadingIndicator from './SpeakerLoadingIndicator';
 const useStyles = makeStyles((theme) => {
 	return {
 		roundwareMap: {
@@ -94,6 +95,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
 						{map && roundware.mixer?.playlist && <WalkingModeButton />}
 						{config.SHOW_SPEAKERS_ON_MAP == true && <SpeakerPolygons />}
+						<SpeakerLoadingIndicator />
 					</GoogleMap>
 				</LoadScript>
 			) : null}
