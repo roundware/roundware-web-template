@@ -1,7 +1,7 @@
 {
-	"ROUNDWARE_SERVER_URL": "https://prod.roundware.com/api/2",
-	"ROUNDWARE_SERVER_BASE_URL": "https://prod.roundware.com/",
-	"ROUNDWARE_DEFAULT_PROJECT_ID": 10,
+	"ROUNDWARE_SERVER_URL": "https://dev.roundware.com/api/2",
+	"ROUNDWARE_SERVER_BASE_URL": "https://dev.roundware.com/",
+	"ROUNDWARE_DEFAULT_PROJECT_ID": 1,
 	"ROUNDWARE_INITIAL_LATITUDE": 50,
 	"ROUNDWARE_INITIAL_LONGITUDE": 15,
 
@@ -26,5 +26,7 @@
 	"SHOW_SPEAKERS_ON_MAP": true,
 	"SPEAKER_STROKE_COLORS": ["#044389", "#FCFF4B", "#FFAD05", "#7CAFC4", "#63A375", "#EF27A6"],
 
-	"AVAILABLE_LISTEN_FILTERS": ["date", "description", "tags"]
+	"AVAILABLE_LISTEN_FILTERS": ["date", "description", "tags"],
+
+	"SYNC_SPEAKERS": true
 }
