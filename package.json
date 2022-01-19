@@ -60,7 +60,7 @@
 		"regenerator-runtime": "^0.13.9",
 		"roundware-web-framework": "https://github.com/shreyas-jadhav/roundware-web-framework/raw/speaker-sync/roundware-web-framework-0.12.5.tgz",
 		"ts-overlapping-marker-spiderfier": "^1.0.3",
-		"wavesurfer-react": "^2.0.12",
+		"wavesurfer-react": "https://github.com/shreyas-jadhav/wavesurfer-react/raw/tarball/wavesurfer-react-2.0.13.tgz",
 		"wavesurfer.js": "^5.2.0",
 		"webpack-manifest-plugin": "^4.1.1"
 	},
@@ -71,6 +71,7 @@
 		"@types/dom-mediacapture-record": "^1.0.10",
 		"@types/lodash": "^4.14.172",
 		"@types/react-router-dom": "^5.1.8",
+		"@types/wavesurfer.js": "^5.2.2",
 		"dotenv": "^10.0.0",
 		"typescript": "^4.4.3"
 	},
