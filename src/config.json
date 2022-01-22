@@ -31,6 +31,6 @@
 	"speakerConfig": {
 		"sync": true,
 		"prefetch": true,
-		"loop": true
+		"loop": false
 	}
 }
