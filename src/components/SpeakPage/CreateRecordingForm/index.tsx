@@ -141,7 +141,7 @@ const CreateRecordingForm = () => {
 	return (
 		<Card className={classes.container}>
 			<Prompt
-				when={!!draftMediaUrl}
+				when={!!draftMediaUrl && !success}
 				message={JSON.stringify({
 					message: `Are you sure you want to leave without submitting your recording? If you do, your recording will be deleted.`,
 					stay: `Keep Recording`,
@@ -363,6 +363,7 @@ const CreateRecordingForm = () => {
 											media_type: 'photo',
 										});
 									}
+									await roundware?.updateAssetPool();
 									set_success(asset);
 									updateAssets();
 								} catch (err) {
