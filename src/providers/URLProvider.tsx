@@ -50,7 +50,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		const eid = Number(params.get('eid')) || null;
 		const aid = Number(params.get('aid')) || null;
 		return { eid, aid };
-	}, [location.search]);
+	}, [location.search, location.pathname]);
 
 	const [addedFromURL, setAddedFromURL] = useState(false);
 	useEffect(() => {
