@@ -79,13 +79,13 @@ export const App = () => {
 				<AppBar position='sticky' className={classes.bottomBar}>
 					<Toolbar style={{ width: '100%', justifyContent: 'space-between' }}>
 						<Route path='/listen'>
-							{roundware?.project?.data?.speak_enabled && (
-								<div>
+							<div>
+								{roundware?.project?.data?.speak_enabled && (
 									<Link to={`/speak`}>
 										<SpeakButton />
 									</Link>
-								</div>
-							)}
+								)}
+							</div>
 							<div>
 								<ListenFilterDrawer />
 								<RoundwareMixerControl />
