@@ -114,23 +114,10 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 			}
 			const defaultTags = config.DEFAULT_SPEAK_TAGS;
 
-			if (!defaultTags) {
-				console.warn(`env variable DEFAULT_SPEAK_TAGS was undefined`);
-				return;
-			}
 			const tagIds = defaultTags;
-			const uiItemIds: any[] = [];
-			roundware.uiConfig.speak.forEach((group: any) =>
-				group.display_items.forEach((item: any) => {
-					if (tagIds.includes(item.tag_id)) {
-						uiItemIds.push(item.id);
-					}
-				})
-			);
-			if (uiItemIds.length > 0) {
-				draftRecording.setTags(uiItemIds as any);
-				history.replace('/speak/location');
-			}
+
+			draftRecording.setTags(tagIds);
+			history.replace('/speak/location');
 		} else {
 			return;
 		}
