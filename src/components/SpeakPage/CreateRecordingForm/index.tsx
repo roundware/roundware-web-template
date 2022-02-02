@@ -154,8 +154,8 @@ const CreateRecordingForm = () => {
 					<Container>
 						{/*{ selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }*/}
 						{
-							<Typography variant={'h5'} className={classes.tagGroupHeaderLabel} key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].id : 1} gutterBottom>
-								{selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].tag_display_text : 'No selected tags'}
+							<Typography variant={'h5'} className={classes.tagGroupHeaderLabel} key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1]?.id : 1} gutterBottom>
+								{selected_tags.length > 0 ? selected_tags[selected_tags.length - 1]?.tag_display_text : 'No selected tags'}
 							</Typography>
 						}
 					</Container>
@@ -337,10 +337,19 @@ const CreateRecordingForm = () => {
 								if (typeof draftRecording.location.longitude !== 'number' || typeof draftRecording.location.latitude !== 'number') {
 									return set_error(new Error(`Failed to get latitude & longitude!`));
 								}
+
+								// include default speak tags
+								const finalTags = draftRecording.tags;
+								config.DEFAULT_SPEAK_TAGS?.forEach((t) => {
+									if (!finalTags.includes(t)) {
+										finalTags.push(t);
+									}
+								});
+
 								const assetMeta = {
 									longitude: draftRecording.location.longitude,
 									latitude: draftRecording.location.latitude,
-									tag_ids: selected_tags.map((t) => t.tag_id),
+									tag_ids: finalTags,
 								};
 								const dateStr = new Date().toISOString();
 
@@ -356,15 +365,14 @@ const CreateRecordingForm = () => {
 										await envelope.upload(new Blob([textAsset.toString()], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' });
 									}
 									for (const file of imageAssets) {
-										// roundware types not defined yet
-
 										await envelope.upload(file, file.name || dateStr + '.jpg', {
 											...assetMeta,
 											media_type: 'photo',
 										});
 									}
-									await roundware?.updateAssetPool();
+
 									set_success(asset);
+
 									updateAssets();
 								} catch (err) {
 									// @ts-ignore
