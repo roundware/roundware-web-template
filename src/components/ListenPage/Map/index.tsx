@@ -12,6 +12,7 @@ import config from 'config.json';
 import SpeakerPolygons from './SpeakerPolygons';
 import SpeakerReplayButton from './SpeakerReplayButton';
 import SpeakerLoadingIndicator from './SpeakerLoadingIndicator';
+import { useURLSync } from 'context/URLContext';
 const useStyles = makeStyles((theme) => {
 	return {
 		roundwareMap: {
@@ -29,6 +30,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 	const { roundware } = useRoundware();
 	const [map, setMap] = useState<google.maps.Map | undefined>();
 
+	const { deleteFromURL } = useURLSync();
 	const updateListenerLocation = (newLocation?: Coordinates) => {
 		if (!map) {
 			return;
@@ -38,7 +40,8 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 			const center = map.getCenter();
 			location = { latitude: center!.lat(), longitude: center!.lng() };
 		}
-
+		deleteFromURL('latitude');
+		deleteFromURL('longitude');
 		roundware.updateLocation(location!);
 		console.log('updated location on framework', location);
 	};
