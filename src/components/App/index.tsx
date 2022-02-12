@@ -1,9 +1,9 @@
-import { useMediaQuery } from '@mui/material';
+import { useMediaQuery, Grid } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
+import Stack from '@mui/material/Stack';
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Helmet from 'react-helmet';
@@ -24,6 +24,7 @@ import SpeakButton from './SpeakButton';
 import useStyles from './styles';
 import config from 'config.json';
 import UserConfirmation from '../UserConfirmation';
+import ShareButton from './ShareButton';
 if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
 	ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 	ReactGA.pageview(window.location.pathname + window.location.search);
@@ -98,9 +99,10 @@ export const App = () => {
 							<div />
 						</Route>
 						{config.DEBUG_MODE === true ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
-						<div>
+						<Stack direction='row' spacing={1} alignItems='center'>
 							<InfoPopup />
-						</div>
+							<ShareButton />
+						</Stack>
 					</Toolbar>
 				</AppBar>
 			</BrowserRouter>
