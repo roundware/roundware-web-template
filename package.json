@@ -57,6 +57,7 @@
 		"react-router": "^5.2.0",
 		"react-router-dom": "^5.2.0",
 		"react-scripts": "^5.0.0",
+		"react-share": "^4.4.0",
 		"regenerator-runtime": "^0.13.9",
 		"roundware-web-framework": "https://github.com/shreyas-jadhav/roundware-web-framework/raw/speaker-sync/roundware-web-framework-0.12.5.tgz",
 		"ts-overlapping-marker-spiderfier": "^1.0.3",
