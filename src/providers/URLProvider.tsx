@@ -46,28 +46,38 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 	}, [roundware?.uiConfig?.listen]);
 
 	const { eid, aid } = useMemo(() => {
-		const params = new URLSearchParams(location.search);
+		const params = new URLSearchParams(window.location.search);
 		const eid = Number(params.get('eid')) || null;
 		const aid = Number(params.get('aid')) || null;
+		console.log(`new params`, eid, aid);
 		return { eid, aid };
-	}, [location, assetPage]);
+	}, [window.location.search, assetPage]);
 
 	const [addedFromURL, setAddedFromURL] = useState(false);
 	useEffect(() => {
 		/** whenever eid or aid get param passed first time
 		 *  select the relavant asset */
-		if (assetPage?.length <= 0 || addedFromURL) return;
 
-		if (eid) {
-			const asset = assetPage.find((a) => a?.envelope_ids?.includes(eid));
-			console.log('asset selected', asset);
-			asset ? selectAsset(asset) : selectAsset(null);
-		} else if (aid) {
-			const asset = assetPage.find((a) => a.id == aid);
-			console.log('asset selected', asset);
-			asset ? selectAsset(asset) : selectAsset(null);
+		setAddedFromURL(false);
+		async function syncAsset() {
+			setLoading(true);
+			await roundware.updateAssetPool();
+			const assets = await roundware.getAssets();
+
+			if (eid) {
+				const asset = assets.find((a) => a?.envelope_ids?.includes(eid));
+				console.log('asset selected', asset);
+				asset ? selectAsset(asset) : selectAsset(null);
+			} else if (aid) {
+				const asset = assets.find((a) => a.id == aid);
+				console.log('asset selected', asset);
+				asset ? selectAsset(asset) : selectAsset(null);
+			}
+			setAddedFromURL(true);
+			setLoading(false);
 		}
-		setAddedFromURL(true);
+
+		syncAsset();
 	}, [eid, aid, assetPage]);
 
 	useEffect(() => {
@@ -88,7 +98,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		/** add aid only when eid not available */
 		if (values[0]) addToURL(names, [values[0], null]);
 		else addToURL(names, values);
-	}, [selectedAsset]);
+	}, [selectedAsset, addedFromURL, loading]);
 
 	// add and remove tag_ids
 	const [tag_ids_get, setTag_ids_get] = useState<number[] | null>();

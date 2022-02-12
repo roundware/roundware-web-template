@@ -35,7 +35,7 @@ const visualizerOptions = {
 
 const CreateRecordingForm = () => {
 	const draftRecording = useRoundwareDraft();
-	const { roundware, tagLookup, updateAssets } = useRoundware();
+	const { roundware, tagLookup, updateAssets, selectAsset } = useRoundware();
 	let [wave, set_wave] = useState(new Wave());
 	const [isRecording, set_is_recording] = useState(false);
 	const [draftRecordingMedia, set_draft_recording_media] = useState<IAudioData | null>(null);
@@ -371,6 +371,7 @@ const CreateRecordingForm = () => {
 										});
 									}
 
+									selectAsset(null);
 									set_success(asset);
 
 									updateAssets();
