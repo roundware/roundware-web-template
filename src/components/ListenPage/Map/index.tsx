@@ -40,8 +40,8 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 			const center = map.getCenter();
 			location = { latitude: center!.lat(), longitude: center!.lng() };
 		}
-		deleteFromURL('latitude');
-		deleteFromURL('longitude');
+		deleteFromURL([`longitude`, `latitude`]);
+
 		roundware.updateLocation(location!);
 		console.log('updated location on framework', location);
 	};
