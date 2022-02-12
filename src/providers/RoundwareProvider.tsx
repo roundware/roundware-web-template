@@ -176,9 +176,13 @@ const RoundwareProvider = (props: PropTypes) => {
 		if (typeof project_id == 'undefined') return console.error(`ROUNDWARE_DEFAULT_PROJECT_ID was missing from env variables`);
 		// maybe we build the site with a default listener location,
 		// otherwise we go to null island
+
+		// location from url params take precendence;
+		const searchParams = new URLSearchParams(location.search);
+
 		const initial_loc = {
-			latitude: config.ROUNDWARE_INITIAL_LATITUDE || 0,
-			longitude: config.ROUNDWARE_INITIAL_LONGITUDE || 0,
+			latitude: parseInt((searchParams.get('latitude') || config.ROUNDWARE_INITIAL_LATITUDE || 0).toString()),
+			longitude: parseInt((searchParams.get(`longitude`) || config.ROUNDWARE_INITIAL_LONGITUDE || 0).toString()),
 		};
 
 		const roundwareOptions: IRoundwareConstructorOptions = {
@@ -199,7 +203,10 @@ const RoundwareProvider = (props: PropTypes) => {
 
 		roundware.connect().then(() => {
 			// set the initial listener location to the project default
-			roundware.updateLocation(roundware.project.location);
+			if (!searchParams.has('latitude')) {
+				// and when url params are not passed
+				roundware.updateLocation(roundware.project.location);
+			}
 			roundware.onUpdateLocation = forceUpdate;
 			roundware.onUpdateAssets = updateAssets;
 			roundware.onPlayAssets = updatePlaying;
