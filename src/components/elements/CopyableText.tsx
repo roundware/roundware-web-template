@@ -18,6 +18,7 @@ const CopyableText = ({ children }: Props) => {
 	};
 
 	useEffect(() => {
+		setCopied(false)
 		if (inputRef && inputRef.current) {
 			inputRef.current.select();
 			inputRef.current.onfocus = inputRef.current.select;
