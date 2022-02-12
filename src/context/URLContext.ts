@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
 export interface IURLContext {
 	params: URLSearchParams;
@@ -6,3 +6,4 @@ export interface IURLContext {
 	deleteFromURL: (name: string) => void;
 }
 export const URLContext = createContext<IURLContext>(undefined!);
+export const useURLSync = () => useContext(URLContext);
