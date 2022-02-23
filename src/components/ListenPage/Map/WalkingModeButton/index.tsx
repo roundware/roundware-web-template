@@ -154,6 +154,7 @@ const walkingModeButton = () => {
 					// not within map bounds
 					setWalkingModeStatus('error');
 					setWalkingModeErrorMessage(messages.errors.outOfRange);
+					enterMapMode();
 				}
 			} catch (e: any) {
 				// switch to map mode in case error
