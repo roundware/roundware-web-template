@@ -61,7 +61,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		setAddedFromURL(false);
 		async function syncAsset() {
 			setLoading(true);
-			await roundware.updateAssetPool();
+			if (typeof roundware?.updateAssetPool == 'function') await roundware.updateAssetPool();
 			const assets = await roundware.getAssets();
 
 			if (eid) {
