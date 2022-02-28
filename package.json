@@ -63,7 +63,8 @@
 		"ts-overlapping-marker-spiderfier": "^1.0.3",
 		"wavesurfer-react": "https://github.com/shreyas-jadhav/wavesurfer-react/raw/tarball/wavesurfer-react-2.0.13.tgz",
 		"wavesurfer.js": "^5.2.0",
-		"webpack-manifest-plugin": "^4.1.1"
+		"webpack-manifest-plugin": "^4.1.1",
+		"react-device-detect": "^2.1.2"
 	},
 	"devDependencies": {
 		"@babel/preset-react": "^7.14.5",
