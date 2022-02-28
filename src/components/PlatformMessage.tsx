@@ -19,16 +19,19 @@ type Props = {
 
 const PlatformMessage = ({ getMessage }: Props) => {
 	const [message, setMessage] = useState<PlatformMessage | null>(getMessage());
-	const [getLink, setGetLink] = useState(false);
+
+	// const [getLink, setGetLink] = useState(false);
+
 	const handleClose = () => setMessage(null);
+
 	return (
 		<Modal open={!!message} onClose={handleClose} title={message?.title || 'Note'}>
 			<Typography>{message?.message}</Typography>
-			<Collapse in={getLink}>{<CopyableText>{message?.link || window.location.href}</CopyableText>}</Collapse>
+			{/* <Collapse in={getLink}>{<CopyableText>{message?.link || window.location.href}</CopyableText>}</Collapse> */}
 			<DialogActions>
-				<Button endIcon={<LinkIcon />} variant='outlined' onClick={() => setGetLink((prev) => !prev)}>
+				{/* <Button endIcon={<LinkIcon />} variant='outlined' onClick={() => setGetLink((prev) => !prev)}>
 					Get Link
-				</Button>
+				</Button> */}
 				<Button onClick={handleClose} endIcon={<ChevronRightIcon />}>
 					Continue Anyway
 				</Button>
