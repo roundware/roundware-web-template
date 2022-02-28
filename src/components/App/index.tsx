@@ -25,6 +25,8 @@ import useStyles from './styles';
 import config from 'config.json';
 import UserConfirmation from '../UserConfirmation';
 import ShareButton from './ShareButton';
+import { getMessageOnLoad } from 'utils/platformMessages';
+import PlatformMessage from 'components/PlatformMessage';
 if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
 	ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 	ReactGA.pageview(window.location.pathname + window.location.search);
@@ -68,6 +70,7 @@ export const App = () => {
 						</NavLink>
 					</Toolbar>
 				</AppBar>
+				<PlatformMessage getMessage={getMessageOnLoad} />
 				<Toolbar />
 				<div className={classes.appContainer}>
 					<Switch>
