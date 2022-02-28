@@ -4,21 +4,26 @@ import CheckIcon from '@mui/icons-material/Check';
 import CopyIcon from '@mui/icons-material/CopyAll';
 interface Props {
 	children?: string;
+	value?: string;
 }
 
-const CopyableText = ({ children }: Props) => {
+const CopyableText = ({ children, value }: Props) => {
 	const [copied, setCopied] = useState(false);
 	const inputRef = useRef<HTMLInputElement>();
+	let link = value;
+	if (!value) {
+		link = children;
+	}
 	const handleCopy = () => {
-		if (!children) return;
-		copyTextToClipboard(children);
+		if (!link) return;
+		copyTextToClipboard(link);
 		setCopied(true);
 		inputRef?.current?.blur();
 		// inputRef?.current?.select();
 	};
 
 	useEffect(() => {
-		setCopied(false)
+		setCopied(false);
 		if (inputRef && inputRef.current) {
 			inputRef.current.select();
 			inputRef.current.onfocus = inputRef.current.select;
