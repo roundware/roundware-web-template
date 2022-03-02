@@ -1,3 +1,4 @@
+import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import { PlatformMessage } from 'components/PlatformMessage';
 import { isIOS, isFirefox, isSafari } from 'react-device-detect';
@@ -9,6 +10,22 @@ export function getMessageOnLoad(): PlatformMessage | null {
 			return {
 				message: 'You are using Safari. Please use another browser',
 			};
+		// with custom actions;
+		case isFirefox:
+			return {
+				message: 'Custom actions',
+
+				// any component / string / element
+				action: (
+					<Button variant='contained' onClick={() => alert(`helo`)}>
+						Helo
+					</Button>
+				),
+
+				// continue anyway button label
+				buttonLabel: 'OK',
+			};
+
 		// with custom title
 		case isFirefox:
 			return {
@@ -25,7 +42,6 @@ export function getMessageOnLoad(): PlatformMessage | null {
 						<Link href='https://appstore.com'>appstore.com</Link>
 					</span>
 				),
-				link: 'appstore.com',
 			};
 
 		default:
