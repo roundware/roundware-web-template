@@ -24,7 +24,9 @@ function DateFilterMenu() {
 	const handleAfterDateChange = (date: Date | null, value?: string | null | undefined): void => {
 		if (!date) return;
 		setAfterDateFilter(date);
-
+		roundware.events?.logEvent(`filter_stream`, {
+			data: `afterDate: ${date.toString()}`,
+		});
 		if (!roundware.mixer) {
 			return;
 		} else {
@@ -40,6 +42,9 @@ function DateFilterMenu() {
 	const handleBeforeDateChange = (date: Date | null, value?: string | null | undefined) => {
 		if (!date) return;
 		setBeforeDateFilter(date);
+		roundware.events?.logEvent(`filter_stream`, {
+			data: `beforeDate: ${date.toString()}`,
+		});
 		if (!roundware.mixer) {
 			return;
 		} else {

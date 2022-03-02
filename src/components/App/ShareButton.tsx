@@ -7,14 +7,14 @@ import CopyableText from 'components/elements/CopyableText';
 import Modal from 'components/elements/Modal';
 import { URLContext } from 'context/URLContext';
 import { useRoundware } from 'hooks';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 const ShareLinkButton = () => {
 	const [showShareLink, setShowShareLink] = useState(false);
-	const handleShare = () => setShowShareLink(true);
 	const handleCloseShare = () => setShowShareLink(false);
 	const { roundware, selectedAsset } = useRoundware();
+
 	const location = useLocation();
 
 	const [includeGeo, setIncludeGeo] = useState(false);
@@ -62,6 +62,17 @@ const ShareLinkButton = () => {
 			showOptions: false,
 		};
 	}, [includeGeo, isAssetSelected, location, roundware?.listenerLocation, location.search]);
+	const handleShare = () => {
+		setShowShareLink(true);
+	};
+
+	useEffect(() => {
+		if (!showShareLink) return;
+		roundware.events?.logEvent(`share_map`, {
+			data: `url: ${link}`,
+		});
+	}, [showShareLink, link]);
+
 	return (
 		<>
 			<IconButton onClick={handleShare}>

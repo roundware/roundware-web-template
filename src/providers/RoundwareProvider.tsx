@@ -11,6 +11,7 @@ import { useDeviceID } from '../hooks/useDeviceID';
 import { ITagLookup } from '../types';
 import { getDefaultListenMode } from '../utils';
 import config from 'config.json';
+import { join } from 'lodash';
 interface PropTypes {
 	children: React.ReactNode;
 }
@@ -122,6 +123,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			// then filter by start and end dates
 			if (afterDateFilter && beforeDateFilter) {
 				const dateMatch = asset.created! <= beforeDateFilter.toISOString() && asset.created! >= afterDateFilter.toISOString() ? true : false;
+
 				if (!dateMatch) {
 					return false;
 				}
@@ -129,6 +131,7 @@ const RoundwareProvider = (props: PropTypes) => {
 
 			if (descriptionFilter) {
 				const descMatch = asset.description?.toLowerCase().indexOf(descriptionFilter.toLowerCase()) !== -1;
+
 				if (!descMatch) return false;
 			}
 			return true;
@@ -163,7 +166,10 @@ const RoundwareProvider = (props: PropTypes) => {
 			});
 
 			roundware.mixer.updateParams({ listenTagIds: listenTagIds });
-
+			roundware.events?.logEvent(`filter_stream`, {
+				tag_ids: listenTagIds,
+				data: `tag_ids:${join(listenTagIds, ',')}`,
+			});
 			return newFilters;
 		});
 	};

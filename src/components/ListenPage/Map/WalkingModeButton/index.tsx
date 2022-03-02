@@ -93,6 +93,9 @@ const walkingModeButton = () => {
 		// stop listening for location updates
 		setGeoListenMode(GeoListenMode.MANUAL);
 		// update text instructions?
+		roundware.events?.logEvent(`change_listen_mode`, {
+			data: `listen_mode: map`,
+		});
 	};
 
 	const [walkingModeStatus, setWalkingModeStatus] = useState('');
@@ -107,6 +110,9 @@ const walkingModeButton = () => {
 		map.setZoom(22);
 		// determine user location and listen for updates
 		setGeoListenMode(GeoListenMode.AUTOMATIC);
+		roundware.events?.logEvent(`change_listen_mode`, {
+			data: `listen_mode: walking`,
+		});
 	};
 
 	const enterWalkingMode = async () => {

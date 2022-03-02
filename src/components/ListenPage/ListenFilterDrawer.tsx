@@ -53,7 +53,14 @@ const ListenFilterDrawer = () => {
 		setState({ ...state, [anchor]: open });
 	};
 
-	const handleOnDescriptionChange: TextFieldProps[`onChange`] = (e) => setDescriptionFilter(e.target.value);
+	const handleOnDescriptionChange: TextFieldProps[`onChange`] = (e) => {
+		setDescriptionFilter(e.target.value);
+		if (e.target.value.length > 3) {
+			roundware.events?.logEvent(`filter_stream`, {
+				data: `description: ${e.target.value}`,
+			});
+		}
+	};
 
 	const availableFilters = config.AVAILABLE_LISTEN_FILTERS || [];
 

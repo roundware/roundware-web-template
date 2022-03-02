@@ -69,6 +69,7 @@ const CreateRecordingForm = () => {
 			.then((stream) => {
 				set_draft_recording_media(null);
 				set_stream(stream);
+				roundware.events?.logEvent(`start_record`);
 				wave.stopStream();
 				const newWave = new Wave();
 				set_wave(newWave);
@@ -100,6 +101,7 @@ const CreateRecordingForm = () => {
 	}, [draftMediaUrl]);
 
 	const stopRecording = () => {
+		roundware.events?.logEvent(`end_record`);
 		if (typeof recorder !== 'undefined') {
 			recorder.stop();
 		}
