@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import Typography from '@mui/material/Typography';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import Modal from './elements/Modal';
-import CopyableText from './elements/CopyableText';
-import Collapse from '@mui/material/Collapse';
-import LinkIcon from '@mui/icons-material/Link';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
+import Modal from './elements/Modal';
 
 export type PlatformMessage = {
 	title?: string;
-	link?: string;
+
 	message: React.ReactNode;
+	action?: React.ReactNode;
+	buttonLabel?: string;
 };
 type Props = {
 	getMessage: () => PlatformMessage | null;
@@ -20,20 +19,16 @@ type Props = {
 const PlatformMessage = ({ getMessage }: Props) => {
 	const [message, setMessage] = useState<PlatformMessage | null>(getMessage());
 
-	// const [getLink, setGetLink] = useState(false);
-
 	const handleClose = () => setMessage(null);
 
 	return (
 		<Modal open={!!message} onClose={handleClose} title={message?.title || 'Note'}>
 			<Typography>{message?.message}</Typography>
-			{/* <Collapse in={getLink}>{<CopyableText>{message?.link || window.location.href}</CopyableText>}</Collapse> */}
+
 			<DialogActions>
-				{/* <Button endIcon={<LinkIcon />} variant='outlined' onClick={() => setGetLink((prev) => !prev)}>
-					Get Link
-				</Button> */}
+				{message?.action || null}
 				<Button onClick={handleClose} endIcon={<ChevronRightIcon />}>
-					Continue Anyway
+					{message?.buttonLabel || 'Continue Anyway'}
 				</Button>
 			</DialogActions>
 		</Modal>
