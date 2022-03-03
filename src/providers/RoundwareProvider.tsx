@@ -168,7 +168,6 @@ const RoundwareProvider = (props: PropTypes) => {
 			roundware.mixer.updateParams({ listenTagIds: listenTagIds });
 			roundware.events?.logEvent(`filter_stream`, {
 				tag_ids: listenTagIds,
-				data: `tag_ids:${join(listenTagIds, ',')}`,
 			});
 			return newFilters;
 		});
