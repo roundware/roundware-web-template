@@ -14,10 +14,11 @@ import config from 'config.json';
 import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
 import 'date-fns';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRoundware } from '../../hooks';
 import DateFilterMenu from '../AssetFilterPanel/DateFilterMenu';
 import TagFilterMenu from '../AssetFilterPanel/TagFilterMenu';
+import useDebounce from 'hooks/useDebounce';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
@@ -53,13 +54,16 @@ const ListenFilterDrawer = () => {
 		setState({ ...state, [anchor]: open });
 	};
 
+	const debouncedDF = useDebounce(descriptionFilter, 2500);
+	useEffect(() => {
+		if (debouncedDF)
+			roundware.events?.logEvent(`filter_stream`, {
+				data: `description: ${debouncedDF}`,
+			});
+	}, [debouncedDF]);
+
 	const handleOnDescriptionChange: TextFieldProps[`onChange`] = (e) => {
 		setDescriptionFilter(e.target.value);
-		if (e.target.value.length > 3) {
-			roundware.events?.logEvent(`filter_stream`, {
-				data: `description: ${e.target.value}`,
-			});
-		}
 	};
 
 	const availableFilters = config.AVAILABLE_LISTEN_FILTERS || [];
