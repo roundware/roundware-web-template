@@ -66,6 +66,8 @@ const ShareLinkButton = () => {
 		setShowShareLink(true);
 	};
 
+	const message = link + ' ' + roundware.project.data?.sharing_message;
+
 	useEffect(() => {
 		if (!showShareLink) return;
 		roundware.events?.logEvent(`share_map`, {
@@ -83,22 +85,22 @@ const ShareLinkButton = () => {
 					<Stack spacing={2}>
 						{/* social icons */}
 						<Stack direction='row' justifyContent='center' spacing={2}>
-							<WhatsappShareButton url={link}>
+							<WhatsappShareButton url={message}>
 								<WhatsappIcon round />
 							</WhatsappShareButton>
-							<EmailShareButton url={link}>
+							<EmailShareButton url={message}>
 								<EmailIcon round />
 							</EmailShareButton>
-							<TwitterShareButton url={link}>
+							<TwitterShareButton url={message}>
 								<TwitterIcon round />
 							</TwitterShareButton>
-							<FacebookShareButton url={link}>
+							<FacebookShareButton url={message}>
 								<FacebookIcon round />
 							</FacebookShareButton>
 						</Stack>
 
 						{/* link */}
-						<CopyableText>{link}</CopyableText>
+						<CopyableText>{message}</CopyableText>
 
 						{/* options */}
 						{showOptions && (
