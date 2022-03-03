@@ -248,6 +248,12 @@ const RoundwareProvider = (props: PropTypes) => {
 		}
 	};
 
+	const resetFilters = () => {
+		setAfterDateFilter(null);
+		setBeforeDateFilter(null);
+		setDescriptionFilter(null);
+		setSelectedTags(null);
+	};
 	return (
 		<RoundwareContext.Provider
 			value={{
@@ -278,6 +284,7 @@ const RoundwareProvider = (props: PropTypes) => {
 				setGeoListenMode,
 				updateAssets,
 				setDescriptionFilter,
+				resetFilters,
 				// computed properties
 				assetPage,
 				assetsReady,

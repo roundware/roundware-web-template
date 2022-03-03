@@ -42,6 +42,7 @@ export interface IRoundwareContext {
 	forceUpdate: React.DispatchWithoutAction;
 	setGeoListenMode: (modeName: GeoListenModeType) => void;
 	updateAssets: (assetData?: IAssetData[]) => void;
+	resetFilters: () => void;
 	// computed properties
 	assetPage: IAssetData[];
 	assetsReady: boolean;
