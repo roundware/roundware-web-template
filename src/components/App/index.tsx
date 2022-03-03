@@ -83,13 +83,14 @@ export const App = () => {
 				<AppBar position='sticky' className={classes.bottomBar}>
 					<Toolbar style={{ width: '100%', justifyContent: 'space-between' }}>
 						<Route path='/listen'>
-							<div>
+							<Stack spacing={1} direction='row'>
+								<ShareButton />
 								{roundware?.project?.data?.speak_enabled && (
 									<Link to={`/speak`}>
 										<SpeakButton />
 									</Link>
 								)}
-							</div>
+							</Stack>
 							<div>
 								<ListenFilterDrawer />
 								<RoundwareMixerControl />
@@ -102,10 +103,9 @@ export const App = () => {
 							<div />
 						</Route>
 						{config.DEBUG_MODE === true ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
-						<Stack direction='row' spacing={1} alignItems='center'>
+						<div>
 							<InfoPopup />
-							<ShareButton />
-						</Stack>
+						</div>
 					</Toolbar>
 				</AppBar>
 			</BrowserRouter>
