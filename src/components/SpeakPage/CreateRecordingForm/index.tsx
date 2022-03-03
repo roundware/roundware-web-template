@@ -29,13 +29,14 @@ import LegalAgreementForm from '../../LegalAgreementForm';
 import AdditionalMediaMenu from './AdditionalMediaMenu';
 import { useStyles } from './styles';
 import config from 'config.json';
+
 const visualizerOptions = {
 	type: 'bars',
 };
 
 const CreateRecordingForm = () => {
 	const draftRecording = useRoundwareDraft();
-	const { roundware, tagLookup, updateAssets, selectAsset } = useRoundware();
+	const { roundware, tagLookup, updateAssets, selectAsset, resetFilters } = useRoundware();
 	let [wave, set_wave] = useState(new Wave());
 	const [isRecording, set_is_recording] = useState(false);
 	const [draftRecordingMedia, set_draft_recording_media] = useState<IAudioData | null>(null);
@@ -53,7 +54,7 @@ const CreateRecordingForm = () => {
 	const classes = useStyles();
 	const theme = useTheme();
 	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+	
 	const startRecording = () => {
 		if (!navigator.mediaDevices) {
 			set_error({
@@ -405,7 +406,8 @@ const CreateRecordingForm = () => {
 							color={'primary'}
 							disabled={success == null}
 							onClick={() => {
-								if (success !== null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
+								if (success != null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
+									resetFilters();
 									history.push(`/listen?eid=${success.envelope_ids[0]}`);
 								}
 							}}
