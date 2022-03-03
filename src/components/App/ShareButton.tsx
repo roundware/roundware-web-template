@@ -66,7 +66,7 @@ const ShareLinkButton = () => {
 		setShowShareLink(true);
 	};
 
-	const message = link + ' ' + roundware.project.data?.sharing_message;
+	const message = link + ' ' + roundware?.project?.data?.sharing_message;
 
 	useEffect(() => {
 		if (!showShareLink) return;
