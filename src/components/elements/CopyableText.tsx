@@ -32,7 +32,7 @@ const CopyableText = ({ children, value }: Props) => {
 
 	return (
 		<Stack spacing={1}>
-			<TextField variant='filled' label='Link' fullWidth inputRef={inputRef} type='text' value={children} />
+			<TextField multiline variant='filled' label='Link' fullWidth inputRef={inputRef} type='text' value={children} />
 
 			<Button startIcon={copied ? <CheckIcon /> : <CopyIcon />} color='primary' onClick={handleCopy}>
 				{copied ? `Copied` : `Copy to Clipboard`}
