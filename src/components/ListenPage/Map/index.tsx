@@ -13,6 +13,7 @@ import SpeakerPolygons from './SpeakerPolygons';
 import SpeakerReplayButton from './SpeakerReplayButton';
 import SpeakerLoadingIndicator from './SpeakerLoadingIndicator';
 import { useURLSync } from 'context/URLContext';
+import ShareDialog from 'components/App/ShareDialog';
 const useStyles = makeStyles((theme) => {
 	return {
 		roundwareMap: {
@@ -30,7 +31,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 	const { roundware } = useRoundware();
 	const [map, setMap] = useState<google.maps.Map | undefined>();
 
-	const { deleteFromURL } = useURLSync();
+	const { deleteFromURL, params } = useURLSync();
 	const updateListenerLocation = (newLocation?: Coordinates) => {
 		if (!map) {
 			return;
@@ -65,7 +66,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 
 		map.setOptions({
 			center: { lat: roundware?.project?.location?.latitude!, lng: roundware?.project?.location?.longitude! },
-			zoom: 5,
+			zoom: Number(params.get('zoom') || '5'),
 			zoomControl: true,
 			draggable: true,
 			mapTypeControl: false,
@@ -85,7 +86,17 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 			},
 			restriction,
 		});
-
+		map.addListener('zoom_changed', () => {
+			const currentZoom = map.getZoom();
+			const paramZoom = params.get('zoom');
+			if (paramZoom) {
+				if (Number(currentZoom) != Number(paramZoom)) {
+					map.setZoom(Number(paramZoom));
+				}
+			}
+			deleteFromURL('zoom');
+			params.delete('zoom');
+		});
 		setMap(map);
 	};
 
@@ -101,6 +112,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						{config.SHOW_SPEAKERS_ON_MAP == true && <SpeakerPolygons />}
 						<SpeakerLoadingIndicator />
 						{!config.speakerConfig.loop && <SpeakerReplayButton />}
+						<ShareDialog />
 					</GoogleMap>
 				</LoadScript>
 			) : null}
