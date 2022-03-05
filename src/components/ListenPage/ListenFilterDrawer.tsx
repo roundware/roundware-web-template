@@ -43,9 +43,6 @@ const ListenFilterDrawer = () => {
 	});
 
 	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter, setDescriptionFilter, descriptionFilter } = useRoundware();
-	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
-		return null;
-	}
 
 	const toggleDrawer = (anchor: string, open: boolean) => (event?: any) => {
 		if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
@@ -131,7 +128,9 @@ const ListenFilterDrawer = () => {
 			</List>
 		</div>
 	);
-
+	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
+		return null;
+	}
 	return (
 		<>
 			<React.Fragment key={'filter'}>
