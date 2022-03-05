@@ -25,6 +25,7 @@ import useStyles from './styles';
 import config from 'config.json';
 import UserConfirmation from '../UserConfirmation';
 import ShareButton from './ShareButton';
+import ShareDialog from './ShareDialog';
 import { getMessageOnLoad } from 'utils/platformMessages';
 import PlatformMessage from 'components/PlatformMessage';
 if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
@@ -82,31 +83,32 @@ export const App = () => {
 				</div>
 				<AppBar position='sticky' className={classes.bottomBar}>
 					<Toolbar style={{ width: '100%', justifyContent: 'space-between' }}>
-						<Route path='/listen'>
-							<Stack spacing={1} direction='row'>
-								<ShareButton />
+						<Stack spacing={1} direction='row'>
+							<ShareButton />
+							<Route path='/listen'>
 								{roundware?.project?.data?.speak_enabled && (
 									<Link to={`/speak`}>
 										<SpeakButton />
 									</Link>
 								)}
-							</Stack>
-							<div>
+							</Route>
+						</Stack>
+						<div>
+							<Route path='/listen'>
 								<ListenFilterDrawer />
 								<RoundwareMixerControl />
-							</div>
-						</Route>
-						<Route path={`/`} exact>
-							<div />
-						</Route>
-						<Route path={`/speak`}>
-							<div />
-						</Route>
+							</Route>
+						</div>
+
 						{config.DEBUG_MODE === true ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
 						<div>
 							<InfoPopup />
 						</div>
 					</Toolbar>
+					<Switch>
+						<Route path='/listen' exact component={() => <React.Fragment></React.Fragment>} />
+						<Route path='/' component={ShareDialog} />
+					</Switch>
 				</AppBar>
 			</BrowserRouter>
 		</>
