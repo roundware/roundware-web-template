@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import LoadingOverlay from './LoadingOverlay';
 import messages from '../../../../locales/en_US.json';
 import config from 'config.json';
+import { useURLSync } from 'context/URLContext';
 const useStyles = makeStyles((theme) => {
 	return {
 		walkingModeButton: {
@@ -36,6 +37,7 @@ const walkingModeButton = () => {
 	if (!roundware?.project) return null;
 	const [busy, setBusy] = useState(false);
 	const map = useGoogleMap();
+	const { params, deleteFromURL } = useURLSync();
 	const classes = useStyles();
 
 	const loc = roundware.listenerLocation;
@@ -87,7 +89,8 @@ const walkingModeButton = () => {
 		if (!map) return;
 		console.log('switching to map mode');
 		// zoom out
-		map.setZoom(5);
+		map.setZoom(Number(params.get('zoom') || '5'));
+
 		// enable map panning
 		map.setOptions({ gestureHandling: 'cooperative' });
 		// stop listening for location updates
