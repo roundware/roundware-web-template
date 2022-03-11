@@ -4,6 +4,8 @@ import { PlatformMessage } from 'components/PlatformMessage';
 import { isIOS, isFirefox, isSafari } from 'react-device-detect';
 
 export function getMessageOnLoad(): PlatformMessage | null {
+	return null;
+	// example
 	switch (true) {
 		// message
 		case isSafari:
