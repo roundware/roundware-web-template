@@ -185,9 +185,11 @@ const RoundwareProvider = (props: PropTypes) => {
 		// location from url params take precendence;
 		const searchParams = new URLSearchParams(location.search);
 
+		const urlLatitude = searchParams.get('latitude');
+		const urlLongitude = searchParams.get('longitude');
 		const initial_loc = {
-			latitude: parseInt((searchParams.get('latitude') || config.ROUNDWARE_INITIAL_LATITUDE || 0).toString()),
-			longitude: parseInt((searchParams.get(`longitude`) || config.ROUNDWARE_INITIAL_LONGITUDE || 0).toString()),
+			latitude: parseInt(typeof urlLatitude == 'string' ? urlLatitude : (config.ROUNDWARE_INITIAL_LATITUDE || 0).toString()),
+			longitude: parseInt(typeof urlLongitude == 'string' ? urlLongitude : (config.ROUNDWARE_INITIAL_LONGITUDE || 0).toString()),
 		};
 
 		const roundwareOptions: IRoundwareConstructorOptions = {

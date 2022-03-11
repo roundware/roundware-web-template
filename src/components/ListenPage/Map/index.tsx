@@ -63,10 +63,16 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 		}
 		const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
 		map.mapTypes.set('styled_map', styledMapType);
-
+		const searchParams = new URLSearchParams(window.location.search);
+		const urlLatitude = searchParams.get('latitude');
+		const urlLongitude = searchParams.get('longitude');
+		const urlZoom = searchParams.get('zoom');
 		map.setOptions({
-			center: { lat: roundware?.project?.location?.latitude!, lng: roundware?.project?.location?.longitude! },
-			zoom: Number(params.get('zoom') || '5'),
+			center: {
+				lat: parseInt(typeof urlLatitude == 'string' ? urlLatitude : roundware?.project?.location?.latitude!?.toString()),
+				lng: parseInt(typeof urlLongitude == 'string' ? urlLongitude : roundware?.project?.location?.longitude!?.toString()),
+			},
+			zoom: parseInt(typeof urlZoom == 'string' ? urlZoom : '5'),
 			zoomControl: true,
 			draggable: true,
 			mapTypeControl: false,
@@ -88,15 +94,15 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 		});
 		map.addListener('zoom_changed', () => {
 			const currentZoom = map.getZoom();
-			const paramZoom = params.get('zoom');
+			const paramZoom = new URLSearchParams(window.location.search).get('zoom');
 			if (paramZoom) {
 				if (Number(currentZoom) != Number(paramZoom)) {
 					map.setZoom(Number(paramZoom));
 				}
 			}
 			deleteFromURL('zoom');
-			params.delete('zoom');
 		});
+
 		setMap(map);
 	};
 
