@@ -31,13 +31,13 @@ const ShareDialog = (props: Props) => {
 			let link = window.location.toString();
 
 			// asked to include geo information and asset not any asset selected
-			if (includeGeo && !isAssetSelected && roundware && roundware.listenerLocation) {
-				const { latitude, longitude } = roundware.listenerLocation;
+			if (includeGeo && !isAssetSelected && roundware) {
+				const center = map?.getCenter();
 
 				// add to search params
-				if (latitude && longitude) {
-					searchParams.append('latitude', latitude?.toString());
-					searchParams.append('longitude', longitude.toString());
+				if (center) {
+					searchParams.append('latitude', center.lat().toString());
+					searchParams.append('longitude', center.lng().toString());
 				}
 
 				const zoom = map?.getZoom();
@@ -67,7 +67,7 @@ const ShareDialog = (props: Props) => {
 			link: window.location.toString(),
 			showOptions: false,
 		};
-	}, [includeGeo, isAssetSelected, location, roundware?.listenerLocation, location.search, map?.getZoom()]);
+	}, [includeGeo, isAssetSelected, location, roundware?.listenerLocation, location.search, map?.getZoom(), map?.getCenter()]);
 
 	const message = roundware?.project?.data?.sharing_message + ' \n' + link;
 
