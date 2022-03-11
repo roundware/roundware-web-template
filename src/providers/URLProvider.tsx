@@ -140,7 +140,7 @@ export const URLSyncProvider = ({ children }: { children: React.ReactNode }) => 
 		});
 	};
 	const deleteFromURL = (name: string | string[]) => {
-		const newParams = new URLSearchParams(location.search);
+		const newParams = new URLSearchParams(window.location.search);
 		if (Array.isArray(name)) name.forEach((n) => newParams.delete(n));
 		else newParams.delete(name);
 		history.push({
