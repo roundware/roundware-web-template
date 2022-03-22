@@ -7,7 +7,7 @@ import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { useQuery, useRoundware } from '../../../../hooks';
 import AssetMarker from './AssetMarker';
-
+import config from 'config.json';
 const OverlappingMarkerSpiderfierComponent = (props: { children: (props: OverlappingMarkerSpiderfier | null) => React.ReactNode }) => {
 	const map = useGoogleMap();
 	const [spiderfier, set_spiderfier] = useState<OverlappingMarkerSpiderfier | null>(null);
@@ -44,7 +44,7 @@ const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordina
 		};
 
 		map.panTo(center);
-		map.setZoom(17);
+		map.setZoom(config.zoom.high);
 		roundware.updateLocation({ latitude: selectedAsset.latitude, longitude: selectedAsset.longitude });
 		console.log(selectedAsset);
 	}, [selectedAsset]);

@@ -89,7 +89,7 @@ const walkingModeButton = () => {
 		if (!map) return;
 		console.log('switching to map mode');
 		// zoom out
-		map.setZoom(Number(params.get('zoom') || '5'));
+		map.setZoom(Number(params.get('zoom') || config.zoom.low.toString()));
 
 		// enable map panning
 		map.setOptions({ gestureHandling: 'cooperative' });
@@ -110,7 +110,7 @@ const walkingModeButton = () => {
 		// disable map panning
 		map.setOptions({ gestureHandling: 'none' });
 		// zoom in
-		map.setZoom(22);
+		map.setZoom(config.zoom.walking);
 		// determine user location and listen for updates
 		setGeoListenMode(GeoListenMode.AUTOMATIC);
 		roundware.events?.logEvent(`change_listen_mode`, {
