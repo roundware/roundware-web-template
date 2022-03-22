@@ -1,7 +1,7 @@
 {
-	"ROUNDWARE_SERVER_URL": "https://dev.roundware.com/api/2",
-	"ROUNDWARE_SERVER_BASE_URL": "https://dev.roundware.com/",
-	"ROUNDWARE_DEFAULT_PROJECT_ID": 1,
+	"ROUNDWARE_SERVER_URL": "https://prod.roundware.com/api/2",
+	"ROUNDWARE_SERVER_BASE_URL": "https://prod.roundware.com/",
+	"ROUNDWARE_DEFAULT_PROJECT_ID": 10,
 	"ROUNDWARE_INITIAL_LATITUDE": 50,
 	"ROUNDWARE_INITIAL_LONGITUDE": 15,
 
@@ -18,7 +18,7 @@
 	"ALLOW_SPEAK_TAGS": true,
 
 	"AUTOPLAY": false,
-	"DEFAULT_SPEAK_TAGS": [91, 218],
+	"DEFAULT_SPEAK_TAGS": [],
 
 	"AVAILABLE_LISTEN_MODES": "device",
 
@@ -30,8 +30,14 @@
 	"AVAILABLE_LISTEN_FILTERS": ["date", "description", "tags"],
 
 	"speakerConfig": {
-		"sync": true,
+		"sync": false,
 		"prefetch": true,
-		"loop": false
+		"loop": true
+	},
+
+	"zoom": {
+		"high": 17,
+		"low": 5,
+		"walking": 22
 	}
 }
