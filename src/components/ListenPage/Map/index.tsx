@@ -14,6 +14,7 @@ import SpeakerReplayButton from './SpeakerReplayButton';
 import SpeakerLoadingIndicator from './SpeakerLoadingIndicator';
 import { useURLSync } from 'context/URLContext';
 import ShareDialog from 'components/App/ShareDialog';
+import ResetButton from './ResetButton';
 const useStyles = makeStyles((theme) => {
 	return {
 		roundwareMap: {
@@ -119,6 +120,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						<SpeakerLoadingIndicator />
 						{!config.speakerConfig.loop && <SpeakerReplayButton />}
 						<ShareDialog />
+						<ResetButton updateLocation={updateListenerLocation} />
 					</GoogleMap>
 				</LoadScript>
 			) : null}
