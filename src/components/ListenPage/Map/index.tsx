@@ -70,8 +70,8 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 		const urlZoom = searchParams.get('zoom');
 		map.setOptions({
 			center: {
-				lat: parseInt(typeof urlLatitude == 'string' ? urlLatitude : roundware?.project?.location?.latitude!?.toString()),
-				lng: parseInt(typeof urlLongitude == 'string' ? urlLongitude : roundware?.project?.location?.longitude!?.toString()),
+				lat: parseFloat(typeof urlLatitude == 'string' ? urlLatitude : roundware?.project?.location?.latitude!?.toString()),
+				lng: parseFloat(typeof urlLongitude == 'string' ? urlLongitude : roundware?.project?.location?.longitude!?.toString()),
 			},
 			zoom: parseInt(typeof urlZoom == 'string' ? urlZoom : '5'),
 			zoomControl: true,
