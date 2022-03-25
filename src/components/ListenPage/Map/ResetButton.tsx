@@ -4,6 +4,7 @@ import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 import { useGoogleMap } from '@react-google-maps/api';
 import config from 'config.json';
 import { Coordinates } from 'roundware-web-framework/dist/types';
+import { GeoListenMode } from 'roundware-web-framework';
 import { useRoundware } from 'hooks';
 type Props = {
 	updateLocation: (coords: Coordinates) => void;
@@ -11,7 +12,8 @@ type Props = {
 
 const ResetButton = ({ updateLocation }: Props) => {
 	const map = useGoogleMap();
-	const { roundware } = useRoundware();
+	const { roundware, geoListenMode } = useRoundware();
+	if (geoListenMode != GeoListenMode.MANUAL) return null;
 	return (
 		<Button
 			onClick={() => {
