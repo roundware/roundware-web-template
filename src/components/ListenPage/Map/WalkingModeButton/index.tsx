@@ -181,6 +181,7 @@ const walkingModeButton = () => {
 					case 2:
 					// position unavailable
 					default:
+						console.error(e);
 						setWalkingModeErrorMessage(messages.errors.failedToDetermineLocation);
 						break;
 				}
