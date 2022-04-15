@@ -33,8 +33,8 @@
 		"sync": true,
 		"prefetch": false,
 		"loop": true,
-		"acceptableDelayMs": 100,
-		"syncCheckInterval": 200
+		"acceptableDelayMs": 50,
+		"syncCheckInterval": 2500
 	},
 
 	"zoom": {
