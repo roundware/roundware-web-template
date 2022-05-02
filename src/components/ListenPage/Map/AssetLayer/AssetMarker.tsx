@@ -24,29 +24,24 @@ interface AssetMarkerProps {
 }
 const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
 	const { roundware, selectAsset, playingAssets } = useRoundware();
-	const iconPin = {
-		scaledSize: new google.maps.Size(20, 20),
-		fillOpacity: 1,
-	};
 
 	const isPlaying = useMemo(() => playingAssets.some((a) => a.id == asset.id), [playingAssets]);
+
+	const iconPin = {
+		url: isPlaying ? marker2 : marker,
+		scaledSize: new google.maps.Size(isPlaying ? 23 : 20, isPlaying ? 23 : 20),
+		fillOpacity: 1,
+	};
+	const zIndex = isPlaying ? 101 : 100;
+	const position = { lat: asset.latitude!, lng: asset.longitude! };
+
+	const onLoad = (m: google.maps.Marker) => {
+		// @ts-ignore
+		m.asset = asset;
+		oms.addMarker(m, () => selectAsset(asset));
+	};
 	return (
-		<Marker
-			position={{ lat: asset.latitude!, lng: asset.longitude! }}
-			icon={{
-				url: isPlaying ? marker2 : marker,
-				scaledSize: new google.maps.Size(isPlaying ? 23 : 20, isPlaying ? 23 : 20),
-				fillOpacity: 1,
-			}}
-			zIndex={isPlaying ? 101 : 100}
-			clusterer={clusterer}
-			onLoad={(m) => {
-				//@ts-ignore
-				m.asset = asset;
-				oms.addMarker(m, () => selectAsset(asset));
-			}}
-			noClustererRedraw={true}
-		>
+		<Marker position={position} icon={iconPin} zIndex={zIndex} clusterer={clusterer} onLoad={onLoad} noClustererRedraw={true}>
 			<AssetInfoWindow asset={asset} />
 		</Marker>
 	);
