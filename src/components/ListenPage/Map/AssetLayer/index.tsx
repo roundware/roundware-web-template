@@ -136,7 +136,7 @@ const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordina
 		updateLocation({ latitude: cluster.center.lat(), longitude: cluster.center.lng() });
 	};
 
-	return <MarkerClusterer onClick={handleClick} onLoad={setMarkerClusterer} maxZoom={12} minimumClusterSize={3} calculator={handleCalculation} options={options} children={markers} />;
+	return <MarkerClusterer onClick={handleClick} onLoad={setMarkerClusterer} minimumClusterSize={3} calculator={handleCalculation} options={options} children={markers} />;
 };
 
 export default AssetLayer;
