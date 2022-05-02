@@ -56,7 +56,7 @@ const TagFilterMenu = ({ tag_group }: TagFilterMenuProps) => {
 		<>
 			<Grid item xs={12} className={`tag-filter-field tag-filter-select`}>
 				<label className='tag-filter-field--label'>
-					<Autocomplete multiple freeSolo id={tag_group?.group_short_name} classes={classes} options={options} getOptionLabel={(option) => (option ? option.label : '')} onChange={handleChange} isOptionEqualToValue={(option) => selectedTagGroupTags?.indexOf(option.value) !== -1} value={options.filter((o: { value: number }) => selectedTagGroupTags.indexOf(o.value) !== -1)} renderInput={(params: AutocompleteRenderInputParams) => <TextField {...params} variant='standard' label={tag_group.header_display_text} placeholder='Select one or more...' />} />
+					<Autocomplete multiple freeSolo id={tag_group?.group_short_name} classes={classes} options={options} getOptionLabel={(option) => (typeof option != 'string' ? option?.label : '')} onChange={handleChange} isOptionEqualToValue={(option) => selectedTagGroupTags?.indexOf(option.value) !== -1} value={options.filter((o: { value: number }) => selectedTagGroupTags.indexOf(o.value) !== -1)} renderInput={(params: AutocompleteRenderInputParams) => <TextField {...params} variant='standard' label={tag_group.header_display_text} placeholder='Select one or more...' />} />
 				</label>
 			</Grid>
 			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
