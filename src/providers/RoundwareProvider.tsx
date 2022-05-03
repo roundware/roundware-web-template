@@ -42,7 +42,9 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [, forceUpdate] = useReducer((x) => !x, false);
 
 	const updatePlaying = (assets: IAssetData[] | undefined) => {
-		setPlayingAssets(assets || []);
+		const pa: IAssetData[] = Array.from(roundware?.mixer?.playlist?.trackMap.values() || []).filter((a) => a != null) as IAssetData[];
+		setPlayingAssets(pa || []);
+		console.log(`update playing: `, pa);
 	};
 
 	const sortAssets = (assets: IAssetData[]) => {
