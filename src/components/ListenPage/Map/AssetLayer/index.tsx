@@ -8,6 +8,7 @@ import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { useQuery, useRoundware } from '../../../../hooks';
 import AssetMarker from './AssetMarker';
 import config from 'config.json';
+import marker2 from '../../../../assets/marker-secondary.svg';
 const OverlappingMarkerSpiderfierComponent = (props: { children: (props: OverlappingMarkerSpiderfier | null) => React.ReactNode }) => {
 	const map = useGoogleMap();
 	const [spiderfier, set_spiderfier] = useState<OverlappingMarkerSpiderfier | null>(null);
@@ -86,41 +87,6 @@ const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordina
 		wait_for_full_page().then(recluster);
 	}, [markerClusterer && markerClusterer.ready, assetPage]);
 
-	const handleCalculation = (markers: unknown[], numStyles: number) => {
-		// Most of this implementation is copied from the default calculator for
-		// React google maps. Change the `styles` property to configure how
-		// clusters look.
-		let index = 0;
-		const title = '';
-		const count = markers.length.toString();
-		let dv = parseInt(count);
-		while (dv !== 0) {
-			dv = parseInt(dv.toString(), 10) / 10;
-			index++;
-		}
-
-		index = Math.min(index + 1, numStyles);
-
-		// Change style if any contained markers are being played.
-		for (const m of markers) {
-			for (const a of playingAssets) {
-				// @ts-ignore = need to extend marker property to suporrt asset
-				if (a && a.id === m.asset.id) {
-					// TODO Change this number to match whatever index in the
-					// `styles` list is your "currently playing" style.
-					index = 0;
-					break;
-				}
-			}
-		}
-
-		return {
-			text: count,
-			index: index,
-			title: title,
-		};
-	};
-
 	const options = {
 		imagePath: 'https://github.com/googlemaps/v3-utility-library/raw/master/packages/markerclustererplus/images/m',
 	};
@@ -130,7 +96,50 @@ const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordina
 		markerClusterer?.repaint();
 	};
 
-	return <MarkerClusterer maxZoom={config.zoom.high} onClick={handleClick} onLoad={setMarkerClusterer} minimumClusterSize={3} calculator={handleCalculation} options={options} children={markers} />;
+	return (
+		<MarkerClusterer
+			maxZoom={config.zoom.high - 1}
+			onClick={handleClick}
+			onLoad={setMarkerClusterer}
+			minimumClusterSize={3}
+			calculator={(markers, numStyles) => {
+				// Most of this implementation is copied from the default calculator for
+				// React google maps. Change the `styles` property to configure how
+				// clusters look.
+				let index = 0;
+				const title = '';
+				const count = markers.length.toString();
+				let dv = parseInt(count);
+				while (dv !== 0) {
+					dv = parseInt(dv.toString(), 10) / 10;
+					index++;
+				}
+
+				index = Math.min(index + 1, numStyles);
+
+				// Change style if any contained markers are being played.
+				for (const m of markers) {
+					for (const a of playingAssets) {
+						// @ts-ignore = need to extend marker property to suporrt asset
+						if (a && a.id === m.asset.id) {
+							// TODO Change this number to match whatever index in the
+							// `styles` list is your "currently playing" style.
+							index = 0;
+							break;
+						}
+					}
+				}
+
+				return {
+					text: count,
+					index: index,
+					title: title,
+				};
+			}}
+			options={options}
+			children={markers}
+		/>
+	);
 };
 
 export default AssetLayer;
