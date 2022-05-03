@@ -58,13 +58,6 @@ const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordina
 		return <OverlappingMarkerSpiderfierComponent children={childrenRenderer} />;
 	};
 
-	// When a new asset starts playing, update the map markers and clusters.
-	useEffect(() => {
-		if (markerClusterer) {
-			markerClusterer.repaint();
-		}
-	}, [playingAssets]);
-
 	const recluster = () => {
 		if (markerClusterer) {
 			const markerObjs = markerClusterer.markers.slice();
@@ -134,9 +127,10 @@ const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordina
 
 	const handleClick = (cluster: any) => {
 		updateLocation({ latitude: cluster.center.lat(), longitude: cluster.center.lng() });
+		markerClusterer?.repaint();
 	};
 
-	return <MarkerClusterer onClick={handleClick} onLoad={setMarkerClusterer} minimumClusterSize={3} calculator={handleCalculation} options={options} children={markers} />;
+	return <MarkerClusterer maxZoom={config.zoom.high} onClick={handleClick} onLoad={setMarkerClusterer} minimumClusterSize={3} calculator={handleCalculation} options={options} children={markers} />;
 };
 
 export default AssetLayer;
