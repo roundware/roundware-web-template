@@ -1,6 +1,6 @@
 import { Marker } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import marker2 from '../../../../assets/marker-secondary.svg';
@@ -25,7 +25,7 @@ interface AssetMarkerProps {
 const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
 	const { roundware, selectAsset, playingAssets } = useRoundware();
 
-	const isPlaying = useMemo(() => playingAssets.some((a) => a.id == asset.id), [playingAssets]);
+	const isPlaying: boolean = useMemo(() => roundware?.mixer?.playing && Array.from(roundware?.mixer?.playlist?.trackMap?.values() || []).some((a) => a?.id == asset.id), [playingAssets, roundware.mixer.playing]);
 
 	const iconPin = {
 		url: isPlaying ? marker2 : marker,
