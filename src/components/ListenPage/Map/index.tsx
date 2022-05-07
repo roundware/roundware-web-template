@@ -51,18 +51,26 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 
 	const onLoad = (map: google.maps.Map) => {
 		let restriction;
-		if (config.USE_LISTEN_MAP_BOUNDS === true) {
-			const {
-				southwest: { latitude: swLat, longitude: swLng },
-				northeast: { latitude: neLat, longitude: neLng },
-			} = roundware.getMapBounds();
+		if (config.MAP_BOUNDS != 'none') {
+			let bounds: google.maps.LatLngBounds;
 
-			const bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			if (config.MAP_BOUNDS == 'auto') {
+				const {
+					southwest: { latitude: swLat, longitude: swLng },
+					northeast: { latitude: neLat, longitude: neLng },
+				} = roundware.getMapBounds();
+
+				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			} else {
+				const { swLat, swLng, neLat, neLng } = config.MAP_BOUNDS_POINTS;
+				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			}
 			restriction = {
 				latLngBounds: bounds,
 				strictBounds: false,
 			};
 		}
+
 		const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
 		map.mapTypes.set('styled_map', styledMapType);
 		const searchParams = new URLSearchParams(window.location.search);
