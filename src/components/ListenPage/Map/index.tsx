@@ -1,5 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import React, { useState, useCallback } from 'react';
 import { Coordinates } from 'roundware-web-framework/dist/types';
 import { useRoundware } from '../../../hooks';
@@ -15,6 +15,7 @@ import SpeakerLoadingIndicator from './SpeakerLoadingIndicator';
 import { useURLSync } from 'context/URLContext';
 import ShareDialog from 'components/App/ShareDialog';
 import ResetButton from './ResetButton';
+
 const useStyles = makeStyles((theme) => {
 	return {
 		roundwareMap: {
@@ -59,7 +60,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 			const bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
 			restriction = {
 				latLngBounds: bounds,
-				strictBounds: true,
+				strictBounds: false,
 			};
 		}
 		const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
@@ -121,6 +122,24 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						{!config.speakerConfig.loop && <SpeakerReplayButton />}
 						<ShareDialog />
 						<ResetButton updateLocation={updateListenerLocation} />
+
+						{config.SHOW_BOUNDS_MARKERS && roundware && (
+							<Marker
+								position={{
+									lat: roundware.getMapBounds().northeast.latitude!,
+									lng: roundware.getMapBounds().northeast.longitude!,
+								}}
+							/>
+						)}
+
+						{config.SHOW_BOUNDS_MARKERS && roundware && (
+							<Marker
+								position={{
+									lat: roundware.getMapBounds().southwest.latitude!,
+									lng: roundware.getMapBounds().southwest.longitude!,
+								}}
+							/>
+						)}
 					</GoogleMap>
 				</LoadScript>
 			) : null}
