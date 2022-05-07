@@ -9,7 +9,7 @@
 	"ALLOW_TEXT": true,
 
 	"SHOW_BOUNDS_MARKERS": true,
-	"MAP_BOUNDS": "manual",
+	"MAP_BOUNDS": "auto",
 	"MAP_BOUNDS_POINTS": {
 		"swLat": 3,
 		"swLng": 5,
