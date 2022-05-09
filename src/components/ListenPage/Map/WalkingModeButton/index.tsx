@@ -139,7 +139,7 @@ const walkingModeButton = () => {
 				const location = await roundware.geoPosition.waitForInitialGeolocation();
 
 				// not need to check if user location is within bounds
-				if (config.USE_LISTEN_MAP_BOUNDS !== true) {
+				if (config.MAP_BOUNDS == 'none') {
 					setWalkingModeStatus('eligible');
 					enableWalkingMode();
 					return;
@@ -148,13 +148,19 @@ const walkingModeButton = () => {
 				// need to ensure user is within map bounds
 				const userlatlng = new google.maps.LatLng(location.latitude!, location.longitude!);
 
-				// get map bounds
+				let bounds: google.maps.LatLngBounds;
+
+			if (config.MAP_BOUNDS == 'auto') {
 				const {
 					southwest: { latitude: swLat, longitude: swLng },
 					northeast: { latitude: neLat, longitude: neLng },
 				} = roundware.getMapBounds();
-				const bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
 
+				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			} else {
+				const { swLat, swLng, neLat, neLng } = config.MAP_BOUNDS_POINTS;
+				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			}
 				// within map bounds
 				if (!bounds || bounds.contains(userlatlng)) {
 					setWalkingModeStatus('eligible');
