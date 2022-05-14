@@ -8,8 +8,8 @@
 	"ALLOW_PHOTOS": true,
 	"ALLOW_TEXT": true,
 
-	"SHOW_BOUNDS_MARKERS": true,
-	"MAP_BOUNDS": "auto",
+	"SHOW_BOUNDS_MARKERS": false,
+	"MAP_BOUNDS": "none",
 	"MAP_BOUNDS_POINTS": {
 		"swLat": 3,
 		"swLng": 5,
@@ -31,7 +31,7 @@
 
 	"INFOWINDOW_DISPLAY_ITEMS": ["tags", "photo", "audio", "actions"],
 
-	"SHOW_SPEAKERS_ON_MAP": true,
+	"SPEAKERS_DISPLAY": "images",
 	"SPEAKER_STROKE_COLORS": ["#044389", "#FCFF4B", "#FFAD05", "#7CAFC4", "#63A375", "#EF27A6"],
 
 	"AVAILABLE_LISTEN_FILTERS": ["date", "description", "tags"],

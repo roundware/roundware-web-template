@@ -9,12 +9,13 @@ import AssetLoadingOverlay from './AssetLoadingOverlay';
 import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
 import config from 'config.json';
-import SpeakerPolygons from './SpeakerPolygons';
-import SpeakerReplayButton from './SpeakerReplayButton';
-import SpeakerLoadingIndicator from './SpeakerLoadingIndicator';
+import SpeakerPolygons from './Speakers/SpeakerPolygons';
+import SpeakerReplayButton from './Speakers/SpeakerReplayButton';
+import SpeakerLoadingIndicator from './Speakers/SpeakerLoadingIndicator';
 import { useURLSync } from 'context/URLContext';
 import ShareDialog from 'components/App/ShareDialog';
 import ResetButton from './ResetButton';
+import SpeakerImages from './Speakers/SpeakerImages';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -125,7 +126,8 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
 						{map && roundware.mixer?.playlist && <WalkingModeButton />}
-						{config.SHOW_SPEAKERS_ON_MAP == true && <SpeakerPolygons />}
+						{config.SPEAKERS_DISPLAY == 'polygons' && <SpeakerPolygons />}
+						{config.SPEAKERS_DISPLAY == 'images' && <SpeakerImages />}
 						<SpeakerLoadingIndicator />
 						{!config.speakerConfig.loop && <SpeakerReplayButton />}
 						<ShareDialog />

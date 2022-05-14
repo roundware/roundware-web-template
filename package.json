@@ -4,7 +4,7 @@
 	"description": "",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "react-scripts start",
+		"start": "PORT=1234 react-scripts start",
 		"deploy": "npm run build && cp ./dist/index.html ./dist/200.html && surge --domain https://roundware-typescript.surge.sh dist",
 		"build": "react-scripts build",
 		"install-rwf": "cd ../roundware-web-framework && npm run build && npm pack && cd ../roundware-web-template && rm -rf node_modules/roundware-web-framework/ &&  npm i file:../roundware-web-framework/roundware-web-framework-0.11.0-alpha.30.tgz"
@@ -25,6 +25,13 @@
 		"@mui/material": "^5.6.3",
 		"@mui/styles": "^5.6.2",
 		"@react-google-maps/api": "^2.2.0",
+		"@turf/center-of-mass": "^6.5.0",
+		"@turf/destination": "^6.5.0",
+		"@turf/distance": "^6.5.0",
+		"@turf/helpers": "^6.5.0",
+		"@turf/midpoint": "^6.5.0",
+		"@turf/polygon-tangents": "^6.5.0",
+		"@turf/polygon-to-line": "^6.5.0",
 		"@types/node": "^16.4.13",
 		"@types/react": "^17.0.16",
 		"@types/react-dom": "^17.0.9",
