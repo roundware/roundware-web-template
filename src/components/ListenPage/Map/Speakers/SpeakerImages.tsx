@@ -1,19 +1,13 @@
-import { GroundOverlay, GroundOverlayProps, Marker, useGoogleMap } from '@react-google-maps/api';
-import React, { useMemo, useState } from 'react';
-import { useRoundware } from 'hooks';
-import { speakerPolygonColors as colors, speakerPolygonOptions } from 'styles/speaker';
-import { polygonToGoogleMapPaths } from 'utils';
-import CustomMapControl from '../CustomControl';
-import config from 'config.json';
-import { polygon, point, Point } from '@turf/helpers';
+import { GroundOverlay, GroundOverlayProps, useGoogleMap } from '@react-google-maps/api';
 import getCenterOfMass from '@turf/center-of-mass';
-import getTangentsOfPolygon from '@turf/polygon-tangents';
-import polygonToLines from '@turf/polygon-to-line';
-import midpoint from '@turf/midpoint';
-import distance from '@turf/distance';
 import destination from '@turf/destination';
-import { Position } from '@turf/helpers';
+import distance from '@turf/distance';
+import { point, Point, polygon, Position } from '@turf/helpers';
+import midpoint from '@turf/midpoint';
 import speakerImage from 'assets/speaker.png';
+import { useRoundware } from 'hooks';
+import React, { useMemo } from 'react';
+import { speakerPolygonColors as colors, speakerPolygonOptions } from 'styles/speaker';
 interface Props {}
 
 const getColorForIndex = (index: number): string => {
@@ -76,23 +70,12 @@ const SpeakerImages = (props: Props) => {
 					options: {
 						opacity: 0.2,
 					},
-					// @ts-ignore
-					key: s?.id,
 				};
-				// const prop2: PolygonProps = {
-				// 	path: polygonToGoogleMapPaths(s.shape),
-				// 	options: {
-				// 		...speakerPolygonOptions,
-				// 		fillColor: getColorForIndex(index),
-				// 		strokeColor: getColorForIndex(index),
-				// 	},
-				// 	// @ts-ignore
-				// 	key: s?.id,
-				// };
+
 				return [prop];
 			});
 	}, [roundware.project, speakerPolygonOptions]);
-	console.log(`speaker:images:markerPoints`);
+
 	return (
 		<>
 			{Array.isArray(overlayProps) &&
