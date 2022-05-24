@@ -1,7 +1,7 @@
 {
 	"ROUNDWARE_SERVER_URL": "https://prod.roundware.com/api/2",
 	"ROUNDWARE_SERVER_BASE_URL": "https://prod.roundware.com/",
-	"ROUNDWARE_DEFAULT_PROJECT_ID": 27,
+	"ROUNDWARE_DEFAULT_PROJECT_ID": 37,
 	"ROUNDWARE_INITIAL_LATITUDE": 50,
 	"ROUNDWARE_INITIAL_LONGITUDE": 27,
 
@@ -37,7 +37,7 @@
 	"AVAILABLE_LISTEN_FILTERS": ["date", "description", "tags"],
 
 	"speakerConfig": {
-		"sync": false,
+		"sync": true,
 		"prefetch": false,
 		"loop": true,
 		"acceptableDelayMs": 50,
