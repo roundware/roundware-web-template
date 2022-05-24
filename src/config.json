@@ -8,6 +8,7 @@
 	"ALLOW_PHOTOS": true,
 	"ALLOW_TEXT": true,
 
+	"USE_LISTEN_MAP_BOUNDS": true,
 	"SHOW_BOUNDS_MARKERS": false,
 	"MAP_BOUNDS": "none",
 	"MAP_BOUNDS_POINTS": {
@@ -29,12 +30,16 @@
 
 	"AVAILABLE_LISTEN_MODES": "device",
 
-	"INFOWINDOW_DISPLAY_ITEMS": ["tags", "photo", "audio", "actions"],
+	"INFOWINDOW_DISPLAY_ITEMS": ["tags"],
 
 	"SPEAKERS_DISPLAY": "images",
 	"SPEAKER_STROKE_COLORS": ["#044389", "#FCFF4B", "#FFAD05", "#7CAFC4", "#63A375", "#EF27A6"],
 
 	"AVAILABLE_LISTEN_FILTERS": ["date", "description", "tags"],
+
+	"AUTO_CONCLUDE_DURATION": 992,
+	"CONCLUDE_DURATION": 2,
+	"SURVEY_LINK": "https://forms.gle/nMfJNPozSW1KFddu7",
 
 	"speakerConfig": {
 		"sync": true,
@@ -45,8 +50,8 @@
 	},
 
 	"zoom": {
-		"high": 19,
-		"low": 5,
+		"high": 17,
+		"low": 15,
 		"walking": 22
 	}
 }
