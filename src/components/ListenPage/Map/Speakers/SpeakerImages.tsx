@@ -6,7 +6,7 @@ import { point, Point, polygon, Position } from '@turf/helpers';
 import midpoint from '@turf/midpoint';
 import speakerImage from 'assets/speaker.png';
 import { useRoundware } from 'hooks';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { speakerPolygonColors as colors, speakerPolygonOptions } from 'styles/speaker';
 interface Props {}
 
@@ -17,9 +17,11 @@ const SpeakerImages = (props: Props) => {
 	const { roundware } = useRoundware();
 
 	const map = useGoogleMap();
+
 	const overlayProps: GroundOverlayProps[] = useMemo(() => {
 		if (!Array.isArray(roundware.speakers())) return [];
-		return roundware
+
+		const p = roundware
 			.speakers()
 			?.sort((a, b) => (a?.id > b?.id ? -1 : 1))
 			?.filter((speaker) => speaker.shape)
@@ -74,7 +76,9 @@ const SpeakerImages = (props: Props) => {
 
 				return [prop];
 			});
-	}, [roundware.project, speakerPolygonOptions]);
+
+		return p;
+	}, [speakerPolygonOptions]);
 
 	return (
 		<>
