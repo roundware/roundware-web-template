@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { useRoundware } from '../hooks';
@@ -36,11 +35,6 @@ const AssetList = (props: AssetListProps) => {
 			<div className={`asset-list--assets ${minimized ? 'hidden' : ''}`}>{entries}</div>
 		</div>
 	);
-};
-
-AssetList.propTypes = {
-	assets: PropTypes.arrayOf(Object),
-	roundware: PropTypes.object,
 };
 
 export default AssetList;
