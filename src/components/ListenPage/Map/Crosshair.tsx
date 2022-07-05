@@ -8,8 +8,8 @@ const commonStyles: SxProps<Theme> = {
 	top: '50%',
 	left: '50%',
 };
-const thickess = '2px';
-const length = '50px';
+const thickness = '1px';
+const length = '30px';
 const Crosshair = () => {
 	return (
 		<>
@@ -18,14 +18,14 @@ const Crosshair = () => {
 				sx={(t) => ({
 					...commonStyles,
 					height: length,
-					width: thickess,
+					width: thickness,
 				})}
 			/>
 
 			<Box
 				sx={(t) => ({
 					...commonStyles,
-					height: thickess,
+					height: thickness,
 					width: length,
 				})}
 			/>
