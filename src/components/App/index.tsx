@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import React, { useEffect, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import Helmet from 'react-helmet';
 import { NavLink, Route, Switch, useLocation, Link, BrowserRouter } from 'react-router-dom';
 import favicon from '../../assets/favicon.png';
@@ -28,10 +28,6 @@ import ShareButton from './ShareButton';
 import ShareDialog from './ShareDialog';
 import { getMessageOnLoad } from 'utils/platformMessages';
 import PlatformMessage from 'components/PlatformMessage';
-if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
-	ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
-	ReactGA.pageview(window.location.pathname + window.location.search);
-}
 
 export const App = () => {
 	const [theme] = useState(defaultTheme);
@@ -39,13 +35,17 @@ export const App = () => {
 	const { roundware } = useRoundware();
 	const isExtraSmallScreen = useMediaQuery<boolean>(theme.breakpoints.down('xs'));
 
-	if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
-		let location = useLocation();
+	let location = useLocation();
 
-		useEffect(() => {
-			ReactGA.pageview(window.location.pathname + window.location.search);
-		}, [location.pathname]);
-	}
+	useEffect(() => {
+		if (!process.env.REACT_APP_GOOGLE_ANALYTICS_ID) return;
+
+		ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
+		ReactGA.send({
+			hitType: 'pageView',
+			page: window.location.pathname + window.location.search,
+		});
+	}, [location.pathname]);
 
 	return (
 		<>
