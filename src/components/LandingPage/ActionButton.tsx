@@ -9,9 +9,10 @@ interface Props {
 	label: string;
 	linkTo: string;
 	style?: React.CSSProperties;
+	onClick?: () => void;
 }
 
-const ActionButton = ({ label, linkTo, style = {} }: Props) => {
+const ActionButton = ({ label, linkTo, style = {}, onClick }: Props) => {
 	const classes = useStyles();
 	const history = useHistory();
 
@@ -24,6 +25,9 @@ const ActionButton = ({ label, linkTo, style = {} }: Props) => {
 					variant='contained'
 					color='primary'
 					onClick={() => {
+						if (onClick instanceof Function) {
+							onClick?.();
+						}
 						history.push(linkTo);
 					}}
 				>

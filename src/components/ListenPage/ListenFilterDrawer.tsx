@@ -1,7 +1,7 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
 import LabelIcon from '@mui/icons-material/Label';
 import DatePicker from '@mui/lab/DatePicker';
-import { TextField, TextFieldProps } from '@mui/material';
+import { TextField, TextFieldProps, InputAdornment } from '@mui/material';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -10,13 +10,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import config from 'config.json';
 import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
 import 'date-fns';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRoundware } from '../../hooks';
+import DateFilterMenu from '../AssetFilterPanel/DateFilterMenu';
 import TagFilterMenu from '../AssetFilterPanel/TagFilterMenu';
-
+import useDebounce from 'hooks/useDebounce';
+import CircularProgress from '@mui/material/CircularProgress';
 const useStyles = makeStyles((theme) => ({
 	list: {
 		width: 300,
@@ -39,45 +42,80 @@ const ListenFilterDrawer = () => {
 		right: false,
 	});
 
-	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter } = useRoundware();
-	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
-		return null;
-	}
-
-	const handleAfterDateChange = (date: Date | null, value?: string | null | undefined): void => {
-		if (!date) return;
-		setAfterDateFilter(date);
-
-		if (!roundware.mixer) {
-			return;
-		} else {
-			roundware.mixer.updateParams({
-				startDate: date,
-			});
-			const trackIds = Object.keys(roundware?.mixer?.playlist?.trackIdMap || {}).map((id) => parseInt(id));
-			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
-		}
-	};
-
-	const handleBeforeDateChange = (date: Date | null, value?: string | null | undefined) => {
-		if (!date) return;
-		setBeforeDateFilter(date);
-		if (!roundware.mixer) {
-			return;
-		} else {
-			roundware.mixer.updateParams({
-				endDate: date,
-			});
-			const trackIds = Object.keys(roundware?.mixer?.playlist?.trackIdMap || {}).map((id) => parseInt(id));
-			trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
-		}
-	};
+	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setBeforeDateFilter, setDescriptionFilter, descriptionFilter } = useRoundware();
 
 	const toggleDrawer = (anchor: string, open: boolean) => (event?: any) => {
 		if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
 			return;
 		}
 		setState({ ...state, [anchor]: open });
+	};
+
+	const debouncedDF = useDebounce(descriptionFilter, 2500);
+	useEffect(() => {
+		if (debouncedDF)
+			roundware.events?.logEvent(`filter_stream`, {
+				data: `description: ${debouncedDF}`,
+			});
+	}, [debouncedDF]);
+
+	const handleOnDescriptionChange: TextFieldProps[`onChange`] = (e) => {
+		setDescriptionFilter(e.target.value);
+	};
+
+	const availableFilters = config.AVAILABLE_LISTEN_FILTERS || [];
+	const endAdornment =
+		descriptionFilter && debouncedDF != descriptionFilter ? (
+			<InputAdornment position='end'>
+				<CircularProgress size={16} />
+			</InputAdornment>
+		) : undefined;
+	const filterLookup: {
+		[index: string]: JSX.Element;
+	} = {
+		date: (
+			<ListItem>
+				<DateFilterMenu />
+			</ListItem>
+		),
+		tags: (
+			<>
+				<ListItem key='tags-header'>
+					<ListItemIcon>
+						<LabelIcon />
+					</ListItemIcon>
+					<ListItemText primary='Filter by Tags' />
+				</ListItem>
+				{roundware &&
+					roundware.uiConfig &&
+					Array.isArray(roundware.uiConfig.listen) &&
+					roundware.uiConfig.listen.map((tg) => (
+						<ListItem key={'list-item' + tg.group_short_name}>
+							<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
+						</ListItem>
+					))}
+			</>
+		),
+		description: (
+			<>
+				<ListItem>
+					<ListItemText>Description Filter</ListItemText>
+				</ListItem>
+				<ListItem>
+					<TextField
+						rows={2}
+						multiline
+						fullWidth
+						placeholder='Type something...'
+						onChange={handleOnDescriptionChange}
+						value={descriptionFilter || ''}
+						InputProps={{
+							endAdornment,
+						}}
+					/>
+				</ListItem>
+			</>
+		),
 	};
 
 	const list = (anchor: string) => (
@@ -96,38 +134,32 @@ const ListenFilterDrawer = () => {
 			</List>
 			<Divider />
 			<List>
-				<ListItem>
-					<DatePicker label='Start Date' showToolbar={false} inputFormat='MM/dd/yyyy' renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='Start Date' {...props} />} value={afterDateFilter} onChange={handleAfterDateChange} />
-				</ListItem>
-				<ListItem>
-					<DatePicker label='End Date' showToolbar={false} inputFormat='MM/dd/yyyy' renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => <TextField label='End Date' {...props} />} value={beforeDateFilter} onChange={handleBeforeDateChange} />
-				</ListItem>
-				<Divider />
-				<ListItem key='tags-header'>
-					<ListItemIcon>
-						<LabelIcon />
-					</ListItemIcon>
-					<ListItemText primary='Filter by Tags' />
-				</ListItem>
-				{roundware &&
-					roundware.uiConfig &&
-					Array.isArray(roundware.uiConfig.listen) &&
-					roundware.uiConfig.listen.map((tg) => (
-						<ListItem key={'list-item' + tg.group_short_name}>
-							<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
-						</ListItem>
-					))}
+				{availableFilters.map((f) => (
+					<>
+						{filterLookup[f]}
+						<Divider />
+					</>
+				))}
 			</List>
 		</div>
 	);
-
+	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
+		return null;
+	}
 	return (
 		<>
 			<React.Fragment key={'filter'}>
 				<Button onClick={toggleDrawer('filter', true)}>
 					<FilterListIcon fontSize='large' />
 				</Button>
-				<Drawer anchor={'right'} open={Boolean(state['filter'])} onClose={toggleDrawer('filter', false)}>
+				<Drawer
+					anchor={'right'}
+					open={Boolean(state['filter'])}
+					onClose={toggleDrawer('filter', false)}
+					ModalProps={{
+						keepMounted: true,
+					}}
+				>
 					{list('right')}
 				</Drawer>
 			</React.Fragment>

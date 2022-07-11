@@ -1,4 +1,5 @@
 import { makeStyles } from '@mui/styles';
+import config from 'config.json';
 import { defaultTheme } from '../../styles';
 
 const useStyles = makeStyles(() => {
@@ -25,7 +26,7 @@ const useStyles = makeStyles(() => {
 			textDecoration: 'none',
 		},
 		navLogo: {
-			height: parseInt(typeof process.env.NAV_LOGO_HEIGHT == 'string' ? process.env.NAV_LOGO_HEIGHT : '34'),
+			height: config.NAV_LOGO_HEIGHT || 34,
 		},
 	};
 });

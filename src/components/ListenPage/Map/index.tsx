@@ -1,5 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import React, { useState, useCallback } from 'react';
 import { Coordinates } from 'roundware-web-framework/dist/types';
 import { useRoundware } from '../../../hooks';
@@ -8,7 +8,15 @@ import AssetLayer from './AssetLayer';
 import AssetLoadingOverlay from './AssetLoadingOverlay';
 import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
-import SpeakerPolygons from './SpeakerPolygons';
+import config from 'config.json';
+import SpeakerPolygons from './Speakers/SpeakerPolygons';
+import SpeakerReplayButton from './Speakers/SpeakerReplayButton';
+import SpeakerLoadingIndicator from './Speakers/SpeakerLoadingIndicator';
+import { useURLSync } from 'context/URLContext';
+import ShareDialog from 'components/App/ShareDialog';
+import ResetButton from './ResetButton';
+import SpeakerImages from './Speakers/SpeakerImages';
+
 const useStyles = makeStyles((theme) => {
 	return {
 		roundwareMap: {
@@ -26,38 +34,56 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 	const { roundware } = useRoundware();
 	const [map, setMap] = useState<google.maps.Map | undefined>();
 
+	const { deleteFromURL, params } = useURLSync();
 	const updateListenerLocation = (newLocation?: Coordinates) => {
 		if (!map) {
 			return;
 		}
-		if (newLocation) roundware.updateLocation(newLocation);
-		else {
+		let location = newLocation;
+		if (!location) {
 			const center = map.getCenter();
-			if (center) roundware.updateLocation({ latitude: center.lat(), longitude: center.lng() });
+			location = { latitude: center!.lat(), longitude: center!.lng() };
 		}
-		console.log('updated location on framework');
+		deleteFromURL([`longitude`, `latitude`]);
+
+		roundware.updateLocation(location!);
+		console.log('updated location on framework', location);
 	};
 
 	const onLoad = (map: google.maps.Map) => {
 		let restriction;
-		if (process.env.USE_LISTEN_MAP_BOUNDS === 'true') {
-			const {
-				southwest: { latitude: swLat, longitude: swLng },
-				northeast: { latitude: neLat, longitude: neLng },
-			} = roundware.getMapBounds();
+		if (config.MAP_BOUNDS != 'none') {
+			let bounds: google.maps.LatLngBounds;
 
-			const bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			if (config.MAP_BOUNDS == 'auto') {
+				const {
+					southwest: { latitude: swLat, longitude: swLng },
+					northeast: { latitude: neLat, longitude: neLng },
+				} = roundware.getMapBounds();
+
+				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			} else {
+				const { swLat, swLng, neLat, neLng } = config.MAP_BOUNDS_POINTS;
+				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+			}
 			restriction = {
 				latLngBounds: bounds,
-				strictBounds: true,
+				strictBounds: false,
 			};
 		}
+
 		const styledMapType = new google.maps.StyledMapType(RoundwareMapStyle, { name: 'Street Map' });
 		map.mapTypes.set('styled_map', styledMapType);
-
+		const searchParams = new URLSearchParams(window.location.search);
+		const urlLatitude = searchParams.get('latitude');
+		const urlLongitude = searchParams.get('longitude');
+		const urlZoom = searchParams.get('zoom');
 		map.setOptions({
-			center: { lat: roundware?.project?.location?.latitude!, lng: roundware?.project?.location?.longitude! },
-			zoom: 5,
+			center: {
+				lat: parseFloat(typeof urlLatitude == 'string' ? urlLatitude : roundware?.project?.location?.latitude!?.toString()),
+				lng: parseFloat(typeof urlLongitude == 'string' ? urlLongitude : roundware?.project?.location?.longitude!?.toString()),
+			},
+			zoom: parseInt(typeof urlZoom == 'string' ? urlZoom : '5'),
 			zoomControl: true,
 			draggable: true,
 			mapTypeControl: false,
@@ -77,6 +103,16 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 			},
 			restriction,
 		});
+		map.addListener('zoom_changed', () => {
+			const currentZoom = map.getZoom();
+			const paramZoom = new URLSearchParams(window.location.search).get('zoom');
+			if (paramZoom) {
+				if (Number(currentZoom) != Number(paramZoom)) {
+					map.setZoom(Number(paramZoom));
+				}
+			}
+			deleteFromURL('zoom');
+		});
 
 		setMap(map);
 	};
@@ -89,8 +125,31 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 					<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad}>
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
-						<WalkingModeButton />
-						{process.env.SHOW_SPEAKERS_ON_MAP == 'true' && <SpeakerPolygons />}
+						{map && roundware.mixer?.playlist && <WalkingModeButton />}
+						{config.SPEAKERS_DISPLAY == 'polygons' && <SpeakerPolygons />}
+						{config.SPEAKERS_DISPLAY == 'images' && <SpeakerImages />}
+						<SpeakerLoadingIndicator />
+						{!config.speakerConfig.loop && <SpeakerReplayButton />}
+						<ShareDialog />
+						<ResetButton updateLocation={updateListenerLocation} />
+
+						{config.SHOW_BOUNDS_MARKERS && roundware && (
+							<Marker
+								position={{
+									lat: roundware.getMapBounds().northeast.latitude!,
+									lng: roundware.getMapBounds().northeast.longitude!,
+								}}
+							/>
+						)}
+
+						{config.SHOW_BOUNDS_MARKERS && roundware && (
+							<Marker
+								position={{
+									lat: roundware.getMapBounds().southwest.latitude!,
+									lng: roundware.getMapBounds().southwest.longitude!,
+								}}
+							/>
+						)}
 					</GoogleMap>
 				</LoadScript>
 			) : null}

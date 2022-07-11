@@ -6,16 +6,16 @@ import { makeStyles } from '@mui/styles';
 import { useRoundware } from '../../hooks';
 import Container from '@mui/material/Container';
 
-import banner from 'url:../../assets/rw-icon-cluster.png';
-
+import banner from '../../assets/rw-icon-cluster.png';
+import { GeoListenMode } from 'roundware-web-framework';
 import useStyles from './styles';
+import config from 'config.json';
 
 export const LandingPage = () => {
-	const {
-		roundware: { project },
-	} = useRoundware();
+	const { roundware, forceUpdate } = useRoundware();
 	const classes = useStyles();
 
+	const project = roundware.project;
 	if (!project || project.projectName === '(unknown)') {
 		return null;
 	}
@@ -44,7 +44,33 @@ export const LandingPage = () => {
 				<Grid container justifyContent='center' style={{ height: '200px' }}>
 					{project.data?.listen_enabled && (
 						<Grid item>
-							<ActionButton label={'Listen'} linkTo={'/listen'} style={{ width: '100%' }} />
+							<ActionButton
+								onClick={() => {
+									if (!config.AUTOPLAY) return;
+									if (!roundware.mixer || !roundware.mixer?.playlist) {
+										roundware?.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
+											if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {
+												const listen_tags = roundware.uiConfig.listen[0].display_items.map((i) => i.tag_id);
+												roundware.mixer.updateParams({
+													listenerLocation: roundware.listenerLocation,
+													minDist: 0,
+													maxDist: 0,
+													recordingRadius: 0,
+													listenTagIds: listen_tags,
+												});
+												roundware.mixer.play();
+												forceUpdate();
+											}
+										});
+									} else {
+										roundware.mixer.play();
+										forceUpdate();
+									}
+								}}
+								label={'Listen'}
+								linkTo={'/listen'}
+								style={{ width: '100%' }}
+							/>
 						</Grid>
 					)}
 

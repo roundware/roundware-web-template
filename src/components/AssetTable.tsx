@@ -25,7 +25,7 @@ const AssetTable = () => {
 		setAssetsPerPage(numRows);
 	};
 	return (
-        <Paper className={'asset-list'}>
+		<Paper className={'asset-list'}>
 			<AssetFilterPanel />
 			<TableContainer>
 				<Table stickyHeader size='small' className={'asset-table'} aria-label='media submission table'>
@@ -78,8 +78,8 @@ const AssetTable = () => {
 			</TableContainer>
 			{/*{ filteredAssets.length === 0 ? "No Recordings Found..." : null }*/}
 
-			<TablePagination component='div' backIconButtonProps={{ size: 'small' }} nextIconButtonProps={{ size: 'small' }} count={table_assets.length} rowsPerPage={assetsPerPage} page={assetPageIndex} onPageChange={handleChangePage} onPageChange={handleChangeRowsPerPage} rowsPerPageOptions={[5, 10]} />
+			<TablePagination component='div' backIconButtonProps={{ size: 'small' }} nextIconButtonProps={{ size: 'small' }} count={table_assets.length} rowsPerPage={assetsPerPage} page={assetPageIndex} onPageChange={handleChangePage} rowsPerPageOptions={[5, 10]} />
 		</Paper>
-    );
+	);
 };
 export default AssetTable;

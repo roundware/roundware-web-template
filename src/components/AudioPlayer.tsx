@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { WaveSurfer, WaveForm, Region } from 'wavesurfer-react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Box, IconButton, LinearProgress } from '@mui/material';
+import React, { useState } from 'react';
+import { WaveForm, WaveSurfer } from 'wavesurfer-react';
+import { WaveSurferProps, WaveSurferRef } from 'wavesurfer-react/dist/containers/WaveSurfer';
 // @ts-ignore
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions';
-import { IconButton, Grid, LinearProgress, Box } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
 
 const plugins = [
 	{
@@ -23,18 +23,16 @@ const AudioPlayer = ({ size = 'small', src }: PropTypes): JSX.Element | null => 
 	const [loading, setLoading] = useState(true);
 
 	const [progress, setProgress] = useState(0);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const wavesurferRef = React.useRef<any>();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const handleMount = React.useCallback(
+
+	const wavesurferRef = React.useRef<WaveSurferRef>();
+
+	const handleMount: WaveSurferProps[`onMount`] = React.useCallback(
 		(waveSurfer: any) => {
 			wavesurferRef.current = waveSurfer;
 			if (wavesurferRef.current) {
 				if (src) {
 					wavesurferRef.current.load(src);
 				}
-
-				// wavesurferRef.current.on("region-created", regionCreatedHandler);
 
 				wavesurferRef.current.on('ready', () => {
 					setLoading(false);
@@ -43,14 +41,6 @@ const AudioPlayer = ({ size = 'small', src }: PropTypes): JSX.Element | null => 
 				wavesurferRef.current.on('loading', (n: number) => {
 					setProgress(n);
 				});
-
-				// wavesurferRef.current.on("region-removed", (region) => {
-				//   console.log("region-removed --> ", region);
-				// });
-
-				// wavesurferRef.current.on("loading", (data) => {
-				//   console.log("loading --> ", data);
-				// });
 			}
 		},
 		[src]
@@ -60,9 +50,9 @@ const AudioPlayer = ({ size = 'small', src }: PropTypes): JSX.Element | null => 
 	const handlePlay = () => {
 		if (playing) {
 			setPlaying(false);
-			return wavesurferRef.current.pause();
+			return wavesurferRef.current?.pause();
 		}
-		wavesurferRef.current.play();
+		wavesurferRef.current?.play();
 		setPlaying(true);
 	};
 
@@ -75,6 +65,7 @@ const AudioPlayer = ({ size = 'small', src }: PropTypes): JSX.Element | null => 
 					fillParent={true}
 					mediaControls={true}
 					height={size === 'small' ? 64 : 128}
+					waveColor='purple'
 					// maxCanvasWidth={size === "small" ? 4000 : 6000}
 				></WaveForm>
 			</WaveSurfer>

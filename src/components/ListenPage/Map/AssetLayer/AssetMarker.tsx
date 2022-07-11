@@ -1,10 +1,10 @@
-import { Marker, useGoogleMap } from '@react-google-maps/api';
+import { Marker } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
-import marker2 from 'url:../../../../assets/marker-secondary.svg';
-import marker from 'url:../../../../assets/marker.svg';
+import marker2 from '../../../../assets/marker-secondary.svg';
+import marker from '../../../../assets/marker.svg';
 import { useRoundware } from '../../../../hooks';
 import { AssetInfoWindowInner } from './AssetInfoWindow';
 const AssetInfoWindow = ({ asset }: { asset: IAssetData }) => {
@@ -23,33 +23,25 @@ interface AssetMarkerProps {
 	oms: OverlappingMarkerSpiderfier;
 }
 const AssetMarker = ({ asset, clusterer, oms }: AssetMarkerProps) => {
-	const { roundware, selectAsset } = useRoundware();
+	const { roundware, selectAsset, playingAssets } = useRoundware();
+
+	const isPlaying: boolean = useMemo(() => roundware?.mixer?.playing && Array.from(roundware?.mixer?.playlist?.trackMap?.values() || []).some((a) => a?.id == asset.id), [playingAssets, roundware.mixer.playing]);
+
 	const iconPin = {
-		scaledSize: new google.maps.Size(20, 20),
+		url: isPlaying ? marker2 : marker,
+		scaledSize: new google.maps.Size(isPlaying ? 23 : 20, isPlaying ? 23 : 20),
 		fillOpacity: 1,
 	};
+	const zIndex = isPlaying ? 101 : 100;
+	const position = { lat: asset.latitude!, lng: asset.longitude! };
 
-	const map = useGoogleMap();
-	// let url = 'https://fonts.gstatic.com/s/i/materialicons/place/v15/24px.svg';
-
-	const isPlaying = roundware?.mixer?.playlist && roundware.mixer.playlist.playing && Array.isArray(roundware.currentlyPlayingAssets) && roundware.currentlyPlayingAssets.length > 0 && roundware.currentlyPlayingAssets[0].id === asset.id;
+	const onLoad = (m: google.maps.Marker) => {
+		// @ts-ignore
+		m.asset = asset;
+		oms.addMarker(m, () => selectAsset(asset));
+	};
 	return (
-		<Marker
-			position={{ lat: asset.latitude!, lng: asset.longitude! }}
-			icon={{
-				url: isPlaying ? marker2 : marker,
-				scaledSize: new google.maps.Size(isPlaying ? 23 : 20, isPlaying ? 23 : 20),
-				fillOpacity: 1,
-			}}
-			zIndex={isPlaying ? 101 : 100}
-			clusterer={clusterer}
-			onLoad={(m) => {
-				//@ts-ignore
-				m.asset = asset;
-				oms.addMarker(m, () => selectAsset(asset));
-			}}
-			noClustererRedraw={true}
-		>
+		<Marker position={position} icon={iconPin} zIndex={zIndex} clusterer={clusterer} onLoad={onLoad} noClustererRedraw={true}>
 			<AssetInfoWindow asset={asset} />
 		</Marker>
 	);

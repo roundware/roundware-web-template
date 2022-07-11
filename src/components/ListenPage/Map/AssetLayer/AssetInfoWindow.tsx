@@ -251,12 +251,18 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
 	const { children, onClose, ...other } = props;
 	return (
 		<MuiDialogTitle {...other}>
-			<Typography variant='h6'>{children}</Typography>
-			{onClose ? (
-				<IconButton aria-label='close' onClick={onClose}>
-					<CloseIcon />
-				</IconButton>
-			) : null}
+			<Grid container justifyContent='space-between'>
+				<Grid item>
+					<Typography variant='h6'>{children}</Typography>
+				</Grid>
+				{onClose ? (
+					<Grid item>
+						<IconButton aria-label='close' onClick={onClose}>
+							<CloseIcon />
+						</IconButton>
+					</Grid>
+				) : null}
+			</Grid>
 		</MuiDialogTitle>
 	);
 });
