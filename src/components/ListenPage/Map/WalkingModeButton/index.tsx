@@ -13,6 +13,7 @@ import LoadingOverlay from './LoadingOverlay';
 import messages from '../../../../locales/en_US.json';
 import config from 'config.json';
 import { useURLSync } from 'context/URLContext';
+import { useLocation } from 'react-router';
 const useStyles = makeStyles((theme) => {
 	return {
 		walkingModeButton: {
@@ -68,10 +69,12 @@ const walkingModeButton = () => {
 
 	const displayListenModeButton = availableListenModes == 'device' || availableListenModesArray.length == 2 ? true : false;
 
+	const location = useLocation();
 	const [init, setInit] = useState(false);
 	// set default GeoListenMode
 	useEffect(() => {
 		if (init) return;
+		if (!map) return;
 		setInit(true);
 		if (availableListenModesArray[0] == 'device') {
 			console.log(`default based on screen width [${isMobile ? `Mobile` : `Desktop`}]`);
@@ -83,7 +86,7 @@ const walkingModeButton = () => {
 			console.log('default to walking mode');
 			enterWalkingMode();
 		}
-	}, [isMobile]);
+	}, [isMobile, map]);
 
 	const enterMapMode = () => {
 		if (!map) return;
@@ -150,17 +153,17 @@ const walkingModeButton = () => {
 
 				let bounds: google.maps.LatLngBounds;
 
-			if (config.MAP_BOUNDS == 'auto') {
-				const {
-					southwest: { latitude: swLat, longitude: swLng },
-					northeast: { latitude: neLat, longitude: neLng },
-				} = roundware.getMapBounds();
+				if (config.MAP_BOUNDS == 'auto') {
+					const {
+						southwest: { latitude: swLat, longitude: swLng },
+						northeast: { latitude: neLat, longitude: neLng },
+					} = roundware.getMapBounds();
 
-				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
-			} else {
-				const { swLat, swLng, neLat, neLng } = config.MAP_BOUNDS_POINTS;
-				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
-			}
+					bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+				} else {
+					const { swLat, swLng, neLat, neLng } = config.MAP_BOUNDS_POINTS;
+					bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
+				}
 				// within map bounds
 				if (!bounds || bounds.contains(userlatlng)) {
 					setWalkingModeStatus('eligible');

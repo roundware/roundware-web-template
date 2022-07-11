@@ -198,7 +198,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			deviceId: deviceId,
 			serverUrl: server_url,
 			projectId: project_id,
-			geoListenMode: getDefaultListenMode(),
+			geoListenMode: GeoListenMode.DISABLED,
 			speakerFilters: { activeyn: true },
 			assetFilters: { submitted: true, media_type: 'audio' },
 			listenerLocation: initial_loc,
