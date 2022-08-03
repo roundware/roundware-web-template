@@ -1,157 +1,50 @@
-import Wave from '@foobar404/wave';
+import { FileUpload } from '@mui/icons-material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MicIcon from '@mui/icons-material/Mic';
-import { IconButton, useMediaQuery } from '@mui/material';
+import { IconButton } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CircularProgress from '@mui/material/CircularProgress';
-import Container from '@mui/material/Container';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Grid from '@mui/material/Grid';
-import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import MediaRecorder from 'audio-recorder-polyfill';
-import React, { useEffect, useState } from 'react';
+import config from 'config.json';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import { useHistory } from 'react-router-dom';
-import { IAudioData } from 'roundware-web-framework/dist/types';
-import { useRoundware, useRoundwareDraft } from '../../../hooks';
-import { ITextAsset } from '../../../types';
-import { wait } from '../../../utils';
+import { Prompt } from 'react-router-dom';
 import AudioPlayer from '../../AudioPlayer';
 import ErrorDialog from '../../ErrorDialog';
 import LegalAgreementForm from '../../LegalAgreementForm';
 import AdditionalMediaMenu from './AdditionalMediaMenu';
 import { useStyles } from './styles';
-
-const visualizerOptions = {
-	type: 'bars',
-};
+import useCreateRecording from './useCreateRecording';
 
 const CreateRecordingForm = () => {
-	const draftRecording = useRoundwareDraft();
-	const { roundware, tagLookup, updateAssets } = useRoundware();
-	let [wave, set_wave] = useState(new Wave());
-	const [isRecording, set_is_recording] = useState(false);
-	const [draftRecordingMedia, set_draft_recording_media] = useState<IAudioData | null>(null);
-	const [draftMediaUrl, set_draft_media_url] = useState('');
-	const [recorder, set_recorder] = useState<MediaRecorder | undefined>();
-	const [stream, set_stream] = useState<MediaStream | undefined>();
-	const [textAsset, setTextAsset] = useState<ITextAsset>('');
-	const [imageAssets, setImageAssets] = useState<File[]>([]);
-	const [deleteModalOpen, set_delete_modal_open] = useState(false);
-	const [legalModalOpen, set_legal_modal_open] = useState(false);
-	const [saving, set_saving] = useState(false);
-	const [error, set_error] = useState<Error | null>(null);
-	const [success, set_success] = useState<{ detail: string; envelope_ids: number[] } | null>(null);
-	const history = useHistory();
+	const { draftMediaUrl, textAsset, imageAssets, set_draft_recording_media, set_draft_media_url, draftRecording, setSuccess, selectAsset, roundware, draftRecordingMedia, updateAssets, saving, resetFilters, history, setTextAsset, setSaving, deleteRecording, legalModalOpen, setLegalModalOpen, setImageAssets, success, selected_tags, error, isRecording, toggleRecording, isExtraSmallScreen, setError, maxRecordingLength, stopRecording, setDeleteModalOpen, deleteModalOpen } = useCreateRecording();
 	const classes = useStyles();
-	const theme = useTheme();
-	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
-	const startRecording = () => {
-		if (!navigator.mediaDevices) {
-			set_error({
-				name: `Microphone not accessible`,
-				message: "We can't get access to your microphone at this time",
-			});
-			return;
-		} else {
-			set_error(null);
-		}
-		navigator.mediaDevices
-			.getUserMedia({ audio: true })
-			.then((stream) => {
-				set_draft_recording_media(null);
-				set_stream(stream);
-				wave.stopStream();
-				const newWave = new Wave();
-				set_wave(newWave);
-				newWave.fromStream(stream, 'audio-visualizer', visualizerOptions, false);
-				const recorder: MediaRecorder = new MediaRecorder(stream);
-				set_recorder(recorder);
-				// Set record to <audio> when recording will be finished
-				recorder.addEventListener('dataavailable', (e) => {
-					console.log('data available: ' + e.data.size);
-					set_draft_recording_media(e.data);
-				});
-				recorder.start();
-				set_is_recording(true);
-			})
-			.catch((err) => {
-				set_error(err);
-			});
-	};
-
-	useEffect(() => {
-		const mediaUrl = draftRecordingMedia ? URL.createObjectURL(draftRecordingMedia) : '';
-		set_draft_media_url(mediaUrl);
-	}, [draftRecordingMedia]);
-
-	useEffect(() => {
-		if (draftMediaUrl !== '') {
-			wave.fromElement('draft-audio', 'audio-visualizer', visualizerOptions);
-		}
-	}, [draftMediaUrl]);
-
-	const stopRecording = () => {
-		if (typeof recorder !== 'undefined') {
-			recorder.stop();
-		}
-		if (stream)
-			stream.getTracks().forEach((track) => {
-				track.stop();
-			});
-		wait(100).then(() => wave.stopStream());
-		set_is_recording(false);
-	};
-
-	const deleteRecording = () => {
-		set_draft_recording_media(null);
-	};
-	const toggleRecording = () => {
-		if (isRecording) {
-			stopRecording();
-		} else {
-			startRecording();
-		}
-	};
-
-	useEffect(() => {
-		const hasLocation = draftRecording.location.latitude && draftRecording.location.longitude;
-		if (!hasLocation) {
-			history.replace('/speak/location/');
-		}
-		const hasTags = draftRecording.tags.length > 0;
-
-		if (!hasTags) {
-			history.replace('/speak/tags/0');
-		}
-	}, [draftRecording.tags, draftRecording.location.latitude, draftRecording.location.longitude]);
-
-	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag]);
-
-	const maxRecordingLength = roundware.project ? (roundware.project.maxRecordingLength ? roundware.project.maxRecordingLength : '--') : '--';
-
 	return (
 		<Card className={classes.container}>
+			{/* unsaved prompt */}
+			<Prompt
+				when={!!draftMediaUrl && !success}
+				message={JSON.stringify({
+					message: `Are you sure you want to leave without submitting your recording? If you do, your recording will be deleted.`,
+					stay: `Keep Recording`,
+					leave: `Delete Recording`,
+				})}
+			/>
+
 			<Grid container alignItems={'center'} direction={'column'} spacing={2} justifyContent='center'>
 				<Grid item mt={3}>
-					<Container>
-						{/*{ selected_tags.map( tag => <Typography variant={"h6"}key={tag.id}>{tag.tag_display_text}</Typography> ) }*/}
-						{
-							<Typography variant={'h5'} className={classes.tagGroupHeaderLabel} key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].id : 1} gutterBottom>
-								{selected_tags.length > 0 ? selected_tags[selected_tags.length - 1].tag_display_text : 'No selected tags'}
-							</Typography>
-						}
-					</Container>
+					<Typography variant={'h5'} className={classes.tagGroupHeaderLabel} key={selected_tags.length > 0 ? selected_tags[selected_tags.length - 1]?.id : 1} gutterBottom>
+						{selected_tags.length > 0 ? selected_tags[selected_tags.length - 1]?.tag_display_text : 'No selected tags'}
+					</Typography>
 				</Grid>
-				<ErrorDialog error={error} set_error={set_error} />
+				<ErrorDialog error={error} set_error={setError} />
 				{!draftMediaUrl && (
 					<Grid item xs={12} className={classes.audioVisualizer}>
 						<canvas id='audio-visualizer' style={{ height: isExtraSmallScreen ? 100 : 150, width: 300 }} />
@@ -167,37 +60,78 @@ const CreateRecordingForm = () => {
 					</Grid>
 				) : null}
 				{!draftMediaUrl && !isRecording ? (
-					<Grid
-						item
-						xs={12}
-						style={{
-							paddingBottom: 0,
-							paddingTop: isExtraSmallScreen ? 8 : 32,
-						}}
-					>
-						<IconButton
-							disabled={draftMediaUrl !== ''}
+					<Grid item xs={12} spacing={1} container direction='row' justifyContent='center' alignItems='center'>
+						<Grid
+							item
 							style={{
-								margin: 'auto',
-								backgroundColor: isRecording ? 'red' : 'inherit',
-								padding: 0,
+								paddingBottom: 0,
+								paddingTop: isExtraSmallScreen ? 8 : 32,
 							}}
-							onClick={toggleRecording}
-							size='large'
+							flexDirection='row'
+							justifyContent={'center'}
 						>
-							<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButton} />
-						</IconButton>
+							<IconButton
+								disabled={draftMediaUrl !== ''}
+								style={{
+									margin: 'auto',
+									backgroundColor: isRecording ? 'red' : 'inherit',
+									padding: 0,
+								}}
+								onClick={toggleRecording}
+								size='large'
+							>
+								<MicIcon color={isRecording ? 'primary' : 'inherit'} className={classes.iconButton} />
+							</IconButton>
+
+							<Typography textAlign='center' variant={'subtitle1'}>
+								Tap to Record
+							</Typography>
+						</Grid>
+
+						<Grid
+							item
+							display={{
+								xs: 'none',
+								md: 'initial',
+							}}
+							style={{
+								paddingBottom: 0,
+								paddingTop: isExtraSmallScreen ? 8 : 32,
+							}}
+							justifyContent='left'
+						>
+							<Button
+								disabled={draftMediaUrl !== ''}
+								style={{
+									margin: 'auto',
+									backgroundColor: isRecording ? 'red' : 'inherit',
+									padding: 0,
+									borderRadius: '50%',
+								}}
+								size='large'
+								component='label'
+							>
+								<FileUpload color={isRecording ? 'primary' : 'inherit'} className={classes.iconButton} />
+								<input
+									onChange={(e) => {
+										if (!e.target.files) return;
+										const file = Array.from(e.target.files)[0];
+										set_draft_recording_media(file);
+										set_draft_media_url(URL.createObjectURL(file));
+									}}
+									type='file'
+									hidden
+									accept='.mp3, .wav'
+								/>
+							</Button>
+
+							<Typography textAlign='center' variant={'subtitle1'}>
+								Tap to Upload Audio
+							</Typography>
+						</Grid>
 					</Grid>
 				) : null}
-				{/*}<Grid
-          item
-          style={{"paddingTop": 0}}>
-          <Typography
-            variant={"h3"}
-            className={classes.label}>
-            {draftMediaUrl ? "Listen Back" : (isRecording ? "Recording!" : "Record")}
-          </Typography>
-        </Grid>*/}
+
 				{isRecording ? (
 					<Grid item xs={12}>
 						<CountdownCircleTimer
@@ -244,15 +178,12 @@ const CreateRecordingForm = () => {
 								</Grid>
 							)}
 						</CountdownCircleTimer>
-					</Grid>
-				) : null}
-				{draftMediaUrl == '' && (
-					<Grid item xs={12} justifyContent='center'>
-						<Typography textAlign='center' variant={'subtitle1'}>
-							Tap to {isRecording ? `Stop` : `Record`}
+						<Typography sx={{ my: 2 }} textAlign='center' variant={'subtitle1'}>
+							Tap to Stop
 						</Typography>
 					</Grid>
-				)}
+				) : null}
+
 				<Grid
 					container
 					item
@@ -270,7 +201,7 @@ const CreateRecordingForm = () => {
 						startIcon={<DeleteIcon />}
 						disabled={draftMediaUrl === ''}
 						onClick={() => {
-							set_delete_modal_open(true);
+							setDeleteModalOpen(true);
 						}}
 					>
 						Delete
@@ -286,7 +217,7 @@ const CreateRecordingForm = () => {
 								variant='contained'
 								color='primary'
 								onClick={() => {
-									set_delete_modal_open(false);
+									setDeleteModalOpen(false);
 								}}
 							>
 								No, keep it!
@@ -296,14 +227,14 @@ const CreateRecordingForm = () => {
 								color='secondary'
 								onClick={() => {
 									deleteRecording();
-									set_delete_modal_open(false);
+									setDeleteModalOpen(false);
 								}}
 							>
 								Yes, delete it!
 							</Button>
 						</DialogActions>
 					</Dialog>
-					{process.env.ALLOW_PHOTOS === 'true' || process.env.ALLOW_TEXT === 'true' ? <AdditionalMediaMenu onSetText={setTextAsset} onSetImage={(file) => setImageAssets([...imageAssets, file])} textAsset={textAsset} imageAssets={imageAssets} disabled={draftMediaUrl === ''} /> : null}
+					{config.ALLOW_PHOTOS === true || config.ALLOW_TEXT === true ? <AdditionalMediaMenu onSetText={setTextAsset} onSetImage={(file) => setImageAssets([...imageAssets, file])} textAsset={textAsset} imageAssets={imageAssets} disabled={draftMediaUrl === ''} /> : null}
 					<Button
 						variant='contained'
 						color='primary'
@@ -312,7 +243,7 @@ const CreateRecordingForm = () => {
 						style={{ margin: 'auto' }}
 						disabled={draftMediaUrl === ''}
 						onClick={() => {
-							set_legal_modal_open(true);
+							setLegalModalOpen(true);
 						}}
 					>
 						Submit
@@ -320,18 +251,27 @@ const CreateRecordingForm = () => {
 					<Dialog open={legalModalOpen}>
 						<LegalAgreementForm
 							onDecline={() => {
-								set_legal_modal_open(false);
+								setLegalModalOpen(false);
 							}}
 							onAccept={async () => {
-								set_legal_modal_open(false);
-								set_saving(true);
+								setLegalModalOpen(false);
+								setSaving(true);
 								if (typeof draftRecording.location.longitude !== 'number' || typeof draftRecording.location.latitude !== 'number') {
-									return set_error(new Error(`Failed to get latitude & longitude!`));
+									return setError(new Error(`Failed to get latitude & longitude!`));
 								}
+
+								// include default speak tags
+								const finalTags = selected_tags.map((t) => t.tag_id);
+								config.DEFAULT_SPEAK_TAGS?.forEach((t) => {
+									if (!finalTags.includes(t)) {
+										finalTags.push(t);
+									}
+								});
+
 								const assetMeta = {
 									longitude: draftRecording.location.longitude,
 									latitude: draftRecording.location.latitude,
-									tag_ids: selected_tags.map((t) => t.tag_id),
+									tag_ids: finalTags,
 								};
 								const dateStr = new Date().toISOString();
 
@@ -347,20 +287,21 @@ const CreateRecordingForm = () => {
 										await envelope.upload(new Blob([textAsset.toString()], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' });
 									}
 									for (const file of imageAssets) {
-										// roundware types not defined yet
-
 										await envelope.upload(file, file.name || dateStr + '.jpg', {
 											...assetMeta,
 											media_type: 'photo',
 										});
 									}
-									set_success(asset);
+
+									selectAsset(null);
+									setSuccess(asset);
+
 									updateAssets();
 								} catch (err) {
 									// @ts-ignore
 									set_error(err);
 								}
-								set_saving(false);
+								setSaving(false);
 							}}
 						/>
 					</Dialog>
@@ -384,7 +325,8 @@ const CreateRecordingForm = () => {
 							color={'primary'}
 							disabled={success == null}
 							onClick={() => {
-								if (success !== null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
+								if (success != null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
+									resetFilters();
 									history.push(`/listen?eid=${success.envelope_ids[0]}`);
 								}
 							}}

@@ -1,0 +1,57 @@
+{
+	"ROUNDWARE_SERVER_URL": "https://prod.roundware.com/api/2",
+	"ROUNDWARE_SERVER_BASE_URL": "https://prod.roundware.com/",
+	"ROUNDWARE_DEFAULT_PROJECT_ID": 10,
+	"ROUNDWARE_INITIAL_LATITUDE": 50,
+	"ROUNDWARE_INITIAL_LONGITUDE": 27,
+
+	"ALLOW_PHOTOS": true,
+	"ALLOW_TEXT": true,
+
+	"USE_LISTEN_MAP_BOUNDS": true,
+	"SHOW_BOUNDS_MARKERS": false,
+	"MAP_BOUNDS": "none",
+	"MAP_BOUNDS_POINTS": {
+		"swLat": 3,
+		"swLng": 5,
+		"neLat": 5,
+		"neLng": 43
+	},
+
+	"KEEP_PAUSED_ASSETS": true,
+
+	"GEO_LISTEN_MODE": "device",
+	"NAV_LOGO_HEIGHT": 34,
+	"DEBUG_MODE": false,
+	"ALLOW_SPEAK_TAGS": true,
+
+	"AUTOPLAY": false,
+	"DEFAULT_SPEAK_TAGS": [],
+
+	"AVAILABLE_LISTEN_MODES": "device",
+
+	"INFOWINDOW_DISPLAY_ITEMS": ["date", "tags", "text", "description", "audio"],
+
+	"SPEAKERS_DISPLAY": "images",
+	"SPEAKER_STROKE_COLORS": ["#044389", "#FCFF4B", "#FFAD05", "#7CAFC4", "#63A375", "#EF27A6"],
+
+	"AVAILABLE_LISTEN_FILTERS": ["date", "description", "tags"],
+
+	"AUTO_CONCLUDE_DURATION": 992,
+	"CONCLUDE_DURATION": 2,
+	"SURVEY_LINK": "https://forms.gle/nMfJNPozSW1KFddu7",
+
+	"speakerConfig": {
+		"sync": true,
+		"prefetch": false,
+		"loop": true,
+		"acceptableDelayMs": 50,
+		"syncCheckInterval": 2500
+	},
+
+	"zoom": {
+		"high": 17,
+		"low": 15,
+		"walking": 22
+	}
+}

@@ -9,7 +9,7 @@ import { ITextAsset } from '../../../../types';
 import { PhotoPickerInput, PhotoPickerMenuItem } from './PhotoPicker';
 import { StyledMenu } from './StyledMenu';
 import { TextInputDialog, TextInputMenuItem } from './TextInput';
-
+import config from 'config.json';
 interface AdditionalMediaMenuProps {
 	onSetText: React.Dispatch<React.SetStateAction<ITextAsset>>;
 	onSetImage: (file: File) => void;
@@ -30,7 +30,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 
 	const handleClose = () => setAnchorEl(null);
 
-	if (process.env.ALLOW_PHOTOS === 'true' && process.env.ALLOW_TEXT === 'true') {
+	if (config.ALLOW_PHOTOS == true && config.ALLOW_TEXT == true) {
 		return (
 			<div>
 				<Button
@@ -77,7 +77,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 				</StyledMenu>
 			</div>
 		);
-	} else if (process.env.ALLOW_PHOTOS === 'true') {
+	} else if (config.ALLOW_PHOTOS == true) {
 		return (
 			<>
 				<Button
