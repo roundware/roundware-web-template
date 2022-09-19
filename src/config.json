@@ -41,6 +41,8 @@
 	"CONCLUDE_DURATION": 2,
 	"SURVEY_LINK": "https://forms.gle/nMfJNPozSW1KFddu7",
 
+	"autoResetTimeSeconds": 5,
+
 	"speakerConfig": {
 		"sync": true,
 		"prefetch": false,

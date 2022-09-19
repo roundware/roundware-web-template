@@ -1,13 +1,13 @@
+import Wave from '@foobar404/wave';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
-import { useRoundwareDraft, useRoundware } from 'hooks';
-import { useState, useEffect } from 'react';
+import config from 'config.json';
+import { useRoundware, useRoundwareDraft } from 'hooks';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { IAudioData } from 'roundware-web-framework/dist/types';
 import { ITextAsset } from 'types';
 import { wait } from 'utils';
-import { useStyles } from './styles';
-import Wave from '@foobar404/wave';
 const visualizerOptions = {
 	type: 'bars',
 };
@@ -118,6 +118,17 @@ const useCreateRecording = () => {
 	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag]);
 
 	const maxRecordingLength = roundware.project ? (roundware.project.maxRecordingLength ? roundware.project.maxRecordingLength : '--') : '--';
+
+	useEffect(() => {
+		let timeout: NodeJS.Timeout;
+		if (success != null && config.autoResetTimeSeconds > 0) {
+			timeout = setTimeout(() => {
+				history.push('/');
+			}, config.autoResetTimeSeconds * 1000);
+		}
+		return () => clearTimeout(timeout);
+	}, [success]);
+
 	return {
 		draftMediaUrl,
 		success,
