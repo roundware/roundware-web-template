@@ -123,7 +123,7 @@ const useCreateRecording = () => {
 		let timeout: NodeJS.Timeout;
 		if (success != null && config.autoResetTimeSeconds > 0) {
 			timeout = setTimeout(() => {
-				history.push('/');
+				history.push('/speak/tags/0');
 			}, config.autoResetTimeSeconds * 1000);
 		}
 		return () => clearTimeout(timeout);
