@@ -119,14 +119,32 @@ const useCreateRecording = () => {
 
 	const maxRecordingLength = roundware.project ? (roundware.project.maxRecordingLength ? roundware.project.maxRecordingLength : '--') : '--';
 
+	// nodejs.Timeout state
+	const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+	const [progress, setProgress] = useState(0);
 	useEffect(() => {
-		let timeout: NodeJS.Timeout;
 		if (success != null && config.autoResetTimeSeconds > 0) {
-			timeout = setTimeout(() => {
+			const timeout = setTimeout(() => {
 				history.push('/speak/tags/0');
 			}, config.autoResetTimeSeconds * 1000);
+
+			setTimer(timeout);
 		}
-		return () => clearTimeout(timeout);
+		return () => {
+			if (timer) clearTimeout(timer);
+		};
+	}, [success]);
+
+	// increment progress to reach 100 after autoResetTimeSeconds
+	useEffect(() => {
+		if (success != null && config.autoResetTimeSeconds > 0) {
+			const interval = setInterval(() => {
+				setProgress((prevProgress) => (prevProgress >= 100 ? 100 : prevProgress + 10 / config.autoResetTimeSeconds));
+			}, 100);
+			return () => {
+				clearInterval(interval);
+			};
+		}
 	}, [success]);
 
 	return {
@@ -161,6 +179,9 @@ const useCreateRecording = () => {
 		history,
 		set_draft_media_url,
 		set_draft_recording_media,
+		timer,
+		setTimer,
+		progress,
 	};
 };
 
