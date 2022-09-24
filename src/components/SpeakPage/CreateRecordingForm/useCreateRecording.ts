@@ -125,6 +125,7 @@ const useCreateRecording = () => {
 	useEffect(() => {
 		if (success != null && config.autoResetTimeSeconds > 0) {
 			const timeout = setTimeout(() => {
+				draftRecording.reset();
 				history.push('/speak/tags/0');
 			}, config.autoResetTimeSeconds * 1000);
 
