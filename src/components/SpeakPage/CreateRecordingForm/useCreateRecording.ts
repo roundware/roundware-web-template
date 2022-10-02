@@ -122,9 +122,11 @@ const useCreateRecording = () => {
 	// nodejs.Timeout state
 	const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 	const [progress, setProgress] = useState(0);
+
 	useEffect(() => {
+		let timeout: NodeJS.Timeout | null = null;
 		if (success != null && config.autoResetTimeSeconds > 0) {
-			const timeout = setTimeout(() => {
+			timeout = setTimeout(() => {
 				draftRecording.reset();
 				history.push('/speak/tags/0');
 			}, config.autoResetTimeSeconds * 1000);
@@ -132,7 +134,7 @@ const useCreateRecording = () => {
 			setTimer(timeout);
 		}
 		return () => {
-			if (timer) clearTimeout(timer);
+			if (timeout) clearTimeout(timeout);
 		};
 	}, [success]);
 
