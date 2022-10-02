@@ -41,10 +41,11 @@ const SpeakPage = (props: SpeakPageProps) => {
 	useEffect(() => {
 		// if we are directed to the 'speak' page directly,
 		// redirect to the first tag selection page
+
 		if (props.match.isExact === true) {
 			history.replace('/speak/tags/0');
 		}
-	}, []);
+	}, [props.match]);
 
 	if (roundware === null || !roundware.uiConfig) {
 		return null;
