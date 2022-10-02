@@ -44,7 +44,13 @@ export const DraftRecordingProvider = ({ roundware, children }: DraftRecordingPr
 
 	const reset: IDraftRecordingContext[`reset`] = () => {
 		setTags([]);
-		setLocation({ latitude: null, longitude: null });
+		const location = roundware.project.location;
+		if (typeof location.latitude == 'number' && typeof location.longitude == 'number') {
+			setLocation({
+				latitude: location.latitude,
+				longitude: location.longitude,
+			});
+		}
 		setAcceptedAgreement(false);
 	};
 
