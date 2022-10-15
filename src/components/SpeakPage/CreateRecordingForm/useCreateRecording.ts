@@ -110,7 +110,7 @@ const useCreateRecording = () => {
 		}
 		const hasTags = draftRecording.tags.length > 0;
 
-		if (!hasTags) {
+		if (!hasTags && config.ALLOW_SPEAK_TAGS !== false) {
 			history.replace('/speak/tags/0');
 		}
 	}, [draftRecording.tags, draftRecording.location.latitude, draftRecording.location.longitude]);
