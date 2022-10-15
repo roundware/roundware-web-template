@@ -277,7 +277,7 @@ const CreateRecordingForm = () => {
 									const assetMeta = {
 										longitude: draftRecording.location.longitude,
 										latitude: draftRecording.location.latitude,
-										tag_ids: finalTags,
+										...(finalTags.length > 0 ? { tags: finalTags } : {}),
 									};
 									const dateStr = new Date().toISOString();
 
