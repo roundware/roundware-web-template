@@ -3,7 +3,7 @@ import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 
 // all the reusable types here
 export interface ITagLookup {
-	[id: number]: ITag;
+	[id: number]: ITag | undefined;
 }
 export interface ISelectedTags {
 	[group_key: string]: number[]; // tag_ids

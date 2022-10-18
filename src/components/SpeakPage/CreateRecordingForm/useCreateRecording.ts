@@ -115,7 +115,7 @@ const useCreateRecording = () => {
 		}
 	}, [draftRecording.tags, draftRecording.location.latitude, draftRecording.location.longitude]);
 
-	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag]);
+	const selected_tags = draftRecording.tags.map((tag) => tagLookup[tag]).filter((tag) => tag !== undefined);
 
 	const maxRecordingLength = roundware.project ? (roundware.project.maxRecordingLength ? roundware.project.maxRecordingLength : '--') : '--';
 

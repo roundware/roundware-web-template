@@ -267,7 +267,7 @@ const CreateRecordingForm = () => {
 									}
 
 									// include default speak tags
-									const finalTags = selected_tags.map((t) => t.tag_id);
+									const finalTags = selected_tags.map((t) => t?.tag_id).filter((t) => t !== undefined);
 									config.DEFAULT_SPEAK_TAGS?.forEach((t) => {
 										if (!finalTags.includes(t)) {
 											finalTags.push(t);
