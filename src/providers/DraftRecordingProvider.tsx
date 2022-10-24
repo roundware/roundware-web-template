@@ -19,13 +19,12 @@ export const DraftRecordingProvider = ({ roundware, children }: DraftRecordingPr
 			return;
 		}
 		if (location.latitude === null || location.longitude === null) {
-			const location = roundware.project.location;
-			if (typeof location.latitude == 'number' && typeof location.longitude == 'number') {
-				setLocation({
-					latitude: location.latitude,
-					longitude: location.longitude,
-				});
-			}
+			const projectLocation = roundware.project.location;
+
+			setLocation({
+				latitude: +(projectLocation?.latitude || 0),
+				longitude: +(projectLocation?.longitude || 0),
+			});
 		}
 	}, [roundware.project && roundware.project.location]);
 
@@ -44,7 +43,12 @@ export const DraftRecordingProvider = ({ roundware, children }: DraftRecordingPr
 
 	const reset: IDraftRecordingContext[`reset`] = () => {
 		setTags([]);
-		setLocation({ latitude: null, longitude: null });
+		const projectLocation = roundware.project.location;
+
+		setLocation({
+			latitude: +(projectLocation?.latitude || 0),
+			longitude: +(projectLocation?.longitude || 0),
+		});
 		setAcceptedAgreement(false);
 	};
 

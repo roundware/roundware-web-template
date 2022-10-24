@@ -135,10 +135,10 @@ const ListenFilterDrawer = () => {
 			<Divider />
 			<List>
 				{availableFilters.map((f) => (
-					<>
+					<React.Fragment key={f.toString()}>
 						{filterLookup[f]}
 						<Divider />
-					</>
+					</React.Fragment>
 				))}
 			</List>
 		</div>

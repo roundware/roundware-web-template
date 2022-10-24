@@ -112,11 +112,12 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 			if (!roundware.uiConfig || !roundware.uiConfig.speak) {
 				return;
 			}
-			const defaultTags = config.DEFAULT_SPEAK_TAGS;
+			// we will do this will submitting
+			// const defaultTags = config.DEFAULT_SPEAK_TAGS;
 
-			const tagIds = defaultTags;
+			// const tagIds = defaultTags;
 
-			draftRecording.setTags(tagIds);
+			// draftRecording.setTags(tagIds);
 			history.replace('/speak/location');
 		} else {
 			return;

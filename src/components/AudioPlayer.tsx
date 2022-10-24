@@ -1,7 +1,7 @@
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { Box, IconButton, LinearProgress } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { WaveForm, WaveSurfer } from 'wavesurfer-react';
 import { WaveSurferProps, WaveSurferRef } from 'wavesurfer-react/dist/containers/WaveSurfer';
 // @ts-ignore
@@ -55,6 +55,12 @@ const AudioPlayer = ({ size = 'small', src }: PropTypes): JSX.Element | null => 
 		wavesurferRef.current?.play();
 		setPlaying(true);
 	};
+
+	useEffect(() => {
+		return () => {
+			wavesurferRef.current?.destroy();
+		};
+	}, []);
 
 	if (!src) return null;
 	return (
