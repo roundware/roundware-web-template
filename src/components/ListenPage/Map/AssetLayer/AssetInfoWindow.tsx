@@ -34,7 +34,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			roundware
 				.getAssets({
 					media_type: 'photo',
-					envelope_id: asset?.envelope_ids[0],
+					envelope_ids: asset?.envelope_ids,
 				})
 				.then(setImageAssets);
 		}
@@ -45,7 +45,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			roundware
 				.getAssets({
 					media_type: 'text',
-					envelope_id: asset.envelope_ids[0],
+					envelope_ids: asset.envelope_ids,
 				})
 				.then(setTextAssets);
 		}
