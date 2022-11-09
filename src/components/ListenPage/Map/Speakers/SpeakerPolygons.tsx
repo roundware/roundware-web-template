@@ -5,6 +5,7 @@ import { speakerPolygonColors as colors, speakerPolygonOptions } from 'styles/sp
 import { polygonToGoogleMapPaths } from 'utils';
 import CustomMapControl from '../CustomControl';
 import config from 'config.json';
+import { ISpeakerData } from 'roundware-web-framework/dist/types/speaker';
 interface Props {}
 
 const getColorForIndex = (index: number): string => {
@@ -20,7 +21,7 @@ const SpeakerPolygons = (props: Props) => {
 		return roundware
 			.speakers()
 			?.sort((a, b) => (a?.id > b?.id ? -1 : 1))
-			?.filter((speaker) => speaker.shape)
+			?.filter((speaker): speaker is ISpeakerData & Required<Pick<ISpeakerData, 'shape'>> => !!speaker.shape)
 			.flatMap((s, index) => {
 				const prop: PolygonProps = {
 					path: polygonToGoogleMapPaths(s.shape),

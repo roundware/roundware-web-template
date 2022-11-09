@@ -7,6 +7,7 @@ import midpoint from '@turf/midpoint';
 import speakerImage from 'assets/speaker.png';
 import { useRoundware } from 'hooks';
 import React, { useMemo, useState } from 'react';
+import { ISpeakerData } from 'roundware-web-framework/dist/types/speaker';
 import { speakerPolygonColors as colors, speakerPolygonOptions } from 'styles/speaker';
 interface Props {}
 
@@ -24,7 +25,7 @@ const SpeakerImages = (props: Props) => {
 		const p = roundware
 			.speakers()
 			?.sort((a, b) => (a?.id > b?.id ? -1 : 1))
-			?.filter((speaker) => speaker.shape)
+			?.filter((speaker): speaker is ISpeakerData & Required<Pick<ISpeakerData, 'shape'>> => !!speaker.shape)
 			.flatMap((s, index) => {
 				const shape = polygon(s.shape.coordinates[0]);
 				const coordinates = shape.geometry.coordinates[0];
