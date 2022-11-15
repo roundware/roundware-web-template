@@ -15,7 +15,7 @@ export interface IDraftRecordingContext {
 		}>
 	>;
 	setTags: Dispatch<SetStateAction<number[]>>;
-	selectTag: (tag: number, deselect: number) => void;
+	selectTag: (tag: number, deselect?: boolean) => void;
 	clearTags: (tags: number[]) => void;
 	reset: () => void;
 }
