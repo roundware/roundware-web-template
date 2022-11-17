@@ -13,7 +13,7 @@ import { useRoundware, useRoundwareDraft } from '../../hooks';
 import { IMatch } from '../../types';
 import { getRandomArbitrary, wait } from '../../utils';
 import config from 'config.json';
-import { ArrowForwardIosRounded } from '@mui/icons-material';
+import { ArrowForwardIosRounded, Iron } from '@mui/icons-material';
 const useStyles = makeStyles((theme) => {
 	return {
 		tagCard: {
@@ -51,22 +51,28 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 			return item.parent_id === null || draftRecording.tags.includes(item.parent_id);
 		});
 
-		if (tagGroup.selection_method == 'random_single') {
-			// randomly select one item from the list
-			const randomIndex = Math.floor(getRandomArbitrary(0, c.length));
-			console.log('randomIndex', randomIndex);
-			draftRecording.selectTag(c[randomIndex].id);
-			return [c[randomIndex]];
-		} else if (tagGroup.selection_method == 'random_double') {
-			// randomly select two items from the list
-			const randomIndex1 = Math.floor(getRandomArbitrary(0, c.length));
-			let randomIndex2 = Math.floor(getRandomArbitrary(0, c.length));
-			while (randomIndex2 == randomIndex1) {
-				randomIndex2 = Math.floor(getRandomArbitrary(0, c.length));
+		if (tagGroup.uiitem_filter?.startsWith(`random`)) {
+			const randomRequired = parseInt(tagGroup.uiitem_filter.split(`-`)[1]);
+
+			if (randomRequired > c.length) return c;
+
+			let randomIndexes: number[] = [];
+
+			for (let i = 0; i < randomRequired; i++) {
+				let randomIndex = Math.floor(getRandomArbitrary(0, c.length + 1));
+
+				while (true) {
+					randomIndex = Math.floor(getRandomArbitrary(0, c.length));
+					if (!randomIndexes.includes(randomIndex)) {
+						break;
+					}
+				}
+				randomIndexes.push(randomIndex);
 			}
 
-			draftRecording.setTags([...draftRecording.tags, c[randomIndex1].id, c[randomIndex2].id]);
-			return [c[randomIndex1], c[randomIndex2]];
+			const randomChoices = randomIndexes.sort().map((index) => c[index]);
+
+			return randomChoices;
 		}
 
 		return c;
@@ -106,27 +112,33 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 
 	const toggleTagSelected = (tagId: number) => {
 		const isSelected = draftRecording.tags.includes(tagId);
-		let newTags;
+		let newTags: number[];
 		if (isSelected) {
 			// remove that tag
 			newTags = draftRecording.tags.filter((t) => t !== tagId);
 		} else {
 			// other tags in this set of choices should be unselected
 			const choiceIds = choices.map((c) => c.id);
+
 			newTags = draftRecording.tags.filter((t) => choiceIds.includes(t));
+
 			newTags = [...newTags, tagId];
 		}
+
 		draftRecording.setTags(newTags);
 
 		wait<void>(500).then(() => {
-			goToNext();
+			goToNext(newTags);
 		});
 	};
 
 	const [error, setError] = useState('');
 
-	const goToNext = () => {
-		if (!tagGroup.display_items.some((t) => draftRecording.tags.includes(t.id))) {
+	const goToNext = (newTags?: number[]) => {
+		const selectedTags = newTags || draftRecording.tags;
+		if (choices.length == 1) {
+			draftRecording.selectTag(choices[0].id);
+		} else if (!choices.some((c) => selectedTags.includes(c.id))) {
 			setError('Please select an option!');
 			return;
 		}
@@ -151,24 +163,22 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 					margin: 'auto',
 				}}
 			>
-				<CardHeader title={tagGroup.header_display_text} titleTypographyProps={{ variant: 'h4', textAlign: 'center' }}></CardHeader>
+				<CardHeader title={tagGroupIndex + 1 + '. ' + tagGroup.header_display_text} titleTypographyProps={{ variant: 'h4', textAlign: 'center' }}></CardHeader>
 				<CardContent>
 					<Stack spacing={1}>
-						{choices.map((choice, index) => {
+						{choices.map((choice) => {
 							const isSelected = draftRecording.tags.includes(choice.id);
 							return (
-								<Fade in timeout={(index + 1) * 100}>
-									<Paper
-										key={choice.id}
-										className={`${classes.tagCard} ${isSelected ? classes.selectedTagCard : ''}`}
-										onClick={(e) => {
-											toggleTagSelected(choice.id);
-											e.preventDefault();
-										}}
-									>
-										<FormControlLabel checked={isSelected} control={<Checkbox style={{ display: 'none' }} size={'medium'} />} label={<Typography children={[choice.tag_display_text]} />} />
-									</Paper>
-								</Fade>
+								<Paper
+									key={choice.id}
+									className={`${classes.tagCard} ${isSelected ? classes.selectedTagCard : ''}`}
+									onClick={(e) => {
+										toggleTagSelected(choice.id);
+										e.preventDefault();
+									}}
+								>
+									<FormControlLabel checked={isSelected} control={<Checkbox style={{ display: 'none' }} size={'medium'} />} label={<Typography children={[choice.tag_display_text]} />} />
+								</Paper>
 							);
 						})}
 					</Stack>
@@ -201,7 +211,7 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 						Back
 					</Button>
 
-					<Button variant='contained' endIcon={<ArrowForwardIosRounded />} onClick={goToNext}>
+					<Button variant='contained' endIcon={<ArrowForwardIosRounded />} onClick={() => goToNext()}>
 						Next
 					</Button>
 				</CardActions>
