@@ -14,7 +14,8 @@ const AssetPlayer = ({ asset, style, className }: AssetPlayerProps) => {
 	}
 
 	let ext = /(?:\.([^.]+))?$/.exec(asset.file!)![1];
-	let filename = asset.file!;
+	// replace extension with no3;
+	let filename = asset.file!.replace(ext, 'mp3');
 	const supported = ['mp3', 'wav'];
 	if (supported.indexOf(ext) === -1) {
 		ext = 'mp3';
@@ -22,8 +23,6 @@ const AssetPlayer = ({ asset, style, className }: AssetPlayerProps) => {
 		let pos = lastPos == -1 ? filename.length : lastPos;
 		filename = filename.substr(0, pos < 0 ? filename.length : pos) + '.' + ext;
 	}
-
-	const audioType = `audio/${ext}`;
 
 	const { roundware } = useRoundware();
 	const handlePlay = () => {
@@ -34,7 +33,7 @@ const AssetPlayer = ({ asset, style, className }: AssetPlayerProps) => {
 	};
 	return (
 		<audio controls style={style} preload='none' controlsList='nodownload' className={className} onPlay={handlePlay} onPause={handleEnd} onEnded={handleEnd}>
-			<source src={filename} type={audioType} />
+			<source src={filename} />
 			Your browser does not support audio!
 		</audio>
 	);
