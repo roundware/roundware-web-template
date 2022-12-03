@@ -27,6 +27,7 @@
 		"@turf/midpoint": "^6.5.0",
 		"audio-recorder-polyfill": "^0.4.1",
 		"autosuggest-highlight": "^3.1.1",
+		"browser-id3-writer": "^4.4.0",
 		"clsx": "^1.2.1",
 		"core-js": "^3.23.3",
 		"date-fns": "^2.23.0",

@@ -24,6 +24,7 @@ import { useStyles } from './styles';
 import useCreateRecording from './useCreateRecording';
 import config from 'config.json';
 import { useState } from 'react';
+import ID3Writer from 'browser-id3-writer';
 const CreateRecordingForm = () => {
 	const { draftMediaUrl, textAsset, imageAssets, set_draft_recording_media, set_draft_media_url, draftRecording, setSuccess, selectAsset, roundware, draftRecordingMedia, updateAssets, saving, resetFilters, history, setTextAsset, setSaving, deleteRecording, legalModalOpen, setLegalModalOpen, setImageAssets, success, selected_tags, error, isRecording, toggleRecording, isExtraSmallScreen, setError, maxRecordingLength, stopRecording, setDeleteModalOpen, deleteModalOpen, timer, setTimer, ...cr } = useCreateRecording();
 	const classes = useStyles();
@@ -122,8 +123,23 @@ const CreateRecordingForm = () => {
 										onChange={(e) => {
 											if (!e.target.files) return;
 											const file = Array.from(e.target.files)[0];
-											set_draft_recording_media(file);
-											set_draft_media_url(URL.createObjectURL(file));
+
+											const reader = new FileReader();
+											reader.onload = function () {
+												const arrayBuffer = reader.result;
+
+												const writer = new ID3Writer(arrayBuffer);
+												writer.removeTag();
+
+												const url = writer.getURL();
+												set_draft_media_url(url);
+												set_draft_recording_media(writer.getBlob());
+											};
+											reader.onerror = function () {
+												// handle error
+												console.error('Reader error', reader.error);
+											};
+											reader.readAsArrayBuffer(file);
 										}}
 										type='file'
 										hidden
