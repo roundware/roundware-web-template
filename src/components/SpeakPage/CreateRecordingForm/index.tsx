@@ -1,4 +1,4 @@
-import { FileUpload } from '@mui/icons-material';
+import { FileUpload, Share } from '@mui/icons-material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -25,6 +25,8 @@ import useCreateRecording from './useCreateRecording';
 import config from 'config.json';
 import { useState } from 'react';
 import ID3Writer from 'browser-id3-writer';
+import ShareLinkButton from 'components/App/ShareButton';
+import { useUIContext } from 'context/UIContext';
 const CreateRecordingForm = () => {
 	const { draftMediaUrl, textAsset, imageAssets, set_draft_recording_media, set_draft_media_url, draftRecording, setSuccess, selectAsset, roundware, draftRecordingMedia, updateAssets, saving, resetFilters, history, setTextAsset, setSaving, deleteRecording, legalModalOpen, setLegalModalOpen, setImageAssets, success, selected_tags, error, isRecording, toggleRecording, isExtraSmallScreen, setError, maxRecordingLength, stopRecording, setDeleteModalOpen, deleteModalOpen, timer, setTimer, ...cr } = useCreateRecording();
 	const classes = useStyles();
@@ -32,6 +34,7 @@ const CreateRecordingForm = () => {
 		if (timer) clearTimeout(timer);
 		setTimer(null);
 	};
+	const { handleShare } = useUIContext();
 	return (
 		<>
 			<Card className={classes.container}>
@@ -342,6 +345,16 @@ const CreateRecordingForm = () => {
 							<DialogContentText>Upload Complete! Thank you for participating!</DialogContentText>
 						</DialogContent>
 						<DialogActions>
+							<Button
+								startIcon={<Share />}
+								onClick={() => {
+									handleShare(`${window.location.origin}/listen?eid=${success?.envelope_ids[0]}`);
+								}}
+								color='primary'
+								variant='contained'
+							>
+								Share
+							</Button>
 							<Button
 								variant={'contained'}
 								color={'primary'}

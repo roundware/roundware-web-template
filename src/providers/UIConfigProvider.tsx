@@ -15,10 +15,10 @@ const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, []);
 
-	const [showShare, setShowShare] = useState(false);
-	const handleCloseShare = () => setShowShare(false);
-	const handleShare = () => {
-		setShowShare(true);
+	const [showShare, setShowShare] = useState('');
+	const handleCloseShare = () => setShowShare('');
+	const handleShare = (customUrl?: string) => {
+		setShowShare(customUrl || 'true');
 	};
 
 	return <UiConfigContext.Provider value={{ infoWindowOrder, showShare, handleCloseShare, handleShare }}>{children}</UiConfigContext.Provider>;

@@ -6,7 +6,7 @@ const ShareLinkButton = () => {
 	const { handleShare } = useUIContext();
 
 	return (
-		<IconButton onClick={handleShare}>
+		<IconButton onClick={() => handleShare()}>
 			<ShareIcon />
 		</IconButton>
 	);
