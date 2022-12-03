@@ -25,13 +25,13 @@ export const StyledMenu = withStyles({
 );
 
 export const StyledMenuItem = withStyles((theme) => ({
-	root: {
-		'&:focus': {
-			backgroundColor: theme.palette.primary.dark,
-			'& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-				color: theme.palette.common.white,
-			},
-		},
-		color: theme.palette.common.black,
-	},
+	// root: {
+	// 	'&:focus': {
+	// 		backgroundColor: theme.palette.primary.§,
+	// 		'& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+	// 			color: theme.palette.common.white,
+	// 		},
+	// 	},
+	// 	color: theme.palette.common.black,
+	// },
 }))(MenuItem);

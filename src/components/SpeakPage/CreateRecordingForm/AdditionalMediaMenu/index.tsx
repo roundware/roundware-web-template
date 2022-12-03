@@ -10,6 +10,7 @@ import { PhotoPickerInput, PhotoPickerMenuItem } from './PhotoPicker';
 import { StyledMenu } from './StyledMenu';
 import { TextInputDialog, TextInputMenuItem } from './TextInput';
 import config from 'config.json';
+import ContactInfo from './ContactInfo';
 interface AdditionalMediaMenuProps {
 	onSetText: React.Dispatch<React.SetStateAction<ITextAsset>>;
 	onSetImage: (file: File) => void;
@@ -64,6 +65,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 						}}
 						setAnchorEl={setAnchorEl}
 					/>
+
 					<TextInputMenuItem
 						{...{
 							textAsset,
@@ -74,6 +76,7 @@ const AdditionalMediaMenu = ({ onSetText, onSetImage, imageAssets, textAsset, di
 							setAnchorEl,
 						}}
 					/>
+					<ContactInfo />
 				</StyledMenu>
 			</div>
 		);
