@@ -344,7 +344,11 @@ const CreateRecordingForm = () => {
 							</DialogContentText>
 							<DialogContentText>Upload Complete! Thank you for participating!</DialogContentText>
 						</DialogContent>
-						<DialogActions>
+						<DialogActions
+							sx={{
+								flexWrap: 'wrap',
+							}}
+						>
 							<Button
 								startIcon={<Share />}
 								onClick={() => {
@@ -352,6 +356,9 @@ const CreateRecordingForm = () => {
 								}}
 								color='primary'
 								variant='contained'
+								sx={{
+									my: 1,
+								}}
 							>
 								Share
 							</Button>
@@ -365,6 +372,9 @@ const CreateRecordingForm = () => {
 										history.push(`/listen?eid=${success.envelope_ids[0]}`);
 									}
 								}}
+								sx={{
+									my: 1,
+								}}
 							>
 								Listen
 							</Button>
@@ -374,6 +384,9 @@ const CreateRecordingForm = () => {
 								onClick={() => {
 									draftRecording.reset();
 									history.push('/speak');
+								}}
+								sx={{
+									my: 1,
 								}}
 							>
 								Create New Recording
