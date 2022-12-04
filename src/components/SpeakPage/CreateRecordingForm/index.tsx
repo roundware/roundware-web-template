@@ -286,7 +286,7 @@ const CreateRecordingForm = () => {
 									}
 
 									// include default speak tags
-									const finalTags = selected_tags.map((t) => t?.tag_id).filter((t) => t !== undefined);
+									const finalTags = selected_tags.map((t) => t?.tag_id).filter((t) => t !== undefined) as number[];
 									config.DEFAULT_SPEAK_TAGS?.forEach((t) => {
 										if (!finalTags.includes(t)) {
 											finalTags.push(t);
@@ -296,7 +296,7 @@ const CreateRecordingForm = () => {
 									const assetMeta = {
 										longitude: draftRecording.location.longitude,
 										latitude: draftRecording.location.latitude,
-										...(finalTags.length > 0 ? { tags: finalTags } : {}),
+										...(finalTags.length > 0 ? { tag_ids: finalTags } : {}),
 									};
 									const dateStr = new Date().toISOString();
 
