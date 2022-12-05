@@ -3,7 +3,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MicIcon from '@mui/icons-material/Mic';
-import { Alert, IconButton, LinearProgress, Snackbar } from '@mui/material';
+import { Alert, IconButton, LinearProgress, Snackbar, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -370,54 +370,45 @@ const CreateRecordingForm = () => {
 							sx={{
 								flexWrap: 'wrap',
 								flexDirection: 'column',
-								justifyContent: 'end',
-								alignItems: 'end',
 							}}
 						>
-							<Button
-								startIcon={<Share />}
-								onClick={() => {
-									handleShare(`${window.location.origin}/listen?eid=${success?.envelope_ids[0]}`);
-								}}
-								color='primary'
-								variant='contained'
-								sx={{
-									my: 1,
-								}}
-							>
-								Share
-							</Button>
-							<Button
-								variant={'contained'}
-								color={'primary'}
-								disabled={success == null}
-								onClick={() => {
-									if (success != null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
-										resetFilters();
-										history.push(`/listen?eid=${success.envelope_ids[0]}`);
-									}
-								}}
-								sx={{
-									my: 1,
-								}}
-								startIcon={<Headphones />}
-							>
-								Listen
-							</Button>
-							<Button
-								variant={'contained'}
-								color={'primary'}
-								onClick={() => {
-									draftRecording.reset();
-									history.push('/speak');
-								}}
-								sx={{
-									my: 1,
-								}}
-								startIcon={<Create />}
-							>
-								Create New Recording
-							</Button>
+							<Stack spacing={1} maxWidth={300}>
+								<Button
+									startIcon={<Share />}
+									onClick={() => {
+										handleShare(`${window.location.origin}/listen?eid=${success?.envelope_ids[0]}`);
+									}}
+									color='primary'
+									variant='contained'
+								>
+									Share
+								</Button>
+								<Button
+									variant={'contained'}
+									color={'primary'}
+									disabled={success == null}
+									onClick={() => {
+										if (success != null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
+											resetFilters();
+											history.push(`/listen?eid=${success.envelope_ids[0]}`);
+										}
+									}}
+									startIcon={<Headphones />}
+								>
+									Listen
+								</Button>
+								<Button
+									variant={'contained'}
+									color={'primary'}
+									onClick={() => {
+										draftRecording.reset();
+										history.push('/speak');
+									}}
+									startIcon={<Create />}
+								>
+									Create New Recording
+								</Button>
+							</Stack>
 						</DialogActions>
 					</Dialog>
 				</Grid>
