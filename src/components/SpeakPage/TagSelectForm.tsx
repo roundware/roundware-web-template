@@ -115,12 +115,12 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 		let newTags: number[];
 		if (isSelected) {
 			// remove that tag
-			newTags = draftRecording.tags.filter((t) => t !== tagId);
+			newTags = draftRecording.tags.filter((t) => t != tagId);
 		} else {
 			// other tags in this set of choices should be unselected
 			const choiceIds = choices.map((c) => c.id);
 
-			newTags = draftRecording.tags.filter((t) => choiceIds.includes(t));
+			newTags = draftRecording.tags.filter((t) => !choiceIds.includes(t));
 
 			newTags = [...newTags, tagId];
 		}
