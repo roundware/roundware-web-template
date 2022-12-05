@@ -1,4 +1,4 @@
-import { FileUpload, Share } from '@mui/icons-material';
+import { Create, FileUpload, Headphones, Share } from '@mui/icons-material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -27,6 +27,8 @@ import { useState } from 'react';
 import ID3Writer from 'browser-id3-writer';
 import ShareLinkButton from 'components/App/ShareButton';
 import { useUIContext } from 'context/UIContext';
+import { useRoundwareDraft } from 'hooks';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 const CreateRecordingForm = () => {
 	const { draftMediaUrl, textAsset, imageAssets, set_draft_recording_media, set_draft_media_url, draftRecording, setSuccess, selectAsset, roundware, draftRecordingMedia, updateAssets, saving, resetFilters, history, setTextAsset, setSaving, deleteRecording, legalModalOpen, setLegalModalOpen, setImageAssets, success, selected_tags, error, isRecording, toggleRecording, isExtraSmallScreen, setError, maxRecordingLength, stopRecording, setDeleteModalOpen, deleteModalOpen, timer, setTimer, ...cr } = useCreateRecording();
 	const classes = useStyles();
@@ -35,6 +37,8 @@ const CreateRecordingForm = () => {
 		setTimer(null);
 	};
 	const { handleShare } = useUIContext();
+
+	const { user } = useRoundwareDraft();
 	return (
 		<>
 			<Card className={classes.container}>
@@ -303,21 +307,39 @@ const CreateRecordingForm = () => {
 									// Make an envelope to hold the uploaded assets.
 									const envelope = await roundware.makeEnvelope();
 									try {
-										// Add the audio asset.
 										if (draftRecordingMedia == null) throw new Error(`RecordingMedia data was null!`);
-										const asset = await envelope.upload(draftRecordingMedia, dateStr + '.mp3', assetMeta);
 
-										// Add the text asset, if any.
+										let asset: Partial<IAssetData> | null = null;
+										// hold all promises for parallel execution
+										const promises = [];
+										// Add the audio asset.
+										promises.push(
+											(async () => {
+												asset = await envelope.upload(draftRecordingMedia, dateStr + '.mp3', assetMeta);
+											})()
+										);
 										if (textAsset) {
-											await envelope.upload(new Blob([textAsset.toString()], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' });
+											promises.push(
+												// Add the text asset, if any.
+
+												envelope.upload(new Blob([textAsset.toString()], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' })
+											);
 										}
 										for (const file of imageAssets) {
-											await envelope.upload(file, file.name || dateStr + '.jpg', {
-												...assetMeta,
-												media_type: 'photo',
-											});
+											promises.push(
+												envelope.upload(file, file.name || dateStr + '.jpg', {
+													...assetMeta,
+													media_type: 'photo',
+												})
+											);
 										}
+										if (user)
+											promises.push(
+												// Add the user asset, if any.
+												roundware.user.updateUser(user)
+											);
 
+										await Promise.all(promises);
 										selectAsset(null);
 										setSuccess(asset);
 
@@ -347,6 +369,9 @@ const CreateRecordingForm = () => {
 						<DialogActions
 							sx={{
 								flexWrap: 'wrap',
+								flexDirection: 'column',
+								justifyContent: 'end',
+								alignItems: 'end',
 							}}
 						>
 							<Button
@@ -375,6 +400,7 @@ const CreateRecordingForm = () => {
 								sx={{
 									my: 1,
 								}}
+								startIcon={<Headphones />}
 							>
 								Listen
 							</Button>
@@ -388,6 +414,7 @@ const CreateRecordingForm = () => {
 								sx={{
 									my: 1,
 								}}
+								startIcon={<Create />}
 							>
 								Create New Recording
 							</Button>
