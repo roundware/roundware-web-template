@@ -21,7 +21,9 @@ const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		setShowShare(customUrl || 'true');
 	};
 
-	return <UiConfigContext.Provider value={{ infoWindowOrder, showShare, handleCloseShare, handleShare }}>{children}</UiConfigContext.Provider>;
+	const [drawerOpen, setDrawerOpen] = useState(false);
+
+	return <UiConfigContext.Provider value={{ infoWindowOrder, showShare, handleCloseShare, handleShare, drawerOpen, setDrawerOpen }}>{children}</UiConfigContext.Provider>;
 };
 
 export default UiConfigProvider;
