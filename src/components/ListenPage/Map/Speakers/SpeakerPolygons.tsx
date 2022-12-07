@@ -4,7 +4,7 @@ import { useRoundware } from 'hooks';
 import { speakerPolygonColors as colors, speakerPolygonOptions } from 'styles/speaker';
 import { polygonToGoogleMapPaths } from 'utils';
 import CustomMapControl from '../CustomControl';
-import config from 'config.json';
+import config from 'config';
 import { ISpeakerData } from 'roundware-web-framework/dist/types/speaker';
 interface Props {}
 
@@ -39,7 +39,7 @@ const SpeakerPolygons = (props: Props) => {
 
 	return (
 		<div>
-			{config.DEBUG_MODE === true && (
+			{config.debugMode === true && (
 				<CustomMapControl position={window.google.maps.ControlPosition.LEFT_CENTER}>
 					<div>
 						<p>fillOpacity</p>

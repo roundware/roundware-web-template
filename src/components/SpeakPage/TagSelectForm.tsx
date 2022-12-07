@@ -12,7 +12,7 @@ import { generatePath, useHistory } from 'react-router-dom';
 import { useRoundware, useRoundwareDraft } from '../../hooks';
 import { IMatch } from '../../types';
 import { getRandomArbitrary, wait } from '../../utils';
-import config from 'config.json';
+import config from 'config';
 import { ArrowForwardIosRounded, Iron } from '@mui/icons-material';
 const useStyles = makeStyles((theme) => {
 	return {
@@ -94,7 +94,7 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 	}, [choices, roundware.uiConfig]);
 
 	useEffect(() => {
-		if (config.ALLOW_SPEAK_TAGS !== true) {
+		if (config.speak.allowSpeakTags !== true) {
 			if (!roundware.uiConfig || !roundware.uiConfig.speak) {
 				return;
 			}

@@ -22,7 +22,7 @@ import LegalAgreementForm from '../../LegalAgreementForm';
 import AdditionalMediaMenu from './AdditionalMediaMenu';
 import { useStyles } from './styles';
 import useCreateRecording from './useCreateRecording';
-import config from 'config.json';
+import config from 'config';
 import { useState } from 'react';
 import ID3Writer from 'browser-id3-writer';
 import ShareLinkButton from 'components/App/ShareButton';
@@ -263,7 +263,7 @@ const CreateRecordingForm = () => {
 								</Button>
 							</DialogActions>
 						</Dialog>
-						{config.ALLOW_PHOTOS === true || config.ALLOW_TEXT === true ? <AdditionalMediaMenu onSetText={setTextAsset} onSetImage={(file) => setImageAssets([...imageAssets, file])} textAsset={textAsset} imageAssets={imageAssets} disabled={draftMediaUrl === ''} /> : null}
+						{config.speak.allowPhotos === true || config.speak.allowText === true ? <AdditionalMediaMenu onSetText={setTextAsset} onSetImage={(file) => setImageAssets([...imageAssets, file])} textAsset={textAsset} imageAssets={imageAssets} disabled={draftMediaUrl === ''} /> : null}
 						<Button
 							variant='contained'
 							color='primary'
@@ -291,7 +291,7 @@ const CreateRecordingForm = () => {
 
 									// include default speak tags
 									const finalTags = selected_tags.map((t) => t?.tag_id).filter((t) => t !== undefined) as number[];
-									config.DEFAULT_SPEAK_TAGS?.forEach((t) => {
+									config.speak.defaultSpeakTags?.forEach((t) => {
 										if (!finalTags.includes(t)) {
 											finalTags.push(t);
 										}
@@ -415,12 +415,12 @@ const CreateRecordingForm = () => {
 			</Card>
 			{/* resetting timer snackbar */}
 
-			<Snackbar open={!!timer} message={`Resetting in ${cr.progress} seconds`} autoHideDuration={config.autoResetTimeSeconds * 1000} onClose={handleOnSnackbarClose}>
+			<Snackbar open={!!timer} message={`Resetting in ${cr.progress} seconds`} autoHideDuration={config.features.autoResetTimeSeconds * 1000} onClose={handleOnSnackbarClose}>
 				<Alert onClose={handleOnSnackbarClose} severity='info' sx={{ width: '100%' }}>
 					Resetting in{' '}
 					{
 						// value of time remaining from progress percent
-						Math.round((config.autoResetTimeSeconds * (100 - cr.progress)) / 100)
+						Math.round((config.features.autoResetTimeSeconds * (100 - cr.progress)) / 100)
 					}
 					{` `}
 					seconds...

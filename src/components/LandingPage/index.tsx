@@ -9,7 +9,7 @@ import Container from '@mui/material/Container';
 import banner from '../../assets/rw-icon-cluster.png';
 import { GeoListenMode } from 'roundware-web-framework';
 import useStyles from './styles';
-import config from 'config.json';
+import config from 'config';
 
 export const LandingPage = () => {
 	const { roundware, forceUpdate } = useRoundware();
@@ -46,7 +46,7 @@ export const LandingPage = () => {
 						<Grid item>
 							<ActionButton
 								onClick={() => {
-									if (!config.AUTOPLAY) return;
+									if (!config.listen.autoplay) return;
 									if (!roundware.mixer || !roundware.mixer?.playlist) {
 										roundware?.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
 											if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {

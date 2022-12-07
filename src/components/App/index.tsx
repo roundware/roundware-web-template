@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import PlatformMessage from 'components/PlatformMessage';
-import config from 'config.json';
+import config from 'config';
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga4';
 import Helmet from 'react-helmet';
@@ -102,7 +102,7 @@ export const App = () => {
 								</Route>
 							</div>
 
-							{config.DEBUG_MODE === true ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
+							{config.debugMode === true ? <div style={{ color: 'white' }}>mixer: {roundware.mixer && JSON.stringify(roundware.mixer.mixParams)}</div> : null}
 							<div>
 								<InfoPopup />
 							</div>

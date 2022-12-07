@@ -11,7 +11,7 @@ import { RoundwareMapStyle } from '../../../styles/map-style';
 import ErrorDialog from '../../ErrorDialog';
 import LocationSelectMarker from './LocationSelectMarker';
 import PlacesAutocomplete from './PlacesAutocomplete';
-import config from 'config.json';
+import config from 'config';
 const getPosition = function (options?: PositionOptions): Promise<GeolocationPosition> {
 	return new Promise(function (resolve, reject) {
 		return navigator.geolocation.getCurrentPosition(resolve, reject, options);
@@ -74,7 +74,7 @@ const LocationSelectForm = () => {
 	const gmapsLibraries = ['places'];
 
 	useEffect(() => {
-		if (draftRecording.tags.length === 0 && config.ALLOW_SPEAK_TAGS === true) {
+		if (draftRecording.tags.length === 0 && config.speak.allowSpeakTags === true) {
 			history.replace('/speak/tags/0');
 		}
 	}, [draftRecording.tags]);

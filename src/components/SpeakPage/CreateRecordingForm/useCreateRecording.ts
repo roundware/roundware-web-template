@@ -1,7 +1,7 @@
 import Wave from '@foobar404/wave';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
-import config from 'config.json';
+import config from 'config';
 import { useRoundware, useRoundwareDraft } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -111,7 +111,7 @@ const useCreateRecording = () => {
 		}
 		const hasTags = draftRecording.tags.length > 0;
 
-		if (!hasTags && config.ALLOW_SPEAK_TAGS !== false) {
+		if (!hasTags && config.speak.allowSpeakTags !== false) {
 			history.replace('/speak/tags/0');
 		}
 	}, [draftRecording.tags, draftRecording.location.latitude, draftRecording.location.longitude]);
@@ -126,11 +126,11 @@ const useCreateRecording = () => {
 
 	useEffect(() => {
 		let timeout: NodeJS.Timeout | null = null;
-		if (success != null && config.autoResetTimeSeconds > 0) {
+		if (success != null && config.features.autoResetTimeSeconds > 0) {
 			timeout = setTimeout(() => {
 				draftRecording.reset();
 				history.push('/speak/tags/0');
-			}, config.autoResetTimeSeconds * 1000);
+			}, config.features.autoResetTimeSeconds * 1000);
 
 			setTimer(timeout);
 		}
@@ -141,9 +141,9 @@ const useCreateRecording = () => {
 
 	// increment progress to reach 100 after autoResetTimeSeconds
 	useEffect(() => {
-		if (success != null && config.autoResetTimeSeconds > 0) {
+		if (success != null && config.features.autoResetTimeSeconds > 0) {
 			const interval = setInterval(() => {
-				setProgress((prevProgress) => (prevProgress >= 100 ? 100 : prevProgress + 10 / config.autoResetTimeSeconds));
+				setProgress((prevProgress) => (prevProgress >= 100 ? 100 : prevProgress + 10 / config.features.autoResetTimeSeconds));
 			}, 100);
 			return () => {
 				clearInterval(interval);

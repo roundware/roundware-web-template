@@ -1,13 +1,12 @@
+import LabelIcon from '@mui/icons-material/Label';
 import { CircularProgress, Divider, InputAdornment, List, ListItem, ListItemIcon, ListItemText, TextField, TextFieldProps, Theme, Typography } from '@mui/material';
-import clsx from 'clsx';
-import useDebounce from 'hooks/useDebounce';
-import React, { useEffect, useState } from 'react';
-import config from 'config.json';
-import { useRoundware } from 'hooks';
+import { makeStyles } from '@mui/styles';
 import DateFilterMenu from 'components/AssetFilterPanel/DateFilterMenu';
 import TagFilterMenu from 'components/AssetFilterPanel/TagFilterMenu';
-import { makeStyles } from '@mui/styles';
-import LabelIcon from '@mui/icons-material/Label';
+import config from 'config';
+import { useRoundware } from 'hooks';
+import useDebounce from 'hooks/useDebounce';
+import React, { useEffect } from 'react';
 
 const useStyles = makeStyles((theme: Theme) => ({
 	list: {
@@ -37,7 +36,7 @@ const Filters = () => {
 		setDescriptionFilter(e.target.value);
 	};
 
-	const availableFilters = config.AVAILABLE_LISTEN_FILTERS || [];
+	const availableFilters = config.map.availableListenFilters || [];
 	const endAdornment =
 		descriptionFilter && debouncedDF != descriptionFilter ? (
 			<InputAdornment position='end'>

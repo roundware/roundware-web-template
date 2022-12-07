@@ -8,7 +8,7 @@ import AssetLayer from './AssetLayer';
 import AssetLoadingOverlay from './AssetLoadingOverlay';
 import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
-import config from 'config.json';
+import config from 'config';
 import SpeakerPolygons from './Speakers/SpeakerPolygons';
 import SpeakerReplayButton from './Speakers/SpeakerReplayButton';
 import SpeakerLoadingIndicator from './Speakers/SpeakerLoadingIndicator';
@@ -52,10 +52,10 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 
 	const onLoad = (map: google.maps.Map) => {
 		let restriction;
-		if (config.MAP_BOUNDS != 'none') {
+		if (config.map.bounds != 'none') {
 			let bounds: google.maps.LatLngBounds;
 
-			if (config.MAP_BOUNDS == 'auto') {
+			if (config.map.bounds == 'auto') {
 				const {
 					southwest: { latitude: swLat, longitude: swLng },
 					northeast: { latitude: neLat, longitude: neLng },
@@ -63,7 +63,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 
 				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
 			} else {
-				const { swLat, swLng, neLat, neLng } = config.MAP_BOUNDS_POINTS;
+				const { swLat, swLng, neLat, neLng } = config.map.boundsPoints;
 				bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
 			}
 			restriction = {
@@ -126,14 +126,14 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
 						{map && roundware.mixer?.playlist && <WalkingModeButton />}
-						{config.SPEAKERS_DISPLAY == 'polygons' && <SpeakerPolygons />}
-						{config.SPEAKERS_DISPLAY == 'images' && <SpeakerImages />}
+						{config.map.speakerDisplay == 'polygons' && <SpeakerPolygons />}
+						{config.map.speakerDisplay == 'images' && <SpeakerImages />}
 						<SpeakerLoadingIndicator />
-						{!config.speakerConfig.loop && <SpeakerReplayButton />}
+						{!config.listen.speaker.loop && <SpeakerReplayButton />}
 						<ShareDialog />
 						<ResetButton updateLocation={updateListenerLocation} />
 
-						{config.SHOW_BOUNDS_MARKERS && roundware && (
+						{config.map.showBoundsMarkers && roundware && (
 							<Marker
 								position={{
 									lat: roundware.getMapBounds().northeast.latitude!,
@@ -142,7 +142,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 							/>
 						)}
 
-						{config.SHOW_BOUNDS_MARKERS && roundware && (
+						{config.map.showBoundsMarkers && roundware && (
 							<Marker
 								position={{
 									lat: roundware.getMapBounds().southwest.latitude!,
