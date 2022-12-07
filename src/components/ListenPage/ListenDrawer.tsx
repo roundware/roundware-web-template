@@ -52,7 +52,18 @@ const ListenDrawer = () => {
 				}}
 			>
 				<Box>
-					<Stack direction='row' p={1} pb={0} spacing={1} alignItems='center'>
+					<Stack
+						position='sticky'
+						top={0}
+						sx={{
+							backgroundColor: 'background.paper',
+						}}
+						direction='row'
+						p={1}
+						pb={0}
+						spacing={1}
+						alignItems='center'
+					>
 						<IconButton
 							sx={{
 								mt: 1,
