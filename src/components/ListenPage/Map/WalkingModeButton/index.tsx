@@ -68,14 +68,13 @@ const walkingModeButton = () => {
 
 	const displayListenModeButton = availableListenModesArray == 'device' || availableListenModesArray.length == 2 ? true : false;
 
-	const location = useLocation();
 	const [init, setInit] = useState(false);
 	// set default GeoListenMode
 	useEffect(() => {
 		if (init) return;
 		if (!map) return;
 		setInit(true);
-		if (availableListenModesArray[0] == 'device') {
+		if (availableListenModesArray == 'device') {
 			console.log(`default based on screen width [${isMobile ? `Mobile` : `Desktop`}]`);
 			isMobile ? enterWalkingMode() : enterMapMode();
 		} else if (availableListenModesArray[0] == 'map') {
