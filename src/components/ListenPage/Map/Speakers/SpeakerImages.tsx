@@ -17,9 +17,9 @@ const getColorForIndex = (index: number): string => {
 const SpeakerImages = (props: Props) => {
 	const { roundware } = useRoundware();
 
-	const map = useGoogleMap();
-
-	const overlayProps: GroundOverlayProps[] = useMemo(() => {
+	const overlayProps: (GroundOverlayProps & {
+		key: string;
+	})[] = useMemo(() => {
 		if (!Array.isArray(roundware.speakers())) return [];
 
 		const p = roundware
@@ -67,12 +67,15 @@ const SpeakerImages = (props: Props) => {
 					);
 				}
 
-				const prop: GroundOverlayProps = {
+				const prop: GroundOverlayProps & {
+					key: string;
+				} = {
 					bounds: new google.maps.LatLngBounds(new google.maps.LatLng(squarePoints[2][1], squarePoints[2][0]), new google.maps.LatLng(squarePoints[0][1], squarePoints[0][0])),
 					url: speakerImage,
 					options: {
 						opacity: 0.2,
 					},
+					key: speakerImage,
 				};
 
 				return [prop];
@@ -85,7 +88,7 @@ const SpeakerImages = (props: Props) => {
 		<>
 			{Array.isArray(overlayProps) &&
 				overlayProps.map((p) => {
-					return <GroundOverlay {...p} key={Math.random().toString()} />;
+					return <GroundOverlay {...p} key={p.key} />;
 				})}
 		</>
 	);
