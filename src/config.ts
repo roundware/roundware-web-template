@@ -158,7 +158,7 @@ type IConfig = {
 		/** items to be displayed in the infowindow
 		 * order will be the same as the order in the array
 		 */
-		infowindowDisplayItems: ('date' | 'tags' | 'text' | 'description' | 'audio')[];
+		infowindowDisplayItems: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'photo' | 'actions')[];
 
 		/** zoom levels */
 		zoom: {
@@ -212,11 +212,11 @@ type IConfig = {
 				 * order will be the same as the order in the array
 				 *  */
 				active: boolean;
-				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions')[];
+				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions' | 'photo')[];
 			};
 			playlist: {
 				active: boolean;
-				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions')[];
+				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions' | 'photo')[];
 			};
 		};
 	};
