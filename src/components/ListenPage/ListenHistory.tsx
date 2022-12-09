@@ -5,7 +5,7 @@ import { sortBy } from 'lodash';
 import moment from 'moment';
 import React from 'react';
 import AssetInfoCard from './Map/AssetLayer/AssetInfoCard';
-
+import config from 'config';
 const ListenHistory = () => {
 	const { roundware } = useRoundware();
 	const { assets } = roundware.listenHistory;
@@ -28,7 +28,7 @@ const ListenHistory = () => {
 								}
 							/>
 							<CardContent>
-								<AssetInfoCard asset={asset} roundware={roundware} />
+								<AssetInfoCard asset={asset} roundware={roundware} order={config.ui.listenSidebar.playlist.available} />
 							</CardContent>
 						</Card>
 					);

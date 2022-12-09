@@ -15,9 +15,10 @@ import { AssetActionButtons } from './AssetActionButtons';
 interface Props {
 	asset: IAssetData;
 	roundware: Roundware;
+	order: ('date' | 'description' | 'tags' | 'text' | 'photo' | 'audio' | 'actions')[];
 }
 
-const AssetInfoCard = ({ asset, roundware }: Props) => {
+const AssetInfoCard = ({ asset, roundware, order }: Props) => {
 	const [imageAssets, setImageAssets] = useState<IImageAsset[]>([]);
 	const [textAssets, setTextAssets] = useState<IAssetData[]>([]);
 
@@ -125,8 +126,7 @@ const AssetInfoCard = ({ asset, roundware }: Props) => {
 		}
 	};
 
-	const { infoWindowOrder } = useContext(UiConfigContext);
-	return <>{Array.isArray(infoWindowOrder) && infoWindowOrder.map((item, index, list) => infoItemsResolver(item, index, list))}</>;
+	return <>{Array.isArray(order) && order.map((item, index, list) => infoItemsResolver(item, index, list))}</>;
 };
 
 export default AssetInfoCard;

@@ -7,6 +7,7 @@ import Drawer from '@mui/material/Drawer';
 import { useUIContext } from 'context/UIContext';
 
 import 'date-fns';
+import config from 'config';
 import React, { useState } from 'react';
 import { useRoundware } from '../../hooks';
 import Filters from './Filters';
@@ -16,10 +17,6 @@ const ListenDrawer = () => {
 	const { roundware } = useRoundware();
 
 	const { drawerOpen: open, setDrawerOpen: setOpen } = useUIContext();
-
-	const handleDrawerOpen = () => {
-		setOpen(true);
-	};
 
 	const handleDrawerClose = () => {
 		setOpen(false);
@@ -31,6 +28,7 @@ const ListenDrawer = () => {
 	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
 		return null;
 	}
+	if (!config.ui.listenSidebar) return null;
 	return (
 		<React.Fragment key={'drawer'}>
 			<IconButton onClick={toggle}>
@@ -73,8 +71,8 @@ const ListenDrawer = () => {
 							<Close />
 						</IconButton>
 						<Tabs value={selectedTab} onChange={(e, v) => setSelectedTab(v)} variant='fullWidth'>
-							<Tab label='Filters' value='filters' />
-							<Tab label='History' value='history' />
+							{config.ui.listenSidebar.filter && <Tab label='Filters' value='filters' />}
+							{config.ui.listenSidebar.playlist && <Tab label='History' value='history' />}
 						</Tabs>
 					</Stack>
 

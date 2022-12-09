@@ -1,5 +1,5 @@
 import LabelIcon from '@mui/icons-material/Label';
-import { CircularProgress, Divider, InputAdornment, List, ListItem, ListItemIcon, ListItemText, TextField, TextFieldProps, Theme, Typography } from '@mui/material';
+import { CircularProgress, Divider, Grid, InputAdornment, List, ListItem, ListItemIcon, ListItemText, TextField, TextFieldProps, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import DateFilterMenu from 'components/AssetFilterPanel/DateFilterMenu';
 import TagFilterMenu from 'components/AssetFilterPanel/TagFilterMenu';
@@ -8,21 +8,8 @@ import { useRoundware } from 'hooks';
 import useDebounce from 'hooks/useDebounce';
 import React, { useEffect } from 'react';
 
-const useStyles = makeStyles((theme: Theme) => ({
-	list: {
-		width: 300,
-		[theme.breakpoints.down('sm')]: {
-			width: 250,
-		},
-	},
-	fullList: {
-		width: 'auto',
-	},
-}));
 const Filters = () => {
-	const classes = useStyles();
-
-	const { roundware, afterDateFilter, setAfterDateFilter, beforeDateFilter, setDescriptionFilter, descriptionFilter } = useRoundware();
+	const { roundware, setDescriptionFilter, descriptionFilter } = useRoundware();
 
 	const debouncedDF = useDebounce(descriptionFilter, 2500);
 	useEffect(() => {
@@ -36,7 +23,7 @@ const Filters = () => {
 		setDescriptionFilter(e.target.value);
 	};
 
-	const availableFilters = config.map.availableListenFilters || [];
+	const availableFilters = config.ui.listenSidebar.filter.available || [];
 	const endAdornment =
 		descriptionFilter && debouncedDF != descriptionFilter ? (
 			<InputAdornment position='end'>
@@ -64,7 +51,9 @@ const Filters = () => {
 					Array.isArray(roundware.uiConfig.listen) &&
 					roundware.uiConfig.listen.map((tg) => (
 						<ListItem key={'list-item' + tg.group_short_name}>
-							<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
+							<Grid container>
+								<TagFilterMenu key={tg.group_short_name} tag_group={tg} />
+							</Grid>
 						</ListItem>
 					))}
 			</>

@@ -1,8 +1,8 @@
 {
 	"debugMode": false,
 	"project": {
-		"serverUrl": "https://dev.roundware.com/api/2",
-		"serverBaseURL": "https://dev.roundware.com/",
+		"apiUrl": "https://dev.roundware.com/api/2",
+		"serverUrl": "https://dev.roundware.com/",
 		"projectId": 1,
 		"initialLocation": {
 			"latitude": 50,

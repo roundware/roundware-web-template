@@ -1,4 +1,5 @@
 import configJSON from 'config.json';
+import { merge } from 'lodash';
 
 // this config object can be overridden by config.json
 // Refer the type object below for info and comments on each config option
@@ -38,7 +39,7 @@ let config: IConfig = {
 
 	map: {
 		infowindowDisplayItems: ['date', 'tags', 'text', 'description', 'audio'],
-		availableListenFilters: ['date', 'description', 'tags'],
+
 		zoom: {
 			high: 17,
 			low: 15,
@@ -59,6 +60,17 @@ let config: IConfig = {
 
 	ui: {
 		navLogoHeight: 34,
+		listenSidebar: {
+			active: true,
+			filter: {
+				active: true,
+				available: ['date', 'tags', 'description'],
+			},
+			playlist: {
+				active: false,
+				available: ['date', 'tags', 'text', 'description', 'audio', 'actions'],
+			},
+		},
 	},
 
 	features: {
@@ -71,11 +83,12 @@ let config: IConfig = {
 
 // override the default config
 // with values from a config.json file
+let finalConfig: IConfig;
 if (configJSON) {
-	config = Object.assign(config, configJSON);
-}
+	finalConfig = merge(config, configJSON);
+} else finalConfig = config;
 
-export default config;
+export default finalConfig;
 
 // types for config file
 type IConfig = {
@@ -146,11 +159,7 @@ type IConfig = {
 		 * order will be the same as the order in the array
 		 */
 		infowindowDisplayItems: ('date' | 'tags' | 'text' | 'description' | 'audio')[];
-		/**
-		 * filters available in the listen mode
-		 * order will be the same as the order in the array
-		 *  */
-		availableListenFilters: ('date' | 'description' | 'tags')[];
+
 		/** zoom levels */
 		zoom: {
 			/** example when info window is selected */
@@ -193,6 +202,23 @@ type IConfig = {
 	ui: {
 		/** height of the nav logo */
 		navLogoHeight: number;
+
+		/** side bar/drawer on listen page */
+		listenSidebar: {
+			active: boolean;
+			filter: {
+				/**
+				 * filters available in the listen mode
+				 * order will be the same as the order in the array
+				 *  */
+				active: boolean;
+				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions')[];
+			};
+			playlist: {
+				active: boolean;
+				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions')[];
+			};
+		};
 	};
 	/** config for features usually project specific */
 	features: {

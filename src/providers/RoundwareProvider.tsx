@@ -11,7 +11,7 @@ import { useDeviceID } from '../hooks/useDeviceID';
 import { ITagLookup } from '../types';
 
 import config from 'config';
-import { join } from 'lodash';
+
 interface PropTypes {
 	children: React.ReactNode;
 }
@@ -179,7 +179,7 @@ const RoundwareProvider = (props: PropTypes) => {
 	useEffect(() => {
 		const project_id = config.project.id;
 		const server_url = config.project.apiUrl;
-
+		console.log(config.project);
 		// maybe we build the site with a default listener location,
 		// otherwise we go to null island
 

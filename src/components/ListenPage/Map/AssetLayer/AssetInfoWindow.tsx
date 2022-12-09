@@ -1,5 +1,6 @@
 import { Card, CardContent, StyledEngineProvider, ThemeProvider } from '@mui/material';
 import { InfoWindow } from '@react-google-maps/api';
+import finalConfig from 'config';
 import { Roundware } from 'roundware-web-framework';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { IRoundwareContext } from '../../../../context/RoundwareContext';
@@ -27,7 +28,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			<StyledEngineProvider injectFirst>
 				<ThemeProvider theme={lightTheme}>
 					<Card>
-						<AssetInfoCard asset={asset} roundware={roundware} />
+						<AssetInfoCard asset={asset} roundware={roundware} order={finalConfig.map.infowindowDisplayItems} />
 					</Card>
 				</ThemeProvider>
 			</StyledEngineProvider>
