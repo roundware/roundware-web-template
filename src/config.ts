@@ -9,10 +9,10 @@ let config: IConfig = {
 	project: {
 		apiUrl: 'https://prod.roundware.com/api/2',
 		serverUrl: 'https://prod.roundware.com/',
-		id: 1,
+		id: 10,
 		initialLocation: {
-			latitude: 40.7128,
-			longitude: -74.006,
+			latitude: 50,
+			longitude: 27,
 		},
 	},
 
