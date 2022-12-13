@@ -31,7 +31,8 @@ const AssetInfoCard = ({ asset, roundware, order }: Props) => {
 			roundware
 				.getAssets({
 					media_type: 'photo',
-					envelope_ids: asset?.envelope_ids,
+					// @ts-ignore
+					envelope_id: asset?.envelope_ids,
 				})
 				.then(setImageAssets);
 		}
