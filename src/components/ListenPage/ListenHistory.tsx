@@ -1,20 +1,22 @@
-import { AccessTime } from '@mui/icons-material';
-import { Card, CardContent, CardHeader, Collapse, Slide, Stack, Typography } from '@mui/material';
-import { useRoundware } from 'hooks';
-import { sortBy } from 'lodash';
-import moment from 'moment';
-import React from 'react';
-import AssetInfoCard from './Map/AssetLayer/AssetInfoCard';
+import { AccessTime, LocationOnOutlined } from '@mui/icons-material';
+import { Button, Card, CardActions, CardContent, CardHeader, Stack, Typography } from '@mui/material';
 import config from 'config';
+import { useRoundware } from 'hooks';
+import { sortBy, uniqBy } from 'lodash';
+import moment from 'moment';
+import AssetInfoCard from './Map/AssetLayer/AssetInfoCard';
 const ListenHistory = () => {
-	const { roundware } = useRoundware();
+	const { roundware, selectAsset, forceUpdate } = useRoundware();
 	const { assets } = roundware.listenHistory;
 
 	return (
 		<Stack spacing={2} p={2}>
-			{sortBy(
-				assets.filter((a) => a.id),
-				'addedAt'
+			{uniqBy(
+				sortBy(
+					assets.filter((a) => a.id),
+					'addedAt'
+				),
+				'id'
 			)
 				.reverse()
 				.map((asset) => {
@@ -30,6 +32,18 @@ const ListenHistory = () => {
 							<CardContent>
 								<AssetInfoCard asset={asset} roundware={roundware} order={config.ui.listenSidebar.playlist.available} />
 							</CardContent>
+							<CardActions>
+								<Button
+									onClick={() => {
+										selectAsset(asset);
+										forceUpdate();
+									}}
+									variant='outlined'
+									startIcon={<LocationOnOutlined />}
+								>
+									Show on Map
+								</Button>
+							</CardActions>
 						</Card>
 					);
 				})}
