@@ -26,6 +26,7 @@ const AssetPlayer = ({ asset, style, className }: AssetPlayerProps) => {
 
 	const { roundware, forceUpdate } = useRoundware();
 	const handlePlay = () => {
+		roundware.mixer.toggle(false);
 		roundware.events?.logAssetStart(asset.id);
 		roundware.listenHistory.addAsset(asset);
 		forceUpdate();
