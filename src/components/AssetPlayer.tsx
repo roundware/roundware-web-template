@@ -24,9 +24,11 @@ const AssetPlayer = ({ asset, style, className }: AssetPlayerProps) => {
 		filename = filename.substr(0, pos < 0 ? filename.length : pos) + '.' + ext;
 	}
 
-	const { roundware } = useRoundware();
+	const { roundware, forceUpdate } = useRoundware();
 	const handlePlay = () => {
 		roundware.events?.logAssetStart(asset.id);
+		roundware.listenHistory.addAsset(asset);
+		forceUpdate();
 	};
 	const handleEnd = () => {
 		roundware.events?.logAssetEnd(asset.id);

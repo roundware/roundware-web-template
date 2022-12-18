@@ -1,6 +1,6 @@
 import finalConfig from 'config';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation, useRouteMatch } from 'react-router';
+import { useLocation } from 'react-router';
 import { UiConfigContext } from '../context/UIContext';
 
 const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {

@@ -75,7 +75,7 @@ const SpeakerImages = (props: Props) => {
 					options: {
 						opacity: 0.2,
 					},
-					key: speakerImage,
+					key: speakerImage + JSON.stringify(squarePoints),
 				};
 
 				return [prop];
