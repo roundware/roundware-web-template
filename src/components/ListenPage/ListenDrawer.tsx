@@ -1,13 +1,11 @@
-import { Close } from '@mui/icons-material';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { Box, Divider, IconButton, Stack, Tab, Tabs, Theme, useMediaQuery } from '@mui/material';
+import { Close, ViewSidebar } from '@mui/icons-material';
+import { Box, IconButton, Stack, Tab, Tabs, Theme, useMediaQuery } from '@mui/material';
 
-import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import { useUIContext } from 'context/UIContext';
 
-import 'date-fns';
 import config from 'config';
+import 'date-fns';
 import React, { useState } from 'react';
 import { useRoundware } from '../../hooks';
 import Filters from './Filters';
@@ -32,7 +30,7 @@ const ListenDrawer = () => {
 	return (
 		<React.Fragment key={'drawer'}>
 			<IconButton onClick={toggle}>
-				<FilterListIcon fontSize='large' />
+				<ViewSidebar fontSize='large' />
 			</IconButton>
 			<Drawer
 				anchor={'right'}
