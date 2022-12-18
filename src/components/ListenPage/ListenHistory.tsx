@@ -1,13 +1,20 @@
-import { AccessTime, LocationOnOutlined } from '@mui/icons-material';
-import { Button, Card, CardActions, CardContent, CardHeader, Stack, Typography } from '@mui/material';
+import { AccessTime, ChevronRight, LocationOnOutlined } from '@mui/icons-material';
+import { Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from '@mui/material';
 import config from 'config';
 import { useRoundware } from 'hooks';
 import { sortBy, uniqBy } from 'lodash';
 import moment from 'moment';
+import { useState } from 'react';
 import AssetInfoCard from './Map/AssetLayer/AssetInfoCard';
 const ListenHistory = () => {
 	const { roundware, selectAsset, forceUpdate } = useRoundware();
 	const { assets } = roundware.listenHistory;
+
+	const [collapsedItems, setCollapsedItems] = useState<number[]>([]);
+
+	const toggleCollapse = (id: number) => {
+		setCollapsedItems((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
+	};
 
 	return (
 		<Stack spacing={2} p={2}>
@@ -29,9 +36,32 @@ const ListenHistory = () => {
 									</Stack>
 								}
 							/>
-							<CardContent>
-								<AssetInfoCard asset={asset} roundware={roundware} order={config.ui.listenSidebar.playlist.available} />
-							</CardContent>
+							<Stack
+								direction={'row'}
+								mx={0.5}
+								alignItems='center'
+								color='text.disabled'
+								onClick={() => {
+									toggleCollapse(asset.id);
+								}}
+								sx={{
+									cursor: 'pointer',
+								}}
+							>
+								<IconButton color='primary'>
+									<ChevronRight
+										sx={{
+											transform: collapsedItems.includes(asset.id) ? 'rotate(90deg)' : 'rotate(0deg)',
+										}}
+									/>
+								</IconButton>
+								<Typography variant='body1'>Asset #{asset.id}</Typography>
+							</Stack>
+							<Collapse in={collapsedItems.includes(asset.id)}>
+								<CardContent>
+									<AssetInfoCard asset={asset} roundware={roundware} order={config.ui.listenSidebar.playlist.available} />
+								</CardContent>
+							</Collapse>
 							<CardActions>
 								<Button
 									onClick={() => {
