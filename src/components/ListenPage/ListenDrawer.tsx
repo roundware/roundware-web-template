@@ -21,7 +21,7 @@ const ListenDrawer = () => {
 	};
 	const toggle = () => setOpen(!open);
 
-	const [selectedTab, setSelectedTab] = useState('filters');
+	const [selectedTab, setSelectedTab] = useState('history');
 	const isDesktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
 	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
 		return null;
