@@ -61,6 +61,7 @@ let config: IConfig = {
 	ui: {
 		navLogoHeight: 34,
 		listenSidebar: {
+			defaultOpen: true,
 			active: true,
 			filter: {
 				active: true,
@@ -205,6 +206,9 @@ type IConfig = {
 
 		/** side bar/drawer on listen page */
 		listenSidebar: {
+			/** should the sidebar be open by default on desktop */
+			defaultOpen: boolean;
+			/** should the sidebar be shown */
 			active: boolean;
 			filter: {
 				/**
