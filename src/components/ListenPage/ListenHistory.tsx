@@ -31,35 +31,31 @@ const ListenHistory = () => {
 						<Card key={asset.id}>
 							<CardHeader
 								subheader={
-									<Stack spacing={1} direction='row' alignItems={'center'}>
-										<AccessTime fontSize='small' /> <Typography variant='subtitle2'>{moment(asset.addedAt).format('h:mm:ss A MMMM Do YYYY')}</Typography>
+									<Stack
+										spacing={1}
+										direction='row'
+										alignItems={'center'}
+										onClick={() => {
+											toggleCollapse(asset.id);
+										}}
+										sx={{
+											cursor: 'pointer',
+										}}
+									>
+										<ChevronRight
+											sx={{
+												transform: collapsedItems.includes(asset.id) ? 'rotate(90deg)' : 'rotate(0deg)',
+											}}
+										/>
+
+										<Typography variant='subtitle2'>{moment(asset.addedAt).format('h:mm:ss A MMMM Do YYYY')}</Typography>
 									</Stack>
 								}
 							/>
-							<Stack
-								direction={'row'}
-								mx={0.5}
-								alignItems='center'
-								color='text.disabled'
-								onClick={() => {
-									toggleCollapse(asset.id);
-								}}
-								sx={{
-									cursor: 'pointer',
-								}}
-							>
-								<IconButton color='primary'>
-									<ChevronRight
-										sx={{
-											transform: collapsedItems.includes(asset.id) ? 'rotate(90deg)' : 'rotate(0deg)',
-										}}
-									/>
-								</IconButton>
-								<Typography variant='body1'>Asset #{asset.id}</Typography>
-							</Stack>
+
 							<Collapse in={collapsedItems.includes(asset.id)}>
 								<CardContent>
-									<AssetInfoCard asset={asset} roundware={roundware} order={config.ui.listenSidebar.playlist.available} />
+									<AssetInfoCard asset={asset} roundware={roundware} order={config.ui.listenSidebar.history.available} />
 								</CardContent>
 							</Collapse>
 							<CardActions>

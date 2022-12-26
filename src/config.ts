@@ -64,11 +64,11 @@ let config: IConfig = {
 			defaultOpen: true,
 			active: true,
 			filter: {
-				active: true,
+				active: false,
 				available: ['date', 'tags', 'description'],
 			},
-			playlist: {
-				active: false,
+			history: {
+				active: true,
 				available: ['date', 'tags', 'text', 'description', 'audio', 'actions'],
 			},
 		},
@@ -218,7 +218,7 @@ type IConfig = {
 				active: boolean;
 				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions' | 'photo')[];
 			};
-			playlist: {
+			history: {
 				active: boolean;
 				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions' | 'photo')[];
 			};

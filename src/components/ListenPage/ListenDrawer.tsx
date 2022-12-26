@@ -21,12 +21,12 @@ const ListenDrawer = () => {
 	};
 	const toggle = () => setOpen(!open);
 
-	const [selectedTab, setSelectedTab] = useState('history');
+	const [selectedTab, setSelectedTab] = useState(config.ui.listenSidebar.history.active ? `history` : `filters`);
 	const isDesktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
 	if (!(roundware.uiConfig && roundware.uiConfig.listen)) {
 		return null;
 	}
-	if (!config.ui.listenSidebar) return null;
+	if (!config.ui.listenSidebar.active) return null;
 	return (
 		<React.Fragment key={'drawer'}>
 			<IconButton onClick={toggle}>
@@ -69,8 +69,8 @@ const ListenDrawer = () => {
 							<Close />
 						</IconButton>
 						<Tabs value={selectedTab} onChange={(e, v) => setSelectedTab(v)} variant='fullWidth'>
-							{config.ui.listenSidebar.filter && <Tab label='Filters' value='filters' />}
-							{config.ui.listenSidebar.playlist && <Tab label='History' value='history' />}
+							{config.ui.listenSidebar.filter.active && <Tab label='Filters' value='filters' />}
+							{config.ui.listenSidebar.history.active && <Tab label='History' value='history' />}
 						</Tabs>
 					</Stack>
 
