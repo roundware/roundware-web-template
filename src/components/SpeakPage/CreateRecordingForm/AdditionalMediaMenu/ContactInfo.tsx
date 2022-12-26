@@ -1,7 +1,7 @@
 import { Email } from '@mui/icons-material';
 import Check from '@mui/icons-material/Check';
 import { LoadingButton } from '@mui/lab';
-import { Box, ListItemIcon, ListItemText, MenuItem, Stack, TextField } from '@mui/material';
+import { Box, DialogContent, ListItemIcon, ListItemText, MenuItem, Stack, TextField } from '@mui/material';
 import Modal from 'components/elements/Modal';
 import { useRoundwareDraft } from 'hooks';
 import { useRef, useState } from 'react';
@@ -19,12 +19,13 @@ const ContactInfo = (props: Props) => {
 
 	return (
 		<>
-			<MenuItem onClick={() => setOpen(true)}>
+			<MenuItem onClick={() => setOpen(true)} tabIndex={-1}>
 				<ListItemIcon>
 					<Email color='primary' />
 				</ListItemIcon>
 				<ListItemText primary='Contact Info' />
 			</MenuItem>
+
 			<Modal open={open} title='Contact Info' onClose={() => setOpen(false)}>
 				<form
 					onSubmit={(e) => {
@@ -38,10 +39,35 @@ const ContactInfo = (props: Props) => {
 						setOpen(false);
 					}}
 				>
-					<Stack spacing={2} minWidth='300px'>
-						<TextField label='First Name' name='first_name' required autoFocus tabIndex={100} inputRef={firstNameRef} />
-						<TextField label='Last Name' name='last_name' required tabIndex={101} inputRef={lastNameRef} />
-						<TextField label='Email' type='email' name='email' required tabIndex={102} inputRef={emailRef} />
+					<Stack spacing={2} minWidth='250px'>
+						<TextField
+							label='First Name'
+							onKeyDown={(e) => {
+								if (e.key === 'Tab') {
+									e.preventDefault();
+									lastNameRef.current?.focus();
+								}
+							}}
+							name='first_name'
+							tabIndex={2}
+							required
+							autoFocus
+							inputRef={firstNameRef}
+						/>
+						<TextField
+							onKeyDown={(e) => {
+								if (e.key === 'Tab') {
+									e.preventDefault();
+									emailRef.current?.focus();
+								}
+							}}
+							label='Last Name'
+							name='last_name'
+							tabIndex={3}
+							required
+							inputRef={lastNameRef}
+						/>
+						<TextField label='Email' type='email' name='email' tabIndex={4} required inputRef={emailRef} />
 						<Box>
 							<LoadingButton startIcon={<Check />} type='submit' variant='contained'>
 								OK
