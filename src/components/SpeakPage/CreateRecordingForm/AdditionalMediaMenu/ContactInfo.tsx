@@ -15,7 +15,7 @@ const ContactInfo = (props: Props) => {
 	const lastNameRef = useRef<HTMLInputElement>(null);
 	const emailRef = useRef<HTMLInputElement>(null);
 
-	const { setUser } = useRoundwareDraft();
+	const { setUser, user } = useRoundwareDraft();
 
 	return (
 		<>
@@ -49,13 +49,14 @@ const ContactInfo = (props: Props) => {
 								}
 							}}
 							name='first_name'
-							tabIndex={2}
 							required
 							autoFocus
+							defaultValue={user?.first_name}
 							inputRef={firstNameRef}
 						/>
 						<TextField
 							onKeyDown={(e) => {
+								console.log(e.key);
 								if (e.key === 'Tab') {
 									e.preventDefault();
 									emailRef.current?.focus();
@@ -63,11 +64,11 @@ const ContactInfo = (props: Props) => {
 							}}
 							label='Last Name'
 							name='last_name'
-							tabIndex={3}
 							required
+							defaultValue={user?.last_name}
 							inputRef={lastNameRef}
 						/>
-						<TextField label='Email' type='email' name='email' tabIndex={4} required inputRef={emailRef} />
+						<TextField label='Email' defaultValue={user?.email} type='email' name='email' tabIndex={4} required inputRef={emailRef} />
 						<Box>
 							<LoadingButton startIcon={<Check />} type='submit' variant='contained'>
 								OK
