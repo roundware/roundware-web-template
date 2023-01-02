@@ -1,4 +1,5 @@
 import { AccessTime, ChevronRight, LocationOnOutlined } from '@mui/icons-material';
+import LocationOn from '@mui/icons-material/LocationOn';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from '@mui/material';
 import config from 'config';
 import { useRoundware } from 'hooks';
@@ -7,7 +8,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import AssetInfoCard from './Map/AssetLayer/AssetInfoCard';
 const ListenHistory = () => {
-	const { roundware, selectAsset, forceUpdate } = useRoundware();
+	const { roundware, selectAsset, forceUpdate, selectedAsset } = useRoundware();
 	const { assets } = roundware.listenHistory;
 
 	const [collapsedItems, setCollapsedItems] = useState<number[]>([]);
@@ -55,21 +56,24 @@ const ListenHistory = () => {
 
 							<Collapse in={collapsedItems.includes(asset.id)}>
 								<CardContent>
-									<AssetInfoCard asset={asset} roundware={roundware} order={config.ui.listenSidebar.history.available} />
+									<AssetInfoCard
+										asset={asset}
+										roundware={roundware}
+										order={config.ui.listenSidebar.history.available}
+										actions={
+											<IconButton
+												title='Show on Map'
+												onClick={() => {
+													selectAsset(asset);
+													forceUpdate();
+												}}
+											>
+												{selectedAsset?.id == asset.id ? <LocationOn /> : <LocationOnOutlined />}
+											</IconButton>
+										}
+									/>
 								</CardContent>
 							</Collapse>
-							<CardActions>
-								<Button
-									onClick={() => {
-										selectAsset(asset);
-										forceUpdate();
-									}}
-									variant='outlined'
-									startIcon={<LocationOnOutlined />}
-								>
-									Show on Map
-								</Button>
-							</CardActions>
 						</Card>
 					);
 				})}

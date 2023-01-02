@@ -39,7 +39,7 @@ const downloadAsset = async (asset: IAssetData, projectName: string) => {
 	a.remove();
 };
 
-export const AssetActionButtons = ({ asset }: { asset: IAssetData }) => {
+export const AssetActionButtons = ({ asset, additionalActions }: { asset: IAssetData; additionalActions?: React.ReactNode }) => {
 	const { roundware } = useRoundware();
 	const projectName = roundware.project.projectName;
 
@@ -63,6 +63,7 @@ export const AssetActionButtons = ({ asset }: { asset: IAssetData }) => {
 			<IconButton onClick={() => downloadAsset(asset, projectName)} style={{ minWidth: 30 }} title='download this audio file'>
 				<GetAppIcon />
 			</IconButton>
+			{additionalActions}
 		</div>
 	);
 };

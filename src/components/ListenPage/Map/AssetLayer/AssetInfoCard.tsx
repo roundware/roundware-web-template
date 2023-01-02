@@ -16,9 +16,10 @@ interface Props {
 	asset: IAssetData;
 	roundware: Roundware;
 	order: ('date' | 'description' | 'tags' | 'text' | 'photo' | 'audio' | 'actions')[];
+	actions?: React.ReactNode;
 }
 
-const AssetInfoCard = ({ asset, roundware, order }: Props) => {
+const AssetInfoCard = ({ asset, roundware, order, actions }: Props) => {
 	const [imageAssets, setImageAssets] = useState<IImageAsset[]>([]);
 	const [textAssets, setTextAssets] = useState<IAssetData[]>([]);
 
@@ -121,7 +122,7 @@ const AssetInfoCard = ({ asset, roundware, order }: Props) => {
 			case 'audio':
 				return <AssetPlayer key={elementName} style={{ width: '100%', marginTop: 10 }} asset={asset} captureEvents />;
 			case 'actions':
-				return <AssetActionButtons key={elementName} asset={asset} />;
+				return <AssetActionButtons key={elementName} asset={asset} additionalActions={actions} />;
 			default:
 				return null;
 		}
