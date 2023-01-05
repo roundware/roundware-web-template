@@ -18,6 +18,7 @@ const DrawerSensitiveWrapper = ({ children }: Props) => {
 					easing: t.transitions.easing.sharp,
 					duration: t.transitions.duration.leavingScreen,
 				}),
+				marginRight: 0,
 				...(drawerOpen && {
 					transition: t.transitions.create('margin', {
 						easing: t.transitions.easing.easeOut,

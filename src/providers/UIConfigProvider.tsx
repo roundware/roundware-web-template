@@ -1,6 +1,6 @@
 import finalConfig from 'config';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { UiConfigContext } from '../context/UIContext';
 
 const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {
@@ -11,13 +11,23 @@ const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	const [drawerOpen, setDrawerOpen] = useState(false);
-	const { pathname } = useLocation();
-	const isListenPage = useMemo(() => pathname.includes(`/listen`), [pathname]);
+	// const history = useHistory();
+
+	const updateDrawerState = () => {
+		console.log('updateDrawerState', window.location.pathname);
+		if (window.location.pathname.includes(`/listen`)) setDrawerOpen(finalConfig.ui.listenSidebar.active && finalConfig.ui.listenSidebar.defaultOpen);
+		else setDrawerOpen(false);
+	};
 
 	useEffect(() => {
-		if (isListenPage) setDrawerOpen(finalConfig.ui.listenSidebar.active && finalConfig.ui.listenSidebar.defaultOpen);
-		else setDrawerOpen(false);
-	}, [isListenPage]);
+		updateDrawerState();
+		window.addEventListener('popstate', updateDrawerState);
+		window.addEventListener('click', updateDrawerState);
+		return () => {
+			window.removeEventListener('popstate', updateDrawerState);
+			window.removeEventListener('click', updateDrawerState);
+		};
+	}, []);
 
 	return <UiConfigContext.Provider value={{ showShare, handleCloseShare, handleShare, drawerOpen, setDrawerOpen }}>{children}</UiConfigContext.Provider>;
 };
