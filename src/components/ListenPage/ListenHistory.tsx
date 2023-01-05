@@ -5,7 +5,7 @@ import config from 'config';
 import { useRoundware } from 'hooks';
 import { sortBy, uniqBy } from 'lodash';
 import moment from 'moment';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import AssetInfoCard from './Map/AssetLayer/AssetInfoCard';
 const ListenHistory = () => {
 	const { roundware, selectAsset, forceUpdate, selectedAsset } = useRoundware();
@@ -17,17 +17,22 @@ const ListenHistory = () => {
 		setCollapsedItems((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
 	};
 
-	return (
-		<Stack spacing={2} p={2}>
-			{uniqBy(
+	const list = useMemo(
+		() =>
+			uniqBy(
 				sortBy(
 					assets.filter((a) => a.id),
 					'addedAt'
 				),
 				'id'
-			)
-				.reverse()
-				.map((asset) => {
+			).reverse(),
+		[assets]
+	);
+
+	return (
+		<Stack spacing={2} p={2}>
+			{list.length ? (
+				list.map((asset) => {
 					return (
 						<Card key={asset.id}>
 							<CardHeader
@@ -76,7 +81,12 @@ const ListenHistory = () => {
 							</Collapse>
 						</Card>
 					);
-				})}
+				})
+			) : (
+				<Typography variant='subtitle2' color='text.secondary'>
+					You currently have no listening history. As you listen to recordings on the map, they will be displayed here for further discovery.
+				</Typography>
+			)}
 		</Stack>
 	);
 };
