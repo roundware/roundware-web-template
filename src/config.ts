@@ -70,6 +70,7 @@ let config: IConfig = {
 			history: {
 				active: true,
 				available: ['date', 'tags', 'text', 'description', 'audio', 'actions'],
+				infoCardDefaultCollapsed: false,
 			},
 		},
 	},
@@ -221,6 +222,7 @@ type IConfig = {
 			history: {
 				active: boolean;
 				available: ('date' | 'tags' | 'text' | 'description' | 'audio' | 'actions' | 'photo')[];
+				infoCardDefaultCollapsed: boolean;
 			};
 		};
 	};

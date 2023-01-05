@@ -45,7 +45,7 @@ const ListenHistory = () => {
 									>
 										<ChevronRight
 											sx={{
-												transform: collapsedItems.includes(asset.id) ? 'rotate(90deg)' : 'rotate(0deg)',
+												transform: (config.ui.listenSidebar.history.infoCardDefaultCollapsed ? collapsedItems.includes(asset.id) : !collapsedItems.includes(asset.id)) ? 'rotate(90deg)' : 'rotate(0deg)',
 											}}
 										/>
 
@@ -54,7 +54,7 @@ const ListenHistory = () => {
 								}
 							/>
 
-							<Collapse in={collapsedItems.includes(asset.id)}>
+							<Collapse in={config.ui.listenSidebar.history.infoCardDefaultCollapsed ? collapsedItems.includes(asset.id) : !collapsedItems.includes(asset.id)}>
 								<CardContent>
 									<AssetInfoCard
 										asset={asset}
