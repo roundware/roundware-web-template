@@ -49,7 +49,6 @@ const ContactInfo = (props: Props) => {
 								}
 							}}
 							name='first_name'
-							required
 							autoFocus
 							defaultValue={user?.first_name}
 							inputRef={firstNameRef}
@@ -64,11 +63,10 @@ const ContactInfo = (props: Props) => {
 							}}
 							label='Last Name'
 							name='last_name'
-							required
 							defaultValue={user?.last_name}
 							inputRef={lastNameRef}
 						/>
-						<TextField label='Email' defaultValue={user?.email} type='email' name='email' tabIndex={4} required inputRef={emailRef} />
+						<TextField label='Email' defaultValue={user?.email} type='email' name='email' tabIndex={4} inputRef={emailRef} />
 						<Box>
 							<LoadingButton startIcon={<Check />} type='submit' variant='contained'>
 								OK
