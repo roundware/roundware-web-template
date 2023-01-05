@@ -174,7 +174,7 @@ type IConfig = {
 		/** how to display the speaker regions;
 		 * 'images' will overlay the speaker region with the image "speaker.png" file
 		 */
-		speakerDisplay: 'images' | 'polygons';
+		speakerDisplay?: 'images' | 'polygons' | 'none';
 		/** colors to be used for speaker polygons */
 		speakerPolygonColors: string[];
 		/** should the map area be restricted */
