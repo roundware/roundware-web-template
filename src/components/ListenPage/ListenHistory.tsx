@@ -1,6 +1,6 @@
-import { AccessTime, ChevronRight, LocationOnOutlined } from '@mui/icons-material';
+import { ChevronRight, ClearAll, LocationOnOutlined } from '@mui/icons-material';
 import LocationOn from '@mui/icons-material/LocationOn';
-import { Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from '@mui/material';
+import { Button, Card, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from '@mui/material';
 import config from 'config';
 import { useRoundware } from 'hooks';
 import { sortBy, uniqBy } from 'lodash';
@@ -8,7 +8,7 @@ import moment from 'moment';
 import { useMemo, useState } from 'react';
 import AssetInfoCard from './Map/AssetLayer/AssetInfoCard';
 const ListenHistory = () => {
-	const { roundware, selectAsset, forceUpdate, selectedAsset } = useRoundware();
+	const { roundware, selectAsset, forceUpdate, selectedAsset, playingAssets } = useRoundware();
 	const { assets } = roundware.listenHistory;
 
 	const [collapsedItems, setCollapsedItems] = useState<number[]>([]);
@@ -26,11 +26,26 @@ const ListenHistory = () => {
 				),
 				'id'
 			).reverse(),
-		[assets]
+		[assets, playingAssets, selectedAsset, forceUpdate, roundware.listenHistory.assets]
 	);
 
 	return (
 		<Stack spacing={2} p={2}>
+			{!!list.length && (
+				<Stack direction='row' alignItems='center' justifyContent='end'>
+					<Button
+						startIcon={<ClearAll />}
+						onClick={() => {
+							roundware.listenHistory.clear();
+							forceUpdate();
+						}}
+						size='small'
+						variant='outlined'
+					>
+						Clear Listening History
+					</Button>
+				</Stack>
+			)}
 			{list.length ? (
 				list.map((asset) => {
 					return (
@@ -64,7 +79,7 @@ const ListenHistory = () => {
 									<AssetInfoCard
 										asset={asset}
 										roundware={roundware}
-										order={config.ui.listenSidebar.history.available}
+										cardConfig={config.ui.listenSidebar.history.available}
 										actions={
 											<IconButton
 												title='Show on Map'

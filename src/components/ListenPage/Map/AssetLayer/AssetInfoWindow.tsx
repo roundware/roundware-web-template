@@ -28,7 +28,7 @@ export const AssetInfoWindowInner = ({ asset, selectAsset, roundware }: AssetInf
 			<StyledEngineProvider injectFirst>
 				<ThemeProvider theme={lightTheme}>
 					<Card>
-						<AssetInfoCard asset={asset} roundware={roundware} order={finalConfig.map.infowindowDisplayItems} />
+						<AssetInfoCard asset={asset} roundware={roundware} cardConfig={finalConfig.map.infoWindowItems} />
 					</Card>
 				</ThemeProvider>
 			</StyledEngineProvider>

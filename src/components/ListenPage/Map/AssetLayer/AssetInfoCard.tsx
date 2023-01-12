@@ -1,12 +1,12 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, Dialog, DialogContent, DialogContentText, DialogTitle as MuiDialogTitle, Divider, Grid, IconButton, Modal, Paper, Theme, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogContentText, DialogTitle as MuiDialogTitle, Divider, Grid, IconButton, Modal, Stack, Theme, Typography } from '@mui/material';
 import { createStyles, makeStyles, withStyles, WithStyles } from '@mui/styles';
+import { IAssetCardConfig } from 'configTypes';
 import Interweave from 'interweave';
 import moment from 'moment';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Roundware } from 'roundware-web-framework';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
-import { UiConfigContext } from '../../../../context/UIContext';
 import { IImageAsset } from '../../../../types';
 import AssetPlayer from '../../../AssetPlayer';
 import { TagsDisplay } from '../../../AssetTags';
@@ -15,11 +15,11 @@ import { AssetActionButtons } from './AssetActionButtons';
 interface Props {
 	asset: IAssetData;
 	roundware: Roundware;
-	order: ('date' | 'description' | 'tags' | 'text' | 'photo' | 'audio' | 'actions')[];
+	cardConfig: IAssetCardConfig;
 	actions?: React.ReactNode;
 }
 
-const AssetInfoCard = ({ asset, roundware, order, actions }: Props) => {
+const AssetInfoCard = ({ asset, roundware, cardConfig, actions }: Props) => {
 	const [imageAssets, setImageAssets] = useState<IImageAsset[]>([]);
 	const [textAssets, setTextAssets] = useState<IAssetData[]>([]);
 
@@ -122,13 +122,13 @@ const AssetInfoCard = ({ asset, roundware, order, actions }: Props) => {
 			case 'audio':
 				return <AssetPlayer key={elementName} style={{ width: '100%', marginTop: 10 }} asset={asset} captureEvents />;
 			case 'actions':
-				return <AssetActionButtons key={elementName} asset={asset} additionalActions={actions} />;
+				return <AssetActionButtons key={elementName} asset={asset} config={cardConfig?.actionItems} additionalActions={actions} />;
 			default:
 				return null;
 		}
 	};
 
-	return <>{Array.isArray(order) && order.map((item, index, list) => infoItemsResolver(item, index, list))}</>;
+	return <Stack spacing={1}>{cardConfig.available.map((item, index, list) => infoItemsResolver(item, index, list))}</Stack>;
 };
 
 export default AssetInfoCard;

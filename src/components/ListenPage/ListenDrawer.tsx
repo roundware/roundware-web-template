@@ -16,9 +16,6 @@ const ListenDrawer = () => {
 
 	const { drawerOpen: open, setDrawerOpen: setOpen } = useUIContext();
 
-	const handleDrawerClose = () => {
-		setOpen(false);
-	};
 	const toggle = () => setOpen(!open);
 
 	const [selectedTab, setSelectedTab] = useState(config.ui.listenSidebar.history.active ? `history` : `filters`);
@@ -29,13 +26,20 @@ const ListenDrawer = () => {
 	if (!config.ui.listenSidebar.active) return null;
 	return (
 		<React.Fragment key={'drawer'}>
-			<IconButton onClick={toggle}>
+			<IconButton
+				onClick={(e) => {
+					e.stopPropagation();
+					toggle();
+				}}
+			>
 				<ViewSidebar fontSize='large' />
 			</IconButton>
 			<Drawer
 				anchor={'right'}
 				open={open}
-				onClose={handleDrawerClose}
+				onClose={(e) => {
+					setOpen(false);
+				}}
 				variant={isDesktop ? 'persistent' : 'temporary'}
 				sx={{
 					width: 350,
@@ -64,7 +68,10 @@ const ListenDrawer = () => {
 							sx={{
 								mt: 1,
 							}}
-							onClick={handleDrawerClose}
+							onClick={(e) => {
+								e.stopPropagation();
+								setOpen(false);
+							}}
 						>
 							<Close />
 						</IconButton>

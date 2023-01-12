@@ -1,6 +1,5 @@
 import finalConfig from 'config';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { UiConfigContext } from '../context/UIContext';
 
 const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {
