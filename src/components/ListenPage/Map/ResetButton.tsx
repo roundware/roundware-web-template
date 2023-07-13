@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 import { useGoogleMap } from '@react-google-maps/api';
-import config from 'config.json';
+import config from 'config';
 import { Coordinates } from 'roundware-web-framework/dist/types';
 import { GeoListenMode } from 'roundware-web-framework';
 import { useRoundware } from 'hooks';
@@ -18,7 +18,7 @@ const ResetButton = ({ updateLocation }: Props) => {
 		<Button
 			onClick={() => {
 				if (!map) return;
-				map.setZoom(config.zoom.low);
+				map.setZoom(config.map.zoom.low);
 				updateLocation(roundware.project.location);
 			}}
 			sx={{

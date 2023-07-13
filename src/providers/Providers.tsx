@@ -5,8 +5,8 @@ import RoundwareProvider from './RoundwareProvider';
 import UiConfigProvider from './UIConfigProvider';
 import { URLSyncProvider } from './URLProvider';
 import { defaultTheme } from '../styles';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import NoSleepProvider from './NoSleepProvider';
 declare module '@mui/styles/defaultTheme' {
 	interface DefaultTheme extends Theme {}
@@ -19,10 +19,10 @@ interface Props {
 const Providers = (props: Props) => {
 	const [theme] = useState(defaultTheme);
 	return (
-		<NoSleepProvider>
-			<RoundwareProvider>
-				<UiConfigProvider>
-					<BrowserRouter>
+		<BrowserRouter>
+			<NoSleepProvider>
+				<RoundwareProvider>
+					<UiConfigProvider>
 						<URLSyncProvider>
 							<StyledEngineProvider injectFirst>
 								<ThemeProvider theme={theme}>
@@ -30,10 +30,10 @@ const Providers = (props: Props) => {
 								</ThemeProvider>
 							</StyledEngineProvider>
 						</URLSyncProvider>
-					</BrowserRouter>
-				</UiConfigProvider>
-			</RoundwareProvider>
-		</NoSleepProvider>
+					</UiConfigProvider>
+				</RoundwareProvider>
+			</NoSleepProvider>
+		</BrowserRouter>
 	);
 };
 

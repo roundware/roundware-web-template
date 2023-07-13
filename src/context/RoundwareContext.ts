@@ -10,7 +10,7 @@ export interface IRoundwareContext {
 	roundware: Roundware;
 	tagLookup: ITagLookup;
 	sortField: {
-		name: string;
+		name: keyof IAssetData;
 		asc: boolean;
 	};
 	selectedTags: ISelectedTags | null;
@@ -34,7 +34,7 @@ export interface IRoundwareContext {
 	setAssetsPerPage: React.Dispatch<React.SetStateAction<number>>;
 	setSortField: React.Dispatch<
 		React.SetStateAction<{
-			name: string;
+			name: keyof IAssetData;
 			asc: boolean;
 		}>
 	>;

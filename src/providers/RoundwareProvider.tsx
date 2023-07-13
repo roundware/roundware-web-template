@@ -9,9 +9,9 @@ import RoundwareContext, { IRoundwareContext } from '../context/RoundwareContext
 import useDebounce from '../hooks/useDebounce';
 import { useDeviceID } from '../hooks/useDeviceID';
 import { ITagLookup } from '../types';
-import { getDefaultListenMode } from '../utils';
-import config from 'config.json';
-import { join } from 'lodash';
+
+import config from 'config';
+
 interface PropTypes {
 	children: React.ReactNode;
 }
@@ -177,10 +177,9 @@ const RoundwareProvider = (props: PropTypes) => {
 
 	// when this provider is loaded, initialize roundware via api
 	useEffect(() => {
-		const project_id = config.ROUNDWARE_DEFAULT_PROJECT_ID;
-		const server_url = config.ROUNDWARE_SERVER_URL;
-		if (typeof server_url == 'undefined') return console.error(`ROUNDWARE_SERVER_URL was missing from env variables`);
-		if (typeof project_id == 'undefined') return console.error(`ROUNDWARE_DEFAULT_PROJECT_ID was missing from env variables`);
+		const project_id = config.project.id;
+		const server_url = config.project.apiUrl;
+		console.log(config.project);
 		// maybe we build the site with a default listener location,
 		// otherwise we go to null island
 
@@ -190,8 +189,8 @@ const RoundwareProvider = (props: PropTypes) => {
 		const urlLatitude = searchParams.get('latitude');
 		const urlLongitude = searchParams.get('longitude');
 		const initial_loc = {
-			latitude: parseFloat(typeof urlLatitude == 'string' ? urlLatitude : (config.ROUNDWARE_INITIAL_LATITUDE || 0).toString()),
-			longitude: parseFloat(typeof urlLongitude == 'string' ? urlLongitude : (config.ROUNDWARE_INITIAL_LONGITUDE || 0).toString()),
+			latitude: parseFloat(typeof urlLatitude == 'string' ? urlLatitude : (config.project.initialLocation.latitude || 0).toString()),
+			longitude: parseFloat(typeof urlLongitude == 'string' ? urlLongitude : (config.project.initialLocation.longitude || 0).toString()),
 		};
 
 		const roundwareOptions: IRoundwareConstructorOptions = {
@@ -205,8 +204,8 @@ const RoundwareProvider = (props: PropTypes) => {
 			assetUpdateInterval: 30 * 1000,
 
 			apiClient: undefined!,
-			keepPausedAssets: config.KEEP_PAUSED_ASSETS == true,
-			speakerConfig: config.speakerConfig,
+			keepPausedAssets: config.listen.keepPausedAssets == true,
+			speakerConfig: config.listen.speaker,
 		};
 		const roundware = new Roundware(window, roundwareOptions);
 

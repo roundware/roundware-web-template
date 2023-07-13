@@ -1,9 +1,9 @@
-import { FileUpload } from '@mui/icons-material';
+import { Create, FileUpload, Headphones, Share } from '@mui/icons-material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MicIcon from '@mui/icons-material/Mic';
-import { Alert, IconButton, LinearProgress, Snackbar } from '@mui/material';
+import { Alert, IconButton, LinearProgress, Snackbar, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -22,8 +22,13 @@ import LegalAgreementForm from '../../LegalAgreementForm';
 import AdditionalMediaMenu from './AdditionalMediaMenu';
 import { useStyles } from './styles';
 import useCreateRecording from './useCreateRecording';
-import config from 'config.json';
+import config from 'config';
 import { useState } from 'react';
+import ID3Writer from 'browser-id3-writer';
+import ShareLinkButton from 'components/App/ShareButton';
+import { useUIContext } from 'context/UIContext';
+import { useRoundwareDraft } from 'hooks';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 const CreateRecordingForm = () => {
 	const { draftMediaUrl, textAsset, imageAssets, set_draft_recording_media, set_draft_media_url, draftRecording, setSuccess, selectAsset, roundware, draftRecordingMedia, updateAssets, saving, resetFilters, history, setTextAsset, setSaving, deleteRecording, legalModalOpen, setLegalModalOpen, setImageAssets, success, selected_tags, error, isRecording, toggleRecording, isExtraSmallScreen, setError, maxRecordingLength, stopRecording, setDeleteModalOpen, deleteModalOpen, timer, setTimer, ...cr } = useCreateRecording();
 	const classes = useStyles();
@@ -31,6 +36,9 @@ const CreateRecordingForm = () => {
 		if (timer) clearTimeout(timer);
 		setTimer(null);
 	};
+	const { handleShare } = useUIContext();
+
+	const { user } = useRoundwareDraft();
 	return (
 		<>
 			<Card className={classes.container}>
@@ -122,8 +130,23 @@ const CreateRecordingForm = () => {
 										onChange={(e) => {
 											if (!e.target.files) return;
 											const file = Array.from(e.target.files)[0];
-											set_draft_recording_media(file);
-											set_draft_media_url(URL.createObjectURL(file));
+
+											const reader = new FileReader();
+											reader.onload = function () {
+												const arrayBuffer = reader.result;
+
+												const writer = new ID3Writer(arrayBuffer);
+												writer.removeTag();
+
+												const url = writer.getURL();
+												set_draft_media_url(url);
+												set_draft_recording_media(writer.getBlob());
+											};
+											reader.onerror = function () {
+												// handle error
+												console.error('Reader error', reader.error);
+											};
+											reader.readAsArrayBuffer(file);
 										}}
 										type='file'
 										hidden
@@ -240,7 +263,7 @@ const CreateRecordingForm = () => {
 								</Button>
 							</DialogActions>
 						</Dialog>
-						{config.ALLOW_PHOTOS === true || config.ALLOW_TEXT === true ? <AdditionalMediaMenu onSetText={setTextAsset} onSetImage={(file) => setImageAssets([...imageAssets, file])} textAsset={textAsset} imageAssets={imageAssets} disabled={draftMediaUrl === ''} /> : null}
+						{config.speak.allowPhotos === true || config.speak.allowText === true ? <AdditionalMediaMenu onSetText={setTextAsset} onSetImage={(file) => setImageAssets([...imageAssets, file])} textAsset={textAsset} imageAssets={imageAssets} disabled={draftMediaUrl === ''} /> : null}
 						<Button
 							variant='contained'
 							color='primary'
@@ -267,8 +290,8 @@ const CreateRecordingForm = () => {
 									}
 
 									// include default speak tags
-									const finalTags = selected_tags.map((t) => t?.tag_id).filter((t) => t !== undefined);
-									config.DEFAULT_SPEAK_TAGS?.forEach((t) => {
+									const finalTags = selected_tags.map((t) => t?.tag_id).filter((t) => t !== undefined) as number[];
+									config.speak.defaultSpeakTags?.forEach((t) => {
 										if (!finalTags.includes(t)) {
 											finalTags.push(t);
 										}
@@ -277,28 +300,46 @@ const CreateRecordingForm = () => {
 									const assetMeta = {
 										longitude: draftRecording.location.longitude,
 										latitude: draftRecording.location.latitude,
-										...(finalTags.length > 0 ? { tags: finalTags } : {}),
+										...(finalTags.length > 0 ? { tag_ids: finalTags } : {}),
 									};
 									const dateStr = new Date().toISOString();
 
 									// Make an envelope to hold the uploaded assets.
 									const envelope = await roundware.makeEnvelope();
 									try {
-										// Add the audio asset.
 										if (draftRecordingMedia == null) throw new Error(`RecordingMedia data was null!`);
-										const asset = await envelope.upload(draftRecordingMedia, dateStr + '.mp3', assetMeta);
 
-										// Add the text asset, if any.
+										let asset: Partial<IAssetData> | null = null;
+										// hold all promises for parallel execution
+										const promises = [];
+										// Add the audio asset.
+										promises.push(
+											(async () => {
+												asset = await envelope.upload(draftRecordingMedia, dateStr + '.mp3', assetMeta);
+											})()
+										);
 										if (textAsset) {
-											await envelope.upload(new Blob([textAsset.toString()], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' });
+											promises.push(
+												// Add the text asset, if any.
+
+												envelope.upload(new Blob([textAsset.toString()], { type: 'text/plain' }), dateStr + '.txt', { ...assetMeta, media_type: 'text' })
+											);
 										}
 										for (const file of imageAssets) {
-											await envelope.upload(file, file.name || dateStr + '.jpg', {
-												...assetMeta,
-												media_type: 'photo',
-											});
+											promises.push(
+												envelope.upload(file, file.name || dateStr + '.jpg', {
+													...assetMeta,
+													media_type: 'photo',
+												})
+											);
 										}
+										if (user)
+											promises.push(
+												// Add the user asset, if any.
+												roundware.user.updateUser(user)
+											);
 
+										await Promise.all(promises);
 										selectAsset(null);
 										setSuccess(asset);
 
@@ -325,42 +366,61 @@ const CreateRecordingForm = () => {
 							</DialogContentText>
 							<DialogContentText>Upload Complete! Thank you for participating!</DialogContentText>
 						</DialogContent>
-						<DialogActions>
-							<Button
-								variant={'contained'}
-								color={'primary'}
-								disabled={success == null}
-								onClick={() => {
-									if (success != null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
-										resetFilters();
-										history.push(`/listen?eid=${success.envelope_ids[0]}`);
-									}
-								}}
-							>
-								Listen
-							</Button>
-							<Button
-								variant={'contained'}
-								color={'primary'}
-								onClick={() => {
-									draftRecording.reset();
-									history.push('/speak');
-								}}
-							>
-								Create New Recording
-							</Button>
+						<DialogActions
+							sx={{
+								flexWrap: 'wrap',
+								flexDirection: 'column',
+							}}
+						>
+							<Stack spacing={1} maxWidth={300}>
+								<Button
+									startIcon={<Share />}
+									onClick={() => {
+										handleShare(`${window.location.origin}/listen?eid=${success?.envelope_ids[0]}`);
+									}}
+									color='primary'
+									variant='contained'
+								>
+									Share
+								</Button>
+								<Button
+									variant={'contained'}
+									color={'primary'}
+									disabled={success == null}
+									onClick={() => {
+										if (success != null && Array.isArray(success.envelope_ids) && success.envelope_ids.length > 0) {
+											resetFilters();
+											history.push(`/listen?eid=${success.envelope_ids[0]}`);
+										}
+									}}
+									startIcon={<Headphones />}
+								>
+									Listen
+								</Button>
+								<Button
+									variant={'contained'}
+									color={'primary'}
+									onClick={() => {
+										draftRecording.reset();
+										history.push('/speak');
+									}}
+									startIcon={<Create />}
+								>
+									Create New Recording
+								</Button>
+							</Stack>
 						</DialogActions>
 					</Dialog>
 				</Grid>
 			</Card>
 			{/* resetting timer snackbar */}
 
-			<Snackbar open={!!timer} message={`Resetting in ${cr.progress} seconds`} autoHideDuration={config.autoResetTimeSeconds * 1000} onClose={handleOnSnackbarClose}>
+			<Snackbar open={!!timer} message={`Resetting in ${cr.progress} seconds`} autoHideDuration={config.features.autoResetTimeSeconds * 1000} onClose={handleOnSnackbarClose}>
 				<Alert onClose={handleOnSnackbarClose} severity='info' sx={{ width: '100%' }}>
 					Resetting in{' '}
 					{
 						// value of time remaining from progress percent
-						Math.round((config.autoResetTimeSeconds * (100 - cr.progress)) / 100)
+						Math.round((config.features.autoResetTimeSeconds * (100 - cr.progress)) / 100)
 					}
 					{` `}
 					seconds...

@@ -1,14 +1,12 @@
 import { MarkerClusterer, useGoogleMap } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
-import { Cluster } from 'cluster';
+import config from 'config';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Coordinates } from 'roundware-web-framework/dist/types';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
-import { useQuery, useRoundware } from '../../../../hooks';
+import { useRoundware } from '../../../../hooks';
 import AssetMarker from './AssetMarker';
-import config from 'config.json';
-import marker2 from '../../../../assets/marker-secondary.svg';
 const OverlappingMarkerSpiderfierComponent = (props: { children: (props: OverlappingMarkerSpiderfier | null) => React.ReactNode }) => {
 	const map = useGoogleMap();
 	const [spiderfier, set_spiderfier] = useState<OverlappingMarkerSpiderfier | null>(null);
@@ -45,7 +43,7 @@ const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordina
 		};
 
 		map.panTo(center);
-		map.setZoom(config.zoom.high);
+		map.setZoom(config.map.zoom.high);
 		roundware.updateLocation({ latitude: selectedAsset.latitude, longitude: selectedAsset.longitude });
 		console.log(selectedAsset);
 	}, [selectedAsset]);
@@ -98,7 +96,7 @@ const AssetLayer = ({ updateLocation }: { updateLocation: (newLocation: Coordina
 
 	return (
 		<MarkerClusterer
-			maxZoom={config.zoom.high - 1}
+			maxZoom={config.map.zoom.high - 1}
 			onClick={handleClick}
 			onLoad={setMarkerClusterer}
 			minimumClusterSize={3}

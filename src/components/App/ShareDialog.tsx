@@ -10,12 +10,15 @@ import { useRoundware } from 'hooks';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
-type Props = {};
+type Props = {
+	link?: string;
+	open?: boolean;
+};
 
 const ShareDialog = (props: Props) => {
 	const { params } = React.useContext(URLContext);
 	const { showShare, handleCloseShare } = useUIContext();
-	const { roundware, selectedAsset } = useRoundware();
+	const { roundware } = useRoundware();
 
 	const location = useLocation();
 	const useMapContext = window.location.pathname == `/listen` ? useGoogleMap : () => null;
@@ -58,27 +61,29 @@ const ShareDialog = (props: Props) => {
 				// final link with location info
 				link = link + prefixCharacter + searchParams.toString();
 			}
+
 			return {
 				link,
 				showOptions: !isAssetSelected,
 			};
 		}
 		return {
-			link: window.location.toString(),
+			link: showShare != 'true' ? showShare : window.location.toString(),
 			showOptions: false,
 		};
-	}, [includeGeo, isAssetSelected, location, roundware?.listenerLocation, location.search, map?.getZoom(), map?.getCenter()]);
+	}, [includeGeo, isAssetSelected, location, roundware?.listenerLocation, location.search, map?.getZoom(), map?.getCenter(), showShare]);
 
 	const message = roundware?.project?.data?.sharing_message + ' \n' + link;
 
 	useEffect(() => {
 		if (!showShare) return;
+
 		roundware.events?.logEvent(`share_map`, {
 			data: `url: ${link}`,
 		});
 	}, [showShare, link]);
 	return (
-		<Modal open={showShare} title='Share' onClose={handleCloseShare}>
+		<Modal open={!!showShare} title='Share' onClose={handleCloseShare}>
 			<Stack spacing={2}>
 				{/* social icons */}
 				<Stack direction='row' justifyContent='center' spacing={2}>

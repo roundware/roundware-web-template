@@ -1,6 +1,7 @@
 import DraftRecordingContext, { IDraftRecordingContext } from '../context/DraftRecordingContext';
 import React, { useEffect, useState } from 'react';
 import { Roundware } from 'roundware-web-framework';
+import { IUserResponse } from 'roundware-web-framework/dist/types/user';
 
 interface DraftRecordingProviderProps {
 	roundware: Roundware;
@@ -13,6 +14,8 @@ export const DraftRecordingProvider = ({ roundware, children }: DraftRecordingPr
 	});
 	const [tags, setTags] = useState<IDraftRecordingContext[`tags`]>([]);
 	const [acceptedAgreement, setAcceptedAgreement] = useState<IDraftRecordingContext[`acceptedAgreement`]>(false);
+
+	const [user, setUser] = useState<Partial<IUserResponse>>();
 
 	useEffect(() => {
 		if (!roundware.project || !roundware.project.location) {
@@ -75,6 +78,8 @@ export const DraftRecordingProvider = ({ roundware, children }: DraftRecordingPr
 				selectTag,
 				clearTags,
 				reset,
+				setUser,
+				user,
 			}}
 		>
 			{children}

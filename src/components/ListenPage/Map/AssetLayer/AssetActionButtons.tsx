@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import IconButton from '@mui/material/IconButton';
 import LinkIcon from '@mui/icons-material/Link';
@@ -8,6 +8,7 @@ import FlagIcon from '@mui/icons-material/Flag';
 
 import { useRoundware } from '../../../../hooks';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+import { IAssetCardConfig } from 'configTypes';
 
 const downloadAsset = async (asset: IAssetData, projectName: string) => {
 	if (!asset.file) return;
@@ -39,30 +40,56 @@ const downloadAsset = async (asset: IAssetData, projectName: string) => {
 	a.remove();
 };
 
-export const AssetActionButtons = ({ asset }: { asset: IAssetData }) => {
+export const AssetActionButtons = ({ asset, additionalActions, config }: { asset: IAssetData; additionalActions?: React.ReactNode; config: IAssetCardConfig[`actionItems`] }) => {
 	const { roundware } = useRoundware();
 	const projectName = roundware.project.projectName;
 
+	const renderItem = useCallback(
+		(item: IAssetCardConfig[`actionItems`][0]) => {
+			if (item == 'download') {
+				return (
+					<IconButton onClick={() => downloadAsset(asset, projectName)} style={{ minWidth: 30 }} title='download this audio file'>
+						<GetAppIcon />
+					</IconButton>
+				);
+			}
+			if (item == 'flag') {
+				return (
+					<VoteButton title='tell us you are concerned about this one!' asset={asset} voteType='flag' votedClass='flagged'>
+						<FlagIcon />
+					</VoteButton>
+				);
+			}
+
+			if (item == 'like') {
+				return (
+					<VoteButton title='tell us you like this one!' asset={asset} voteType='like' votedClass='liked'>
+						<ThumbUpIcon />
+					</VoteButton>
+				);
+			}
+
+			if (item === 'show') {
+				<IconButton
+					onClick={() => {
+						if (Array.isArray(asset.envelope_ids) && asset.envelope_ids.length > 0) window.open(`/listen?eid=${asset.envelope_ids[0]}`, '_blank');
+					}}
+					style={{ minWidth: 30 }}
+					title='go to contribution page'
+				>
+					<LinkIcon />
+				</IconButton>;
+			}
+		},
+		[config]
+	);
+
+	if (!config) return null;
 	return (
 		<div id='infoVoteBlock'>
-			<VoteButton title='tell us you like this one!' asset={asset} voteType='like' votedClass='liked'>
-				<ThumbUpIcon />
-			</VoteButton>
-			<VoteButton title='tell us you are concerned about this one!' asset={asset} voteType='flag' votedClass='flagged'>
-				<FlagIcon />
-			</VoteButton>
-			<IconButton
-				onClick={() => {
-					if (Array.isArray(asset.envelope_ids) && asset.envelope_ids.length > 0) window.open(`/listen?eid=${asset.envelope_ids[0]}`, '_blank');
-				}}
-				style={{ minWidth: 30 }}
-				title='go to contribution page'
-			>
-				<LinkIcon />
-			</IconButton>
-			<IconButton onClick={() => downloadAsset(asset, projectName)} style={{ minWidth: 30 }} title='download this audio file'>
-				<GetAppIcon />
-			</IconButton>
+			{config.map(renderItem)}
+
+			{additionalActions}
 		</div>
 	);
 };

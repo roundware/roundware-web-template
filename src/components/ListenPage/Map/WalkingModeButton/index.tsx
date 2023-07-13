@@ -11,7 +11,7 @@ import ListenerLocationMarker from './ListenerLocationMarker';
 import clsx from 'clsx';
 import LoadingOverlay from './LoadingOverlay';
 import messages from '../../../../locales/en_US.json';
-import config from 'config.json';
+import config from 'config';
 import { useURLSync } from 'context/URLContext';
 import { useLocation } from 'react-router';
 const useStyles = makeStyles((theme) => {
@@ -64,19 +64,17 @@ const walkingModeButton = () => {
 		}
 	}, [lat, lng]);
 
-	const availableListenModes = config.AVAILABLE_LISTEN_MODES || 'map,walking';
-	const availableListenModesArray = availableListenModes.split(',');
+	const availableListenModesArray = config.listen.availableListenModes;
 
-	const displayListenModeButton = availableListenModes == 'device' || availableListenModesArray.length == 2 ? true : false;
+	const displayListenModeButton = availableListenModesArray == 'device' || availableListenModesArray.length == 2 ? true : false;
 
-	const location = useLocation();
 	const [init, setInit] = useState(false);
 	// set default GeoListenMode
 	useEffect(() => {
 		if (init) return;
 		if (!map) return;
 		setInit(true);
-		if (availableListenModesArray[0] == 'device') {
+		if (availableListenModesArray == 'device') {
 			console.log(`default based on screen width [${isMobile ? `Mobile` : `Desktop`}]`);
 			isMobile ? enterWalkingMode() : enterMapMode();
 		} else if (availableListenModesArray[0] == 'map') {
@@ -92,7 +90,7 @@ const walkingModeButton = () => {
 		if (!map) return;
 		console.log('switching to map mode');
 		// zoom out
-		map.setZoom(Number(params.get('zoom') || config.zoom.low.toString()));
+		map.setZoom(Number(params.get('zoom') || config.map.zoom.low.toString()));
 
 		// enable map panning
 		map.setOptions({ gestureHandling: 'cooperative' });
@@ -113,7 +111,7 @@ const walkingModeButton = () => {
 		// disable map panning
 		map.setOptions({ gestureHandling: 'none' });
 		// zoom in
-		map.setZoom(config.zoom.walking);
+		map.setZoom(config.map.zoom.walking);
 		// determine user location and listen for updates
 		setGeoListenMode(GeoListenMode.AUTOMATIC);
 		roundware.events?.logEvent(`change_listen_mode`, {
@@ -142,7 +140,7 @@ const walkingModeButton = () => {
 				const location = await roundware.geoPosition.waitForInitialGeolocation();
 
 				// not need to check if user location is within bounds
-				if (config.MAP_BOUNDS == 'none') {
+				if (config.map.bounds == 'none') {
 					setWalkingModeStatus('eligible');
 					enableWalkingMode();
 					return;
@@ -153,7 +151,7 @@ const walkingModeButton = () => {
 
 				let bounds: google.maps.LatLngBounds;
 
-				if (config.MAP_BOUNDS == 'auto') {
+				if (config.map.bounds == 'auto') {
 					const {
 						southwest: { latitude: swLat, longitude: swLng },
 						northeast: { latitude: neLat, longitude: neLng },
@@ -161,7 +159,7 @@ const walkingModeButton = () => {
 
 					bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
 				} else {
-					const { swLat, swLng, neLat, neLng } = config.MAP_BOUNDS_POINTS;
+					const { swLat, swLng, neLat, neLng } = config.map.boundsPoints;
 					bounds = new google.maps.LatLngBounds({ lat: swLat!, lng: swLng! }, { lat: neLat!, lng: neLng! });
 				}
 				// within map bounds
