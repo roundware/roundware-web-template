@@ -6,8 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import PlatformMessage from 'components/PlatformMessage';
 import config from 'config';
-import React, { useEffect, useState } from 'react';
-import ReactGA from 'react-ga4';
+import React, { useState } from 'react';
 import Helmet from 'react-helmet';
 import { BrowserRouter, Link, NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { getMessageOnLoad } from 'utils/platformMessages';
@@ -38,16 +37,6 @@ export const App = () => {
 
 	let location = useLocation();
 
-	useEffect(() => {
-		if (!process.env.REACT_APP_GOOGLE_ANALYTICS_ID) return;
-
-		ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
-		ReactGA.send({
-			hitType: 'pageView',
-			page: window.location.pathname + window.location.search,
-		});
-	}, [location.pathname]);
-
 	return (
 		<>
 			<BrowserRouter getUserConfirmation={(message, callback) => UserConfirmation(message, callback)}>
@@ -58,6 +47,18 @@ export const App = () => {
 					<title>{roundware.project ? roundware.project.projectName : ''}</title>
 					<link rel='icon' type='image/png' href={favicon} sizes='16x16' />
 					<meta name='theme-color' content={theme.palette.primary.main} />
+
+					<script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`}></script>
+					<script>
+						{`
+						window.dataLayer = window.dataLayer || [];
+
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', '${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}');
+		  `}
+					</script>
 				</Helmet>
 
 				<DrawerSensitiveWrapper>
