@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme) => {
 			margin: theme.spacing(2),
 		},
 		landingHeader: {
-			backgroundImage: `linear-gradient(180deg, #000000ff, #ffffff00), url(${landingHeaderImage})`,
-			backgroundSize: 'cover',
+			// backgroundImage: `linear-gradient(180deg, #000000ff, #ffffff00), url(${landingHeaderImage})`,
+			// backgroundSize: 'cover',
 			height: '100%',
 			backgroundPosition: 'center',
 		},

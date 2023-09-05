@@ -24,7 +24,11 @@ export const LandingPage = () => {
 		<Container style={{ paddingRight: 0, paddingLeft: 0 }}>
 			<Grid container className={classes.landingHeader}>
 				<Grid container justifyContent='center' style={{ height: '100px' }}>
-					<Grid item style={{ margin: 'auto', height: '15vh', textAlign: 'center', paddingTop: 15 }} sm={12}>
+					<Grid
+						item
+						style={{ margin: 'auto', height: '15vh', textAlign: 'center', paddingTop: 15, marginTop: 100 }}
+						sm={12}
+					>
 						{/*<Typography
               variant={"h2"}
               className={classes.landingTitle}
