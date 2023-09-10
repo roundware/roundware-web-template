@@ -8,7 +8,7 @@ import PlatformMessage from 'components/PlatformMessage';
 import config from 'config';
 import React, { useState } from 'react';
 import Helmet from 'react-helmet';
-import { BrowserRouter, Link, NavLink, Route, Switch, useLocation } from 'react-router-dom';
+import { BrowserRouter, Link, NavLink, Route, Switch } from 'react-router-dom';
 import { getMessageOnLoad } from 'utils/platformMessages';
 import favicon from '../../assets/favicon.png';
 import logoSmall from '../../assets/rw-full-logo-wb.png';
@@ -34,8 +34,6 @@ export const App = () => {
 	const classes = useStyles();
 	const { roundware } = useRoundware();
 	const isExtraSmallScreen = useMediaQuery<boolean>(theme.breakpoints.down('xs'));
-
-	let location = useLocation();
 
 	return (
 		<>
