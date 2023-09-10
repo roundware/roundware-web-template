@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, MenuItem, Stack, Typography } from '@mui/material';
 import React from 'react';
-import { getPermissionMessages, type Funcionality } from 'web-permission-notfications';
+import { getPermissionMessages, type Funcionality } from 'web-permission-messages';
 type Props = {
 	open: boolean;
 	onClose: () => void;
@@ -45,7 +45,7 @@ const PermissionDeniedDialog = (props: Props) => {
 									borderColor: (t) => t.palette.divider,
 									borderStyle: 'solid',
 								}}
-								src={require(`web-permission-notfications/dist/screenshots/${step.imageName}`)}
+								src={require(`web-permission-messages/dist/screenshots/${step.imageName}`)}
 								alt={step.message}
 							/>
 						</li>
