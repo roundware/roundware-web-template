@@ -33,21 +33,23 @@ const PermissionDeniedDialog = (props: Props) => {
 							<Typography variant='h6'>
 								{index + 1}. {step.message}
 							</Typography>
-							<Box
-								component='img'
-								sx={{
-									minWidth: '320px',
-									maxWidth: '100%',
+							<ImageErrorBoundary>
+								<Box
+									component='img'
+									sx={{
+										minWidth: '320px',
+										maxWidth: '100%',
 
-									objectFit: 'contain',
-									borderRadius: 4,
-									borderWidth: 2,
-									borderColor: (t) => t.palette.divider,
-									borderStyle: 'solid',
-								}}
-								src={require(`web-permission-messages/dist/screenshots/${step.imageName}`)}
-								alt={step.message}
-							/>
+										objectFit: 'contain',
+										borderRadius: 4,
+										borderWidth: 2,
+										borderColor: (t) => t.palette.divider,
+										borderStyle: 'solid',
+									}}
+									src={require(`web-permission-messages/dist/screenshots/${step.imageName}`)}
+									alt={step.message}
+								/>
+							</ImageErrorBoundary>
 						</li>
 					))}
 				</Stack>
