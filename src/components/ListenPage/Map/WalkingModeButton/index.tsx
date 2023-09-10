@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useRoundware } from '../../../../hooks';
-import { GeoListenMode } from 'roundware-web-framework';
-import { useGoogleMap } from '@react-google-maps/api';
-import { makeStyles, useTheme } from '@mui/styles';
-import Button from '@mui/material/Button';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from '@mui/material';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import MapIcon from '@mui/icons-material/Map';
-import ListenerLocationMarker from './ListenerLocationMarker';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from '@mui/material';
+import Button from '@mui/material/Button';
+import { makeStyles, useTheme } from '@mui/styles';
+import { useGoogleMap } from '@react-google-maps/api';
 import clsx from 'clsx';
-import LoadingOverlay from './LoadingOverlay';
-import messages from '../../../../locales/en_US.json';
+import PermissionDeniedDialog from 'components/elements/PermissionDeniedDialog';
 import config from 'config';
 import { useURLSync } from 'context/URLContext';
-import { useLocation } from 'react-router';
+import { isEqual } from 'lodash';
+import { useEffect, useState } from 'react';
+import { GeoListenMode } from 'roundware-web-framework';
+import { useRoundware } from '../../../../hooks';
+import messages from '../../../../locales/en_US.json';
+import ListenerLocationMarker from './ListenerLocationMarker';
+import LoadingOverlay from './LoadingOverlay';
 const useStyles = makeStyles((theme) => {
 	return {
 		walkingModeButton: {
@@ -215,7 +216,10 @@ const walkingModeButton = () => {
 	return (
 		<div>
 			<LoadingOverlay open={walkingModeStatus === 'locating'} message={'Locating... \nPlease allow location permissions.'} />
-			<Dialog open={walkingModeStatus === ('error' || 'out-of-range')}>
+
+			{/* permission denied dialog */}
+			<PermissionDeniedDialog open={walkingModeStatus === 'error' && isEqual(walkingModeErrorMessage, messages.errors.permissionDenied)} onClose={() => setWalkingModeStatus('')} functionality={'location'} />
+			<Dialog open={(walkingModeStatus === 'error' && !isEqual(walkingModeErrorMessage, messages.errors.permissionDenied)) || walkingModeStatus === 'out-of-range'}>
 				<DialogTitle>{walkingModeErrorMessage?.title}</DialogTitle>
 				<DialogContent>
 					<DialogContentText>{walkingModeErrorMessage?.message}</DialogContentText>

@@ -45,7 +45,7 @@ const PermissionDeniedDialog = (props: Props) => {
 									borderColor: (t) => t.palette.divider,
 									borderStyle: 'solid',
 								}}
-								src={require(`web-permission-notfications/src/screenshots/${step.imageName}`)}
+								src={require(`web-permission-notfications/dist/screenshots/${step.imageName}`)}
 								alt={step.message}
 							/>
 						</li>
