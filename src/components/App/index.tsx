@@ -28,6 +28,7 @@ import ShareButton from './ShareButton';
 import ShareDialog from './ShareDialog';
 import SpeakButton from './SpeakButton';
 import useStyles from './styles';
+import ErrorBoundary from 'components/elements/ErrorBoundary';
 
 export const App = () => {
 	const [theme] = useState(defaultTheme);
@@ -36,7 +37,7 @@ export const App = () => {
 	const isExtraSmallScreen = useMediaQuery<boolean>(theme.breakpoints.down('xs'));
 
 	return (
-		<>
+		<ErrorBoundary>
 			<BrowserRouter getUserConfirmation={(message, callback) => UserConfirmation(message, callback)}>
 				<CssBaseline />
 
@@ -113,6 +114,6 @@ export const App = () => {
 					</AppBar>
 				</DrawerSensitiveWrapper>
 			</BrowserRouter>
-		</>
+		</ErrorBoundary>
 	);
 };
