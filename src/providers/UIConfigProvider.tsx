@@ -1,6 +1,7 @@
 import finalConfig from 'config';
 import React, { MouseEvent, useEffect, useState } from 'react';
 import { UiConfigContext } from '../context/UIContext';
+import { Theme, useMediaQuery } from '@mui/material';
 
 const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	const [showShare, setShowShare] = useState('');
@@ -12,9 +13,10 @@ const UiConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	// const history = useHistory();
 
+	const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
 	const updateDrawerState = () => {
 		console.log('updateDrawerState', window.location.pathname);
-		if (window.location.pathname.includes(`/listen`)) setDrawerOpen(finalConfig.ui.listenSidebar.active && finalConfig.ui.listenSidebar.defaultOpen);
+		if (window.location.pathname.includes(`/listen`)) setDrawerOpen(finalConfig.ui.listenSidebar.active && finalConfig.ui.listenSidebar.defaultOpen && !isMobile);
 		else setDrawerOpen(false);
 	};
 
