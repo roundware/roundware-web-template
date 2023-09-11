@@ -1,6 +1,7 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, MenuItem, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { getPermissionMessages, type Funcionality } from 'web-permission-messages';
+import ImageErrorBoundary from './ImageErrorBoundary';
 type Props = {
 	open: boolean;
 	onClose: () => void;

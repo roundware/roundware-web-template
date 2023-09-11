@@ -1,3 +1,5 @@
+import React from 'react';
+
 class ImageErrorBoundary extends React.Component<{}, { hasError: boolean }> {
 	constructor(props: {}) {
 		super(props);
@@ -20,3 +22,5 @@ class ImageErrorBoundary extends React.Component<{}, { hasError: boolean }> {
 		return this.props.children;
 	}
 }
+
+export default ImageErrorBoundary;
