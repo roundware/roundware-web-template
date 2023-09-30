@@ -8,6 +8,7 @@ export type IAssetCardConfig = {
 };
 
 export type IConfig = {
+	locale: string;
 	/** display debug mesages on UI */
 	debugMode: boolean;
 

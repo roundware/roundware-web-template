@@ -1,5 +1,5 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, MenuItem, Stack, Typography } from '@mui/material';
-import React from 'react';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
+import finalConfig from 'config';
 import { getPermissionMessages, type Funcionality } from 'web-permission-messages';
 import ImageErrorBoundary from './ImageErrorBoundary';
 type Props = {
@@ -9,7 +9,9 @@ type Props = {
 };
 
 const PermissionDeniedDialog = (props: Props) => {
-	const message = getPermissionMessages(props.functionality);
+	const message = getPermissionMessages(props.functionality, {
+		locale: finalConfig.locale as 'en' | 'es',
+	});
 
 	return (
 		<Dialog open={props.open} onClose={props.onClose}>

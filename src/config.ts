@@ -5,6 +5,7 @@ import { merge } from 'lodash';
 // this config object can be overridden by config.json
 // Refer the type object below for info and comments on each config option
 let config: IConfig = {
+	locale: 'es',
 	debugMode: false,
 
 	project: {
