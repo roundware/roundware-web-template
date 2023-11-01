@@ -92,7 +92,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 			fullscreenControl: false,
 			zoomControlOptions: {
 				style: google.maps.ZoomControlStyle.SMALL,
-				position: google.maps.ControlPosition.TOP_RIGHT,
+				position: google.maps.ControlPosition.RIGHT_CENTER,
 			},
 			rotateControl: false,
 			mapTypeId: 'styled_map',
