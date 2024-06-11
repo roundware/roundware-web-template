@@ -5,7 +5,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "PORT=2345 react-scripts start",
-		"deploy": "npm run build && cp ./dist/index.html ./dist/200.html && surge --domain https://roundware-typescript.surge.sh dist",
+		"deploy": "npm run build && cp ./build/index.html ./build/200.html && surge --domain https://roundware-typescript.surge.sh build",
 		"build": "react-scripts build",
 		"install-rwf": "cd ../roundware-web-framework && npm run build && npm pack && cd ../roundware-web-template && rm -rf node_modules/roundware-web-framework/ &&  npm i file:../roundware-web-framework/roundware-web-framework-0.11.0-alpha.30.tgz"
 	},
