@@ -9,12 +9,12 @@ let config: IConfig = {
 	debugMode: false,
 
 	project: {
-		apiUrl: 'https://prod.roundware.com/api/2',
-		serverUrl: 'https://prod.roundware.com/',
-		id: 10,
+		apiUrl: 'https://dev.roundware.com/api/2',
+		serverUrl: 'https://dev.roundware.com/',
+		id: 1,
 		initialLocation: {
-			latitude: 50,
-			longitude: 27,
+			latitude: 21.1458,
+			longitude: 79.0882,
 		},
 	},
 
@@ -24,7 +24,7 @@ let config: IConfig = {
 		geoListenMode: 'device',
 		autoplay: false,
 		speaker: {
-			sync: false,
+			sync: true,
 			prefetch: false,
 			loop: true,
 			acceptableDelayMs: 50,
@@ -88,6 +88,8 @@ let config: IConfig = {
 		concludeDuration: 2,
 		surveyLink: 'https://forms.gle/nMfJNPozSW1KFddu7',
 		autoResetTimeSeconds: 0,
+
+		speakerToggleIds: [18, 19],
 	},
 };
 
