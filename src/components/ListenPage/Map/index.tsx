@@ -16,6 +16,8 @@ import { useURLSync } from 'context/URLContext';
 import ShareDialog from 'components/App/ShareDialog';
 import ResetButton from './ResetButton';
 import SpeakerImages from './Speakers/SpeakerImages';
+import SpeakerToggle from '../SpeakerToggle';
+import PlaybackInfoOverlay from '../PlaybackInfoOverlay';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -126,13 +128,14 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
 						{map && roundware.mixer?.playlist && <WalkingModeButton />}
+						{config.features.speakerToggleIds?.length > 0 && <SpeakerToggle />}
 						{config.map.speakerDisplay == 'polygons' && <SpeakerPolygons />}
 						{config.map.speakerDisplay == 'images' && <SpeakerImages />}
 						<SpeakerLoadingIndicator />
 						{!config.listen.speaker.loop && <SpeakerReplayButton />}
 						<ShareDialog />
 						<ResetButton updateLocation={updateListenerLocation} />
-
+						<PlaybackInfoOverlay />
 						{config.map.showBoundsMarkers && roundware && (
 							<Marker
 								position={{

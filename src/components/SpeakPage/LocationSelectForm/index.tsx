@@ -12,6 +12,7 @@ import ErrorDialog from '../../ErrorDialog';
 import LocationSelectMarker from './LocationSelectMarker';
 import PlacesAutocomplete from './PlacesAutocomplete';
 import config from 'config';
+import PermissionDeniedDialog from 'components/elements/PermissionDeniedDialog';
 const getPosition = function (options?: PositionOptions): Promise<GeolocationPosition> {
 	return new Promise(function (resolve, reject) {
 		return navigator.geolocation.getCurrentPosition(resolve, reject, options);
@@ -69,7 +70,7 @@ const LocationSelectForm = () => {
 	};
 	const classes = useStyles();
 	const history = useHistory();
-	const [error, set_error] = useState<Error | null>(null);
+	const [error, set_error] = useState<GeolocationPositionError | Error | null>(null);
 	const [geolocating, set_geolocating] = useState<boolean>(false);
 	const gmapsLibraries = ['places'];
 
@@ -109,7 +110,13 @@ const LocationSelectForm = () => {
 	}
 	return (
 		<Card className={classes.container}>
-			<ErrorDialog error={error} set_error={set_error} />
+			{error && ['denied', 'deny'].some((str) => error.message.toLowerCase().includes(str)) ? (
+				// permission denied
+				<PermissionDeniedDialog open={true} onClose={() => set_error(null)} functionality={'location'} />
+			) : (
+				// normal error
+				<ErrorDialog error={error as Error} set_error={set_error} />
+			)}
 			<CardContent style={{ padding: 0 }}>
 				<Typography variant={'h4'} className={classes.locationHeaderLabel}>
 					Where are you recording today?
