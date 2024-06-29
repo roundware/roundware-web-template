@@ -7,13 +7,13 @@ import CustomMapControl from './Map/CustomControl';
 
 const SpeakerToggle = () => {
 	const [speakerValues, setSpeakerValues] = useState(
-		finalConfig.features.speakerToggleIds?.reduce((acc, id) => {
-			acc[id] = true;
+		finalConfig.features.speakerToggleIds?.reduce((acc, id, idx) => {
+			acc[id] = idx === 1;
 			return acc;
 		}, {} as Record<string, boolean>)
 	);
 
-	const { roundware } = useRoundware();
+	const { roundware, setHideSpeakerPolygons } = useRoundware();
 	useEffect(() => {
 		if (speakerValues) {
 			roundware.mixer.speakerTracks?.forEach((st) => {
@@ -27,6 +27,12 @@ const SpeakerToggle = () => {
 					}
 				}
 			});
+
+			setHideSpeakerPolygons(
+				Object.keys(speakerValues)
+					.filter((key) => speakerValues[key] === false)
+					.map((key) => parseInt(key, 10))
+			);
 		}
 	}, [speakerValues, ...(roundware.mixer.speakerTracks?.map((st) => st.currentVolume) ?? [])]);
 
@@ -44,21 +50,25 @@ const SpeakerToggle = () => {
 						<Typography fontWeight={'bold'} variant={'body1'}>
 							Speakers
 						</Typography>
-						{finalConfig.features.speakerToggleIds?.map((id) => (
-							<Stack direction={'row'} spacing={1} key={id} alignItems={'center'}>
-								<Typography>{id}</Typography>
-								<Switch
-									checked={speakerValues[id]}
-									onChange={(e) => {
-										setSpeakerValues((prev) => {
-											const newValues = { ...prev };
-											newValues[id] = e.target.checked;
-											return newValues;
-										});
-									}}
-								/>
-							</Stack>
-						))}
+
+						<Switch
+							checked={speakerValues[finalConfig.features.speakerToggleIds[1]]}
+							onChange={(e) => {
+								setSpeakerValues((prev) => {
+									const newValues = { ...prev };
+
+									const speakerToTurnOn = finalConfig.features.speakerToggleIds[e.target.checked ? 1 : 0];
+
+									Object.keys(newValues).forEach((key) => {
+										newValues[key] = false;
+									});
+
+									newValues[speakerToTurnOn] = true;
+
+									return newValues;
+								});
+							}}
+						/>
 					</Stack>
 				</Paper>
 			</ThemeProvider>

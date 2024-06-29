@@ -46,6 +46,10 @@ export interface IRoundwareContext {
 	// computed properties
 	assetPage: IAssetData[];
 	assetsReady: boolean;
+
+	// hide speaker polygons for these
+	hideSpeakerPolygons: number[];
+	setHideSpeakerPolygons: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const RoundwareContext = React.createContext<IRoundwareContext>(undefined!);

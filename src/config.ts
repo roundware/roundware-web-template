@@ -50,7 +50,7 @@ let config: IConfig = {
 			low: 15,
 			walking: 22,
 		},
-		speakerDisplay: 'images',
+		speakerDisplay: 'polygons',
 		speakerPolygonColors: ['#044389', '#FCFF4B', '#FFAD05', '#7CAFC4', '#63A375', '#EF27A6'],
 		useListenMapBounds: true,
 		showBoundsMarkers: false,
