@@ -12,7 +12,7 @@ const getColorForIndex = (index: number): string => {
 	return colors[index % colors.length];
 };
 const SpeakerPolygons = (props: Props) => {
-	const { roundware } = useRoundware();
+	const { roundware, hideSpeakerPolygons } = useRoundware();
 
 	const [options, setOptions] = useState<PolygonProps[`options`]>(speakerPolygonOptions);
 
@@ -22,6 +22,7 @@ const SpeakerPolygons = (props: Props) => {
 			.speakers()
 			?.sort((a, b) => (a?.id > b?.id ? -1 : 1))
 			?.filter((speaker): speaker is ISpeakerData & Required<Pick<ISpeakerData, 'shape'>> => !!speaker.shape)
+			?.filter((s) => !hideSpeakerPolygons.includes(s.id))
 			.flatMap((s, index) => {
 				const prop: PolygonProps = {
 					path: polygonToGoogleMapPaths(s.shape),
@@ -35,7 +36,7 @@ const SpeakerPolygons = (props: Props) => {
 				};
 				return [prop];
 			});
-	}, [roundware.project, options]);
+	}, [roundware.project, options, hideSpeakerPolygons]);
 
 	return (
 		<div>

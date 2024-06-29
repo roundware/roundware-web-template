@@ -8,6 +8,7 @@ export type IAssetCardConfig = {
 };
 
 export type IConfig = {
+	locale: string;
 	/** display debug mesages on UI */
 	debugMode: boolean;
 
@@ -150,5 +151,8 @@ export type IConfig = {
 		surveyLink: string;
 		/** time after which the app will automatically reset */
 		autoResetTimeSeconds: number;
+
+		/** ids of the tags which should toggle the speaker regions */
+		speakerToggleIds: number[];
 	};
 };

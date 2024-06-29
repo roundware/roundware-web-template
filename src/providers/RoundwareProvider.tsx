@@ -39,6 +39,9 @@ const RoundwareProvider = (props: PropTypes) => {
 	const [assetPageNonMemoized, setAssetPage] = useState<IRoundwareContext[`assetPage`]>([]);
 	const assetPage = useMemo(() => assetPageNonMemoized, [assetPageNonMemoized]);
 	const [playingAssets, setPlayingAssets] = useState<IRoundwareContext[`playingAssets`]>([]);
+
+	const [hideSpeakerPolygons, setHideSpeakerPolygons] = useState<IRoundwareContext[`hideSpeakerPolygons`]>(config.features.speakerToggleIds?.[0] ? [config.features.speakerToggleIds?.[0]] : []);
+
 	const [, forceUpdate] = useReducer((x) => !x, false);
 
 	const updatePlaying = (assets: IAssetData[] | undefined) => {
@@ -291,6 +294,8 @@ const RoundwareProvider = (props: PropTypes) => {
 				// computed properties
 				assetPage,
 				assetsReady,
+				hideSpeakerPolygons,
+				setHideSpeakerPolygons,
 			}}
 		>
 			{props.children}
