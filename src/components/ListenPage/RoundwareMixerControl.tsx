@@ -1,7 +1,6 @@
-import Forward5Icon from '@mui/icons-material/Forward5';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import Replay5Icon from '@mui/icons-material/Replay5';
+import ReplayIcon from '@mui/icons-material/Replay';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -9,6 +8,8 @@ import Snackbar, { SnackbarProps } from '@mui/material/Snackbar';
 import { useEffect, useState } from 'react';
 import { GeoListenMode } from 'roundware-web-framework';
 import { useRoundware } from '../../hooks';
+import finalConfig from 'config';
+import { IconButton } from '@mui/material';
 
 const RoundwareMixerControl = () => {
 	const { roundware, forceUpdate } = useRoundware();
@@ -71,9 +72,11 @@ const RoundwareMixerControl = () => {
 
 	return (
 		<>
-			<Button onClick={() => seek(-5)} disabled={isPlaying ? false : true}>
-				<Replay5Icon />
-			</Button>
+			{finalConfig.ui.listenTransport.includeSkipBackButton && (
+				<IconButton onClick={() => seek(-(finalConfig.listen.skipDuration || 5))} disabled={isPlaying ? false : true}>
+					<ReplayIcon />
+				</IconButton>
+			)}
 
 			<Button
 				onClick={() => {
@@ -100,11 +103,16 @@ const RoundwareMixerControl = () => {
 			>
 				{roundware && roundware.mixer && roundware.mixer.playing ? <PauseCircleOutlineIcon fontSize='large' /> : <PlayCircleOutlineIcon fontSize='large' />}
 			</Button>
-
-			<Button disabled={isPlaying ? false : true} onClick={() => seek(5)}>
-				<Forward5Icon />
-			</Button>
-
+			{finalConfig.ui.listenTransport.includeSkipForwardButton && (
+				<IconButton disabled={isPlaying ? false : true} onClick={() => seek(finalConfig.listen.skipDuration || 5)}>
+					<ReplayIcon
+						sx={{
+							// flip the icon horizontally
+							transform: 'scaleX(-1)',
+						}}
+					/>
+				</IconButton>
+			)}
 			<Button
 				disabled={isPlaying ? false : true}
 				onClick={() => {

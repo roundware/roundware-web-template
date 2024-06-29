@@ -30,6 +30,8 @@ let config: IConfig = {
 			acceptableDelayMs: 50,
 			syncCheckInterval: 2500,
 		},
+
+		skipDuration: 5,
 	},
 
 	speak: {
@@ -80,6 +82,11 @@ let config: IConfig = {
 				},
 				infoCardDefaultCollapsed: false,
 			},
+		},
+
+		listenTransport: {
+			includeSkipForwardButton: true,
+			includeSkipBackButton: true,
 		},
 	},
 
