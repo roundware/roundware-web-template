@@ -5,6 +5,7 @@ import { merge } from 'lodash';
 // this config object can be overridden by config.json
 // Refer the type object below for info and comments on each config option
 let config: IConfig = {
+	locale: 'es',
 	debugMode: false,
 
 	project: {
@@ -29,6 +30,8 @@ let config: IConfig = {
 			acceptableDelayMs: 50,
 			syncCheckInterval: 2500,
 		},
+
+		skipDuration: 5,
 	},
 
 	speak: {
@@ -79,6 +82,11 @@ let config: IConfig = {
 				},
 				infoCardDefaultCollapsed: false,
 			},
+		},
+
+		listenTransport: {
+			includeSkipForwardButton: true,
+			includeSkipBackButton: true,
 		},
 	},
 

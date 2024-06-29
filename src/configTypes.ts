@@ -8,6 +8,7 @@ export type IAssetCardConfig = {
 };
 
 export type IConfig = {
+	locale: string;
 	/** display debug mesages on UI */
 	debugMode: boolean;
 
@@ -57,6 +58,9 @@ export type IConfig = {
 			 */
 			syncCheckInterval: number;
 		};
+
+		/** duration to skip when listen transport buttons are clicked */
+		skipDuration: number;
 	};
 	/** config for speak mode */
 	speak: {
@@ -138,6 +142,14 @@ export type IConfig = {
 				available: IAssetCardConfig;
 				infoCardDefaultCollapsed: boolean;
 			};
+		};
+
+		/** transport controls on listen page */
+		listenTransport: {
+			/** should the skip forward button be shown */
+			includeSkipForwardButton: boolean;
+			/** should the skip back button be shown */
+			includeSkipBackButton: boolean;
 		};
 	};
 	/** config for features usually project specific */

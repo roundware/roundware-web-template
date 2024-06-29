@@ -7,7 +7,7 @@ import React from 'react';
 
 interface ErrorDialogProps {
 	error: Error | null;
-	set_error: React.Dispatch<React.SetStateAction<Error | null>>;
+	set_error: (error: Error | null) => void;
 }
 const ErrorDialog = ({ error, set_error }: ErrorDialogProps) => {
 	return (
