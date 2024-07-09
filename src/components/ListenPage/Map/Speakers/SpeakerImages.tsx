@@ -15,7 +15,7 @@ const getColorForIndex = (index: number): string => {
 	return colors[index % colors.length];
 };
 const SpeakerImages = (props: Props) => {
-	const { roundware } = useRoundware();
+	const { roundware, hideSpeakerPolygons } = useRoundware();
 
 	const overlayProps: (GroundOverlayProps & {
 		key: string;
@@ -26,6 +26,7 @@ const SpeakerImages = (props: Props) => {
 			.speakers()
 			?.sort((a, b) => (a?.id > b?.id ? -1 : 1))
 			?.filter((speaker): speaker is ISpeakerData & Required<Pick<ISpeakerData, 'shape'>> => !!speaker.shape)
+			?.filter((s) => !hideSpeakerPolygons.includes(s.id))
 			.flatMap((s, index) => {
 				const shape = polygon(s.shape.coordinates[0]);
 				const coordinates = shape.geometry.coordinates[0];
@@ -82,7 +83,7 @@ const SpeakerImages = (props: Props) => {
 			});
 
 		return p;
-	}, [speakerPolygonOptions]);
+	}, [speakerPolygonOptions, hideSpeakerPolygons]);
 
 	return (
 		<>
