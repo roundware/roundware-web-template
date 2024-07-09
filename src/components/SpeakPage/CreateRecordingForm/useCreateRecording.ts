@@ -33,6 +33,8 @@ const useCreateRecording = () => {
 	const theme = useTheme();
 	const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+	const [isPermissionDenied, setIsPermissionDenied] = useState(false);
+
 	const startRecording = () => {
 		if (!navigator.mediaDevices) {
 			setError({
@@ -64,7 +66,9 @@ const useCreateRecording = () => {
 				set_is_recording(true);
 			})
 			.catch((err) => {
-				setError(err);
+				if (err.name === 'NotAllowedError') {
+					setIsPermissionDenied(true);
+				} else setError(err);
 			});
 	};
 
@@ -186,6 +190,8 @@ const useCreateRecording = () => {
 		timer,
 		setTimer,
 		progress,
+		isPermissionDenied,
+		setIsPermissionDenied,
 	};
 };
 

@@ -14,21 +14,21 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
+import ID3Writer from 'browser-id3-writer';
+import config from 'config';
+import { useUIContext } from 'context/UIContext';
+import { useRoundwareDraft } from 'hooks';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Prompt } from 'react-router-dom';
+import { IAssetData } from 'roundware-web-framework/dist/types/asset';
 import AudioPlayer from '../../AudioPlayer';
 import ErrorDialog from '../../ErrorDialog';
 import LegalAgreementForm from '../../LegalAgreementForm';
 import AdditionalMediaMenu from './AdditionalMediaMenu';
 import { useStyles } from './styles';
 import useCreateRecording from './useCreateRecording';
-import config from 'config';
-import { useState } from 'react';
-import ID3Writer from 'browser-id3-writer';
-import ShareLinkButton from 'components/App/ShareButton';
-import { useUIContext } from 'context/UIContext';
-import { useRoundwareDraft } from 'hooks';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+import PermissionDeniedDialog from 'components/elements/PermissionDeniedDialog';
+
 const CreateRecordingForm = () => {
 	const { draftMediaUrl, textAsset, imageAssets, set_draft_recording_media, set_draft_media_url, draftRecording, setSuccess, selectAsset, roundware, draftRecordingMedia, updateAssets, saving, resetFilters, history, setTextAsset, setSaving, deleteRecording, legalModalOpen, setLegalModalOpen, setImageAssets, success, selected_tags, error, isRecording, toggleRecording, isExtraSmallScreen, setError, maxRecordingLength, stopRecording, setDeleteModalOpen, deleteModalOpen, timer, setTimer, ...cr } = useCreateRecording();
 	const classes = useStyles();
@@ -42,6 +42,14 @@ const CreateRecordingForm = () => {
 	return (
 		<>
 			<Card className={classes.container}>
+				{/* permission denied */}
+				<PermissionDeniedDialog
+					open={cr.isPermissionDenied}
+					onClose={() => {
+						cr.setIsPermissionDenied(false);
+					}}
+					functionality='microphone'
+				/>
 				{/* unsaved prompt */}
 				<Prompt
 					when={!!draftMediaUrl && !success}
