@@ -17,6 +17,7 @@ import ShareDialog from 'components/App/ShareDialog';
 import ResetButton from './ResetButton';
 import SpeakerImages from './Speakers/SpeakerImages';
 import SpeakerToggle from '../SpeakerToggle';
+import PlaybackInfoOverlay from '../PlaybackInfoOverlay';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -134,7 +135,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						{!config.listen.speaker.loop && <SpeakerReplayButton />}
 						<ShareDialog />
 						<ResetButton updateLocation={updateListenerLocation} />
-
+						<PlaybackInfoOverlay />
 						{config.map.showBoundsMarkers && roundware && (
 							<Marker
 								position={{
