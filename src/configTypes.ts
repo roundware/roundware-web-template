@@ -117,6 +117,9 @@ export type IConfig = {
 
 		/** types of assets to be displayed */
 		assetTypeDisplay: ('audio' | 'photo' | 'text')[];
+
+		/** asset display */
+		assetDisplay: 'pin' | 'circle' | 'polygon';
 	};
 	/** config for ui */
 	ui: {
