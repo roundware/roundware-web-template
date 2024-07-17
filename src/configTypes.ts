@@ -114,6 +114,9 @@ export type IConfig = {
 			neLat: number;
 			neLng: number;
 		};
+
+		/** types of assets to be displayed */
+		assetTypeDisplay: ('audio' | 'photo' | 'text')[];
 	};
 	/** config for ui */
 	ui: {

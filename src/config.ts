@@ -61,6 +61,7 @@ let config: IConfig = {
 			neLat: 5,
 			neLng: 43,
 		},
+		assetTypeDisplay: ['audio', 'photo','text'],
 	},
 
 	ui: {
