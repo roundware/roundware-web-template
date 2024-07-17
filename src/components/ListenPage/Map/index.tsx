@@ -18,6 +18,7 @@ import ResetButton from './ResetButton';
 import SpeakerImages from './Speakers/SpeakerImages';
 import SpeakerToggle from '../SpeakerToggle';
 import PlaybackInfoOverlay from '../PlaybackInfoOverlay';
+import OutOfRangeMessage from './OutOfRangeMessage';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -153,6 +154,8 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 								}}
 							/>
 						)}
+
+						<OutOfRangeMessage />
 					</GoogleMap>
 				</LoadScript>
 			) : null}
