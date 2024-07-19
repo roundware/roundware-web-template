@@ -26,6 +26,7 @@
 		"@turf/distance": "^6.5.0",
 		"@turf/helpers": "^6.5.0",
 		"@turf/midpoint": "^6.5.0",
+		"@turf/polygon-to-line": "^7.0.0",
 		"audio-recorder-polyfill": "^0.4.1",
 		"autosuggest-highlight": "^3.1.1",
 		"browser-id3-writer": "^4.4.0",

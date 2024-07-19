@@ -96,6 +96,16 @@ const RoundwareProvider = (props: PropTypes) => {
 	const filterAssets = (asset_data: IAssetData[]) => {
 		return asset_data.filter((asset) => {
 			// show the asset, unless a filter returns 'false'
+
+			if (config.map.assetTypeDisplay.includes(asset.media_type as (
+				| 'audio'
+				| 'photo'
+				| 'text'
+			)) == false) {
+				return false;
+			}
+
+
 			// filter by tags first
 			let filteredByTag = false;
 			const tag_filter_groups = Object.entries(selectedTags || {});
@@ -202,7 +212,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			projectId: project_id,
 			geoListenMode: GeoListenMode.DISABLED,
 			speakerFilters: { activeyn: true },
-			assetFilters: { submitted: true, media_type: 'audio' },
+			assetFilters: { submitted: true, },
 			listenerLocation: initial_loc,
 			assetUpdateInterval: 30 * 1000,
 
