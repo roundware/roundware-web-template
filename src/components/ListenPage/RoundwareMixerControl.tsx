@@ -6,10 +6,11 @@ import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Snackbar, { SnackbarProps } from '@mui/material/Snackbar';
 import { useEffect, useState } from 'react';
-import { GeoListenMode } from 'roundware-web-framework';
+
 import { useRoundware } from '../../hooks';
-import finalConfig from 'config';
+import finalConfig from '@/config';
 import { IconButton } from '@mui/material';
+import { GeoListenMode } from 'roundware-web-framework/dist/index';
 
 const RoundwareMixerControl = () => {
 	const { roundware, forceUpdate } = useRoundware();
@@ -47,7 +48,7 @@ const RoundwareMixerControl = () => {
 	}, [roundware]);
 
 	function seek(offset: number): void {
-		roundware.mixer.speakerTracks?.forEach((s) => {
+		roundware.mixer.speakerEngine?.speakerTracks?.forEach((s) => {
 			const currentTime = s.player.audio.currentTime;
 			let newTime = currentTime + offset;
 

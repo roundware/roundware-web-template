@@ -1,6 +1,6 @@
 import { MarkerClusterer, useGoogleMap } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
-import config from 'config';
+import config from '@/config';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Coordinates } from 'roundware-web-framework/dist/types';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';

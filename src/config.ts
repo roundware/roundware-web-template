@@ -1,11 +1,11 @@
-import configJSON from 'config.json';
-import { IConfig } from 'configTypes';
+import configJSON from '@/config.json';
+import { IConfig } from '@/configTypes';
 import { merge } from 'lodash';
 
 // this config object can be overridden by config.json
 // Refer the type object below for info and comments on each config option
 let config: IConfig = {
-	locale: 'es',
+	locale: 'en',
 	debugMode: false,
 
 	project: {
@@ -24,11 +24,12 @@ let config: IConfig = {
 		geoListenMode: 'device',
 		autoplay: false,
 		speaker: {
-			sync: true,
-			prefetch: false,
+			mode: 'prefetch-sync-basePlusMax5Random',
 			loop: true,
 			acceptableDelayMs: 50,
 			syncCheckInterval: 2500,
+			replaceWithNoneProbability: 0.3,
+			lengths: [1 / 8, 2 / 8],
 		},
 
 		skipDuration: 5,
@@ -37,8 +38,11 @@ let config: IConfig = {
 	speak: {
 		allowPhotos: true,
 		allowText: true,
-		allowSpeakTags: true,
+		allowSpeakTags: false,
 		defaultSpeakTags: [],
+		recordingMethod: 'looping',
+		uploadAsSpeaker: true,
+		baseRecordingLoopSelectionMethod: 'all',
 	},
 
 	map: {
@@ -49,12 +53,12 @@ let config: IConfig = {
 
 		zoom: {
 			high: 17,
-			low: 15,
+			low: 11,
 			walking: 22,
 		},
 		speakerDisplay: 'polygons',
 		speakerPolygonColors: ['#044389', '#FCFF4B', '#FFAD05', '#7CAFC4', '#63A375', '#EF27A6'],
-		useListenMapBounds: true,
+		useListenMapBounds: false,
 		showBoundsMarkers: false,
 		bounds: 'none',
 		boundsPoints: {
@@ -64,8 +68,8 @@ let config: IConfig = {
 			neLng: 43,
 		},
 		assetTypeDisplay: ['audio', 'photo', 'text'],
-		
-		assetDisplay: 'circle'
+
+		assetDisplay: 'circle',
 	},
 
 	ui: {
@@ -88,8 +92,8 @@ let config: IConfig = {
 		},
 
 		listenTransport: {
-			includeSkipForwardButton: true,
-			includeSkipBackButton: true,
+			includeSkipForwardButton: false,
+			includeSkipBackButton: false,
 		},
 	},
 
@@ -99,7 +103,7 @@ let config: IConfig = {
 		surveyLink: 'https://forms.gle/nMfJNPozSW1KFddu7',
 		autoResetTimeSeconds: 0,
 
-		speakerToggleIds: [18, 19],
+		speakerToggleIds: [],
 	},
 };
 

@@ -3,8 +3,8 @@ import { makeStyles, useTheme } from '@mui/styles';
 import { useGoogleMap } from '@react-google-maps/api';
 import React, { useEffect, useState } from 'react';
 import useDimensions from 'react-cool-dimensions';
-import { GeoListenMode } from 'roundware-web-framework';
-import { Coordinates } from 'roundware-web-framework/dist/types';
+
+import { Coordinates, GeoListenMode } from 'roundware-web-framework/dist/index';
 import { useRoundware } from '../../../hooks';
 import Crosshair from './Crosshair';
 

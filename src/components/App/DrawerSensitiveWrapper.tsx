@@ -1,5 +1,5 @@
 import { Box, Theme, useMediaQuery } from '@mui/material';
-import { useUIContext } from 'context/UIContext';
+import { useUIContext } from '@/context/UIContext';
 import React from 'react';
 
 type Props = {

@@ -1,9 +1,9 @@
 import { Card, CardContent, Fade, Link, Paper, Stack, ThemeProvider, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { lightTheme } from 'styles';
+import { lightTheme } from '@/styles';
 import OpenInNew from '@mui/icons-material/OpenInNew';
 import playbackInfo from '../../playbackInfo.json';
-import { useRoundware } from 'hooks';
+import { useRoundware } from '@/hooks';
 import CustomMapControl from './Map/CustomControl';
 
 type PlaybackInfo = {

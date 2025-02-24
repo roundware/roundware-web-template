@@ -1,17 +1,15 @@
 import moment from 'moment';
 import * as React from 'react';
 import { useEffect, useMemo, useReducer, useState } from 'react';
-import { GeoListenMode, Roundware } from 'roundware-web-framework';
-import { Coordinates, GeoListenModeType } from 'roundware-web-framework/dist/types';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
-import { IRoundwareConstructorOptions } from 'roundware-web-framework/dist/types/roundware';
+
 import RoundwareContext, { IRoundwareContext } from '../context/RoundwareContext';
 import useDebounce from '../hooks/useDebounce';
 import { useDeviceID } from '../hooks/useDeviceID';
-import { ITagLookup } from '../types';
 
-import config from 'config';
+import config from '@/config';
+import Roundware, { Coordinates, GeoListenMode, GeoListenModeType, IRoundwareConstructorOptions, IAssetData } from 'roundware-web-framework/dist/index';
 
+import { ITagLookup } from '@/types/index';
 interface PropTypes {
 	children: React.ReactNode;
 }
@@ -97,14 +95,9 @@ const RoundwareProvider = (props: PropTypes) => {
 		return asset_data.filter((asset) => {
 			// show the asset, unless a filter returns 'false'
 
-			if (config.map.assetTypeDisplay.includes(asset.media_type as (
-				| 'audio'
-				| 'photo'
-				| 'text'
-			)) == false) {
+			if (config.map.assetTypeDisplay.includes(asset.media_type as 'audio' | 'photo' | 'text') == false) {
 				return false;
 			}
-
 
 			// filter by tags first
 			let filteredByTag = false;
@@ -212,7 +205,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			projectId: project_id,
 			geoListenMode: GeoListenMode.DISABLED,
 			speakerFilters: { activeyn: true },
-			assetFilters: { submitted: true, },
+			assetFilters: { submitted: true },
 			listenerLocation: initial_loc,
 			assetUpdateInterval: 30 * 1000,
 
@@ -220,7 +213,7 @@ const RoundwareProvider = (props: PropTypes) => {
 			keepPausedAssets: config.listen.keepPausedAssets == true,
 			speakerConfig: config.listen.speaker,
 		};
-		const roundware = new Roundware(window, roundwareOptions);
+		const roundware = new Roundware(roundwareOptions);
 
 		roundware.connect().then(() => {
 			// set the initial listener location to the project default

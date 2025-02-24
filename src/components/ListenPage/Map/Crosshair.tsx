@@ -1,6 +1,6 @@
 import { Box, SxProps, Theme } from '@mui/material';
 import React from 'react';
-import { defaultTheme } from 'styles';
+import { defaultTheme } from '@/styles';
 const commonStyles: SxProps<Theme> = {
 	background: defaultTheme.palette.primary.dark,
 	transform: `translate(-50%, -50%)`,

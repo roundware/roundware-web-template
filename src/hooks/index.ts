@@ -14,3 +14,10 @@ export const useRoundware = () => {
 	return context;
 };
 export const useRoundwareDraft = () => useContext(DraftRecordingContext);
+
+export const useLocationFromQuery = () => {
+	const query = useQuery();
+	const lat = parseFloat(query.get('lat') as string) || 0;
+	const lng = parseFloat(query.get('lng') as string) || 0;
+	return { lat, lng };
+};

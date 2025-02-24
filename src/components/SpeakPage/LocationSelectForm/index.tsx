@@ -11,8 +11,8 @@ import { RoundwareMapStyle } from '../../../styles/map-style';
 import ErrorDialog from '../../ErrorDialog';
 import LocationSelectMarker from './LocationSelectMarker';
 import PlacesAutocomplete from './PlacesAutocomplete';
-import config from 'config';
-import PermissionDeniedDialog from 'components/elements/PermissionDeniedDialog';
+import config from '@/config';
+import PermissionDeniedDialog from '@/components/elements/PermissionDeniedDialog';
 const getPosition = function (options?: PositionOptions): Promise<GeolocationPosition> {
 	return new Promise(function (resolve, reject) {
 		return navigator.geolocation.getCurrentPosition(resolve, reject, options);
@@ -76,9 +76,28 @@ const LocationSelectForm = () => {
 
 	useEffect(() => {
 		if (draftRecording.tags.length === 0 && config.speak.allowSpeakTags === true) {
-			history.replace('/speak/tags/0');
+			history.replace({
+				pathname: '/speak/tags/0',
+				search: history.location.search,
+			});
 		}
 	}, [draftRecording.tags]);
+
+	useEffect(() => {
+		const searchParams = new URLSearchParams(history.location.search);
+		const lat = searchParams.get('lat');
+		const lng = searchParams.get('lng');
+		if (lat && lng) {
+			draftRecording.setLocation({
+				latitude: parseFloat(lat),
+				longitude: parseFloat(lng),
+			});
+			history.push({
+				pathname: '/speak/recording',
+				search: history.location.search,
+			});
+		}
+	}, [history.location.search]);
 
 	if (!draftRecording.location.latitude || !draftRecording.location.longitude) {
 		return null;
@@ -105,7 +124,7 @@ const LocationSelectForm = () => {
 		}
 	};
 
-	if (!process.env.REACT_APP_GOOGLE_MAPS_API_KEY) {
+	if (!import.meta.env.VITE_GOOGLE_MAPS_API_KEY) {
 		console.warn(`GOOGLE_MAPS_API_KEY was not provided! Script loading will fail.`);
 	}
 	return (
@@ -121,7 +140,7 @@ const LocationSelectForm = () => {
 				<Typography variant={'h4'} className={classes.locationHeaderLabel}>
 					Where are you recording today?
 				</Typography>
-				<LoadScript id='script-loader' googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries as LoadScriptProps[`libraries`]}>
+				<LoadScript id='script-loader' googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''} libraries={gmapsLibraries as LoadScriptProps[`libraries`]}>
 					<PlacesAutocomplete />
 					<div className={classes.mapContainerDiv}>
 						<GoogleMap
@@ -172,7 +191,10 @@ const LocationSelectForm = () => {
 					color='primary'
 					variant={'contained'}
 					onClick={() => {
-						history.push('/speak/recording');
+						history.push({
+							pathname: '/speak/recording',
+							search: history.location.search,
+						});
 						if (roundware.mixer && roundware.mixer.playing) {
 							roundware.mixer.toggle();
 						}

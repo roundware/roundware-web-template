@@ -1,8 +1,8 @@
 import { Paper, Stack, Switch, ThemeProvider, Typography } from '@mui/material';
-import finalConfig from 'config';
-import { useRoundware } from 'hooks';
+import finalConfig from '@/config';
+import { useRoundware } from '@/hooks';
 import { useEffect, useState } from 'react';
-import { lightTheme } from 'styles';
+import { lightTheme } from '@/styles';
 import CustomMapControl from './Map/CustomControl';
 
 const SpeakerToggle = () => {

@@ -1,5 +1,5 @@
 import { useMediaQuery, useTheme } from '@mui/material';
-import finalConfig from 'config';
+import finalConfig from '@/config';
 import React, { useEffect, useState } from 'react';
 import { UiConfigContext } from '../context/UIContext';
 

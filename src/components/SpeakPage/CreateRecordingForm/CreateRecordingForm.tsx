@@ -15,9 +15,9 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 import ID3Writer from 'browser-id3-writer';
-import config from 'config';
-import { useUIContext } from 'context/UIContext';
-import { useRoundwareDraft } from 'hooks';
+import config from '@/config';
+import { useUIContext } from '@/context/UIContext';
+import { useRoundwareDraft } from '@/hooks';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Prompt } from 'react-router-dom';
 import { IAssetData } from 'roundware-web-framework/dist/types/asset';
@@ -27,7 +27,7 @@ import LegalAgreementForm from '../../LegalAgreementForm';
 import AdditionalMediaMenu from './AdditionalMediaMenu';
 import { useStyles } from './styles';
 import useCreateRecording from './useCreateRecording';
-import PermissionDeniedDialog from 'components/elements/PermissionDeniedDialog';
+import PermissionDeniedDialog from '@/components/elements/PermissionDeniedDialog';
 
 const CreateRecordingForm = () => {
 	const { draftMediaUrl, textAsset, imageAssets, set_draft_recording_media, set_draft_media_url, draftRecording, setSuccess, selectAsset, roundware, draftRecordingMedia, updateAssets, saving, resetFilters, history, setTextAsset, setSaving, deleteRecording, legalModalOpen, setLegalModalOpen, setImageAssets, success, selected_tags, error, isRecording, toggleRecording, isExtraSmallScreen, setError, maxRecordingLength, stopRecording, setDeleteModalOpen, deleteModalOpen, timer, setTimer, ...cr } = useCreateRecording();
@@ -410,7 +410,10 @@ const CreateRecordingForm = () => {
 									color={'primary'}
 									onClick={() => {
 										draftRecording.reset();
-										history.push('/speak');
+										history.push({
+											pathname: '/speak',
+											search: history.location.search,
+										});
 									}}
 									startIcon={<Create />}
 								>

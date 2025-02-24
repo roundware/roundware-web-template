@@ -28,7 +28,10 @@ const ActionButton = ({ label, linkTo, style = {}, onClick }: Props) => {
 						if (onClick instanceof Function) {
 							onClick?.();
 						}
-						history.push(linkTo);
+						history.push({
+							pathname: linkTo,
+							search: history.location.search,
+						});
 					}}
 				>
 					<Typography variant={'h3'} className={classes.buttonLabel}>

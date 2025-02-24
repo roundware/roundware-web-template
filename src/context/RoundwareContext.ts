@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Roundware } from 'roundware-web-framework';
-import { GeoListenModeType, ITagGroup } from 'roundware-web-framework/dist/types';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+
 import { ISelectedTags, ITagLookup } from '../types';
+import Roundware, { GeoListenModeType, IAssetData, ITagGroup } from 'roundware-web-framework';
 
 // this is the equivalent to the createStore method of Redux
 // https://redux.js.org/api/createstore

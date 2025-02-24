@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { styled, Button, Grow } from '@mui/material';
-import { useRoundware } from 'hooks';
+import { useRoundware } from '@/hooks';
 import ReplayIcon from '@mui/icons-material/Replay';
 type Props = {};
 

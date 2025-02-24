@@ -2,11 +2,14 @@ import React, { useEffect } from 'react';
 import { useRoundware } from '../../hooks';
 import TagSelectForm from './TagSelectForm';
 import LocationSelectForm from './LocationSelectForm';
-import CreateRecordingForm from './CreateRecordingForm';
+import CreateRecordingForm from './CreateRecordingForm/CreateRecordingForm';
 import Grid from '@mui/material/Grid';
 import { makeStyles } from '@mui/styles';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { DraftRecordingProvider } from '../../providers/DraftRecordingProvider';
+import { config } from 'process';
+import finalConfig from '@/config';
+import LoopingRecordingForm from './CreateRecordingForm/LoopingRecording/LoopingRecordingForm';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -43,7 +46,7 @@ const SpeakPage = (props: SpeakPageProps) => {
 		// redirect to the first tag selection page
 
 		if (props.match.isExact === true) {
-			history.replace('/speak/tags/0');
+			history.replace({ pathname: '/speak/tags/0', search: history.location.search });
 		}
 	}, [props.match]);
 
@@ -58,7 +61,7 @@ const SpeakPage = (props: SpeakPageProps) => {
 					<Switch>
 						<Route path={`${props.match.path}/tags/:tagGroupIndex`} component={TagSelectForm} />
 						<Route path={`${props.match.path}/location`} component={LocationSelectForm} />
-						<Route path={`${props.match.path}/recording`} component={CreateRecordingForm} />
+						<Route path={`${props.match.path}/recording`} component={finalConfig.speak.recordingMethod === 'standard' ? CreateRecordingForm : LoopingRecordingForm} />
 					</Switch>
 				</Grid>
 			</Grid>
