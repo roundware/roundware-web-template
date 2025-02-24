@@ -3,11 +3,10 @@
 Create or open `.env`:
 
 ```
-REACT_APP_GOOGLE_MAPS_API_KEY='put your real google maps api key in .env.local'
-REACT_APP_GOOGLE_ANALYTICS_ID='put your real google analytics api key in .env.local'
+VITE_GOOGLE_MAPS_API_KEY='put your real google maps api key in .env.local'
+VITE_GOOGLE_ANALYTICS_ID='put your real google analytics api key in .env.local'
 PORT=1234
 ```
-
 
 # Roundware Configuration
 

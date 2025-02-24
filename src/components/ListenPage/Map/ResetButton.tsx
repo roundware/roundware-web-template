@@ -1,11 +1,11 @@
-import React from 'react';
-import Button from '@mui/material/Button';
+import config from '@/config';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
+import Button from '@mui/material/Button';
 import { useGoogleMap } from '@react-google-maps/api';
-import config from 'config';
-import { Coordinates } from 'roundware-web-framework/dist/types';
-import { GeoListenMode } from 'roundware-web-framework';
-import { useRoundware } from 'hooks';
+
+import { useRoundware } from '@/hooks';
+import { Coordinates, GeoListenMode } from 'roundware-web-framework/dist/index';
+
 type Props = {
 	updateLocation: (coords: Coordinates) => void;
 };

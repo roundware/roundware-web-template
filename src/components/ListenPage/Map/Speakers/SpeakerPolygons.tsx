@@ -1,10 +1,10 @@
 import { Polygon, PolygonProps } from '@react-google-maps/api';
 import React, { useMemo, useState } from 'react';
-import { useRoundware } from 'hooks';
-import { speakerPolygonColors as colors, speakerPolygonOptions } from 'styles/speaker';
-import { polygonToGoogleMapPaths } from 'utils';
+import { useRoundware } from '@/hooks';
+import { speakerPolygonColors as colors, speakerPolygonOptions } from '@/styles/speaker';
+import { polygonToGoogleMapPaths } from '@/utils';
 import CustomMapControl from '../CustomControl';
-import config from 'config';
+import config from '@/config';
 import { ISpeakerData } from 'roundware-web-framework/dist/types/speaker';
 interface Props {}
 

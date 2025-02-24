@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
-import { PlatformMessage } from 'components/PlatformMessage';
+import { PlatformMessage } from '@/components/PlatformMessage';
 import { isIOS, isFirefox, isSafari } from 'react-device-detect';
 
 export function getMessageOnLoad(): PlatformMessage | null {

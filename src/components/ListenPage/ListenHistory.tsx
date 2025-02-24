@@ -1,8 +1,8 @@
 import { ChevronRight, ClearAll, LocationOnOutlined } from '@mui/icons-material';
 import LocationOn from '@mui/icons-material/LocationOn';
 import { Button, Card, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from '@mui/material';
-import config from 'config';
-import { useRoundware } from 'hooks';
+import config from '@/config';
+import { useRoundware } from '@/hooks';
 import { sortBy, uniqBy } from 'lodash';
 import moment from 'moment';
 import { useMemo, useState } from 'react';

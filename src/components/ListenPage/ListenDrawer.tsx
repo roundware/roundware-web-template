@@ -2,9 +2,9 @@ import { Close, ViewSidebar } from '@mui/icons-material';
 import { Box, IconButton, Stack, Tab, Tabs, Theme, useMediaQuery } from '@mui/material';
 
 import Drawer from '@mui/material/Drawer';
-import { useUIContext } from 'context/UIContext';
+import { useUIContext } from '@/context/UIContext';
 
-import config from 'config';
+import config from '@/config';
 import 'date-fns';
 import React, { useState } from 'react';
 import { useRoundware } from '../../hooks';

@@ -8,17 +8,21 @@ import AssetLayer from './AssetLayer';
 import AssetLoadingOverlay from './AssetLoadingOverlay';
 import RangeCircleOverlay from './RangeCircleOverlay';
 import WalkingModeButton from './WalkingModeButton';
-import config from 'config';
+import config from '@/config';
 import SpeakerPolygons from './Speakers/SpeakerPolygons';
 import SpeakerReplayButton from './Speakers/SpeakerReplayButton';
 import SpeakerLoadingIndicator from './Speakers/SpeakerLoadingIndicator';
-import { useURLSync } from 'context/URLContext';
-import ShareDialog from 'components/App/ShareDialog';
+import { useURLSync } from '@/context/URLContext';
+import ShareDialog from '@/components/App/ShareDialog';
 import ResetButton from './ResetButton';
 import SpeakerImages from './Speakers/SpeakerImages';
 import SpeakerToggle from '../SpeakerToggle';
 import PlaybackInfoOverlay from '../PlaybackInfoOverlay';
 import OutOfRangeMessage from './OutOfRangeMessage';
+import { Button, Paper, ThemeProvider } from '@mui/material';
+import { lightTheme } from '@/styles/index';
+import { Mic } from '@mui/icons-material';
+import AddLoopVoiceButton from './AddLoopVoiceButton';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -37,7 +41,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 	const { roundware } = useRoundware();
 	const [map, setMap] = useState<google.maps.Map | undefined>();
 
-	const { deleteFromURL, } = useURLSync();
+	const { deleteFromURL } = useURLSync();
 	const updateListenerLocation = (newLocation?: Coordinates) => {
 		if (!map) {
 			return;
@@ -156,6 +160,8 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						)}
 
 						<OutOfRangeMessage />
+
+						<AddLoopVoiceButton />
 					</GoogleMap>
 				</LoadScript>
 			) : null}

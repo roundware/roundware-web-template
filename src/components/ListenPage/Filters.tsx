@@ -1,11 +1,11 @@
 import LabelIcon from '@mui/icons-material/Label';
 import { CircularProgress, Divider, Grid, InputAdornment, List, ListItem, ListItemIcon, ListItemText, TextField, TextFieldProps, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import DateFilterMenu from 'components/AssetFilterPanel/DateFilterMenu';
-import TagFilterMenu from 'components/AssetFilterPanel/TagFilterMenu';
-import config from 'config';
-import { useRoundware } from 'hooks';
-import useDebounce from 'hooks/useDebounce';
+import DateFilterMenu from '@/components/AssetFilterPanel/DateFilterMenu';
+import TagFilterMenu from '@/components/AssetFilterPanel/TagFilterMenu';
+import config from '@/config';
+import { useRoundware } from '@/hooks';
+import useDebounce from '@/hooks/useDebounce';
 import React, { useEffect } from 'react';
 
 const Filters = () => {

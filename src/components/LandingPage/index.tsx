@@ -1,15 +1,14 @@
+import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import ActionButton from './ActionButton';
-import React, { Fragment } from 'react';
-import { makeStyles } from '@mui/styles';
 import { useRoundware } from '../../hooks';
-import Container from '@mui/material/Container';
+import ActionButton from './ActionButton';
+
+import config from '@/config';
 
 import banner from '../../assets/rw-icon-cluster.png';
-import { GeoListenMode } from 'roundware-web-framework';
 import useStyles from './styles';
-import config from 'config';
+import { GeoListenMode } from 'roundware-web-framework/dist/index';
 
 export const LandingPage = () => {
 	const { roundware, forceUpdate } = useRoundware();
@@ -78,7 +77,7 @@ export const LandingPage = () => {
 						</Grid>
 					)}
 
-					{project.data?.speak_enabled && (
+					{project.data?.speak_enabled && config.speak.recordingMethod === 'standard' && (
 						<Grid item>
 							<ActionButton label={'Speak'} linkTo={'/speak'} />
 						</Grid>

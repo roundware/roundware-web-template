@@ -12,7 +12,7 @@ import { generatePath, useHistory } from 'react-router-dom';
 import { useRoundware, useRoundwareDraft } from '../../hooks';
 import { IMatch } from '../../types';
 import { getRandomArbitrary, wait } from '../../utils';
-import config from 'config';
+import config from '@/config';
 import { ArrowForwardIosRounded, Iron } from '@mui/icons-material';
 const useStyles = makeStyles((theme) => {
 	return {
@@ -87,7 +87,10 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 			const previousIndex = parseInt(match.params.tagGroupIndex) - 1;
 			if (previousIndex >= 0) {
 				const previousUrl = match.path.replace(':tagGroupIndex', previousIndex.toString());
-				history.replace(previousUrl);
+				history.replace({
+					pathname: previousUrl,
+					search: history.location.search,
+				});
 				return;
 			}
 		}
@@ -104,7 +107,10 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 			// const tagIds = defaultTags;
 
 			// draftRecording.setTags(tagIds);
-			history.replace('/speak/location');
+			history.replace({
+				pathname: '/speak/location',
+				search: history.location.search,
+			});
 		} else {
 			return;
 		}
@@ -146,10 +152,16 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 		const isLastGroup = tagGroups.length <= tagGroupIndex + 1;
 		window.scrollTo(0, 0);
 		if (isLastGroup) {
-			history.push('/speak/location');
+			history.push({
+				pathname: '/speak/location',
+				search: history.location.search,
+			});
 		} else {
 			const nextUrl = generatePath(match.path, { tagGroupIndex: tagGroupIndex + 1 });
-			history.push(nextUrl);
+			history.push({
+				pathname: nextUrl,
+				search: history.location.search,
+			});
 		}
 	};
 
@@ -204,7 +216,10 @@ const TagSelectForm = ({ match }: TagSelectFormProps) => {
 								history.replace('/');
 							} else {
 								const nextUrl = generatePath(match.path, { tagGroupIndex: tagGroupIndex - 1 });
-								history.replace(nextUrl);
+								history.replace({
+									pathname: nextUrl,
+									search: history.location.search,
+								});
 							}
 						}}
 					>

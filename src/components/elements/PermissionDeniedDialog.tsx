@@ -1,7 +1,12 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
-import finalConfig from 'config';
+import finalConfig from '@/config';
 import { getPermissionMessages, type Funcionality } from 'web-permission-messages';
 import ImageErrorBoundary from './ImageErrorBoundary';
+
+const getImageUrl = (imageName: string) => {
+	return new URL(`../../node_modules/web-permission-messages/dist/screenshots/${imageName}`, import.meta.url).href;
+};
+
 type Props = {
 	open: boolean;
 	onClose: () => void;
@@ -22,12 +27,9 @@ const PermissionDeniedDialog = (props: Props) => {
 					component={'ol'}
 					sx={{
 						padding: 1,
-						// no numbers
 						'& li': {
 							listStyleType: 'none',
-							'&:before': {
-								content: 'none',
-							},
+							'&:before': { content: 'none' },
 						},
 					}}
 				>
@@ -42,14 +44,13 @@ const PermissionDeniedDialog = (props: Props) => {
 									sx={{
 										minWidth: '320px',
 										maxWidth: '100%',
-
 										objectFit: 'contain',
 										borderRadius: 4,
 										borderWidth: 2,
 										borderColor: (t) => t.palette.divider,
 										borderStyle: 'solid',
 									}}
-									src={require(`web-permission-messages/dist/screenshots/${step.imageName}`)}
+									src={getImageUrl(step.imageName)}
 									alt={step.message}
 								/>
 							</ImageErrorBoundary>
@@ -57,7 +58,6 @@ const PermissionDeniedDialog = (props: Props) => {
 					))}
 				</Stack>
 			</DialogContent>
-
 			<DialogActions>
 				<Button onClick={props.onClose}>OK</Button>
 			</DialogActions>

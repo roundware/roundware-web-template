@@ -1,5 +1,5 @@
 import { PolygonProps } from '@react-google-maps/api';
-import finalConfig from 'config';
+import finalConfig from '@/config';
 
 export const speakerPolygonColors = finalConfig.map.speakerPolygonColors;
 export const speakerPolygonOptions: PolygonProps[`options`] = {

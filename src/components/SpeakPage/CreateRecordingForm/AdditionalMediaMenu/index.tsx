@@ -9,7 +9,7 @@ import { ITextAsset } from '../../../../types';
 import { PhotoPickerInput, PhotoPickerMenuItem } from './PhotoPicker';
 import { StyledMenu } from './StyledMenu';
 import { TextInputDialog, TextInputMenuItem } from './TextInput';
-import config from 'config';
+import config from '@/config';
 import ContactInfo from './ContactInfo';
 interface AdditionalMediaMenuProps {
 	onSetText: React.Dispatch<React.SetStateAction<ITextAsset>>;

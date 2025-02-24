@@ -4,11 +4,13 @@
 	"description": "",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "PORT=2345 react-scripts start",
-		"deploy": "npm run build && cp ./build/index.html ./build/200.html && surge --domain https://roundware-typescript.surge.sh build",
-		"build": "react-scripts build",
-		"install-rwf": "cd ../roundware-web-framework && npm run build && npm pack && cd ../roundware-web-template && rm -rf node_modules/roundware-web-framework/ &&  npm i file:../roundware-web-framework/roundware-web-framework-0.11.0-alpha.30.tgz"
+		"dev": "vite",
+		"start": "vite",
+		"preview": "vite preview",
+		"build": "vite build",
+		"deploy": "npm run build && cp ./dist/index.html ./dist/200.html && surge --domain https://roundware-typescript.surge.sh dist"
 	},
+	"type": "module",
 	"author": "Evan Babb",
 	"license": "ISC",
 	"dependencies": {
@@ -21,12 +23,15 @@
 		"@mui/styles": "^5.8.7",
 		"@mui/x-date-pickers": "^5.0.16",
 		"@react-google-maps/api": "^2.2.0",
+		"@turf/boolean-point-in-polygon": "^7.1.0",
 		"@turf/center-of-mass": "^6.5.0",
 		"@turf/destination": "^6.5.0",
 		"@turf/distance": "^6.5.0",
 		"@turf/helpers": "^6.5.0",
 		"@turf/midpoint": "^6.5.0",
+		"@turf/point-to-line-distance": "^7.1.0",
 		"@turf/polygon-to-line": "^7.0.0",
+		"@turf/turf": "^7.1.0",
 		"audio-recorder-polyfill": "^0.4.1",
 		"autosuggest-highlight": "^3.1.1",
 		"browser-id3-writer": "^4.4.0",
@@ -50,7 +55,7 @@
 		"react-router-dom": "^5.2.0",
 		"react-share": "^4.4.0",
 		"regenerator-runtime": "^0.13.9",
-		"roundware-web-framework": "^0.12.8-alpha.14",
+		"roundware-web-framework": "^0.12.8-alpha.18",
 		"ts-overlapping-marker-spiderfier": "^1.0.3",
 		"wavesurfer-react": "https://github.com/shreyas-jadhav/wavesurfer-react/raw/tarball/wavesurfer-react-2.0.13.tgz",
 		"wavesurfer.js": "^5.2.0",
@@ -63,16 +68,17 @@
 		"@types/dom-mediacapture-record": "^1.0.10",
 		"@types/gtag.js": "^0.0.10",
 		"@types/lodash": "^4.14.172",
-		"@types/node": "^16.4.13",
+		"@types/node": "^22.13.1",
 		"@types/react": "^17.0.16",
 		"@types/react-dom": "^17.0.9",
 		"@types/react-helmet": "^6.1.2",
 		"@types/react-router-dom": "^5.1.8",
 		"@types/wavesurfer.js": "^5.2.2",
+		"@vitejs/plugin-react": "^4.3.4",
 		"dotenv": "^10.0.0",
 		"nth-check": "^2.0.0",
-		"react-scripts": "^5.0.1",
-		"typescript": "^4.4.3"
+		"typescript": "^5.7.2",
+		"vite": "^6.1.0"
 	},
 	"resolutions": {
 		"@babel/preset-env": "7.13.8"

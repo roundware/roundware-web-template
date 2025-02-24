@@ -2,8 +2,8 @@ import { Email } from '@mui/icons-material';
 import Check from '@mui/icons-material/Check';
 import { LoadingButton } from '@mui/lab';
 import { Box, DialogContent, ListItemIcon, ListItemText, MenuItem, Stack, TextField } from '@mui/material';
-import Modal from 'components/elements/Modal';
-import { useRoundwareDraft } from 'hooks';
+import Modal from '@/components/elements/Modal';
+import { useRoundwareDraft } from '@/hooks';
 import { useRef, useState } from 'react';
 
 type Props = {};
