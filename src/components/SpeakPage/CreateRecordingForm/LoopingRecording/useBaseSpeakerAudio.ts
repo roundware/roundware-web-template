@@ -34,6 +34,7 @@ export const useBaseSpeakerAudio = (
 	const [duration, setAudioDuration] = useState<number | null>(null);
 
 	useEffect(() => {
+		if (!roundware.mixer) return;
 		roundware.mixer.initContext();
 		if (!roundware.speakers().length) return;
 
