@@ -7,7 +7,7 @@ import midpoint from '@turf/midpoint';
 import speakerImage from '@/assets/speaker.png';
 import { useRoundware } from '@/hooks';
 import React, { useMemo, useState } from 'react';
-import { ISpeakerData } from 'roundware-web-framework/dist/types/speaker';
+import { ISpeakerData } from 'roundware-web-framework';
 import { speakerPolygonColors as colors, speakerPolygonOptions } from '@/styles/speaker';
 interface Props {}
 

@@ -58,7 +58,14 @@ const PlaybackInfoOverlay = () => {
 			});
 		} else {
 			// cancel the intervals
-			timeouts.forEach((timeout) => clearTimeout(timeout));
+			timeouts.forEach(
+				(timeout) =>
+					timeout &&
+					clearTimeout(
+						// @ts-ignore
+						timeout
+					)
+			);
 		}
 	}, [roundware.mixer.playing]);
 

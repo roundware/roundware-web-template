@@ -2,7 +2,7 @@ import { Circle, Marker, Polygon } from '@react-google-maps/api';
 import { Clusterer } from '@react-google-maps/marker-clusterer';
 import finalConfig from '@/config';
 import React, { useMemo } from 'react';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+import { IAssetData } from 'roundware-web-framework';
 import { OverlappingMarkerSpiderfier } from 'ts-overlapping-marker-spiderfier';
 import { polygonToGoogleMapPaths } from '@/utils';
 import marker2 from '../../../../assets/marker-secondary.svg';

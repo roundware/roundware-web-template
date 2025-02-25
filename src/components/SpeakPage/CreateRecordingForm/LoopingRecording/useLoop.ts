@@ -109,6 +109,7 @@ export const useLoop = () => {
 
 	function stop() {
 		if (interval.current) {
+			// @ts-ignore
 			clearInterval(interval.current);
 		}
 		if (speakerSource.current) {

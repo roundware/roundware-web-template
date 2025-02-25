@@ -20,7 +20,7 @@ import { useUIContext } from '@/context/UIContext';
 import { useRoundwareDraft } from '@/hooks';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Prompt } from 'react-router-dom';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+import { IAssetData } from 'roundware-web-framework';
 import AudioPlayer from '../../AudioPlayer';
 import ErrorDialog from '../../ErrorDialog';
 import LegalAgreementForm from '../../LegalAgreementForm';

@@ -1,12 +1,12 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Dialog, DialogContent, DialogContentText, DialogTitle as MuiDialogTitle, Divider, Grid, IconButton, Modal, Stack, Theme, Typography } from '@mui/material';
 import { createStyles, makeStyles, withStyles, WithStyles } from '@mui/styles';
-import { IAssetCardConfig } from 'configTypes';
+import { IAssetCardConfig } from '@/configTypes';
 import Interweave from 'interweave';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Roundware } from 'roundware-web-framework';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+
+import Roundware, { IAssetData } from 'roundware-web-framework';
 import { IImageAsset } from '../../../../types';
 import AssetPlayer from '../../../AssetPlayer';
 import { TagsDisplay } from '../../../AssetTags';

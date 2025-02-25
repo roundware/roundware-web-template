@@ -3,7 +3,7 @@ import moment from 'moment';
 import AssetPlayer from './AssetPlayer';
 import { useRoundware } from '../hooks';
 import { TagsDisplay } from './AssetTags';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+import { IAssetData } from 'roundware-web-framework';
 
 interface AssetListItemProps {
 	asset: IAssetData;

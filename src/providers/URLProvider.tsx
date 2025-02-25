@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useHistory } from 'react-router';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+import { IAssetData } from 'roundware-web-framework';
 import { IRoundwareContext } from '../context/RoundwareContext';
 
 import { IURLContext, URLContext } from '../context/URLContext';

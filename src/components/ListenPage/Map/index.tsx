@@ -1,7 +1,7 @@
 import makeStyles from '@mui/styles/makeStyles';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import React, { useState, useCallback } from 'react';
-import { Coordinates } from 'roundware-web-framework/dist/types';
+import { Coordinates } from 'roundware-web-framework';
 import { useRoundware } from '../../../hooks';
 import { RoundwareMapStyle } from '../../../styles/map-style';
 import AssetLayer from './AssetLayer';

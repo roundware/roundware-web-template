@@ -1,9 +1,10 @@
 import { Grid, Snackbar, SnackbarProps, TextField, AlertProps, Alert } from '@mui/material';
 import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
 import React, { useState } from 'react';
-import { ITag, ITagGroup } from 'roundware-web-framework/dist/types';
+
 import { useRoundware } from '../../hooks';
 import useStyles from './styles';
+import { ITag, ITagGroup } from 'roundware-web-framework';
 
 interface TagFilterMenuProps {
 	tag_group: ITagGroup;

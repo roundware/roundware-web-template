@@ -5,8 +5,8 @@ import config from '@/config';
 import { useRoundware, useRoundwareDraft } from '@/hooks';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { IAudioData } from 'roundware-web-framework/dist/types';
-import { ITextAsset } from 'types';
+import { IAudioData } from 'roundware-web-framework';
+import { ITextAsset } from '@/types';
 import { wait } from '@/utils';
 import MediaRecorder from 'audio-recorder-polyfill';
 const visualizerOptions = {

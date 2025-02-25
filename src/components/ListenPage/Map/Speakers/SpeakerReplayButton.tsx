@@ -9,11 +9,11 @@ const SpeakerReplayButton = (props: Props) => {
 	const [showReplay, setShowReplay] = useState(false);
 	useEffect(() => {
 		setupListener();
-	}, [roundware?.mixer?.speakerTracks]);
+	}, [roundware?.mixer?.speakerEngine?.speakerTracks]);
 
 	const setupListener = () => {
-		if (roundware.mixer && Array.isArray(roundware.mixer.speakerTracks)) {
-			roundware.mixer.onAllSpeakersEnd(() => {
+		if (roundware.mixer && Array.isArray(roundware.mixer.speakerEngine?.speakerTracks)) {
+			roundware.mixer.speakerEngine?.onAllSpeakersEnd(() => {
 				setShowReplay(true);
 				console.log(`all ended`);
 			});
@@ -21,7 +21,7 @@ const SpeakerReplayButton = (props: Props) => {
 	};
 
 	const handleOnReplay = () => {
-		roundware?.mixer?.replay();
+		roundware?.mixer?.speakerEngine?.replay();
 		setShowReplay(false);
 	};
 	console.log(`show replay`, showReplay);

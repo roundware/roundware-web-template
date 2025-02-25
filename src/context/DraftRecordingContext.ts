@@ -1,6 +1,6 @@
 import { Context, createContext, Dispatch, SetStateAction } from 'react';
-import { ITag } from 'roundware-web-framework/dist/types';
-import { IUserResponse } from 'roundware-web-framework/dist/types/user';
+import { ITag } from 'roundware-web-framework';
+import { IUserResponse } from 'roundware-web-framework';
 
 export interface IDraftRecordingContext {
 	tags: number[];

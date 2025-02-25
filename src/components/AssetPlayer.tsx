@@ -1,6 +1,7 @@
 import React, { CSSProperties } from 'react';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+
 import { useRoundware } from '../hooks';
+import { IAssetData } from 'roundware-web-framework';
 interface AssetPlayerProps {
 	asset: IAssetData;
 	style?: CSSProperties;

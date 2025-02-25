@@ -7,8 +7,8 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import FlagIcon from '@mui/icons-material/Flag';
 
 import { useRoundware } from '../../../../hooks';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
-import { IAssetCardConfig } from 'configTypes';
+import { IAssetData } from 'roundware-web-framework';
+import { IAssetCardConfig } from '@/configTypes';
 
 const downloadAsset = async (asset: IAssetData, projectName: string) => {
 	if (!asset.file) return;

@@ -16,7 +16,7 @@ const SpeakerToggle = () => {
 	const { roundware, setHideSpeakerPolygons } = useRoundware();
 	useEffect(() => {
 		if (speakerValues) {
-			roundware.mixer.speakerTracks?.forEach((st) => {
+			roundware.mixer.speakerEngine?.speakerTracks?.forEach((st) => {
 				if (st.speakerId in speakerValues) {
 					if (speakerValues[st.speakerId] === false) {
 						console.log('st', st.player);
@@ -34,7 +34,7 @@ const SpeakerToggle = () => {
 					.map((key) => parseInt(key, 10))
 			);
 		}
-	}, [speakerValues, ...(roundware.mixer.speakerTracks?.map((st) => st.currentVolume) ?? [])]);
+	}, [speakerValues, ...(roundware.mixer.speakerEngine?.speakerTracks?.map((st) => st.calculatedVolume) ?? [])]);
 
 	return (
 		<CustomMapControl position={window.google.maps.ControlPosition.RIGHT_CENTER}>

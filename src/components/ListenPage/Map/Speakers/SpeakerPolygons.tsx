@@ -5,7 +5,7 @@ import { speakerPolygonColors as colors, speakerPolygonOptions } from '@/styles/
 import { polygonToGoogleMapPaths } from '@/utils';
 import CustomMapControl from '../CustomControl';
 import config from '@/config';
-import { ISpeakerData } from 'roundware-web-framework/dist/types/speaker';
+import { ISpeakerData } from 'roundware-web-framework';
 interface Props {}
 
 const getColorForIndex = (index: number): string => {

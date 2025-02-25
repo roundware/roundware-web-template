@@ -5,9 +5,9 @@ import { useRoundware, useRoundwareDraft } from '@/hooks/index';
 import moment from 'moment';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
-import { ITag } from 'roundware-web-framework/dist/types/index';
-import { ISpeakerData } from 'roundware-web-framework/dist/types/speaker';
+import { IAssetData } from 'roundware-web-framework';
+import { ITag } from 'roundware-web-framework';
+import { ISpeakerData } from 'roundware-web-framework';
 
 // hook to handle saving of the recording to server
 export const useSubmission = ({ location, recordedAudioBlob, baseSpeakers }: { location: { lat: number; lng: number }; recordedAudioBlob: Blob | null; baseSpeakers: ISpeakerData[] }) => {

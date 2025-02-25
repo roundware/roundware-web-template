@@ -1,7 +1,8 @@
 import DraftRecordingContext, { IDraftRecordingContext } from '../context/DraftRecordingContext';
 import React, { useEffect, useState } from 'react';
-import { Roundware } from 'roundware-web-framework';
-import { IUserResponse } from 'roundware-web-framework/dist/types/user';
+
+import Roundware from 'roundware-web-framework';
+import { IUserResponse } from 'roundware-web-framework';
 
 interface DraftRecordingProviderProps {
 	roundware: Roundware;

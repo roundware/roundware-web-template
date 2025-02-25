@@ -1,8 +1,8 @@
 import { Card, CardContent, StyledEngineProvider, ThemeProvider } from '@mui/material';
 import { InfoWindow } from '@react-google-maps/api';
 import finalConfig from '@/config';
-import { Roundware } from 'roundware-web-framework';
-import { IAssetData } from 'roundware-web-framework/dist/types/asset';
+
+import Roundware, { IAssetData } from 'roundware-web-framework';
 import { IRoundwareContext } from '../../../../context/RoundwareContext';
 import { lightTheme } from '../../../../styles';
 import AssetInfoCard from './AssetInfoCard';
