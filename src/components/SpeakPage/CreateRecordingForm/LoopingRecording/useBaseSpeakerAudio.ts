@@ -3,9 +3,7 @@ import finalConfig from '@/config';
 import { useRoundware } from '@/hooks/index';
 import { useEffect, useState } from 'react';
 import { useLoop } from './useLoop';
-import { ISpeakerData } from 'roundware-web-framework/dist/types/speaker';
-import { VPTrack } from 'roundware-web-framework/dist/speaker/speaker_volume_processor';
-import { SpeakerTrack } from 'roundware-web-framework/dist/speaker/speaker_track';
+import { ISpeakerData, SpeakerTrack } from 'roundware-web-framework';
 
 const getSpeakerAudioBuffer = async (uri: string, audioContext: AudioContext) => {
 	const response = await fetch(uri);
@@ -36,11 +34,10 @@ export const useBaseSpeakerAudio = (
 	const [duration, setAudioDuration] = useState<number | null>(null);
 
 	useEffect(() => {
-		if (!roundware.speakers) return;
+		roundware.mixer.initContext();
+		if (!roundware.speakers().length) return;
 
-		roundware.mixer.speakerEngine?.initializeSpeakers();
-
-		if (!roundware.mixer.speakerEngine?.speakerTracks) return;
+		if (!roundware.mixer.speakerEngine?.speakerTracks?.length) return;
 
 		const listenerPoint = point([lng, lat]);
 
@@ -57,7 +54,7 @@ export const useBaseSpeakerAudio = (
 				? sts
 				: (() => {
 						// map
-						return [roundware.mixer.speakerEngine?.volumeProcessor.findRoot(sts as VPTrack[])];
+						return [roundware.mixer.speakerEngine?.volumeProcessor.findRoot(sts)];
 				  })()
 		) as SpeakerTrack[];
 
@@ -66,10 +63,23 @@ export const useBaseSpeakerAudio = (
 
 			if (baseSpeakers.length > 1) {
 				const audioBuffers = await Promise.all(
-					baseSpeakers.map(async (st) => ({
-						buffer: await getSpeakerAudioBuffer((st as SpeakerTrack).uri, loop.audioContext.current),
-						volume: st.volumeByLocation(listenerPoint.geometry),
-					}))
+					baseSpeakers.map(async (st) => {
+						return {
+							buffer: await getSpeakerAudioBuffer(
+								(
+									st as {
+										uri: string;
+									}
+								).uri,
+								loop.audioContext.current
+							),
+							volume: (
+								st as {
+									volumeByLocation: (arg0: any) => number;
+								}
+							).volumeByLocation(listenerPoint.geometry),
+						};
+					})
 				);
 
 				const totalVolume = audioBuffers.reduce((acc, { volume }) => acc + volume, 0);
@@ -88,10 +98,26 @@ export const useBaseSpeakerAudio = (
 					loop.audioContext.current.createBuffer(audioBuffers[0].buffer.numberOfChannels, audioBuffers[0].buffer.length, audioBuffers[0].buffer.sampleRate)
 				);
 			} else {
-				finalBuffer = await getSpeakerAudioBuffer(baseSpeakers[0].uri, loop.audioContext.current);
+				finalBuffer = await getSpeakerAudioBuffer(
+					(
+						baseSpeakers[0] as {
+							uri: string;
+						}
+					).uri,
+					loop.audioContext.current
+				);
 			}
 			loop.speakerAudioBuffer.current = finalBuffer;
-			setBaseSpeakers(baseSpeakers.map((s) => s.speakerData));
+			setBaseSpeakers(
+				baseSpeakers.map(
+					(s) =>
+						(
+							s as {
+								speakerData: ISpeakerData;
+							}
+						).speakerData
+				)
+			);
 			loop.setIsLoading(false);
 			setAudioDuration(finalBuffer.duration);
 		})();

@@ -12,20 +12,16 @@ const AddLoopVoiceButton = () => {
 	const handleClick = () => {
 		const lat = roundware.listenerLocation.latitude as number;
 		const lng = roundware.listenerLocation.longitude as number;
-		roundware.mixer.initializeSpeakers();
-		roundware.mixer.speakerTracks?.forEach((speaker) => {
-			speaker.updateParams(false, {
-				listenerPoint: point([lng, lat]),
-			});
+		roundware.mixer.initContext();
+		roundware.mixer.speakerEngine?.updateParams(false, {
+			listenerPoint: point([lng, lat]),
 		});
 
-		const sts = roundware.mixer.speakerTracks?.sort((st1, st2) => {
-			console.log('volume: ', st1.speakerData.id, st1.calculateVolume(), st1.listenerPoint);
-			console.log('volume:', st2.speakerData.id, st2.calculateVolume());
-			return st2.calculateVolume() - st1.calculateVolume();
+		const sts = roundware.mixer.speakerEngine?.speakerTracks?.sort((st1, st2) => {
+			return st2.volumeByLocation(point([lng, lat]).geometry) - st1.volumeByLocation(point([lng, lat]).geometry);
 		});
 
-		if (sts && sts.length > 0 && sts[0].calculateVolume() !== sts[0].minVolume) {
+		if (sts && sts.length > 0 && sts[0].volumeByLocation(point([lng, lat]).geometry) !== sts[0].minVolume) {
 			roundware.mixer.stop();
 			forceUpdate();
 			// history.push({
