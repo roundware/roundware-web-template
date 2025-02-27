@@ -28,8 +28,13 @@ let config: IConfig = {
 			loop: true,
 			acceptableDelayMs: 50,
 			syncCheckInterval: 2500,
-			replaceWithNoneProbability: 0.3,
+			replaceWithNoneProbability: 0.1,
 			lengths: [1 / 8, 2 / 8],
+			effects: {
+				delayTimeInMs: 50,
+				feedback: 0.5,
+				pan: [-0.8, -0.4, 0.4, 0.8],
+			},
 		},
 
 		skipDuration: 5,
