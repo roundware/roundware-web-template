@@ -3,7 +3,7 @@ import finalConfig from '@/config';
 import { useRoundware } from '@/hooks/index';
 import { useEffect, useState } from 'react';
 import { useLoop } from './useLoop';
-import { ISpeakerData, SpeakerTrack } from 'roundware-web-framework';
+import { ISpeakerData, SpeakerTrack, SpeakerEngine } from 'roundware-web-framework';
 
 const getSpeakerAudioBuffer = async (uri: string, audioContext: AudioContext) => {
 	const response = await fetch(uri);
@@ -55,7 +55,7 @@ export const useBaseSpeakerAudio = (
 				? sts
 				: (() => {
 						// map
-						return [roundware.mixer.speakerEngine?.volumeProcessor.findRoot(sts)];
+						return [SpeakerEngine.findBaseSpeaker(sts, listenerPoint.geometry)];
 				  })()
 		) as SpeakerTrack[];
 
