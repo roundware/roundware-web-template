@@ -28,10 +28,10 @@ let config: IConfig = {
 			loop: true,
 			acceptableDelayMs: 50,
 			syncCheckInterval: 2500,
-			replaceWithNoneProbability: 0,
+			replaceWithNoneProbability: 0.8,
 			loopPointUpdateProbability: 1,
-			slotConsiderationProbability: 1,
-			loopFractions: [1 / 32, 1 / 16],
+			slotConsiderationProbability: 0.6,
+			loopFractions: [1 / 8, 1 / 16],
 			effects: {
 				delayTimeInMs: 50,
 				feedback: 0.5,
