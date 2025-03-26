@@ -1,11 +1,11 @@
 import { Polygon, PolygonProps } from '@react-google-maps/api';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRoundware } from '@/hooks';
 import { speakerPolygonColors as colors, speakerPolygonOptions } from '@/styles/speaker';
 import { polygonToGoogleMapPaths } from '@/utils';
 import CustomMapControl from '../CustomControl';
 import config from '@/config';
-import { ISpeakerData } from 'roundware-web-framework';
+
 interface Props {}
 
 const getColorForIndex = (index: number): string => {
@@ -16,27 +16,60 @@ const SpeakerPolygons = (props: Props) => {
 
 	const [options, setOptions] = useState<PolygonProps[`options`]>(speakerPolygonOptions);
 
-	const googleMapPolygonProps: PolygonProps[] = useMemo(() => {
-		if (!Array.isArray(roundware.speakers())) return [];
-		return roundware
-			.speakers()
-			?.sort((a, b) => (a?.id > b?.id ? -1 : 1))
-			?.filter((speaker): speaker is ISpeakerData & Required<Pick<ISpeakerData, 'shape'>> => !!speaker.shape)
-			?.filter((s) => !hideSpeakerPolygons.includes(s.id))
-			.flatMap((s, index) => {
-				const prop: PolygonProps = {
-					path: polygonToGoogleMapPaths(s.shape),
-					options: {
-						...options,
-						fillColor: getColorForIndex(index),
-						strokeColor: getColorForIndex(index),
-					},
-					// @ts-ignore
-					key: s?.id,
-				};
-				return [prop];
+	const [googleMapPolygonProps, setGoogleMapPolygonProps] = useState<PolygonProps[]>([]);
+
+	const updatePolygons = () => {
+		setGoogleMapPolygonProps(
+			roundware.mixer.speakerEngine?.speakers
+				?.sort((a, b) => (a?.data.id > b?.data.id ? -1 : 1))
+				?.filter(({ data: speaker }) => !!speaker.shape)
+				?.filter((s) => !hideSpeakerPolygons.includes(s.data.id))
+				.flatMap((s, index) => {
+					const prop: PolygonProps = {
+						path: polygonToGoogleMapPaths(s.data.shape!),
+						options: {
+							...options,
+							fillColor: getColorForIndex(index),
+							strokeColor: getColorForIndex(index),
+							...(!s.buffer
+								? {
+										fillOpacity: 0,
+										strokeOpacity: 1,
+										strokeWeight: 1,
+										strokeColor: getColorForIndex(index),
+								  }
+								: {}),
+						},
+						// @ts-ignore
+						key: s?.speakerData?.id,
+					};
+					return [prop];
+				}) ?? []
+		);
+	};
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			updatePolygons();
+		}, 3000);
+		return () => clearInterval(interval);
+	}, []);
+
+	useEffect(() => {
+		if (!Array.isArray(roundware.speakers())) return;
+
+		roundware.mixer.speakerEngine?.speakers.forEach((s) => {
+			s.on('loaded', updatePolygons);
+			s.on('unloaded', updatePolygons);
+		});
+
+		return () => {
+			roundware.mixer.speakerEngine?.speakers.forEach((s) => {
+				s.off('loaded', updatePolygons);
+				s.off('unloaded', updatePolygons);
 			});
-	}, [roundware.project, options, hideSpeakerPolygons]);
+		};
+	}, [roundware.speakers()]);
 
 	return (
 		<div>

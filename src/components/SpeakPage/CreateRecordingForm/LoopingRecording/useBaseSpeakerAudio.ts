@@ -3,7 +3,7 @@ import finalConfig from '@/config';
 import { useRoundware } from '@/hooks/index';
 import { useEffect, useState } from 'react';
 import { useLoop } from './useLoop';
-import { ISpeakerData, SpeakerTrack, SpeakerEngine } from 'roundware-web-framework';
+import { ISpeakerData, SpeakerTrack } from 'roundware-web-framework';
 
 const getSpeakerAudioBuffer = async (uri: string, audioContext: AudioContext) => {
 	const response = await fetch(uri);
@@ -38,24 +38,26 @@ export const useBaseSpeakerAudio = (
 		roundware.mixer.initContext();
 		if (!roundware.speakers().length) return;
 
-		if (!roundware.mixer.speakerEngine?.speakerTracks?.length) return;
+		if (!roundware.mixer.speakerEngine?.speakers?.length) return;
 
 		const listenerPoint = point([lng, lat]);
 
-		roundware.mixer.speakerEngine?.updateParams(false, {
+		roundware.mixer.speakerEngine?.updateParams({
 			listenerPoint,
 		});
 
-		const sts = roundware.mixer.speakerEngine?.speakerTracks?.filter((st) => {
+		const sts = roundware.mixer.speakerEngine?.speakers?.filter((st) => {
 			return st.outerBoundaryContains(listenerPoint) || st.attenuationShapeContains(listenerPoint);
 		});
+
+		roundware.mixer.speakerEngine.calculateVolumesByLocation();
 
 		let baseSpeakers = (
 			finalConfig.speak.baseRecordingLoopSelectionMethod === 'all'
 				? sts
 				: (() => {
 						// map
-						return [SpeakerEngine.findBaseSpeaker(sts, listenerPoint.geometry)];
+						return [roundware.mixer.speakerEngine.latestBaseTrack];
 				  })()
 		) as SpeakerTrack[];
 

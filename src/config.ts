@@ -24,13 +24,14 @@ let config: IConfig = {
 		geoListenMode: 'device',
 		autoplay: false,
 		speaker: {
-			mode: 'prefetch-sync-basePlusMax5Random',
+			mode: 'progressive-sync-basePlusMax5Random',
 			loop: true,
 			acceptableDelayMs: 50,
 			syncCheckInterval: 2500,
-			replaceWithNoneProbability: 0.8,
-			loopPointUpdateProbability: 1,
-			slotConsiderationProbability: 0.6,
+			replaceWithNoneProbability: 0.2,
+			loopPointUpdateProbability: 0.8,
+			slotConsiderationProbability: 0.5,
+			prefetchDistanceMeters: 5,
 			loopFractions: [1 / 8, 1 / 16],
 			effects: {
 				delayTimeInMs: 50,
