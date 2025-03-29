@@ -13,11 +13,11 @@ const AddLoopVoiceButton = () => {
 		const lat = roundware.listenerLocation.latitude as number;
 		const lng = roundware.listenerLocation.longitude as number;
 		roundware.mixer.initContext();
-		roundware.mixer.speakerEngine?.updateParams(false, {
+		roundware.mixer.speakerEngine?.updateParams({
 			listenerPoint: point([lng, lat]),
 		});
 
-		const sts = roundware.mixer.speakerEngine?.speakerTracks?.sort((st1, st2) => {
+		const sts = roundware.mixer.speakerEngine?.speakers?.sort((st1, st2) => {
 			return st2.volumeByLocation(point([lng, lat]).geometry) - st1.volumeByLocation(point([lng, lat]).geometry);
 		});
 
