@@ -1,11 +1,7 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, Stack, Typography } from '@mui/material';
+import LanguageIcon from '@mui/icons-material/Language';
 import finalConfig from '@/config';
-import { getPermissionMessages, type Funcionality } from 'web-permission-messages';
-import ImageErrorBoundary from './ImageErrorBoundary';
-
-const getImageUrl = (imageName: string) => {
-	return new URL(`../../node_modules/web-permission-messages/dist/screenshots/${imageName}`, import.meta.url).href;
-};
+import { type Funcionality } from 'web-permission-messages';
 
 type Props = {
 	open: boolean;
@@ -14,53 +10,67 @@ type Props = {
 };
 
 const PermissionDeniedDialog = (props: Props) => {
-	const message = getPermissionMessages(props.functionality, {
-		locale: finalConfig.locale as 'en' | 'es',
-	});
-
 	return (
-		<Dialog open={props.open} onClose={props.onClose}>
-			<DialogTitle>{message.deniedMessage}</DialogTitle>
-			<DialogContent>
-				<Stack
-					spacing={1}
-					component={'ol'}
-					sx={{
-						padding: 1,
-						'& li': {
-							listStyleType: 'none',
-							'&:before': { content: 'none' },
-						},
-					}}
-				>
-					{message.steps.map((step, index) => (
-						<li key={step.message}>
-							<Typography variant='h6'>
-								{index + 1}. {step.message}
-							</Typography>
-							<ImageErrorBoundary>
-								<Box
-									component='img'
-									sx={{
-										minWidth: '320px',
-										maxWidth: '100%',
-										objectFit: 'contain',
-										borderRadius: 4,
-										borderWidth: 2,
-										borderColor: (t) => t.palette.divider,
-										borderStyle: 'solid',
-									}}
-									src={getImageUrl(step.imageName)}
-									alt={step.message}
-								/>
-							</ImageErrorBoundary>
-						</li>
-					))}
+		<Dialog 
+			open={props.open} 
+			onClose={props.onClose}
+			fullScreen
+			PaperProps={{
+				sx: {
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'center',
+					p: 3,
+					textAlign: 'center',
+					backgroundColor: 'rgba(116, 151, 255, 0.46)',
+					backdropFilter: 'blur(10px)',
+					WebkitBackdropFilter: 'blur(10px)',
+					color: 'white',
+					border: '1px solid rgba(255, 255, 255, 0.1)',
+					boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
+				}
+			}}
+		>
+			<DialogContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+				<Stack spacing={4} alignItems="center" justifyContent="center">
+					<Stack spacing={2} alignItems="center">
+						<LanguageIcon sx={{ fontSize: 40, color: 'white', opacity: 0.7, fontWeight: 100 }} />
+						<Typography 
+							variant="h4" 
+							component="h1" 
+							sx={{ 
+								fontWeight: 300,
+								letterSpacing: '0.5px',
+								fontSize: '1.5rem',
+								margin: 0
+							}}
+						>
+							SORRY!
+						</Typography>
+					</Stack>
+					<Typography 
+						variant="h6" 
+						sx={{ 
+							maxWidth: '600px',
+							fontWeight: 300,
+							opacity: 0.9,
+							fontSize: '0.9rem',
+							lineHeight: 1.6
+						}}
+					>
+						To participate fully in the artwork experience we need access to your location. In the meantime, please see our Youtube channel from some of our favourite choirs.
+					</Typography>
+					<Button 
+						variant="contained"
+						color="primary"
+						size="large"
+						onClick={() => window.open('https://roundware.org/', '_blank')}
+					>
+						WATCH VIDEOS
+					</Button>
 				</Stack>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={props.onClose}>OK</Button>
-			</DialogActions>
 		</Dialog>
 	);
 };
