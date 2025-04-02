@@ -19,10 +19,12 @@ import SpeakerImages from './Speakers/SpeakerImages';
 import SpeakerToggle from '../SpeakerToggle';
 import PlaybackInfoOverlay from '../PlaybackInfoOverlay';
 import OutOfRangeMessage from './OutOfRangeMessage';
-import { Button, Paper, ThemeProvider } from '@mui/material';
+import { Box, Button, Fab, Fade, IconButton, Paper, Skeleton, Stack, Tooltip, ThemeProvider } from '@mui/material';
 import { lightTheme } from '@/styles/index';
-import { Mic } from '@mui/icons-material';
+import { GraphicEq, Info, Mic, VolumeOff, VolumeOffRounded } from '@mui/icons-material';
 import AddLoopVoiceButton from './AddLoopVoiceButton';
+import RoundwareMixerControl from '../RoundwareMixerControl';
+import { GeoListenMode } from 'roundware-web-framework';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -38,8 +40,9 @@ interface RoundwareMapProps {
 }
 const RoundwareMap = (props: RoundwareMapProps) => {
 	const classes = useStyles();
-	const { roundware } = useRoundware();
+	const { roundware, forceUpdate } = useRoundware();
 	const [map, setMap] = useState<google.maps.Map | undefined>();
+	const [showLaunch, setShowLaunch] = useState(true);
 
 	const { deleteFromURL } = useURLSync();
 	const updateListenerLocation = (newLocation?: Coordinates) => {
@@ -124,12 +127,44 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 		setMap(map);
 	};
 
+	const handleLaunch = () => {
+		setShowLaunch(false);
+		// Start audio playback when launch overlay disappears
+		if (!roundware.mixer || !roundware.mixer?.playlist) {
+			roundware.activateMixer({ geoListenMode: GeoListenMode.MANUAL }).then(() => {
+				if (roundware && roundware.uiConfig && roundware.uiConfig.listen && roundware.uiConfig.listen[0]) {
+					const listen_tags = roundware.uiConfig.listen[0].display_items.map((i) => i.tag_id);
+					roundware.mixer.updateParams({
+						listenerLocation: roundware.listenerLocation,
+						minDist: 0,
+						maxDist: 0,
+						recordingRadius: 0,
+						listenTagIds: listen_tags,
+					});
+					roundware.mixer.toggle();
+					forceUpdate();
+				}
+			});
+		} else {
+			roundware.mixer.toggle();
+			forceUpdate();
+		}
+	};
+
 	return (
 		<>
 			{roundware.project ? (
 				<LoadScript id='script-loader' googleMapsApiKey={props.googleMapsApiKey}>
 					<AssetLoadingOverlay />
 					<GoogleMap mapContainerClassName={classes.roundwareMap + ' ' + props.className} onZoomChanged={updateListenerLocation} onDragEnd={updateListenerLocation} onLoad={onLoad}>
+						<Box position="absolute" top={80} right={8} zIndex={1}>
+							<IconButton>
+								<Info fontSize="large" />
+							</IconButton>
+						</Box>
+						<Box position="absolute" top={140} right={2} zIndex={1}>
+							<RoundwareMixerControl />
+						</Box>
 						<AssetLayer updateLocation={updateListenerLocation} />
 						<RangeCircleOverlay updateLocation={updateListenerLocation} />
 						{map && roundware.mixer?.playlist && <WalkingModeButton />}
@@ -160,8 +195,43 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 						)}
 
 						<OutOfRangeMessage />
-
+							
 						<AddLoopVoiceButton />
+
+						<Fade in={showLaunch} timeout={1000}>
+							<Box
+								display="flex"
+								alignItems="center"
+								justifyContent="center"
+								position="absolute"
+								width="100%"
+								height="100%"
+								sx={{ '& .MuiFab-root': { width: 120, height: 120 } }}>
+								<Box sx={{ position: 'relative' }}>
+									<Skeleton
+										variant="circular"
+										animation="pulse"
+										sx={{
+											position: 'absolute',
+											width: 160,
+											height: 160,
+											top: '50%',
+											left: '50%',
+											transform: 'translate(-50%, -50%)',
+								
+										}}
+									/>
+									<Tooltip title="TAP LAUNCH TO LISTEN TO CHOIR" arrow placement="bottom">
+										<Fab size="large" onClick={handleLaunch}>
+											<Stack alignItems="center" spacing={2}>
+												<GraphicEq fontSize="large" />
+												LAUNCH
+											</Stack>
+										</Fab>
+									</Tooltip>
+								</Box>
+							</Box>
+						</Fade>
 					</GoogleMap>
 				</LoadScript>
 			) : null}
