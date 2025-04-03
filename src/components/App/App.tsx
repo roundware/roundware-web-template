@@ -102,7 +102,6 @@ export const App = () => {
 							<div>
 								<Route path='/listen'>
 									<ListenDrawer />
-									<RoundwareMixerControl />
 								</Route>
 							</div>
 
