@@ -1,6 +1,6 @@
-import { ArrowForwardIos, Check, Mic } from '@mui/icons-material';
+import { ArrowForwardIos, Check, Mic, GraphicEq } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, CardContent, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grow, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Button, Card, CardContent, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Fab, Checkbox, Grow, Skeleton, Stack, Tooltip, Typography, useTheme } from '@mui/material';
 import PermissionDeniedDialog from '@/components/elements/PermissionDeniedDialog';
 import LegalAgreementForm from '@/components/LegalAgreementForm';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import { useLoopingRecording } from './useLoopingRecording';
 
 const LoopingRecordingForm = () => {
 	const theme = useTheme();
+	const [isConsentChecked, setIsConsentChecked] = useState(false);
 
 	const [showRerecordConfirm, setShowRerecordConfirm] = useState(false);
 	const [legalModalOpen, setLegalModalOpen] = useState(false);
@@ -29,7 +30,75 @@ const LoopingRecordingForm = () => {
 				})}
 			/>
 
-			<Card>
+			<Box
+				display="flex"
+				flexDirection="column"
+				alignItems="center"
+				justifyContent="center"
+				position="fixed"
+				top="50%"
+				left="50%"
+				width="100%"
+				height="100%"
+				sx={{ 
+					'& .MuiFab-root': { width: 250, height: 250 },
+					transform: 'translate(-50%, -50%)'
+				}}>
+				<Box sx={{ position: 'relative' }}>
+					<Skeleton
+						variant="circular"
+						animation="pulse"
+						sx={{
+							position: 'absolute',
+							width: 300,
+							height: 300,
+							top: '50%',
+							left: '50%',
+							transform: 'translate(-50%, -50%)',
+						}}
+					/>
+					
+					<Fab size="large">
+						<Stack alignItems="center" spacing={1}>
+							<Typography variant="button">JOIN CHOIR</Typography>
+							<Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+								<Box sx={{ width: 20, height: 3, bgcolor: 'primary.main' }} />
+								<Box sx={{ width: 20, height: 3, bgcolor: 'grey.500' }} />
+								<Box sx={{ width: 20, height: 3, bgcolor: 'grey.500' }} />
+							</Stack>
+							<Typography variant="body2">
+								Rehearse your<br />singing to the loop
+							</Typography>
+						</Stack>
+					</Fab>
+				</Box>
+				<Stack direction="row" alignItems="center" sx={{ mt: 4 }}>
+					<Checkbox 
+						checked={isConsentChecked}
+						onChange={(e) => setIsConsentChecked(e.target.checked)}
+					/>
+					<Typography variant="body2">
+						I consent to my recording being used solely for the artistic purposes of Invisible Choir
+					</Typography>
+				</Stack>
+				<Button 
+					variant="contained"
+					disabled={!isConsentChecked}
+					sx={{ mt: 4 }}
+				
+				>
+					Continue
+				</Button>
+				<Button 
+					variant="text"
+					 sx={{ mt: 3 }}
+				>
+					Cancel
+				</Button>
+			</Box>
+
+
+			{/* <Card>
 				<CardContent>
 					<Collapse in={!loop.isStarted}>
 						<Stack spacing={4} p={4}>
@@ -205,7 +274,7 @@ const LoopingRecordingForm = () => {
 						<DialogContentText>We encountered an error while trying to upload your contribution. Please try again later.</DialogContentText>
 					</DialogContent>
 				</Dialog>
-			</Card>
+			</Card> */}
 		</>
 	);
 };
