@@ -1,9 +1,9 @@
-import { ArrowForwardIos, Check, Mic, GraphicEq } from '@mui/icons-material';
+import { ArrowForwardIos, Check, Mic, GraphicEq, PlayArrow, Close } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, CardContent, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Fab, Checkbox, Grow, Skeleton, Stack, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Button, Card, CardContent, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Fab, Checkbox, Grow, Skeleton, Stack, Tooltip, Typography, useTheme, IconButton } from '@mui/material';
 import PermissionDeniedDialog from '@/components/elements/PermissionDeniedDialog';
 import LegalAgreementForm from '@/components/LegalAgreementForm';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Prompt } from 'react-router';
 import { useLoopingRecording } from './useLoopingRecording';
@@ -11,11 +11,40 @@ import { useLoopingRecording } from './useLoopingRecording';
 const LoopingRecordingForm = () => {
 	const theme = useTheme();
 	const [isConsentChecked, setIsConsentChecked] = useState(false);
+	const [showRehearsePage, setShowRehearsePage] = useState(false);
+	const [showRecordButtonPage, setShowRecordButtonPage] = useState(false);
+	const [isCountdownActive, setIsCountdownActive] = useState(false);
+	const [countdownValue, setCountdownValue] = useState(3);
 
 	const [showRerecordConfirm, setShowRerecordConfirm] = useState(false);
 	const [legalModalOpen, setLegalModalOpen] = useState(false);
 
 	const { speaker, recorder, submission, loop } = useLoopingRecording();
+
+	useEffect(() => {
+		let timer: NodeJS.Timeout | undefined;
+		if (isCountdownActive && countdownValue > 0) {
+			timer = setTimeout(() => {
+				setCountdownValue(prev => prev - 1);
+			}, 1000);
+		} else if (isCountdownActive && countdownValue === 0) {
+			setIsCountdownActive(false);
+		}
+		return () => {
+			if (timer) clearTimeout(timer);
+		};
+	}, [isCountdownActive, countdownValue, loop]);
+
+	const handleLaunch = () => {
+		// Function to handle launching the rehearsal
+		setShowRehearsePage(true);
+		// Add any additional logic needed for launching rehearsal
+	};
+
+	const handleMicClick = () => {
+		setIsCountdownActive(true);
+		setCountdownValue(5);
+	};
 
 	return (
 		<>
@@ -30,74 +59,163 @@ const LoopingRecordingForm = () => {
 				})}
 			/>
 
-			<Box
-				display="flex"
-				flexDirection="column"
-				alignItems="center"
-				justifyContent="center"
-				position="fixed"
-				top="50%"
-				left="50%"
-				width="100%"
-				height="100%"
-				sx={{ 
-					'& .MuiFab-root': { width: 250, height: 250 },
-					transform: 'translate(-50%, -50%)'
-				}}>
-				<Box sx={{ position: 'relative' }}>
-					<Skeleton
-						variant="circular"
-						animation="pulse"
-						sx={{
-							position: 'absolute',
-							width: 300,
-							height: 300,
-							top: '50%',
-							left: '50%',
-							transform: 'translate(-50%, -50%)',
-						}}
-					/>
-					
-					<Fab size="large">
-						<Stack alignItems="center" spacing={1}>
-							<Typography variant="button">JOIN CHOIR</Typography>
-							<Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
-								<Box sx={{ width: 20, height: 3, bgcolor: 'primary.main' }} />
-								<Box sx={{ width: 20, height: 3, bgcolor: 'grey.500' }} />
-								<Box sx={{ width: 20, height: 3, bgcolor: 'grey.500' }} />
+			<Collapse in={!showRehearsePage}>
+				<Box
+					display="flex"
+					flexDirection="column"
+					alignItems="center"
+					justifyContent="center"
+					position="fixed"
+					top="50%"
+					left="50%"
+					width="100%"
+					height="100%"
+					sx={{ 
+						'& .MuiFab-root': { width: 250, height: 250 },
+						transform: 'translate(-50%, -50%)'
+					}}>
+					<Box sx={{ position: 'relative' }}>
+						<Skeleton
+							variant="circular"
+							animation="pulse"
+							sx={{
+								position: 'absolute',
+								width: 300,
+								height: 300,
+								top: '50%',
+								left: '50%',
+								transform: 'translate(-50%, -50%)',
+							}}
+						/>
+						
+						<Fab size="large">
+							<Stack alignItems="center" spacing={1}>
+								<Typography variant="button">JOIN CHOIR</Typography>
+								<Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+									<Box sx={{ width: 20, height: 3, bgcolor: 'primary.main' }} />
+									<Box sx={{ width: 20, height: 3, bgcolor: 'grey.500' }} />
+									<Box sx={{ width: 20, height: 3, bgcolor: 'grey.500' }} />
+								</Stack>
+								<Typography variant="body2">
+									Rehearse your<br />singing to the loop
+								</Typography>
 							</Stack>
-							<Typography variant="body2">
-								Rehearse your<br />singing to the loop
+						</Fab>
+					</Box>
+					<Stack direction="row" alignItems="center" sx={{ mt: 4 }}>
+						<Checkbox 
+							checked={isConsentChecked}
+							onChange={(e) => setIsConsentChecked(e.target.checked)}
+						/>
+						<Typography variant="body2">
+							I consent to my recording being used solely for the artistic purposes of Invisible Choir
+						</Typography>
+					</Stack>
+					<Button 
+						variant="contained"
+						disabled={!isConsentChecked}
+						sx={{ mt: 4 }}
+						onClick={async () => {
+							const hasPermission = await recorder.checkMicrophonePermission();
+							if (!hasPermission) return;
+						
+							setShowRehearsePage(true);
+						}}
+					>
+						Continue
+					</Button>
+					<Button 
+						variant="text"
+						sx={{ mt: 3 }}>
+						Cancel
+					</Button>
+				</Box>
+			</Collapse>
+
+			<Collapse in={showRehearsePage}>
+				<Box
+					display="flex"
+					flexDirection="column"
+					alignItems="center"
+					justifyContent="center"
+					position="fixed"
+					top="50%"
+					left="50%"
+					width="100%"
+					height="100%"
+					sx={{ 
+						'& .MuiFab-root': { width: 250, height: 250 },
+						transform: 'translate(-50%, -50%)'
+					}}>
+					<Box sx={{
+						position: 'absolute', top: 0, right: 0, width: '100%', display: 'flex', justifyContent: 'flex-end'
+					}}>
+						<IconButton 
+							sx={{ mt: 10, mr: 2 }}
+							onClick={() => setShowRehearsePage(false)}
+						>
+							<Close />
+						</IconButton>
+					</Box>
+					
+					<Stack direction="row" spacing={1} justifyContent="center" alignItems="flex-start" sx={{ mt: 18, position: 'absolute', top: 0 }}>
+						<Stack direction="column" alignItems="center" spacing={1}>
+							<Box sx={{ width: 100, height: 3, bgcolor: 'primary.main', mt: '3px' }} />
+							<Typography variant="body2" sx={{ fontWeight: 'medium', color: 'primary.main' }}>
+								REHEARSE
 							</Typography>
 						</Stack>
-					</Fab>
-				</Box>
-				<Stack direction="row" alignItems="center" sx={{ mt: 4 }}>
-					<Checkbox 
-						checked={isConsentChecked}
-						onChange={(e) => setIsConsentChecked(e.target.checked)}
-					/>
-					<Typography variant="body2">
-						I consent to my recording being used solely for the artistic purposes of Invisible Choir
+						<Box sx={{ width: 100, height: 3, bgcolor: 'grey.500', mt: '3px' }} />
+						<Box sx={{ width: 100, height: 3, bgcolor: 'grey.500', mt: '3px' }} />
+					</Stack>
+					
+					<Box sx={{ position: 'relative' }}>
+						<Skeleton
+							variant="circular"
+							animation="pulse"
+							sx={{
+								position: 'absolute',
+								width: 300,
+								height: 300,
+								top: '50%',
+								left: '50%',
+								transform: 'translate(-50%, -50%)',
+							}}
+						/>
+						
+						<Fab size="large" >
+							{!showRecordButtonPage ? (
+								<PlayArrow 
+									onClick={() => {
+										handleLaunch();
+										setShowRecordButtonPage(true);
+									}}
+									sx={{ cursor: 'pointer' }}
+								/>
+							) : (
+								<Box sx={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+									{isCountdownActive ? (
+										<Typography variant="h4" >
+											{countdownValue}
+										</Typography>
+									) : (
+										<Mic 
+											onClick={handleMicClick}
+											sx={{ cursor: 'pointer' }}
+										/>
+									)}
+								</Box>
+							)}
+						</Fab>
+					</Box>
+					
+					<Typography variant="body1" sx={{ mt: 5 }}>
+						{showRecordButtonPage 
+							? (!isCountdownActive ? "PRESS RECORD WHEN READY TO SING" : "GET READY")
+							: "PRESS PLAY WHEN READY TO SING"}
 					</Typography>
-				</Stack>
-				<Button 
-					variant="contained"
-					disabled={!isConsentChecked}
-					sx={{ mt: 4 }}
-				
-				>
-					Continue
-				</Button>
-				<Button 
-					variant="text"
-					 sx={{ mt: 3 }}
-				>
-					Cancel
-				</Button>
-			</Box>
-
-
+				</Box>
+			</Collapse>
 			{/* <Card>
 				<CardContent>
 					<Collapse in={!loop.isStarted}>
