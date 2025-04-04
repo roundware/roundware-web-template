@@ -1,14 +1,14 @@
-import { GroundOverlay, GroundOverlayProps, useGoogleMap } from '@react-google-maps/api';
+import speakerImage from '@/assets/speaker.png';
+import { useRoundware } from '@/hooks';
+import { speakerPolygonColors as colors, speakerPolygonOptions } from '@/styles/speaker';
+import { GroundOverlay, GroundOverlayProps } from '@react-google-maps/api';
 import getCenterOfMass from '@turf/center-of-mass';
 import destination from '@turf/destination';
 import distance from '@turf/distance';
 import { point, Point, polygon, Position } from '@turf/helpers';
 import midpoint from '@turf/midpoint';
-import speakerImage from '@/assets/speaker.png';
-import { useRoundware } from '@/hooks';
-import React, { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { ISpeakerData } from 'roundware-web-framework';
-import { speakerPolygonColors as colors, speakerPolygonOptions } from '@/styles/speaker';
 interface Props {}
 
 const getColorForIndex = (index: number): string => {
@@ -71,7 +71,12 @@ const SpeakerImages = (props: Props) => {
 				const prop: GroundOverlayProps & {
 					key: string;
 				} = {
-					bounds: new google.maps.LatLngBounds(new google.maps.LatLng(squarePoints[2][1], squarePoints[2][0]), new google.maps.LatLng(squarePoints[0][1], squarePoints[0][0])),
+					bounds: {
+						north: squarePoints[0][1],
+						south: squarePoints[2][1],
+						east: squarePoints[0][0],
+						west: squarePoints[2][0],
+					},
 					url: speakerImage,
 					options: {
 						opacity: 0.2,

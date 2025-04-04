@@ -9,19 +9,21 @@ const SpeakerReplayButton = (props: Props) => {
 	const [showReplay, setShowReplay] = useState(false);
 	useEffect(() => {
 		setupListener();
-	}, [roundware?.mixer?.speakerEngine?.speakerTracks]);
+	}, [roundware?.mixer?.speakerEngine?.speakers]);
 
 	const setupListener = () => {
-		if (roundware.mixer && Array.isArray(roundware.mixer.speakerEngine?.speakerTracks)) {
-			roundware.mixer.speakerEngine?.onAllSpeakersEnd(() => {
-				setShowReplay(true);
-				console.log(`all ended`);
+		if (roundware.mixer && Array.isArray(roundware.mixer.speakerEngine?.speakers)) {
+			roundware.mixer.speakerEngine?.speakers?.forEach((sp) => {
+				sp.request?.addEventListener('ended', () => {
+					setShowReplay(true);
+					console.log(`all ended`);
+				});
 			});
 		}
 	};
 
 	const handleOnReplay = () => {
-		roundware?.mixer?.speakerEngine?.replay();
+		// roundware?.mixer?.speakerEngine?.replay();
 		setShowReplay(false);
 	};
 	console.log(`show replay`, showReplay);

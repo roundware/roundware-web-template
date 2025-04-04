@@ -48,7 +48,7 @@ const RoundwareMixerControl = () => {
 	}, [roundware]);
 
 	function seek(offset: number): void {
-		(roundware.mixer.speakerEngine as any)?.speakerTracks?.forEach((s: any) => {
+		(roundware.mixer.speakerEngine as any)?.speakers?.forEach((s: any) => {
 			const currentTime = s.player.audio.currentTime;
 			let newTime = currentTime + offset;
 

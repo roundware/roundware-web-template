@@ -12,21 +12,20 @@ const SpeakerLoadingIndicator = (props: Props) => {
 
 	const [loadingSpeakers, setLoadingSpeakers] = useState<{ id: number; value: number }[]>([]);
 	useEffect(() => {
-		roundware.mixer.speakerEngine?.speakerTracks?.forEach((sp) => {
-			const player = sp.player;
-			player.onLoadingProgress((per: number) => {
-				if (per <= 100)
+		roundware.mixer.speakerEngine?.speakers?.forEach((sp) => {
+			sp.request?.addEventListener('progress', (ev) => {
+				if (ev.loaded / ev.total <= 100)
 					setLoadingSpeakers((prev) => [
-						...prev.filter((s) => s.id != sp.speakerId),
+						...prev.filter((s) => s.id != sp.data.id),
 						{
-							id: sp.speakerId,
-							value: per,
+							id: sp.data.id,
+							value: (ev.loaded / ev.total) * 100,
 						},
 					]);
-				else setLoadingSpeakers((prev) => [...prev.filter((s) => s.id != sp.speakerId)]);
+				else setLoadingSpeakers((prev) => [...prev.filter((s) => s.id != sp.data.id)]);
 			});
 		});
-	}, [roundware?.mixer?.speakerEngine?.speakerTracks]);
+	}, [roundware?.mixer?.speakerEngine?.speakers]);
 
 	if (loadingSpeakers.every((s) => s.value == 100)) return null;
 	return (
