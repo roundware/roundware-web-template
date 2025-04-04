@@ -8,6 +8,34 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Prompt } from 'react-router';
 import { useLoopingRecording } from './useLoopingRecording';
 
+// Step indicator component
+interface StepIndicatorProps {
+	activeStep: number;
+}
+
+const StepIndicator = ({ activeStep }: StepIndicatorProps) => {
+	const steps = [
+		{ label: 'REHEARSE' },
+		{ label: 'RECORDING' },
+		{ label: 'REVIEW' }
+	];
+
+	return (
+		<Stack direction="row" spacing={1} justifyContent="center" alignItems="flex-start" sx={{ mt: 18, position: 'absolute', top: 0 }}>
+			{steps.map((step, index) => (
+				<Stack key={index} direction="column" alignItems="center" spacing={1}>
+					<Box sx={{ width: 100, height: 3, bgcolor: activeStep === index ? 'primary.main' : 'grey.500' }} />
+					{activeStep === index && (
+						<Typography variant="body2" sx={{ fontWeight: 'medium', color: 'primary.main' }}>
+							{step.label}
+						</Typography>
+					)}
+				</Stack>
+			))}
+		</Stack>
+	);
+};
+
 const LoopingRecordingForm = () => {
 	const theme = useTheme();
 	const [isConsentChecked, setIsConsentChecked] = useState(false);
@@ -15,6 +43,7 @@ const LoopingRecordingForm = () => {
 	const [showRecordButtonPage, setShowRecordButtonPage] = useState(false);
 	const [isCountdownActive, setIsCountdownActive] = useState(false);
 	const [countdownValue, setCountdownValue] = useState(3);
+	const [activeStep, setActiveStep] = useState(0);
 
 	const [showRerecordConfirm, setShowRerecordConfirm] = useState(false);
 	const [legalModalOpen, setLegalModalOpen] = useState(false);
@@ -29,11 +58,14 @@ const LoopingRecordingForm = () => {
 			}, 1000);
 		} else if (isCountdownActive && countdownValue === 0) {
 			setIsCountdownActive(false);
+			setActiveStep(1);
+			// loop.start('playing-speaker');
+			recorder.scheduleRecording();
 		}
 		return () => {
 			if (timer) clearTimeout(timer);
 		};
-	}, [isCountdownActive, countdownValue, loop]);
+	}, [isCountdownActive, countdownValue, loop, recorder]);
 
 	const handleLaunch = () => {
 		// Function to handle launching the rehearsal
@@ -158,16 +190,7 @@ const LoopingRecordingForm = () => {
 						</IconButton>
 					</Box>
 					
-					<Stack direction="row" spacing={1} justifyContent="center" alignItems="flex-start" sx={{ mt: 18, position: 'absolute', top: 0 }}>
-						<Stack direction="column" alignItems="center" spacing={1}>
-							<Box sx={{ width: 100, height: 3, bgcolor: 'primary.main', mt: '3px' }} />
-							<Typography variant="body2" sx={{ fontWeight: 'medium', color: 'primary.main' }}>
-								REHEARSE
-							</Typography>
-						</Stack>
-						<Box sx={{ width: 100, height: 3, bgcolor: 'grey.500', mt: '3px' }} />
-						<Box sx={{ width: 100, height: 3, bgcolor: 'grey.500', mt: '3px' }} />
-					</Stack>
+					<StepIndicator activeStep={activeStep} />
 					
 					<Box sx={{ position: 'relative' }}>
 						<Skeleton
