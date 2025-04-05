@@ -45,7 +45,10 @@ const AddLoopVoiceButton = () => {
 					position="absolute"
 					width="100%"
 					height="100%"
-					sx={{ '& .MuiFab-root': { width: 120, height: 120 } }}>
+					sx={{ 
+						'& .MuiFab-root': { width: 120, height: 120 },
+						pointerEvents: 'none'
+					}}>
 					<Box sx={{ position: 'relative' }}>
 						<Skeleton
 							variant="circular"
@@ -61,7 +64,11 @@ const AddLoopVoiceButton = () => {
 							}}
 						/>
 						<Tooltip title="TAP TO JOIN CHOIR" arrow placement="bottom">
-							<Fab size="large" onClick={handleClick}>
+							<Fab 
+								size="large" 
+								onClick={handleClick}
+								sx={{ pointerEvents: 'auto' }}
+							>
 								<AddCircleOutlineIcon fontSize="large" />
 								
 							</Fab>

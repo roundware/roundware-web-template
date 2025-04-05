@@ -98,7 +98,7 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 			draggable: true,
 			mapTypeControl: false,
 			streetViewControl: false,
-			draggableCursor: 'cursor',
+			draggableCursor: null,
 			fullscreenControl: false,
 			zoomControlOptions: {
 				style: google.maps.ZoomControlStyle.SMALL,
@@ -206,7 +206,10 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 								position="absolute"
 								width="100%"
 								height="100%"
-								sx={{ '& .MuiFab-root': { width: 120, height: 120 } }}>
+								sx={{ 
+									'& .MuiFab-root': { width: 120, height: 120 },
+									pointerEvents: 'none'
+								}}>
 								<Box sx={{ position: 'relative' }}>
 									<Skeleton
 										variant="circular"
@@ -218,11 +221,14 @@ const RoundwareMap = (props: RoundwareMapProps) => {
 											top: '50%',
 											left: '50%',
 											transform: 'translate(-50%, -50%)',
-								
 										}}
 									/>
 									<Tooltip title="TAP LAUNCH TO LISTEN TO CHOIR" arrow placement="bottom">
-										<Fab size="large" onClick={handleLaunch}>
+										<Fab 
+											size="large" 
+											onClick={handleLaunch}
+											sx={{ pointerEvents: 'auto' }}
+										>
 											<Stack alignItems="center" spacing={2}>
 												<GraphicEq fontSize="large" />
 												LAUNCH
