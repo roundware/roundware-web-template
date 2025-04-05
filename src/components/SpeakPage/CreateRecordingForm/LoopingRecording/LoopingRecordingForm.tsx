@@ -1,6 +1,6 @@
 import { ArrowForwardIos, Check, Mic, GraphicEq, PlayArrow, Close } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, CardContent, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Fab, Checkbox, Grow, Skeleton, Stack, Tooltip, Typography, useTheme, IconButton } from '@mui/material';
+import { Box, Button, Card, CardContent, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Fab, Checkbox, Grow, Skeleton, Stack, Tooltip, Typography, useTheme, IconButton, FormControlLabel } from '@mui/material';
 import PermissionDeniedDialog from '@/components/elements/PermissionDeniedDialog';
 import LegalAgreementForm from '@/components/LegalAgreementForm';
 import { useState, useEffect } from 'react';
@@ -135,13 +135,19 @@ const LoopingRecordingForm = () => {
 						</Fab>
 					</Box>
 					<Stack direction="row" alignItems="center" sx={{ mt: 4 }}>
-						<Checkbox 
-							checked={isConsentChecked}
-							onChange={(e) => setIsConsentChecked(e.target.checked)}
+						<FormControlLabel
+							control={
+								<Checkbox 
+									checked={isConsentChecked}
+									onChange={(e) => setIsConsentChecked(e.target.checked)}
+								/>
+							}
+							label={
+								<Typography variant="body2">
+									I consent to my recording being used solely for the artistic purposes of Invisible Choir
+								</Typography>
+							}
 						/>
-						<Typography variant="body2">
-							I consent to my recording being used solely for the artistic purposes of Invisible Choir
-						</Typography>
 					</Stack>
 					<Button 
 						variant="contained"
@@ -213,7 +219,6 @@ const LoopingRecordingForm = () => {
 										handleLaunch();
 										setShowRecordButtonPage(true);
 									}}
-									sx={{ cursor: 'pointer' }}
 								/>
 							) : (
 								<Box sx={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -224,7 +229,6 @@ const LoopingRecordingForm = () => {
 									) : (
 										<Mic 
 											onClick={handleMicClick}
-											sx={{ cursor: 'pointer' }}
 										/>
 									)}
 								</Box>
