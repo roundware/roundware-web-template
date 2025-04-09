@@ -17,32 +17,23 @@ interface ConfirmationDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  variant?: 'leave' | 'rerecord';
+  icon?: React.ReactNode;
+  title: string;
+  description: string;
+  confirmText: string;
+  cancelText?: string;
 }
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   open,
   onClose,
   onConfirm,
-  variant = 'rerecord'
+  icon,
+  title,
+  description,
+  confirmText,
+  cancelText
 }) => {
-  const content = {
-    rerecord: {
-      icon: <ReplayIcon fontSize="large" />,
-      title: 'Re-record',
-      description: 'Are you sure?\nYou will lose your recording.',
-      confirmText: 'YES, RE-RECORD'
-    },
-    leave: {
-      icon: <LogoutIcon fontSize="large" />,
-      title: 'Leave choir',
-      description: 'Are you sure you want to leave this choir?\nYou will lose your recording.',
-      confirmText: 'YES, LEAVE'
-    }
-  };
-
-  const selectedContent = content[variant];
-
   return (
     <Dialog
       open={open}
@@ -85,14 +76,14 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             alignItems="center"
             sx={{ width: '100%', px: 2 }}
           >
-            {selectedContent.icon}
+            {icon}
             
             <Typography variant="h4" component="div" textAlign="center">
-              {selectedContent.title}
+              {title}
             </Typography>
             
             <Typography variant="subtitle1" textAlign="center" sx={{ whiteSpace: 'pre-line' }}>
-              {selectedContent.description}
+              {description}
             </Typography>
             
             <Stack spacing={2} width="100%">
@@ -102,7 +93,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                 fullWidth
                 size="large"
               >
-                {selectedContent.confirmText}
+                {confirmText}
               </Button>
               
               <Button
@@ -111,7 +102,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                 fullWidth
                 size="large"
               >
-                CANCEL
+                {cancelText}
               </Button>
             </Stack>
           </Stack>
