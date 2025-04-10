@@ -1,11 +1,13 @@
-import { ArrowForwardIos, Check, Mic, GraphicEq, PlayArrow, Close } from '@mui/icons-material';
+import { ArrowForwardIos, Check, Mic, GraphicEq, PlayArrow, Close, Logout } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, CardContent, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Fab, Checkbox, Grow, Skeleton, Stack, Tooltip, Typography, useTheme, IconButton, FormControlLabel } from '@mui/material';
+import { Box, Button, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Fab, Checkbox, Grow, Skeleton, Stack, Tooltip, Typography, useTheme, IconButton, FormControlLabel } from '@mui/material';
 import PermissionDeniedDialog from '@/components/elements/PermissionDeniedDialog';
 import LegalAgreementForm from '@/components/LegalAgreementForm';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import ReplayIcon from '@mui/icons-material/Replay';
 import { useState, useEffect } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import { Prompt } from 'react-router';
+import { Prompt, useHistory } from 'react-router';
 import { useLoopingRecording } from './useLoopingRecording';
 
 // Step indicator component
@@ -21,7 +23,7 @@ const StepIndicator = ({ activeStep }: StepIndicatorProps) => {
 	];
 
 	return (
-		<Stack direction="row" spacing={1} justifyContent="center" alignItems="flex-start" sx={{ mt: 18, position: 'absolute', top: 0 }}>
+		<Stack direction="row" spacing={1} justifyContent="center" alignItems="flex-start" sx={{ mt: 18, position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 'fit-content' }}>
 			{steps.map((step, index) => (
 				<Stack key={index} direction="column" alignItems="center" spacing={1}>
 					<Box sx={{ width: 100, height: 3, bgcolor: activeStep === index ? 'primary.main' : 'grey.500' }} />
@@ -39,47 +41,89 @@ const StepIndicator = ({ activeStep }: StepIndicatorProps) => {
 const LoopingRecordingForm = () => {
 	const theme = useTheme();
 	const [isConsentChecked, setIsConsentChecked] = useState(false);
+	const [showJoinChoirPage, setShowJoinChoirPage] = useState(true);
 	const [showRehearsePage, setShowRehearsePage] = useState(false);
 	const [showRecordButtonPage, setShowRecordButtonPage] = useState(false);
-	const [isCountdownActive, setIsCountdownActive] = useState(false);
-	const [countdownValue, setCountdownValue] = useState(3);
 	const [activeStep, setActiveStep] = useState(0);
+	const [showMicButton, setShowMicButton] = useState(true);
+	const [showAnotherButton, setShowAnotherButton] = useState(false);
+	const [countdown, setCountdown] = useState<number | null>(null);
 
 	const [showRerecordConfirm, setShowRerecordConfirm] = useState(false);
 	const [legalModalOpen, setLegalModalOpen] = useState(false);
+	const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+	const [showThankYouDialog, setShowThankYouDialog] = useState(false);
 
 	const { speaker, recorder, submission, loop } = useLoopingRecording();
+	const history = useHistory();
 
 	useEffect(() => {
-		let timer: NodeJS.Timeout | undefined;
-		if (isCountdownActive && countdownValue > 0) {
-			timer = setTimeout(() => {
-				setCountdownValue(prev => prev - 1);
-			}, 1000);
-		} else if (isCountdownActive && countdownValue === 0) {
-			setIsCountdownActive(false);
-			setActiveStep(1);
-			// loop.start('playing-speaker');
-			recorder.scheduleRecording();
+		if (recorder.recordedAudioBlob) {
+			setActiveStep(2); // Set to REVIEW when recording is completed
+			setShowMicButton(false);
+			setShowAnotherButton(true);
 		}
-		return () => {
-			if (timer) clearTimeout(timer);
-		};
-	}, [isCountdownActive, countdownValue, loop, recorder]);
+	}, [recorder.recordedAudioBlob]);
 
-	const handleLaunch = () => {
-		// Function to handle launching the rehearsal
-		setShowRehearsePage(true);
-		// Add any additional logic needed for launching rehearsal
-	};
+	// Add countdown timer effect
+	useEffect(() => {
+		if (loop.mode === 'waiting-to-record' && loop.nextLoopPointAt.current) {
+			const updateCountdown = () => {
+				const now = Date.now();
+				const remaining = Math.max(0, Math.ceil((loop.nextLoopPointAt.current! - now) / 1000));
+				setCountdown(remaining);
+			};
+
+			updateCountdown();
+			const interval = setInterval(updateCountdown, 1000);
+
+			return () => clearInterval(interval);
+		} else {
+			setCountdown(null);
+		}
+	}, [loop.mode, loop.nextLoopPointAt.current]);
+
+	useEffect(() => {
+		if (countdown !== null) {
+			setShowAnotherButton(false);
+		}
+	}, [countdown]);
 
 	const handleMicClick = () => {
-		setIsCountdownActive(true);
-		setCountdownValue(5);
+		setShowMicButton(false);
+		setShowAnotherButton(true);
+	};
+
+	const handleAnotherButtonClick = () => {
+		if (recorder.recordedAudioBlob) {
+			setShowRerecordConfirm(true);
+		} else {
+			recorder.scheduleRecording();
+			setActiveStep(1);
+		}
+		setShowMicButton(true);
+		setShowAnotherButton(false);
 	};
 
 	return (
 		<>
+			{!showJoinChoirPage && (
+				<Button 
+					variant="outlined"
+					size="small"
+					sx={{ 
+						position: 'absolute',
+						top: 80,
+						right: 16,
+						minWidth: 0,
+						p: 1,
+						borderRadius: '50%'
+					}}
+					onClick={() => setShowCloseConfirm(true)}
+				>
+					<Close />
+				</Button>
+			)}
 			<PermissionDeniedDialog open={recorder.isPermissionDenied} onClose={() => recorder.setIsPermissionDenied(false)} functionality='microphone' />
 
 			<Prompt
@@ -91,7 +135,8 @@ const LoopingRecordingForm = () => {
 				})}
 			/>
 
-			<Collapse in={!showRehearsePage}>
+			{!showJoinChoirPage && <StepIndicator activeStep={activeStep} />}
+			<Collapse in={showJoinChoirPage}>
 				<Box
 					display="flex"
 					flexDirection="column"
@@ -156,7 +201,7 @@ const LoopingRecordingForm = () => {
 						onClick={async () => {
 							const hasPermission = await recorder.checkMicrophonePermission();
 							if (!hasPermission) return;
-						
+							setShowJoinChoirPage(false);
 							setShowRehearsePage(true);
 						}}
 					>
@@ -170,256 +215,330 @@ const LoopingRecordingForm = () => {
 				</Box>
 			</Collapse>
 
-			<Collapse in={showRehearsePage}>
-				<Box
-					display="flex"
-					flexDirection="column"
-					alignItems="center"
-					justifyContent="center"
-					position="fixed"
-					top="50%"
-					left="50%"
-					width="100%"
-					height="100%"
-					sx={{ 
-						'& .MuiFab-root': { width: 250, height: 250 },
-						transform: 'translate(-50%, -50%)'
-					}}>
-					<Box sx={{
-						position: 'absolute', top: 0, right: 0, width: '100%', display: 'flex', justifyContent: 'flex-end'
-					}}>
-						<IconButton 
-							sx={{ mt: 10, mr: 2 }}
-							onClick={() => setShowRehearsePage(false)}
-						>
-							<Close />
-						</IconButton>
-					</Box>
-					
-					<StepIndicator activeStep={activeStep} />
-					
-					<Box sx={{ position: 'relative' }}>
-						<Skeleton
-							variant="circular"
-							animation="pulse"
-							sx={{
-								position: 'absolute',
-								width: 300,
-								height: 300,
-								top: '50%',
-								left: '50%',
-								transform: 'translate(-50%, -50%)',
-							}}
-						/>
-						
-						<Fab size="large" >
-							{!showRecordButtonPage ? (
-								<PlayArrow 
-									onClick={() => {
-										handleLaunch();
-										setShowRecordButtonPage(true);
-									}}
-								/>
-							) : (
-								<Box sx={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-									{isCountdownActive ? (
-										<Typography variant="h4" >
-											{countdownValue}
-										</Typography>
-									) : (
-										<Mic 
-											onClick={handleMicClick}
-										/>
-									)}
-								</Box>
-							)}
-						</Fab>
-					</Box>
-					
-					<Typography variant="body1" sx={{ mt: 5 }}>
-						{showRecordButtonPage 
-							? (!isCountdownActive ? "PRESS RECORD WHEN READY TO SING" : "GET READY")
-							: "PRESS PLAY WHEN READY TO SING"}
-					</Typography>
-				</Box>
-			</Collapse>
-			{/* <Card>
-				<CardContent>
-					<Collapse in={!loop.isStarted}>
-						<Stack spacing={4} p={4}>
-							<Typography variant='h5' fontWeight={'bold'} textAlign={'center'}>
-								Amazing! You are about to add your voice to the choir of voices that exist in this location.
-							</Typography>
-							<Typography variant='h6' textAlign={'center'}>
-								Tap the START button and you will hear a loop of the base music for this choir. When you are ready to record, tap the RECORD button and you will see a countdown indicator that displays how much time remains until the recording will start. Then sing along however you want.
-							</Typography>
-
-							<Stack direction={'row'} spacing={2} justifyContent={'center'}>
-								<LoadingButton
-									variant='contained'
-									size='large'
-									color='primary'
-									sx={{
-										fontSize: '1.3rem',
-										fontWeight: 'bold',
-									}}
-									endIcon={<ArrowForwardIos />}
-									loading={loop.isLoading}
-									onClick={async () => {
-										const hasPermission = await recorder.checkMicrophonePermission();
-										if (!hasPermission) return;
-										loop.start('playing-speaker');
-									}}
-								>
-									START
-								</LoadingButton>
-							</Stack>
-						</Stack>
-					</Collapse>
-
-					<Collapse in={loop.isStarted}>
-						<Stack spacing={4} p={4} alignItems={'center'} justifyContent={'center'}>
-							{speaker.isReady && speaker.duration > 0 && (
-								<CountdownCircleTimer
-									duration={speaker.duration}
-									colors={loop.mode === 'recording' ? theme.palette.error.main : theme.palette.primary.main}
-									trailColor={theme.palette.grey[800]}
-									isPlaying={loop.mode !== 'idle'}
-									onComplete={() => {
-										return [true, 0];
-									}}
-								>
-									<Stack
-										sx={{
-											width: '100%',
-											height: '100%',
-											display: 'flex',
-											flexDirection: 'column',
-											justifyContent: 'center',
-											alignItems: 'center',
+			<Collapse in={!loop.isStarted && !showJoinChoirPage}>
+				<Stack spacing={4} p={4}>
+					<Stack direction={'row'} spacing={2} justifyContent={'center'}>
+						{speaker.duration !== null && (
+							<CountdownCircleTimer
+								duration={speaker.duration}
+								colors={theme.palette.primary.main}
+								trailColor={theme.palette.grey[800]}
+								isPlaying={loop.mode !== 'idle'}
+								strokeWidth={3}
+								size={280}
+								onComplete={() => {
+									return [true, 0];
+								}}
+							>
+								<Box sx={{ bgcolor: 'white', borderRadius: '50%', p: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+									<Fab
+										color="primary"
+										onClick={async () => {
+											const hasPermission = await recorder.checkMicrophonePermission();
+											if (!hasPermission) return;
+											loop.start('playing-speaker');
+											setShowMicButton(true);
+											setShowAnotherButton(false);
 										}}
+										disabled={loop.isLoading}
 									>
-										<Grow in={loop.mode === 'playing-speaker' || loop.mode === 'recording-playback'}>
-											<Button
-												variant='contained'
-												color='primary'
-												sx={{
-													fontWeight: 'bold',
-													background: theme.palette.error.main,
-													'&:hover': {
-														background: theme.palette.error.dark,
-													},
-													position: 'absolute',
-												}}
-												endIcon={<Mic />}
-												onClick={() => {
-													if (recorder.recordedAudioBlob) {
-														setShowRerecordConfirm(true);
-													} else recorder.scheduleRecording();
-												}}
-												size={recorder.recordedAudioBlob ? 'small' : 'medium'}
-											>
-												{recorder.recordedAudioBlob ? 'Re-record' : 'Record'}
-											</Button>
-										</Grow>
+										{loop.isLoading ? <CircularProgress size={24} /> : <PlayArrow />}
+									</Fab>
+								</Box>
+							</CountdownCircleTimer>
+						)}
+					</Stack>
+				</Stack>
+			</Collapse>
 
-										<Grow in={loop.mode === 'recording'}>
-											<Typography variant='subtitle2' textAlign={'center'}>
+			<Collapse in={loop.isStarted}>
+				<Stack spacing={4} p={4} alignItems={'center'} justifyContent={'center'} sx={{ mb: 10 }}>
+					{speaker.isReady && speaker.duration > 0 && (
+						<>
+							<CountdownCircleTimer
+								duration={speaker.duration}
+								colors={loop.mode === 'recording' ? theme.palette.error.main : theme.palette.primary.main}
+								trailColor={theme.palette.grey[800]}
+								isPlaying={loop.mode !== 'idle'}
+								strokeWidth={3}
+								size={(loop.mode === 'recording' || loop.mode === 'recording-playback') ? 190 : 280}
+								onComplete={() => {
+									return [true, 0];
+								}}
+							>
+								<Stack
+									sx={{
+										width: '100%',
+										height: '100%',
+										display: 'flex',
+										flexDirection: 'column',
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<Stack direction="column" spacing={5} position={'absolute'}>
+										{(loop.mode === 'recording' || loop.mode === 'recording-playback') && (
+											<CountdownCircleTimer
+												duration={speaker.duration}
+												colors={theme.palette.error.main}
+												trailColor={theme.palette.grey[800]}
+												isPlaying={true}
+												strokeWidth={3}
+												size={280}
+												onComplete={() => {
+													return [true, 0];
+												}}
+											/>
+										)}
+									</Stack>
+									<Grow in={loop.mode === 'playing-speaker' || loop.mode === 'recording-playback' || loop.mode === 'waiting-to-record'}>
+										<Stack direction="column" spacing={5} position={'absolute'}>
+											{countdown !== null && (
+												<Box sx={{ 
+													bgcolor: 'white', 
+													borderRadius: '50%', 
+													p: 8, 
+													display: 'flex', 
+													alignItems: 'center', 
+													justifyContent: 'center',
+													width: 180,
+													height: 180
+												}}>
+													<Typography
+														variant="h2"
+														align="center"
+														color="primary.main"
+													>
+														{countdown}
+													</Typography>
+												</Box>
+											)}
+											{showMicButton && (
+												<Box sx={{ bgcolor: 'white', borderRadius: '50%', p: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+													<Fab
+														color="primary"
+														onClick={() => {
+															if (loop.mode === 'recording') return;
+															setShowMicButton(false);
+															recorder.scheduleRecording();
+															setActiveStep(1);
+														}}
+														sx={{
+															'&:hover': {
+																color: theme.palette.error.dark,
+															},
+															fontSize: '2rem'
+														}}
+													>
+														<Mic sx={{ 
+															color: loop.mode === 'recording' ? 'action.disabled' : 'inherit'
+														}} />
+													</Fab>
+												</Box>
+											)}
+											{showAnotherButton && (
+												<Box sx={{ bgcolor: 'white', borderRadius: '50%', p: 11.5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+													<Button
+														variant='outlined'
+														sx={{
+															position: 'absolute',
+															left: '50%',
+															top: '50%',
+															transform: 'translate(-50%, -50%)',
+															whiteSpace: 'nowrap',
+															color: 'primary.main',
+															borderColor: 'primary.main',
+														}}
+														startIcon={<ReplayIcon />}
+														onClick={() => {
+															if (recorder.recordedAudioBlob) {
+																setShowRerecordConfirm(true);
+															} else {
+																recorder.scheduleRecording();
+																setActiveStep(1);
+															}
+														}}
+														size={recorder.recordedAudioBlob ? 'small' : 'medium'}
+													>
+														{recorder.recordedAudioBlob ? 'Re-record' : 'Record'}
+													</Button>
+												</Box>
+											)}
+										</Stack>
+									</Grow>
+
+									<Grow in={loop.mode === 'recording'}>
+										<Box sx={{ position: 'relative' }}>
+											<Box sx={{ bgcolor: 'white', borderRadius: '50%', p: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+												<Fab
+													color="primary"
+													onClick={() => {
+														if (loop.mode === 'recording') return;
+														setShowMicButton(false);
+														recorder.scheduleRecording();
+														setActiveStep(1);
+													}}
+													sx={{
+														'&:hover': {
+															color: theme.palette.error.dark,
+														},
+														fontSize: '2rem'
+													}}
+												>
+													<Mic sx={{ 
+														fontSize: '2rem',
+														color: loop.mode === 'recording' ? 'action.disabled' : 'inherit'
+													}} />
+												</Fab>
+											</Box>
+											<Typography 
+												variant='subtitle2' 
+												textAlign={'center'}
+												sx={{ 
+													position: 'absolute',
+													top: '50%',
+													left: '50%',
+													transform: 'translate(-50%, -50%)',
+													width: '100%'
+												}}
+											>
 												Recording...
 											</Typography>
-										</Grow>
+										</Box>
+									</Grow>
 
-										<Grow in={loop.mode === 'waiting-to-record'}>
-											<Typography
-												variant='subtitle2'
-												textAlign={'center'}
-												sx={{
-													position: 'absolute',
-													color: 'GrayText',
-													transform: 'translateY(-50%)',
-												}}
-											>
-												Waiting to record...
-											</Typography>
-										</Grow>
-									</Stack>
-								</CountdownCircleTimer>
-							)}
-
-							{recorder.recordedAudioBlob && (
-								<Stack spacing={2} alignItems={'center'}>
-									<Typography variant='body1' textAlign={'center'}>
-										Hit SUBMIT to add your voice to this invisible choir for everyone else to hear.
-									</Typography>
-									<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-										<Button
-											variant='contained'
-											color='primary'
-											onClick={() => {
-												setLegalModalOpen(true);
-											}}
-											size='large'
+									<Grow in={loop.mode === 'waiting-to-record'}>
+										<Typography
+											variant='subtitle2'
+											textAlign={'center'}
 											sx={{
-												fontWeight: 'bold',
+												position: 'absolute',
+												color: 'GrayText',
+												transform: 'translateY(-50%)',
 											}}
-											endIcon={<Check />}
 										>
-											Submit
-										</Button>
-									</Box>
+											Waiting to record...
+										</Typography>
+									</Grow>
 								</Stack>
-							)}
+							</CountdownCircleTimer>
+						</>
+					)}
+
+					{recorder.recordedAudioBlob && (
+						<Stack spacing={10} alignItems={'center'} sx={{ position: 'absolute', bottom: 150, width: '100%' }}>
+							<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+								<Button
+									variant='contained'
+									color='primary'
+									onClick={() => {
+										setLegalModalOpen(true);
+									}}
+									size='large'
+									sx={{
+										fontWeight: 'bold',
+									}}
+								>
+									Submit Recording
+								</Button>
+							</Box>
 						</Stack>
-					</Collapse>
-				</CardContent>
+					)}
+				</Stack>
+			</Collapse>
 
-				<Dialog open={showRerecordConfirm} onClose={() => setShowRerecordConfirm(false)}>
-					<DialogTitle>Are you sure you want to re-record your message?</DialogTitle>
-					<DialogContent>
-						<Typography variant='body1' gutterBottom>
-							You will lose your current recording if you re-record.
-						</Typography>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={() => setShowRerecordConfirm(false)}>Cancel</Button>
-						<Button
-							color='error'
-							onClick={() => {
-								setShowRerecordConfirm(false);
-								recorder.scheduleRecording();
-							}}
-							variant='contained'
-						>
-							Re-record
-						</Button>
-					</DialogActions>
-				</Dialog>
+			{!showJoinChoirPage && (
+				<Box sx={{ 
+					position: 'absolute', 
+					bottom: 200, 
+					left: '50%',
+					transform: 'translateX(-50%)',
+					width: '100%', 
+					textAlign: 'center' 
+				}}>
+					<Typography variant="body1">
+						{activeStep === 2 ? "" :
+							activeStep === 1 ? "" :
+								!loop.isStarted ? "PRESS PLAY TO START REHEARSING" : "PRESS RECORD WHEN READY TO SING"}
+						{loop.mode === 'waiting-to-record' ? "GET READY" : ""}
+					</Typography>
+				</Box>
+			)}
+			
+			<ConfirmationDialog
+				open={showRerecordConfirm}
+				onClose={() => setShowRerecordConfirm(false)}
+				onConfirm={() => {
+					setShowRerecordConfirm(false);
+					recorder.scheduleRecording();
+					setActiveStep(1);
+				}}
+				icon={<ReplayIcon sx={{ fontSize: 40 }} />}
+				title="Re-record"
+				description="Are you sure? 
+				You will lose your recording."
+				confirmText="Yes, Re-record"
+				cancelText="Cancel"
+			/>
 
-				<Dialog open={legalModalOpen}>
-					<LegalAgreementForm
-						onDecline={() => {
-							setLegalModalOpen(false);
-						}}
-						onAccept={async () => {
-							setLegalModalOpen(false);
-							await submission.start();
-						}}
-					/>
-				</Dialog>
+			<ConfirmationDialog
+				open={showCloseConfirm}
+				onClose={() => setShowCloseConfirm(false)}
+				onConfirm={() => {
+					setShowCloseConfirm(false);
+					setShowRehearsePage(false);
+					history.push('/listen');
+				}}
+				icon={<Logout sx={{ fontSize: 40 }} />}
+				title="Leave Choir"
+				description="Are you sure you want to leave this choir? 
+				You will lose your recording."
+				confirmText="Yes, Leave"
+				cancelText="Cancel"
+			/>
 
-				<Dialog open={submission.status === 'submitting'}>
-					<DialogContent>
-						<CircularProgress color={'primary'} style={{ margin: 'auto' }} />
-						<DialogContentText>Uploading your contribution now! Please keep this page open until we finish uploading.</DialogContentText>
-					</DialogContent>
-				</Dialog>
+			<ConfirmationDialog
+				open={showThankYouDialog}
+				onClose={() => {
+					setShowThankYouDialog(false);
+					history.push('/listen');
+				}}
+				onConfirm={() => {
+					setShowThankYouDialog(false);
+					history.push('/listen');
+				}}
+				icon={<Logout sx={{ fontSize: 40}} />}
+				title="Thank You!"
+				description="Your voice has been added to the choir and can now be heard with the other voices in this location."
+				confirmText="Listen"
+				cancelText=""
+			/>
 
-				<Dialog open={submission.status === 'error'}>
-					<DialogContent>
-						<DialogContentText>We encountered an error while trying to upload your contribution. Please try again later.</DialogContentText>
-					</DialogContent>
-				</Dialog>
-			</Card> */}
+			<Dialog open={legalModalOpen}>
+				<LegalAgreementForm
+					onDecline={() => {
+						setLegalModalOpen(false);
+					}}
+					onAccept={async () => {
+						setLegalModalOpen(false);
+						await submission.start();
+						setShowThankYouDialog(true);
+					}}
+				/>
+			</Dialog>
+
+			<Dialog open={submission.status === 'submitting'}>
+				<DialogContent>
+					<CircularProgress color={'primary'} style={{ margin: 'auto' }} />
+					<DialogContentText>Uploading your contribution now! Please keep this page open until we finish uploading.</DialogContentText>
+				</DialogContent>
+			</Dialog>
+
+			<Dialog open={submission.status === 'error'}>
+				<DialogContent>
+					<DialogContentText>We encountered an error while trying to upload your contribution. Please try again later.</DialogContentText>
+				</DialogContent>
+			</Dialog>
 		</>
 	);
 };
