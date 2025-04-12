@@ -1,144 +1,182 @@
-import { useRef, useState } from 'react';
-import { useLoop } from './useLoop';
-import { createBlobFromAudioBuffer, trimAudioBuffer } from '@/utils/index';
+import { useRef, useState } from "react";
+import { useLoop } from "./useLoop";
+import { createBlobFromAudioBuffer, trimAudioBuffer } from "@/utils/index";
 
-export const useRecorder = ({ duration, loop }: { duration?: number; loop: ReturnType<typeof useLoop> }) => {
-	const mediaRecorder = useRef<MediaRecorder | null>(null);
+export const useRecorder = ({
+  duration,
+  loop,
+}: {
+  duration?: number;
+  loop: ReturnType<typeof useLoop>;
+}) => {
+  const mediaRecorder = useRef<MediaRecorder | null>(null);
 
-	const audioChunk = useRef<Blob>();
+  const audioChunk = useRef<Blob>();
 
-	const [recordedAudioBlob, setRecordedAudioBlob] = useState<Blob | null>(null);
+  const [recordedAudioBlob, setRecordedAudioBlob] = useState<Blob | null>(null);
 
-	const [isPermissionDenied, setIsPermissionDenied] = useState(false);
+  const [isPermissionDenied, setIsPermissionDenied] = useState(false);
 
-	const [recorderStream, setRecorderStream] = useState<MediaStream>();
+  const [recorderStream, setRecorderStream] = useState<MediaStream>();
 
-	// just for checking permission start a small recording and stop it
-	const checkMicrophonePermission = async () => {
-		try {
-			const stream = await navigator.mediaDevices.getUserMedia({
-				audio: {
-					echoCancellation: false,
-					noiseSuppression: false,
-					autoGainControl: false,
-				},
-			});
-			stream.getTracks().forEach((track) => {
-				track.stop();
-				console.debug(track.readyState);
-			});
+  const [startingRecordingInSeconds, setStartingRecordingInSeconds] =
+    useState<number>(0);
+  const countdownInterval = useRef<NodeJS.Timeout>();
 
-			return true;
-		} catch (error) {
-			console.error('Microphone permission denied:', error);
-			setIsPermissionDenied(true);
-			return false;
-		}
-	};
+  // just for checking permission start a small recording and stop it
+  const checkMicrophonePermission = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false,
+        },
+      });
+      stream.getTracks().forEach((track) => {
+        track.stop();
+        console.debug(track.readyState);
+      });
 
-	// schedule recording to start from next loop point in timer
-	const scheduleRecording = async () => {
-		const hasPermission = await checkMicrophonePermission();
-		if (!hasPermission) return;
-		if (typeof duration !== 'number') return;
+      return true;
+    } catch (error) {
+      console.error("Microphone permission denied:", error);
+      setIsPermissionDenied(true);
+      return false;
+    }
+  };
 
-		loop.setMode('waiting-to-record');
-		setRecordedAudioBlob(null);
+  // schedule recording to start from next loop point in timer
+  const scheduleRecording = async () => {
+    const hasPermission = await checkMicrophonePermission();
+    if (!hasPermission) return;
+    if (typeof duration !== "number") return;
 
-		console.debug('Scheduling recording', loop.nextLoopPointAt.current, Date.now());
-		console.debug('Starting recording in', ((loop.nextLoopPointAt.current ?? 0) - Date.now()) / 1000 + 's');
+    loop.setMode("waiting-to-record");
+    setRecordedAudioBlob(null);
 
-		setTimeout(
-			() => {
-				startRecording();
-			},
-			loop.nextLoopPointAt.current ? loop.nextLoopPointAt.current - Date.now() : 0
-		);
-	};
+    console.debug(
+      "Scheduling recording",
+      loop.nextLoopPointAt.current,
+      Date.now()
+    );
 
-	const startRecording = async () => {
-		try {
-			setRecordedAudioBlob(null);
-			audioChunk.current = undefined;
+    const startingInSeconds =
+      ((loop.nextLoopPointAt.current ?? 0) - Date.now()) / 1000;
+    setStartingRecordingInSeconds(startingInSeconds);
+    console.debug("Starting recording in", startingInSeconds + "s");
 
-			const stream = await navigator.mediaDevices.getUserMedia({
-				audio: {
-					echoCancellation: false,
-				},
-			});
+    setTimeout(() => {
+      startRecording();
+    }, startingInSeconds * 1000);
 
-			setRecorderStream(stream);
+    countdownInterval.current = setInterval(() => {
+      setStartingRecordingInSeconds((prev) => {
+        if (prev <= 1) {
+          if (countdownInterval.current) {
+            clearInterval(countdownInterval.current);
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
-			mediaRecorder.current = new MediaRecorder(stream);
+  const startRecording = async () => {
+    try {
+      setRecordedAudioBlob(null);
+      audioChunk.current = undefined;
 
-			mediaRecorder.current.ondataavailable = async (event) => {
-				if (audioChunk.current) return;
-				stopRecording();
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+        },
+      });
 
-				audioChunk.current = event.data;
+      setRecorderStream(stream);
 
-				console.log('Speaker Duration:', duration);
+      mediaRecorder.current = new MediaRecorder(stream);
 
-				const audioBuffer = await loop.audioContext.current.decodeAudioData(await new Blob([event.data], { type: 'audio/wav' }).arrayBuffer());
+      mediaRecorder.current.ondataavailable = async (event) => {
+        if (audioChunk.current) return;
+        stopRecording();
 
-				if (!audioBuffer || !duration) throw new Error('Something went wrong while decoding audio data');
+        audioChunk.current = event.data;
 
-				let adjustedBuffer = audioBuffer;
+        console.log("Speaker Duration:", duration);
 
-				if (adjustedBuffer.duration > duration) {
-					const difference = adjustedBuffer.duration - duration;
-					// 5% from start, rest from end
-					adjustedBuffer = trimAudioBuffer(audioBuffer, difference * (10 / 100), audioBuffer.duration - difference * (90 / 100), loop.audioContext.current);
-					console.log('Trimmed audio buffer:', adjustedBuffer);
-				}
+        const audioBuffer = await loop.audioContext.current.decodeAudioData(
+          await new Blob([event.data], { type: "audio/wav" }).arrayBuffer()
+        );
 
-				const audioBlob = createBlobFromAudioBuffer(adjustedBuffer);
+        if (!audioBuffer || !duration)
+          throw new Error("Something went wrong while decoding audio data");
 
-				setRecordedAudioBlob(audioBlob);
-				loop.stop();
-				loop.start('recording-playback', audioBlob);
-			};
+        let adjustedBuffer = audioBuffer;
 
-			mediaRecorder.current.onstop = () => {
-				// stop
-				stream.getTracks().forEach((track) => {
-					track.stop();
-				});
-			};
+        if (adjustedBuffer.duration > duration) {
+          const difference = adjustedBuffer.duration - duration;
+          // 5% from start, rest from end
+          adjustedBuffer = trimAudioBuffer(
+            audioBuffer,
+            difference * (10 / 100),
+            audioBuffer.duration - difference * (90 / 100),
+            loop.audioContext.current
+          );
+          console.log("Trimmed audio buffer:", adjustedBuffer);
+        }
 
-			mediaRecorder.current.onstart = () => {
-				console.debug('Recording started');
+        const audioBlob = createBlobFromAudioBuffer(adjustedBuffer);
 
-				loop.start('recording');
+        setRecordedAudioBlob(audioBlob);
+        loop.stop();
+        loop.start("recording-playback", audioBlob);
+      };
 
-				if (!duration) return;
-			};
+      mediaRecorder.current.onstop = () => {
+        // stop
+        stream.getTracks().forEach((track) => {
+          track.stop();
+        });
+      };
 
-			loop.stop();
+      mediaRecorder.current.onstart = () => {
+        console.debug("Recording started");
 
-			console.log('Will be reocording for:', duration);
-			mediaRecorder.current.start(duration ? (duration + 0.1) * 1000 : undefined);
-		} catch (error) {
-			console.error('Error starting recording:', error);
-			setIsPermissionDenied(true);
-			loop.stop();
-		}
-	};
+        loop.start("recording");
 
-	const stopRecording = () => {
-		if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
-			mediaRecorder.current.stop();
-			console.debug('Recording stopped');
-		}
-	};
+        if (!duration) return;
+      };
 
-	return {
-		recordedAudioBlob,
-		isPermissionDenied,
-		setIsPermissionDenied,
-		scheduleRecording,
-		stopRecording,
-		checkMicrophonePermission,
-		recorderStream,
-	};
+      loop.stop();
+
+      console.log("Will be reocording for:", duration);
+      mediaRecorder.current.start(
+        duration ? (duration + 0.1) * 1000 : undefined
+      );
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      setIsPermissionDenied(true);
+      loop.stop();
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder.current && mediaRecorder.current.state !== "inactive") {
+      mediaRecorder.current.stop();
+      console.debug("Recording stopped");
+    }
+  };
+
+  return {
+    recordedAudioBlob,
+    isPermissionDenied,
+    setIsPermissionDenied,
+    scheduleRecording,
+    stopRecording,
+    checkMicrophonePermission,
+    startingRecordingInSeconds,
+    recorderStream,
+  };
 };
