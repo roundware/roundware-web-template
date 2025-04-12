@@ -7,7 +7,8 @@ import {
   Button,
   IconButton,
   Box,
-  SvgIconProps
+  SvgIconProps,
+  Container
 } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import CloseIcon from '@mui/icons-material/Close';
@@ -71,41 +72,43 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             justifyContent: 'center'
           }}
         >
-          <Stack
-            spacing={3}
-            alignItems="center"
-            sx={{ width: '100%', px: 2 }}
-          >
-            {icon}
-            
-            <Typography variant="h4" component="div" textAlign="center">
-              {title}
-            </Typography>
-            
-            <Typography variant="subtitle1" textAlign="center" sx={{ whiteSpace: 'pre-line' }}>
-              {description}
-            </Typography>
-            
-            <Stack spacing={2} width="100%">
-              <Button
-                variant="contained"
-                onClick={onConfirm}
-                fullWidth
-                size="large"
-              >
-                {confirmText}
-              </Button>
+          <Container maxWidth="xs">
+            <Stack
+              spacing={3}
+              alignItems="center"
+              sx={{ width: '100%', px: 2 }}
+            >
+              {icon}
               
-              <Button
-                variant="text"
-                onClick={onClose}
-                fullWidth
-                size="large"
-              >
-                {cancelText}
-              </Button>
+              <Typography variant="h4" component="div" textAlign="center">
+                {title}
+              </Typography>
+              
+              <Typography variant="subtitle1" textAlign="center" sx={{ whiteSpace: 'pre-line' }}>
+                {description}
+              </Typography>
+              
+              <Stack spacing={2} width="100%">
+                <Button
+                  variant="contained"
+                  onClick={onConfirm}
+                  fullWidth
+                  size="large"
+                >
+                  {confirmText}
+                </Button>
+                
+                <Button
+                  variant="text"
+                  onClick={onClose}
+                  fullWidth
+                  size="large"
+                >
+                  {cancelText}
+                </Button>
+              </Stack>
             </Stack>
-          </Stack>
+          </Container>
         </Box>
       </DialogContent>
     </Dialog>
