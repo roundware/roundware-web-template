@@ -391,34 +391,7 @@ const LoopingRecordingForm = () => {
 													}} />
 												</Fab>
 											</Box>
-											<Typography 
-												variant='subtitle2' 
-												textAlign={'center'}
-												sx={{ 
-													position: 'absolute',
-													top: '50%',
-													left: '50%',
-													transform: 'translate(-50%, -50%)',
-													width: '100%'
-												}}
-											>
-												Recording...
-											</Typography>
 										</Box>
-									</Grow>
-
-									<Grow in={loop.mode === 'waiting-to-record'}>
-										<Typography
-											variant='subtitle2'
-											textAlign={'center'}
-											sx={{
-												position: 'absolute',
-												color: 'GrayText',
-												transform: 'translateY(-50%)',
-											}}
-										>
-											Waiting to record...
-										</Typography>
 									</Grow>
 								</Stack>
 							</CountdownCircleTimer>
