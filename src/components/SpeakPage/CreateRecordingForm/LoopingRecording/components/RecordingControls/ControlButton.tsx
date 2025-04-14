@@ -1,6 +1,16 @@
 import { MicOutlined, PlayCircleFilled, Replay } from "@mui/icons-material";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-import { memo } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { memo, useState } from "react";
 import { useLoopingRecording } from "../../useLoopingRecording";
 import { useLoopContext } from "../../LoopContext";
 import CountdownTimer from "./CountdownTimer";
@@ -15,6 +25,7 @@ const ControlButton = memo(
   ({ mode, onPlayClick, onRecordClick }: ControlButtonProps) => {
     const theme = useTheme();
     const { recorder } = useLoopContext();
+    const [rerecordWarningOpen, setRerecordWarningOpen] = useState(false);
 
     return (
       <Box
@@ -69,7 +80,9 @@ const ControlButton = memo(
             color="inherit"
             size="small"
             startIcon={<Replay />}
-            onClick={onRecordClick}
+            onClick={() => {
+              setRerecordWarningOpen(true);
+            }}
           >
             Re-Record
           </Button>
@@ -78,6 +91,33 @@ const ControlButton = memo(
         ) : mode === "loading" ? (
           <Typography variant="h3">Loading...</Typography>
         ) : null}
+
+        <Dialog
+          open={rerecordWarningOpen}
+          onClose={() => setRerecordWarningOpen(false)}
+        >
+          <DialogTitle>Rerecord Warning</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to rerecord? This will delete the current
+              recording and start over.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setRerecordWarningOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setRerecordWarningOpen(false);
+                onRecordClick();
+              }}
+            >
+              Rerecord
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     );
   }

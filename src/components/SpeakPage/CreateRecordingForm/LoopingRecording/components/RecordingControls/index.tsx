@@ -1,5 +1,5 @@
 import PermissionDeniedDialog from "@/components/elements/PermissionDeniedDialog";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { Prompt } from "react-router-dom";
 import { useLoopContext } from "../../LoopContext";
 import StepIndicator from "../StepIndicator";
@@ -50,6 +50,27 @@ const RecordingControls = () => {
             onRecordClick={recorder.scheduleRecording}
           />
         </Box>
+      </Box>
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: "30%",
+          left: 0,
+          right: 0,
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h6" textTransform={"uppercase"}>
+          {loop.mode === "idle"
+            ? "Press play to start rehearsing"
+            : loop.mode === "playing-speaker"
+            ? "Press record when ready to sing"
+            : loop.mode === "waiting-to-record"
+            ? "Get ready"
+            : loop.mode === "recording"
+            ? ""
+            : ""}
+        </Typography>
       </Box>
       <Box />
       <PermissionDeniedDialog
