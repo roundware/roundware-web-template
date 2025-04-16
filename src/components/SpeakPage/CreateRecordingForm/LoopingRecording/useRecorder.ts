@@ -153,7 +153,7 @@ export const useRecorder = ({
 
       console.log("Will be reocording for:", duration);
       mediaRecorder.current.start(
-        duration ? (duration + 0.1) * 1000 : undefined
+        duration ? (duration + 0.001) * 1000 : undefined
       );
     } catch (error) {
       console.error("Error starting recording:", error);
