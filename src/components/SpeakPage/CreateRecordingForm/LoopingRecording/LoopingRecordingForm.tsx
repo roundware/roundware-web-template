@@ -14,6 +14,7 @@ const LoopingRecordingForm = () => {
   const [showJoinChoirPage, setShowJoinChoirPage] = useState(true);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const [showRerecordConfirm, setShowRerecordConfirm] = useState(false);
+  const [showThankYouConfirm, setShowThankYouConfirm] = useState(false);
 
   const history = useHistory();
 
@@ -53,6 +54,7 @@ const LoopingRecordingForm = () => {
         hasRecording={!!recorder.recordedAudioBlob}
         submissionStatus={submission.status}
         onLegalAccept={async () => {
+          setShowThankYouConfirm(true);
           await submission.start();
         }}
         onLegalDecline={() => {}}
@@ -81,13 +83,14 @@ const LoopingRecordingForm = () => {
         }}
         icon={<Logout sx={{ fontSize: 40 }} />}
         title="Leave Choir"
-        description="Are you sure you want to leave this choir? You will lose your recording."
+        description="Are you sure you want to leave this choir? 
+        You will lose your recording."
         confirmText="Yes, Leave"
         cancelText="Cancel"
       />
 
       <ConfirmationDialog
-        open={submission.status === "submitted"}
+        open={showThankYouConfirm}
         onClose={() => {
           history.push("/listen");
         }}
