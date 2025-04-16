@@ -14,6 +14,7 @@ import { memo, useState } from "react";
 import { useLoopingRecording } from "../../useLoopingRecording";
 import { useLoopContext } from "../../LoopContext";
 import CountdownTimer from "./CountdownTimer";
+import ConfirmationDialog from "@/components/elements/ConfirmationDialog";
 
 interface ControlButtonProps {
   mode: ReturnType<typeof useLoopingRecording>["loop"]["mode"];
@@ -92,32 +93,21 @@ const ControlButton = memo(
           <Typography variant="h3">Loading...</Typography>
         ) : null}
 
-        <Dialog
-          open={rerecordWarningOpen}
-          onClose={() => setRerecordWarningOpen(false)}
-        >
-          <DialogTitle>Rerecord Warning</DialogTitle>
-          <DialogContent>
-            <Typography>
-              Are you sure you want to rerecord? This will delete the current
-              recording and start over.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setRerecordWarningOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setRerecordWarningOpen(false);
-                onRecordClick();
-              }}
-            >
-              Rerecord
-            </Button>
-          </DialogActions>
-        </Dialog>
+      <ConfirmationDialog
+        open={rerecordWarningOpen}
+        onClose={() => setRerecordWarningOpen(false)}
+        onConfirm={() => {
+          setRerecordWarningOpen(false);
+          recorder.scheduleRecording();
+        }}
+        icon={<Replay sx={{ fontSize: 40 }} />}
+        title="Re-record"
+        description="Are you sure? 
+        You will lose your recording."
+        confirmText="Yes, Re-record"
+        cancelText="Cancel"
+      />
+
       </Box>
     );
   }
