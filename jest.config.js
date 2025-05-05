@@ -12,7 +12,11 @@ export default {
     transform: {
         '^.+\\.(ts|tsx)$': ['ts-jest', {
             useESM: true,
+            tsconfig: 'tsconfig.json'
         }],
+        '^.+\\.js$': ['babel-jest', {
+            presets: [['@babel/preset-env', { targets: { node: 'current' } }]]
+        }]
     },
     testMatch: ['**/__smoke__testing__/**/*.test.(ts|tsx)'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
@@ -21,6 +25,7 @@ export default {
     globals: {
         'ts-jest': {
             useESM: true,
+            tsconfig: 'tsconfig.json'
         },
     },
 }; 
