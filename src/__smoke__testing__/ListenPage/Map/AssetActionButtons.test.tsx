@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AssetActionButtons, VoteButton } from '../../components/ListenPage/Map/AssetLayer/AssetActionButtons';
-import { useRoundware } from '../../hooks';
+import { AssetActionButtons, VoteButton } from '../../../components/ListenPage/Map/AssetLayer/AssetActionButtons';
+import { useRoundware } from '../../../hooks';
 import { IAssetData } from 'roundware-web-framework';
-import { IAssetCardConfig } from '../../configTypes';
+import { IAssetCardConfig } from '../../../configTypes';
 
 // Mock the useRoundware hook
 jest.mock('../../hooks', () => ({

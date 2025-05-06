@@ -88,7 +88,7 @@ jest.mock('@/context/URLContext', () => ({
 }));
 
 // Import the component after mocks
-import RoundwareMap from '../../components/ListenPage/Map';
+import RoundwareMap from '../../../components/ListenPage/Map';
 
 describe('RoundwareMap Component Smoke Tests', () => {
   const mockDeleteFromURL = jest.fn();

@@ -1,36 +1,38 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
-import { lightTheme } from '../../styles';
-import { AssetInfoWindowInner } from '../../components/ListenPage/Map/AssetLayer/AssetInfoWindow';
+import { lightTheme } from '../../../styles';
+import AssetInfoCard from '../../../components/ListenPage/Map/AssetLayer/AssetInfoCard';
 import Roundware, { IAssetData, GeoListenMode } from 'roundware-web-framework';
-import RoundwareContext from '../../context/RoundwareContext';
-
-// Mock Google Maps InfoWindow
-jest.mock('@react-google-maps/api', () => ({
-  InfoWindow: ({ children, onCloseClick }: { children: React.ReactNode; onCloseClick: () => void }) => (
-    <div data-testid="mock-info-window" onClick={onCloseClick}>
-      {children}
-    </div>
-  ),
-}));
+import { IAssetCardConfig } from '../../../configTypes';
+import RoundwareContext from '../../../context/RoundwareContext';
 
 // Mock global fetch
 global.fetch = jest.fn();
 
-// Mock google maps Size
-global.google = {
-  maps: {
-    Size: jest.fn().mockImplementation((width, height) => ({ width, height })),
+// Mock AudioContext
+global.AudioContext = jest.fn().mockImplementation(() => ({
+  createBuffer: jest.fn(),
+  decodeAudioData: jest.fn(),
+  suspend: jest.fn(),
+  resume: jest.fn(),
+  close: jest.fn(),
+  state: 'running',
+  sampleRate: 44100,
+  currentTime: 0,
+  destination: {
+    channelCount: 2,
+    connect: jest.fn(),
+    disconnect: jest.fn(),
   },
-} as any;
+}));
 
 // Mock data
 const mockAsset: IAssetData = {
   id: 1,
   description: 'Test Description',
-  latitude: 40.7128,
-  longitude: -74.0060,
+  latitude: 0,
+  longitude: 0,
   filename: 'test.mp3',
   file: 'test.mp3',
   volume: 1,
@@ -49,6 +51,11 @@ const mockAsset: IAssetData = {
   envelope_ids: [],
   description_loc_ids: [],
   alt_text_loc_ids: []
+};
+
+const mockCardConfig: IAssetCardConfig = {
+  available: ['date', 'tags', 'description', 'audio', 'photo', 'text', 'actions'],
+  actionItems: ['like', 'flag', 'download', 'show']
 };
 
 const mockRoundware = new Roundware({
@@ -182,7 +189,7 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-describe('AssetInfoWindow Smoke Tests', () => {
+describe('AssetInfoCard Smoke Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -190,145 +197,142 @@ describe('AssetInfoWindow Smoke Tests', () => {
   it('renders without crashing', () => {
     render(
       <TestWrapper>
-        <AssetInfoWindowInner 
+        <AssetInfoCard 
           asset={mockAsset} 
-          selectAsset={mockRoundwareContext.selectAsset}
-          roundware={mockRoundware}
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
         />
       </TestWrapper>
     );
-    expect(screen.getByTestId('mock-info-window')).toBeInTheDocument();
   });
 
-  it('displays asset information correctly', () => {
+  it('displays date when configured', () => {
     render(
       <TestWrapper>
-        <AssetInfoWindowInner 
+        <AssetInfoCard 
           asset={mockAsset} 
-          selectAsset={mockRoundwareContext.selectAsset}
-          roundware={mockRoundware}
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
         />
       </TestWrapper>
     );
-
-    // Check if basic asset information is displayed
-    expect(screen.getByText('Test Description')).toBeInTheDocument();
     expect(screen.getByText('January 1, 2023 5:30 AM')).toBeInTheDocument();
   });
 
-  it('handles close click correctly', () => {
+  it('displays description when configured', () => {
     render(
       <TestWrapper>
-        <AssetInfoWindowInner 
+        <AssetInfoCard 
           asset={mockAsset} 
-          selectAsset={mockRoundwareContext.selectAsset}
-          roundware={mockRoundware}
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
         />
       </TestWrapper>
     );
-
-    // Click the info window to close it
-    const infoWindow = screen.getByTestId('mock-info-window');
-    infoWindow.click();
-
-    // Check if selectAsset was called with null
-    expect(mockRoundwareContext.selectAsset).toHaveBeenCalledWith(null);
+    expect(screen.getByText('Description:')).toBeInTheDocument();
+    expect(screen.getByText('Test Description')).toBeInTheDocument();
   });
 
-  it('positions info window correctly based on asset coordinates', () => {
-    const assetWithCoords: IAssetData = {
-      ...mockAsset,
-      latitude: 42.3601,
-      longitude: -71.0589
-    };
-
+  it('displays tags when configured', () => {
     render(
       <TestWrapper>
-        <AssetInfoWindowInner 
-          asset={assetWithCoords} 
-          selectAsset={mockRoundwareContext.selectAsset}
-          roundware={mockRoundware}
+        <AssetInfoCard 
+          asset={mockAsset} 
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
         />
       </TestWrapper>
     );
-
-    // Info window should be rendered
-    expect(screen.getByTestId('mock-info-window')).toBeInTheDocument();
+    expect(screen.getAllByText('Mock Tag Description')).toHaveLength(2);
   });
 
-  it('handles different asset types correctly', () => {
-    const photoAsset: IAssetData = {
+  it('handles image display when photo is configured', () => {
+    const mockAssetWithImage = {
       ...mockAsset,
+      envelope_ids: [1]
+    };
+    render(
+      <TestWrapper>
+        <AssetInfoCard 
+          asset={mockAssetWithImage} 
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
+        />
+      </TestWrapper>
+    );
+    // Wait for the image to be loaded
+    expect(mockRoundware.getAssets).toHaveBeenCalledWith({
       media_type: 'photo',
-      file: 'test.jpg',
-      filename: 'test.jpg'
-    };
-
-    render(
-      <TestWrapper>
-        <AssetInfoWindowInner 
-          asset={photoAsset} 
-          selectAsset={mockRoundwareContext.selectAsset}
-          roundware={mockRoundware}
-        />
-      </TestWrapper>
-    );
-
-    // Info window should be rendered for photo asset
-    expect(screen.getByTestId('mock-info-window')).toBeInTheDocument();
+      envelope_id: [1]
+    });
   });
 
-  it('handles missing coordinates gracefully', () => {
-    const assetWithoutCoords: IAssetData = {
+  it('handles text display when text is configured', () => {
+    const mockAssetWithText = {
       ...mockAsset,
-      latitude: 0,
-      longitude: 0
+      envelope_ids: [1]
     };
-
     render(
       <TestWrapper>
-        <AssetInfoWindowInner 
-          asset={assetWithoutCoords} 
-          selectAsset={mockRoundwareContext.selectAsset}
-          roundware={mockRoundware}
+        <AssetInfoCard 
+          asset={mockAssetWithText} 
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
         />
       </TestWrapper>
     );
-
-    // Info window should still be rendered
-    expect(screen.getByTestId('mock-info-window')).toBeInTheDocument();
+    // Wait for the text to be loaded
+    expect(mockRoundware.getAssets).toHaveBeenCalledWith({
+      media_type: 'text',
+      envelope_ids: [1]
+    });
   });
 
-  it('handles missing description gracefully', () => {
-    const assetWithoutDescription: IAssetData = {
-      ...mockAsset,
-      description: ''
-    };
-
+  it('displays audio player when audio is configured', () => {
     render(
       <TestWrapper>
-        <AssetInfoWindowInner 
-          asset={assetWithoutDescription} 
-          selectAsset={mockRoundwareContext.selectAsset}
-          roundware={mockRoundware}
-        />
-      </TestWrapper>
-    );
-
-    // Info window should still be rendered
-    expect(screen.getByTestId('mock-info-window')).toBeInTheDocument();
-  });
-
-  it('handles info window options correctly', () => {
-    render(
-      <TestWrapper>
-        <AssetInfoWindowInner 
+        <AssetInfoCard 
           asset={mockAsset} 
-          selectAsset={mockRoundwareContext.selectAsset}
-          roundware={mockRoundware}
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
+        />
+      </TestWrapper>
+    );
+    const audioElement = screen.getByText('Your browser does not support audio!').closest('audio');
+    expect(audioElement).toBeInTheDocument();
+    expect(audioElement).toHaveAttribute('controls');
+    expect(audioElement).toHaveAttribute('controlslist', 'nodownload');
+  });
+
+  it('displays action buttons when actions are configured', () => {
+    render(
+      <TestWrapper>
+        <AssetInfoCard 
+          asset={mockAsset} 
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
+        />
+      </TestWrapper>
+    );
+    expect(screen.getByTitle('download this audio file')).toBeInTheDocument();
+    expect(screen.getByTitle('tell us you like this one!')).toBeInTheDocument();
+    expect(screen.getByTitle('tell us you are concerned about this one!')).toBeInTheDocument();
+  });
+
+  it('renders additional actions when provided', () => {
+    const additionalAction = <button data-testid="additional-action">Test</button>;
+    
+    render(
+      <TestWrapper>
+        <AssetInfoCard 
+          asset={mockAsset} 
+          roundware={mockRoundware} 
+          cardConfig={mockCardConfig}
+          actions={additionalAction}
         />
       </TestWrapper>
     );
 
+    expect(screen.getByTestId('additional-action')).toBeInTheDocument();
   });
 }); 
