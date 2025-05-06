@@ -10,19 +10,19 @@ jest.mock('@react-google-maps/api', () => ({
   Marker: () => <div data-testid="marker" />,
 }));
 
-jest.mock('../../components/ListenPage/Map/AssetLayer', () => () => <div data-testid="asset-layer" />);
-jest.mock('../../components/ListenPage/Map/AssetLoadingOverlay', () => () => <div data-testid="asset-loading" />);
-jest.mock('../../components/ListenPage/Map/RangeCircleOverlay', () => () => <div data-testid="range-circle" />);
-jest.mock('../../components/ListenPage/Map/WalkingModeButton', () => () => <div data-testid="walking-mode" />);
-jest.mock('../../components/ListenPage/Map/Speakers/SpeakerPolygons', () => () => <div data-testid="speaker-polygons" />);
-jest.mock('../../components/ListenPage/Map/Speakers/SpeakerImages', () => () => <div data-testid="speaker-images" />);
-jest.mock('../../components/ListenPage/Map/Speakers/SpeakerLoadingIndicator', () => () => <div data-testid="speaker-loading" />);
-jest.mock('../../components/ListenPage/Map/Speakers/SpeakerReplayButton', () => () => <div data-testid="speaker-replay" />);
-jest.mock('../../components/App/ShareDialog', () => () => <div data-testid="share-dialog" />);
-jest.mock('../../components/ListenPage/Map/ResetButton', () => () => <div data-testid="reset-button" />);
-jest.mock('../../components/ListenPage/PlaybackInfoOverlay', () => () => <div data-testid="playback-info" />);
-jest.mock('../../components/ListenPage/Map/OutOfRangeMessage', () => () => <div data-testid="out-of-range" />);
-jest.mock('../../components/ListenPage/Map/AddLoopVoiceButton', () => () => <div data-testid="add-loop-voice" />);
+jest.mock('../../../components/ListenPage/Map/AssetLayer', () => () => <div data-testid="asset-layer" />);
+jest.mock('../../../components/ListenPage/Map/AssetLoadingOverlay', () => () => <div data-testid="asset-loading" />);
+jest.mock('../../../components/ListenPage/Map/RangeCircleOverlay', () => () => <div data-testid="range-circle" />);
+jest.mock('../../../components/ListenPage/Map/WalkingModeButton', () => () => <div data-testid="walking-mode" />);
+jest.mock('../../../components/ListenPage/Map/Speakers/SpeakerPolygons', () => () => <div data-testid="speaker-polygons" />);
+jest.mock('../../../components/ListenPage/Map/Speakers/SpeakerImages', () => () => <div data-testid="speaker-images" />);
+jest.mock('../../../components/ListenPage/Map/Speakers/SpeakerLoadingIndicator', () => () => <div data-testid="speaker-loading" />);
+jest.mock('../../../components/ListenPage/Map/Speakers/SpeakerReplayButton', () => () => <div data-testid="speaker-replay" />);
+jest.mock('../../../components/App/ShareDialog', () => () => <div data-testid="share-dialog" />);
+jest.mock('../../../components/ListenPage/Map/ResetButton', () => () => <div data-testid="reset-button" />);
+jest.mock('../../../components/ListenPage/PlaybackInfoOverlay', () => () => <div data-testid="playback-info" />);
+jest.mock('../../../components/ListenPage/Map/OutOfRangeMessage', () => () => <div data-testid="out-of-range" />);
+jest.mock('../../../components/ListenPage/Map/AddLoopVoiceButton', () => () => <div data-testid="add-loop-voice" />);
 
 // Mock the hooks
 interface MockMixer {
@@ -79,7 +79,7 @@ const mockUseRoundware = jest.fn(() => ({
   forceUpdate: mockForceUpdate
 }));
 
-jest.mock('../../hooks', () => ({
+jest.mock('../../../hooks', () => ({
   useRoundware: () => mockUseRoundware()
 }));
 

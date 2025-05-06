@@ -6,7 +6,7 @@ import { IAssetData } from 'roundware-web-framework';
 import { IAssetCardConfig } from '../../../configTypes';
 
 // Mock the useRoundware hook
-jest.mock('../../hooks', () => ({
+jest.mock('../../../hooks', () => ({
   useRoundware: jest.fn(),
 }));
 
