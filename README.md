@@ -32,3 +32,24 @@ npm start
 ```
 npm run build
 ```
+
+# Testing
+
+## Smoke Testing
+
+The project uses Jest and React Testing Library for smoke testing. 
+All smoke tests are located in the `src/__smoke__testing__` directory.
+
+### Running Tests
+
+1. Run all tests:
+```
+npm test
+```
+
+2. Run a specific test file:
+```
+npm test -- file.test.tsx
+# or
+npm test -- path/to/test/file.test.tsx
+```
