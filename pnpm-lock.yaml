@@ -35,6 +35,9 @@ dependencies:
   '@react-google-maps/api':
     specifier: ^2.2.0
     version: 2.20.6(react-dom@17.0.2)(react@17.0.2)
+  '@react-google-maps/marker-clusterer':
+    specifier: ^2.20.0
+    version: 2.20.0
   '@turf/boolean-point-in-polygon':
     specifier: ^7.1.0
     version: 7.2.0
@@ -89,6 +92,9 @@ dependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
+  marker-clusterer:
+    specifier: link:@types/@react-google-maps/marker-clusterer
+    version: link:@types/@react-google-maps/marker-clusterer
   moment:
     specifier: ^2.29.4
     version: 2.30.1
@@ -126,7 +132,7 @@ dependencies:
     specifier: ^6.1.0
     version: 6.1.0(react@17.0.2)
   react-router:
-    specifier: ^5.2.0
+    specifier: ^5.3.4
     version: 5.3.4(react@17.0.2)
   react-router-dom:
     specifier: ^5.2.0
@@ -138,8 +144,8 @@ dependencies:
     specifier: ^0.13.9
     version: 0.13.11
   roundware-web-framework:
-    specifier: 0.13.0-alpha.1
-    version: 0.13.0-alpha.1
+    specifier: 0.13.1-alpha.1
+    version: 0.13.1-alpha.1
   ts-overlapping-marker-spiderfier:
     specifier: ^1.0.3
     version: 1.0.3
@@ -184,6 +190,9 @@ devDependencies:
   '@types/react-helmet':
     specifier: ^6.1.2
     version: 6.1.11
+  '@types/react-router':
+    specifier: ^5.1.20
+    version: 5.1.20
   '@types/react-router-dom':
     specifier: ^5.1.8
     version: 5.3.3
@@ -5254,8 +5263,8 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /roundware-web-framework@0.13.0-alpha.1:
-    resolution: {integrity: sha512-gFD2V0MO+hNkAg2YllfNRqD1fiVuXELdVFOl5YBTSmqr6cy+wvtaZxwkt/bfp1wJXUxPzLDjLL8Mx4g27tzHuw==}
+  /roundware-web-framework@0.13.1-alpha.1:
+    resolution: {integrity: sha512-kyJK7mS2Z0WYCo/EKSJlqtFdz20hnDvxm7AffTP/+nz6wCOVKwANyKw1csEWePdnehF7bm3Xu5wVDvblUzgqRQ==}
     dependencies:
       '@turf/bbox': 6.5.0
       '@turf/boolean-point-in-polygon': 6.5.0

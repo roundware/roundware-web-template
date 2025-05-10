@@ -1,5 +1,6 @@
 import { Mic } from '@mui/icons-material';
-import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Box, Button, Dialog, DialogActions, DialogContent, Tooltip, Skeleton, Fade, Fab, Stack } from '@mui/material';
 import { point } from '@turf/helpers';
 import { useRoundware } from '@/hooks/index';
 import { useState } from 'react';
@@ -8,6 +9,7 @@ const AddLoopVoiceButton = () => {
 	const { roundware, forceUpdate } = useRoundware();
 
 	const [showNoSpeakerMessage, setShowNoSpeakerMessage] = useState(false);
+	const [showLaunch, setShowLaunch] = useState(true);
 
 	const handleClick = () => {
 		const lat = roundware.listenerLocation.latitude as number;
@@ -35,21 +37,45 @@ const AddLoopVoiceButton = () => {
 	};
 	return (
 		<>
-			<Button
-				sx={{
-					position: 'absolute',
-					bottom: 80,
-					left: '50%',
-					transform: 'translate(-50%, -50%)',
-					zIndex: 1000,
-				}}
-				variant='contained'
-				size='large'
-				startIcon={<Mic />}
-				onClick={handleClick}
-			>
-				Add your voice here
-			</Button>
+			<Fade in={showLaunch} timeout={1000}>
+				<Box
+					display="flex"
+					alignItems="center"
+					justifyContent="center"
+					position="absolute"
+					width="100%"
+					height="100%"
+					sx={{ 
+						'& .MuiFab-root': { width: 120, height: 120 },
+						pointerEvents: 'none'
+					}}>
+					<Box sx={{ position: 'relative' }}>
+						<Skeleton
+							variant="circular"
+							animation="pulse"
+							sx={{
+								position: 'absolute',
+								width: 160,
+								height: 160,
+								top: '50%',
+								left: '50%',
+								transform: 'translate(-50%, -50%)',
+					
+							}}
+						/>
+						<Tooltip title="TAP TO JOIN CHOIR" arrow placement="bottom">
+							<Fab 
+								size="large" 
+								onClick={handleClick}
+								sx={{ pointerEvents: 'auto' }}
+							>
+								<AddCircleOutlineIcon fontSize="large" />
+								
+							</Fab>
+						</Tooltip>
+					</Box>
+				</Box>
+			</Fade>
 
 			<Dialog open={showNoSpeakerMessage} onClose={() => setShowNoSpeakerMessage(false)}>
 				<DialogContent>Sorry, but there is no choir here for you to join. Please find a new location for your participation!</DialogContent>

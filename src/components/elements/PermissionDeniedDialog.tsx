@@ -1,11 +1,7 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, Stack, Typography, Container } from '@mui/material';
+import LanguageIcon from '@mui/icons-material/Language';
 import finalConfig from '@/config';
-import { getPermissionMessages, type Funcionality } from 'web-permission-messages';
-import ImageErrorBoundary from './ImageErrorBoundary';
-
-const getImageUrl = (imageName: string) => {
-	return new URL(`../../node_modules/web-permission-messages/dist/screenshots/${imageName}`, import.meta.url).href;
-};
+import { type Funcionality } from 'web-permission-messages';
 
 type Props = {
 	open: boolean;
@@ -14,53 +10,52 @@ type Props = {
 };
 
 const PermissionDeniedDialog = (props: Props) => {
-	const message = getPermissionMessages(props.functionality, {
-		locale: finalConfig.locale as 'en' | 'es',
-	});
-
 	return (
-		<Dialog open={props.open} onClose={props.onClose}>
-			<DialogTitle>{message.deniedMessage}</DialogTitle>
-			<DialogContent>
-				<Stack
-					spacing={1}
-					component={'ol'}
-					sx={{
-						padding: 1,
-						'& li': {
-							listStyleType: 'none',
-							'&:before': { content: 'none' },
-						},
-					}}
-				>
-					{message.steps.map((step, index) => (
-						<li key={step.message}>
-							<Typography variant='h6'>
-								{index + 1}. {step.message}
+		<Dialog 
+			open={props.open} 
+			onClose={props.onClose}
+			fullScreen
+			PaperProps={{
+				sx: {
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'center',
+					p: 3,
+					textAlign: 'center',
+					backdropFilter: 'blur(10px)',
+					WebkitBackdropFilter: 'blur(10px)'
+				}
+			}}
+		>
+			<DialogContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+				<Container>
+					<Stack spacing={4} alignItems="center" justifyContent="center">
+						<Stack spacing={2} alignItems="center">
+							<LanguageIcon sx={{ fontSize: 40 }} />
+							<Typography 
+								variant="h5" 
+								component="h1" 
+							>
+								SORRY!
 							</Typography>
-							<ImageErrorBoundary>
-								<Box
-									component='img'
-									sx={{
-										minWidth: '320px',
-										maxWidth: '100%',
-										objectFit: 'contain',
-										borderRadius: 4,
-										borderWidth: 2,
-										borderColor: (t) => t.palette.divider,
-										borderStyle: 'solid',
-									}}
-									src={getImageUrl(step.imageName)}
-									alt={step.message}
-								/>
-							</ImageErrorBoundary>
-						</li>
-					))}
-				</Stack>
+						</Stack>
+						<Typography 
+							variant="body1" 
+						>
+							To participate fully in the artwork experience we need access to your location. In the meantime, please see our Youtube channel from some of our favourite choirs.
+						</Typography>
+						<Button 
+							variant="contained"
+							color="primary"
+							size="large"
+							onClick={() => window.open('https://roundware.org/', '_blank')}
+						>
+							WATCH VIDEOS
+						</Button>
+					</Stack>
+				</Container>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={props.onClose}>OK</Button>
-			</DialogActions>
 		</Dialog>
 	);
 };

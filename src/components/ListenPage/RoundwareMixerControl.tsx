@@ -1,5 +1,5 @@
-import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import ReplayIcon from '@mui/icons-material/Replay';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import Alert from '@mui/material/Alert';
@@ -48,7 +48,7 @@ const RoundwareMixerControl = () => {
 	}, [roundware]);
 
 	function seek(offset: number): void {
-		roundware.mixer.speakerEngine?.speakerTracks?.forEach((s) => {
+		(roundware.mixer.speakerEngine as any)?.speakers?.forEach((s: any) => {
 			const currentTime = s.player.audio.currentTime;
 			let newTime = currentTime + offset;
 
@@ -102,7 +102,7 @@ const RoundwareMixerControl = () => {
 					}
 				}}
 			>
-				{roundware && roundware.mixer && roundware.mixer.playing ? <PauseCircleOutlineIcon fontSize='large' /> : <PlayCircleOutlineIcon fontSize='large' />}
+				{roundware && roundware.mixer && roundware.mixer.playing ? <VolumeUpIcon fontSize='large' /> : <VolumeOffIcon fontSize='large' />}
 			</Button>
 			{finalConfig.ui.listenTransport.includeSkipForwardButton && (
 				<IconButton disabled={isPlaying ? false : true} onClick={() => seek(finalConfig.listen.skipDuration || 5)}>
@@ -114,20 +114,6 @@ const RoundwareMixerControl = () => {
 					/>
 				</IconButton>
 			)}
-			<Button
-				disabled={isPlaying ? false : true}
-				onClick={() => {
-					if (!roundware.mixer || !roundware.mixer.playlist) {
-						return;
-					} else {
-						const trackIds = Object.keys(roundware.mixer.playlist.trackIdMap || {}).map((id) => parseInt(id));
-						trackIds.forEach((audioTrackId) => roundware.mixer.skipTrack(audioTrackId));
-						setSnackbarOpen(true);
-					}
-				}}
-			>
-				<SkipNextIcon />
-			</Button>
 
 			<Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} style={{ marginBottom: 50 }}>
 				<Alert elevation={6} severity='success'>
